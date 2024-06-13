@@ -2,19 +2,27 @@ NAME				= transcendence
 DOCKER_COMPOSE_PATH	= docker-compose.yml
 DOCKER_COMPOSE		= docker-compose -f $(DC_PATH) -p $(NAME)
 
+USER_MANAGEMENT_DB_VOLUME_PATH	=	user_management/docker/volumes/db
+TOURNAMENT_DB_VOLUME_PATH		=	tournament/docker/volumes/db
+NOTIFICATION_DB_VOLUME_PATH		=	notification/docker/volumes/db
 
-DATA_PATH		= /home/aaugu/data/
-ENV_PATH		= srcs/.env
+DB_VOLUME_PATHS	= 	$(USER_MANAGEMENT_DB_VOLUME_PATH) \
+					$(TOURNAMENT_DB_VOLUME_PATH) \
+					$(NOTIFICATION_DB_VOLUME_PATH)
+
+ENV_PATH		= .env
 
 # Colors
 BLUE			= \033[44m
 END				= \033[0m
 
-all : prepare down build up
+all : prepare #down build up
 
 prepare :
-	@(sh ./srcs/requirements/tools/prepare_inception.sh)
-	@(echo "Inception successfully prepared !")
+	mkdir -p $(DB_VOLUME_PATHS)
+	if [ ! -e .env ]; then
+  		exit 1
+    fi
 
 build :
 	@(echo "Creating images...")
@@ -38,43 +46,16 @@ start :
 stop :
 	$(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
 
-restart :
-	$(DOCKER_COMPOSE) restart
-
-status :
-	@(echo "$(BLUE)Running Containers :$(END)")
-	@($(DOCKER_COMPOSE) ps)
-	@(echo "")
-
-	@(echo "$(BLUE)Images :$(END)")
-	@(docker images)
-	@(echo "")
-
-	@(echo "$(BLUE)Containers :$(END)")
-	@(docker container ls -a)
-	@(echo "")
-
-	@(echo "$(BLUE)Volumes :$(END)")
-	@(docker volume ls)
-	@(echo "")
-
-	@(echo "$(BLUE)Network :$(END)")
-	@(docker network ls)
-	@(echo "")
-
-logs:
-	@($(DOCKER_COMPOSE) -f $(DC_FILE) -p $(NAME) logs)
-
 clean: down
 	@(docker system prune -a)
 
 fclean: down
 	@(docker system prune -a --volumes)
 	@(docker volume rm $$(docker volume ls -q))
-	@(sudo rm -rf $(DATA_PATH))
+	@(sudo rm -rf $(DB_VOLUME_PATHS))
 	@(rm $(ENV_PATH))
 
 re: fclean all
 
-.PHONY: all prepare build up up-detached down start stop status logs clean fclean re
+.PHONY: all prepare build up up-detached down start stop clean fclean re
 
