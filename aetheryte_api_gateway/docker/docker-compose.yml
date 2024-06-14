@@ -1,22 +1,4 @@
 services:
-    aetheryte-nginx:
-        build:
-            context: nginx
-            dockerfile: Dockerfile
-        networks:
-            - transcendence
-        ports:
-            - "6000:443"
-        environment:
-            NGINX_HOST= ${}
-            NGINX_PORT=
-        healthcheck:
-            test: curl --fail https://localhost/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
-        restart: on-failure
-
     aetheryte-postgres:
         build:
             context: postgres
@@ -25,6 +7,8 @@ services:
             - postgres_data:/var/lib/postgresql/data/
         networks:
             - transcendence
+        env_file:
+            - .env
         environment:
             POSTGRES_HOST: ${AETHERYTE_POSTGRES_HOST}
             POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
@@ -47,6 +31,26 @@ services:
             - transcendence
         healthcheck:
             test: curl --fail https://localhost:8000/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure
+
+    aetheryte-nginx:
+        build:
+            context: nginx
+            dockerfile: Dockerfile
+        networks:
+            - transcendence
+        ports:
+            - "6000:443"
+        env_file:
+            - .env
+        environment:
+            NGINX_HOST= ${AETHERYTE_NGINX_HOST}
+            NGINX_PORT= ${AETHERYTE_NGINX_PORT}
+        healthcheck:
+            test: curl --fail https://localhost/ || exit 1
             interval: 10s
             timeout: 5s
             retries: 5

@@ -1,0 +1,20 @@
+services:
+    ui-nginx:
+        build:
+            context: nginx
+            dockerfile: Dockerfile
+        networks:
+            - transcendence
+        ports:
+            - "6001:443"
+        env_file:
+            - .env
+        environment:
+            NGINX_HOST= ${UI_NGINX_HOST}
+            NGINX_PORT= ${UI_NGINX_PORT}
+        healthcheck:
+            test: curl --fail https://localhost/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure

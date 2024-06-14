@@ -7,6 +7,8 @@ services:
             - postgres_data:/var/lib/postgresql/data/
         networks:
             - transcendence
+        env_file:
+            - .env
         environment:
             POSTGRES_HOST: ${TOURNAMENT_POSTGRES_HOST}
             POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}

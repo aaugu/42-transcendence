@@ -1,0 +1,83 @@
+version: "3.8"
+
+networks:
+    transcendence:
+        driver: bridge
+
+volumes:
+    # API Gateway
+    aetheryte_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: aetheryte_api_gateway/docker/volumes/db/
+    # Tournament
+    tournament_postgres_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: tournament/docker/volumes/db
+    # User management
+    user_management_postgres_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: user_management/docker/volumes/db/
+
+services:
+    # Aetheryte API Gateway
+    aetheryte-postgres:
+        extends:
+            file: aetheryte_api_gateway/docker/docker-compose.yaml
+            service: aetheryte-postgres
+    aetheryte-python:
+        extends:
+            file: aetheryte_api_gateway/docker/docker-compose.yaml
+            service: aetheryte-python
+        depends_on:
+            aetheryte-postgres:
+                condition: service_healthy
+    aetheryte-nginx:
+        extends:
+            file: aetheryte_api_gateway/docker/docker-compose.yaml
+            service: aetheryte-nginx
+        depends_on:
+            aetheryte-python:
+                condition: service_healthy
+
+    # Frontend - User interface
+
+    # Pong
+    pong-python:
+        extends:
+            file: pong/docker/docker-compose.yaml
+            service: pong-python
+
+    # Tournament
+    tournament-postgres:
+        extends:
+            file: tournament/docker/docker-compose.yaml
+            service: tournament-postgres
+    tournament-python:
+        extends:
+            file: tournament/docker/docker-compose.yaml
+            service: tournament-python
+        depends_on:
+            tournament-postgres:
+                condition: service_healthy
+
+    # User management
+    user-management-postgres:
+        extends:
+            file: user_management/docker/docker-compose.yaml
+            service: user-management-postgres
+    user-management-python:
+        extends:
+            file: user_management/docker/docker-compose.yaml
+            service: user-management
+        depends_on:
+            user-management-postgres:
+                condition: service_healthy
