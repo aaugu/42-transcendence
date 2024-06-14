@@ -1,0 +1,53 @@
+services:
+    aetheryte-nginx:
+        build:
+            context: nginx
+            dockerfile: Dockerfile
+        networks:
+            - transcendence
+        ports:
+            - "6000:443"
+        environment:
+            NGINX_HOST= ${}
+            NGINX_PORT=
+        healthcheck:
+            test: curl --fail https://localhost/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure
+
+    aetheryte-postgres:
+        build:
+            context: postgres
+            dockerfile: Dockerfile
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        networks:
+            - transcendence
+        environment:
+            POSTGRES_HOST: ${AETHERYTE_POSTGRES_HOST}
+            POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
+            POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+
+    aetheryte-python:
+        build:
+            context: python
+            dockerfile: Dockerfile
+        volumes:
+            - aetheryte:/app/aetheryte
+        networks:
+            - transcendence
+        healthcheck:
+            test: curl --fail https://localhost:8000/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure

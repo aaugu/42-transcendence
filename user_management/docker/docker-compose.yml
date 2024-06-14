@@ -11,7 +11,7 @@ services:
             POSTGRES_HOST: ${USERS_POSTGRES_HOST}
             POSTGRES_DB: ${USERS_POSTGRES_DB}
             POSTGRES_USER: ${USERS_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_PASSWORD: ${USERS_POSTGRES_PASSWORD}
         healthcheck:
             test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
             interval: 10s

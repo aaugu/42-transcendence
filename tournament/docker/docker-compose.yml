@@ -11,7 +11,7 @@ services:
             POSTGRES_HOST: ${TOURNAMENT_POSTGRES_HOST}
             POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
             POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_PASSWORD: ${TOURNAMENT_POSTGRES_PASSWORD}
         healthcheck:
             test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
             interval: 10s
