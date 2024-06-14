@@ -1,0 +1,15 @@
+services:
+    pong-python:
+        build:
+            context: python
+            dockerfile: Dockerfile
+        volumes:
+            - pong:/app/pong
+        networks:
+            - transcendence
+        healthcheck:
+            test: curl --fail https://localhost:8000/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure

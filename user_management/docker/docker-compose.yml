@@ -1,0 +1,36 @@
+services:
+    user-management-postgres:
+        build:
+            context: postgres
+            dockerfile: Dockerfile
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        networks:
+            - transcendence
+        environment:
+            POSTGRES_HOST: ${USERS_POSTGRES_HOST}
+            POSTGRES_DB: ${USERS_POSTGRES_DB}
+            POSTGRES_USER: ${USERS_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+
+    user-management-python:
+        build:
+            context: python
+            dockerfile: Dockerfile
+        volumes:
+            - user_management:/app/user_management
+            # Volumes à rajouter si on met les photos de profil?
+        networks:
+            - transcendence
+        healthcheck:
+            test: curl --fail https://localhost:8000/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure

@@ -1,0 +1,35 @@
+services:
+    tournament-postgres:
+        build:
+            context: postgres
+            dockerfile: Dockerfile
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        networks:
+            - transcendence
+        environment:
+            POSTGRES_HOST: ${TOURNAMENT_POSTGRES_HOST}
+            POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
+            POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+
+    tournament-python:
+        build:
+            context: python
+            dockerfile: Dockerfile
+        volumes:
+            - tournament:/app/tournament
+        networks:
+            - transcendence
+        healthcheck:
+            test: curl --fail https://localhost:8000/ || exit 1
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: on-failure
