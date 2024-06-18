@@ -6,7 +6,7 @@ services:
         networks:
             - transcendence
         ports:
-            - "6001:443"
+            - "443:443"
         env_file:
             - .env
         environment:
