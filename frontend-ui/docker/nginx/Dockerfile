@@ -14,7 +14,7 @@ RUN openssl req -x509 -nodes \
 # Configure NGINX by overwritting configuration file
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
-
+COPY ./src/index.html /usr/share/nginx/html/index.html
 
 # Exposes port 443 and makes it available only for inter-container communication (required for SSL protocol)
 EXPOSE 443

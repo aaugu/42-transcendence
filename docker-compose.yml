@@ -3,6 +3,13 @@ version: "3.8"
 networks:
     transcendence:
         driver: bridge
+    aetheryte_api_gateway:
+        driver: bridge
+    tournament:
+        driver: bridge
+    user_management:
+        driver: bridge
+    
 
 volumes:
     # API Gateway

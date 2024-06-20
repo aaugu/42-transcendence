@@ -5,10 +5,6 @@ services:
             dockerfile: Dockerfile
         networks:
             - transcendence
-        ports:
-            - "443:443"
-        env_file:
-            - .env
         environment:
             NGINX_HOST= ${UI_NGINX_HOST}
             NGINX_PORT= ${UI_NGINX_PORT}

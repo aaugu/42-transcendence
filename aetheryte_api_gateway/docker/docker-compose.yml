@@ -7,10 +7,8 @@ services:
             - postgres_data:/var/lib/postgresql/data/
         networks:
             - transcendence
-        env_file:
-            - .env
+            - aetheryte_api_gateway
         environment:
-            POSTGRES_HOST: ${AETHERYTE_POSTGRES_HOST}
             POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
             POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
             POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
