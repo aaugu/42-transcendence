@@ -3,11 +3,11 @@ services:
         build:
             context: nginx
             dockerfile: Dockerfile
-        networks:
-            - transcendence
+        # networks:
+        #     - transcendence
         environment:
-            NGINX_HOST= ${UI_NGINX_HOST}
-            NGINX_PORT= ${UI_NGINX_PORT}
+            NGINX_HOST: "localhost"
+            NGINX_PORT: "443"
         healthcheck:
             test: curl --fail https://localhost/ || exit 1
             interval: 10s
