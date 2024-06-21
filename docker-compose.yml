@@ -1,5 +1,3 @@
-version: "3.8"
-
 networks:
     transcendence:
         driver: bridge
@@ -13,26 +11,26 @@ networks:
 
 volumes:
     # API Gateway
-    aetheryte_volume:
+    aetheryte_postgres_volume:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: aetheryte_api_gateway/docker/volumes/db/
+            device: aetheryte_api_gateway/docker/volumes/
     # Tournament
     tournament_postgres_volume:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: tournament/docker/volumes/db
+            device: tournament/docker/volumes/
     # User management
     user_management_postgres_volume:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: user_management/docker/volumes/db/
+            device: user_management/docker/volumes/
 
 services:
     # Aetheryte API Gateway
@@ -51,10 +49,10 @@ services:
     # Frontend - User interface
     ui-nginx:
         extends:
-            file: frontend-ui/docker/docker/docker-compose.yml
+            file: frontend-ui/docker/docker-compose.yml
             service: ui-nginx
         ports:
-            - "443:443"
+            - "127.0.0.1:433:443"
 
     # Pong
     pong-python:
@@ -83,7 +81,7 @@ services:
     user-management-python:
         extends:
             file: user_management/docker/docker-compose.yml
-            service: user-management
+            service: user-management-python
         depends_on:
             user-management-postgres:
                 condition: service_healthy

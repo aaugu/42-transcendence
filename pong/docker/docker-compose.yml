@@ -3,10 +3,10 @@ services:
         build:
             context: python
             dockerfile: Dockerfile
-        volumes:
-            - pong:/app/pong
         networks:
             - transcendence
+        volumes:
+            - ../app/:/app/
         healthcheck:
             test: curl --fail https://localhost:8000/ || exit 1
             interval: 10s

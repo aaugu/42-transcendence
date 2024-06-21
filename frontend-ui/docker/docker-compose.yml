@@ -5,6 +5,8 @@ services:
             dockerfile: Dockerfile
         # networks:
         #     - transcendence
+        volumes:
+            - ../app/:/var/www/html/
         environment:
             NGINX_HOST: "localhost"
             NGINX_PORT: "443"

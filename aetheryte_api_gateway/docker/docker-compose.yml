@@ -4,7 +4,7 @@ services:
             context: postgres
             dockerfile: Dockerfile
         volumes:
-            - postgres_data:/var/lib/postgresql/data/
+            - aetheryte_postgres_volume:/var/lib/postgresql/data/
         networks:
             - transcendence
             - aetheryte_api_gateway
@@ -13,7 +13,7 @@ services:
             POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
             POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${AETHERYTE_POSTGRES_USER} -d ${AETHERYTE_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
             retries: 5
@@ -23,8 +23,6 @@ services:
         build:
             context: python
             dockerfile: Dockerfile
-        volumes:
-            - aetheryte:/app/aetheryte
         networks:
             - transcendence
         healthcheck:

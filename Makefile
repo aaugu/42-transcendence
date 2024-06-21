@@ -1,14 +1,14 @@
 NAME				= transcendence
 DOCKER_COMPOSE_PATH	= docker-compose.yml
-DOCKER_COMPOSE		= docker-compose -f $(DC_PATH) -p $(NAME)
+DOCKER_COMPOSE		= docker-compose -f $(DOCKER_COMPOSE_PATH) -p $(NAME)
 
-USER_MANAGEMENT_DB_VOLUME_PATH	=	user_management/docker/volumes/db
-TOURNAMENT_DB_VOLUME_PATH		=	tournament/docker/volumes/db
-NOTIFICATION_DB_VOLUME_PATH		=	notification/docker/volumes/db
+USER_MANAGEMENT_DB_VOLUME_PATH	=	user_management/docker/volumes
+TOURNAMENT_DB_VOLUME_PATH		=	tournament/docker/volumes
+AETHERYTE_DB_VOLUME_PATH		=	aetheryte_api_gateway/docker/volumes
 
 DB_VOLUME_PATHS	= 	$(USER_MANAGEMENT_DB_VOLUME_PATH) \
 					$(TOURNAMENT_DB_VOLUME_PATH) \
-					$(NOTIFICATION_DB_VOLUME_PATH)
+					$(AETHERYTE_DB_VOLUME_PATH) \
 
 ENV_PATH		= .env
 
@@ -16,13 +16,11 @@ ENV_PATH		= .env
 BLUE			= \033[44m
 END				= \033[0m
 
-all : prepare #down build up
+all : prepare down build up
 
 prepare :
-	mkdir -p $(DB_VOLUME_PATHS)
-	if [ ! -e .env ]; then
-  		exit 1
-    fi
+	@(sh ./prepare_transcendence.sh)
+	@(echo "Transcendence successfully prepared !")
 
 build :
 	@(echo "Creating images...")
@@ -52,8 +50,8 @@ clean: down
 fclean: down
 	@(docker system prune -a --volumes)
 	@(docker volume rm $$(docker volume ls -q))
-	@(sudo rm -rf $(DB_VOLUME_PATHS))
-	@(rm $(ENV_PATH))
+	@(rm -rf $(DB_VOLUME_PATHS))
+	# @(rm $(ENV_PATH))
 
 re: fclean all
 

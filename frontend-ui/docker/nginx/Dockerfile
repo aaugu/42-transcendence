@@ -13,17 +13,7 @@ RUN openssl req -x509 -nodes \
 			-subj "/C=SW/ST=VD/L=Lausanne/O=42-transcendence/CN=localhost"
 
 # Configure NGINX by overwritting configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# # Prepare NGINX start
-# COPY start_nginx.sh /usr/local/start_nginx.sh
-# RUN chmod +x /usr/local/start_nginx.sh
-
-COPY index.html /var/www/html/
-RUN chmod -R 755 /var/www/html/
+COPY config/nginx.conf /etc/nginx/nginx.conf
 
 # Exposes port 443 and makes it available only for inter-container communication (required for SSL protocol)
 EXPOSE 443
-
-# # Set executable that will always run when the container is initiated
-# ENTRYPOINT [ "sh", "usr/local/start_nginx.sh" ]
