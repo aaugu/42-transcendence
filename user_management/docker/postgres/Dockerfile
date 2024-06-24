@@ -1,3 +1,3 @@
-FROM postgresql:16.3-bookworm
+FROM postgres:16.3-bookworm
 
 EXPOSE 5432

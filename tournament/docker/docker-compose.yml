@@ -5,8 +5,10 @@ services:
             dockerfile: Dockerfile
         volumes:
             - tournament_postgres_volume:/var/lib/postgresql/data/
+            - ../app/:/app/
         networks:
-            - transcendence
+            transcendence:
+                ipv4_address: 172.20.2.3
         environment:
             POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
             POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
@@ -23,12 +25,13 @@ services:
             context: python
             dockerfile: Dockerfile
         networks:
-            - transcendence
+            transcendence:
+                ipv4_address: 172.20.2.2
         volumes:
             - ../app/:/app/
-        healthcheck:
-            test: curl --fail https://localhost:8000/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
+        # healthcheck:
+        #     test: curl --fail https://172.20.2.2:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 5
         restart: on-failure

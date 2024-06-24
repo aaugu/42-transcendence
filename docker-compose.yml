@@ -43,19 +43,19 @@ services:
             aetheryte-postgres:
                 condition: service_healthy
 
-    # Frontend - User interface
-    ui-nginx:
-        extends:
-            file: frontend-ui/docker/docker-compose.yml
-            service: ui-nginx
-        ports:
-            - "443:443"
+    # # Frontend - User interface
+    # ui-nginx:
+    #     extends:
+    #         file: frontend-ui/docker/docker-compose.yml
+    #         service: ui-nginx
+    #     ports:
+    #         - "443:443"
 
-    # Pong
-    pong-python:
-        extends:
-            file: pong/docker/docker-compose.yml
-            service: pong-python
+    # # Pong
+    # pong-python:
+    #     extends:
+    #         file: pong/docker/docker-compose.yml
+    #         service: pong-python
 
     # # Tournament
     # tournament-postgres:

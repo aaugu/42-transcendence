@@ -1,12 +1,11 @@
 FROM python:3.12.4-bookworm
 
-# DEBUG installation
-RUN apt update -y
-RUN apt upgrade -y
-RUN apt install postgresql postgresql-contrib -y
+RUN apt update -y && apt upgrade -y
 
-COPY ./config/requirements.txt /config/requirements.txt
+COPY config/requirements.txt app/
 
-# RUN pip install -r /config/requirements.txt -y
+RUN pip install --no-cache-dir -r app/requirements.txt
+
+EXPOSE 8000
 
 CMD ["sh", "-c", "while true; do sleep 1; done"]

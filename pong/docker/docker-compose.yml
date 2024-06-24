@@ -4,12 +4,13 @@ services:
             context: python
             dockerfile: Dockerfile
         networks:
-            - transcendence
+            transcendence:
+                ipv4_address: 172.20.3.2
         volumes:
             - ../app/:/app/
-        healthcheck:
-            test: curl --fail https://localhost:8000/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
+        # healthcheck:
+        #     test: curl --fail https://172.20.3.2:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 5
         restart: on-failure

@@ -51,7 +51,7 @@ fclean: down
 	@(docker system prune -a --volumes)
 	@(docker volume rm $$(docker volume ls -q))
 	@(rm -rf $(DB_VOLUME_PATHS))
-	# @(rm $(ENV_PATH))
+	@(rm $(ENV_PATH))
 
 re: fclean all
 
