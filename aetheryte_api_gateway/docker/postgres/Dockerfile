@@ -1,3 +1,9 @@
-FROM postgresql:16.3-bookworm
+FROM postgres:16.3-bookworm
+
+RUN apt update -y \
+    && apt upgrade -y \
+    && apt install vim -y
+
+COPY ./config/init.sql /docker-entrypoint-initdb.d/init.sql
 
 EXPOSE 5432

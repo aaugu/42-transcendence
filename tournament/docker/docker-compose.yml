@@ -7,7 +7,6 @@ services:
             - tournament_postgres_volume:/var/lib/postgresql/data/
         networks:
             - transcendence
-            - tournament
         environment:
             POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
             POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
@@ -25,7 +24,6 @@ services:
             dockerfile: Dockerfile
         networks:
             - transcendence
-            - tournament
         volumes:
             - ../app/:/app/
         healthcheck:

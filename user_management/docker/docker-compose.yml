@@ -7,7 +7,6 @@ services:
             - user_management_postgres_volume:/var/lib/postgresql/data/
         networks:
             - transcendence
-            - user_management
         environment:
             POSTGRES_DB: ${USERS_POSTGRES_DB}
             POSTGRES_USER: ${USERS_POSTGRES_USER}
@@ -26,7 +25,6 @@ services:
         # Volumes à rajouter si on met les photos de profil?
         networks:
             - transcendence
-            - user_management
         volumes:
             - ../app/:/app/
         healthcheck:

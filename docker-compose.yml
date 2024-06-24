@@ -3,31 +3,31 @@ networks:
         driver: bridge
         ipam:
             config:
-            - subnet: 172.20.0.0/16
-              gateway: 172.20.0.1
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1
 
 volumes:
     # API Gateway
-    aetheryte_postgres_volume:
+    aetheryte_postgres:
         driver: local
         driver_opts:
             type: none
             o: bind
-            device: aetheryte_api_gateway/docker/volumes/
+            device: aetheryte_api_gateway/docker/volumes/db
     # # Tournament
     # tournament_postgres_volume:
     #     driver: local
     #     driver_opts:
     #         type: none
     #         o: bind
-    #         device: tournament/docker/volumes/
+    #         device: tournament/docker/volumes/db
     # # User management
     # user_management_postgres_volume:
     #     driver: local
     #     driver_opts:
     #         type: none
     #         o: bind
-    #         device: user_management/docker/volumes/
+    #         device: user_management/docker/volumes/db/
 
 services:
     # Aetheryte API Gateway
@@ -43,19 +43,19 @@ services:
             aetheryte-postgres:
                 condition: service_healthy
 
-    # # Frontend - User interface
-    # ui-nginx:
-    #     extends:
-    #         file: frontend-ui/docker/docker-compose.yml
-    #         service: ui-nginx
-    #     ports:
-    #         - "443:443"
+    # Frontend - User interface
+    ui-nginx:
+        extends:
+            file: frontend-ui/docker/docker-compose.yml
+            service: ui-nginx
+        ports:
+            - "443:443"
 
-    # # Pong
-    # pong-python:
-    #     extends:
-    #         file: pong/docker/docker-compose.yml
-    #         service: pong-python
+    # Pong
+    pong-python:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-python
 
     # # Tournament
     # tournament-postgres:

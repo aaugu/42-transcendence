@@ -3,8 +3,8 @@ services:
         build:
             context: nginx
             dockerfile: Dockerfile
-        # networks:
-        #     - transcendence
+        networks:
+            - transcendence
         volumes:
             - ../app/:/var/www/html/
         environment:

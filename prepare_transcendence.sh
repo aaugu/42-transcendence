@@ -4,9 +4,9 @@ YELLOW='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-USER_MANAGEMENT_DB_VOLUME_PATH="user_management/docker/volumes"
-TOURNAMENT_DB_VOLUME_PATH="tournament/docker/volumes"
-AETHERYTE_DB_VOLUME_PATH="aetheryte_api_gateway/docker/volumes"
+USER_MANAGEMENT_DB_VOLUME_PATH="user_management/docker/volumes/db"
+TOURNAMENT_DB_VOLUME_PATH="tournament/docker/volumes/db"
+AETHERYTE_DB_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/db"
 ENV_PATH=".env"
 
 echo "-------------------- PREPARING DOCKER TO START... --------------------"
