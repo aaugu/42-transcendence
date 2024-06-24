@@ -1,10 +1,7 @@
 FROM python:3.12.4-bookworm
 
-RUN mkdir /app
-WORKDIR /app
+RUN apt update -y && apt upgrade -y
 
-COPY requirements.txt /app/
+COPY config/requirements.txt app/
 
-EXPOSE 8000
-
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r app/requirements.txt

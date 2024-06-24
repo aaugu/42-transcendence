@@ -4,18 +4,17 @@ services:
             context: postgres
             dockerfile: Dockerfile
         volumes:
-            - postgres_data:/var/lib/postgresql/data/
+            - tournament_postgres_volume:/var/lib/postgresql/data/
+            - ../app/:/app/
         networks:
-            - transcendence
-        env_file:
-            - .env
+            transcendence:
+                ipv4_address: 172.20.2.3
         environment:
-            POSTGRES_HOST: ${TOURNAMENT_POSTGRES_HOST}
             POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
             POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
             POSTGRES_PASSWORD: ${TOURNAMENT_POSTGRES_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${TOURNAMENT_POSTGRES_USER} -d ${TOURNAMENT_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
             retries: 5
@@ -25,12 +24,13 @@ services:
         build:
             context: python
             dockerfile: Dockerfile
-        volumes:
-            - tournament:/app/tournament
         networks:
-            - transcendence
+            transcendence:
+                ipv4_address: 172.20.2.2
+        volumes:
+            - ../app/:/app/
         healthcheck:
-            test: curl --fail https://localhost:8000/ || exit 1
+            test: curl --fail https://172.20.2.2:8000/ || exit 1
             interval: 10s
             timeout: 5s
             retries: 5
