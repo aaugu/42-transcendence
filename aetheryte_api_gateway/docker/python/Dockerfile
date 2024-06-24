@@ -7,5 +7,3 @@ COPY config/requirements.txt app/
 RUN pip install --no-cache-dir -r app/requirements.txt
 
 EXPOSE 8000
-
-CMD ["sh", "-c", "while true; do sleep 1; done"]
