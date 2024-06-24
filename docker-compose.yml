@@ -48,8 +48,8 @@ services:
         extends:
             file: frontend-ui/docker/docker-compose.yml
             service: ui-nginx
-        # ports:
-        #     - "443:443"
+        ports:
+            - "10443:443"
 
     # Pong
     pong-python:
