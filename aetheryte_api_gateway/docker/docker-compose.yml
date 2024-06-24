@@ -4,18 +4,16 @@ services:
             context: postgres
             dockerfile: Dockerfile
         volumes:
-            - postgres_data:/var/lib/postgresql/data/
+            - aetheryte_postgres:/var/lib/postgresql/data/
         networks:
-            - transcendence
-        env_file:
-            - .env
+            transcendence:
+                ipv4_address: 172.20.0.3
         environment:
-            POSTGRES_HOST: ${AETHERYTE_POSTGRES_HOST}
-            POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
-            POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${A_POSTGRES_DB}
+            POSTGRES_USER: ${A_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${A_POSTGRES_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${A_POSTGRES_USER} -d ${A_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
             retries: 5
@@ -26,12 +24,13 @@ services:
             context: python
             dockerfile: Dockerfile
         volumes:
-            - aetheryte:/app/aetheryte
+            - ../src:/app
         networks:
-            - transcendence
-        healthcheck:
-            test: curl --fail https://localhost:8000/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
+            transcendence :
+                ipv4_address: 172.20.0.2
+        # healthcheck:
+        #     test: curl --fail https://localhost:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 5
         restart: on-failure

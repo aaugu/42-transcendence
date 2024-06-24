@@ -1,3 +1,4 @@
 .env
 .DS_Store
 .vscode/*
+aetheryte_api_gateway/docker/volumes/*
