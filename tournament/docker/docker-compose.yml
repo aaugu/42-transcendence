@@ -25,6 +25,7 @@ services:
             dockerfile: Dockerfile
         networks:
             - transcendence
+            - tournament
         volumes:
             - ../app/:/app/
         healthcheck:

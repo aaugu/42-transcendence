@@ -26,6 +26,7 @@ services:
         # Volumes à rajouter si on met les photos de profil?
         networks:
             - transcendence
+            - user_management
         volumes:
             - ../app/:/app/
         healthcheck:

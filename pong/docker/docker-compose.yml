@@ -3,8 +3,8 @@ services:
         build:
             context: python
             dockerfile: Dockerfile
-        networks:
-            - transcendence
+        # networks:
+        #     - transcendence
         volumes:
             - ../app/:/app/
         healthcheck:
