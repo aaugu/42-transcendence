@@ -1,5 +1,6 @@
 FROM postgres:16.3-bookworm
 
+# Configure image parameters
 RUN apt update -y \
     && apt upgrade -y \
     && apt install vim -y

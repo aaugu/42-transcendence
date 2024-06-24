@@ -5,7 +5,6 @@ DOCKER_COMPOSE      = docker-compose -f $(DOCKER_COMPOSE_PATH) -p $(NAME)
 AETHERYTE_DB_VOLUME_PATH		= aetheryte_api_gateway/docker/volumes/db
 USER_MANAGEMENT_DB_VOLUME_PATH  = user_management/docker/volumes/db
 TOURNAMENT_DB_VOLUME_PATH       = tournament/docker/volumes/db
-NOTIFICATION_DB_VOLUME_PATH     = notification/docker/volumes/db
 
 DB_VOLUME_PATHS = $(USER_MANAGEMENT_DB_VOLUME_PATH) \
                   $(TOURNAMENT_DB_VOLUME_PATH) \
@@ -16,7 +15,7 @@ DB_VOLUME_PATHS = $(USER_MANAGEMENT_DB_VOLUME_PATH) \
 BLUE            = \033[44m
 END             = \033[0m
 
-all: prepare build up-detached
+all: prepare down build up-detached
 
 prepare:
 	@(mkdir -p $(DB_VOLUME_PATHS))
@@ -49,12 +48,11 @@ stop:
 	@($(DOCKER_COMPOSE) stop)
 
 clean: down
-#	@(docker system prune -a -f)
+	@(docker system prune -a -f)
+	sh ./tools/createScrap.sh
 
 fclean: clean down
 	@(docker volume rm $$(docker volume ls -q))
-#	@(rm -rf $(DB_VOLUME_PARENTS))
-	@(echo " !!! ------------> Suprimer les volumes locaux a la main <------------------ !!!")
 
 
 re: fclean all

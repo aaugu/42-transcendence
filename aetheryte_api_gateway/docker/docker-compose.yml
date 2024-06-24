@@ -9,11 +9,11 @@ services:
             transcendence:
                 ipv4_address: 172.20.0.3
         environment:
-            POSTGRES_DB: ${A_POSTGRES_DB}
-            POSTGRES_USER: ${A_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${A_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
+            POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${A_POSTGRES_USER} -d ${A_POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${AETHERYTE_POSTGRES_USER} -d ${AETHERYTE_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
             retries: 5
