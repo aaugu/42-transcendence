@@ -1,5 +1,5 @@
 NAME				= transcendence
-DOCKER_COMPOSE_PATH	= docker-compose.yml
+DOCKER_COMPOSE_PATH	= frontend-ui/docker/docker-compose.yml
 DOCKER_COMPOSE		= docker-compose -f $(DOCKER_COMPOSE_PATH) -p $(NAME)
 ENV_PATH			= .env
 
