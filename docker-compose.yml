@@ -5,14 +5,9 @@ networks:
             config:
                 - subnet: 172.20.0.0/16
                   gateway: 172.20.0.1
-        ipam:
-            config:
-                - subnet: 172.20.0.0/16
-                  gateway: 172.20.0.1
 
 volumes:
     # API Gateway
-    aetheryte_postgres:
     aetheryte_postgres:
         driver: local
         driver_opts:
@@ -53,27 +48,27 @@ services:
         extends:
             file: frontend-ui/docker/docker-compose.yml
             service: ui-nginx
-        # ports:
-        #     - "443:443"
+        ports:
+            - "10443:443"
 
-    # # Pong
-    # pong-python:
-    #     extends:
-    #         file: pong/docker/docker-compose.yml
-    #         service: pong-python
+    # Pong
+    pong-python:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-python
 
-    # # Tournament
-    # tournament-postgres:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-postgres
-    # tournament-python:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-python
-    #     depends_on:
-    #         tournament-postgres:
-    #             condition: service_healthy
+    # Tournament
+    tournament-postgres:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-postgres
+    tournament-python:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-python
+        depends_on:
+            tournament-postgres:
+                condition: service_healthy
 
     # User management
     user-management-postgres:
