@@ -24,7 +24,7 @@ services:
             context: python
             dockerfile: Dockerfile
         volumes:
-            - ../src:/app
+            - ../app:/app
         networks:
             transcendence :
                 ipv4_address: 172.20.0.2
