@@ -40,7 +40,8 @@ clean: down
 	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
-	@(docker system prune -a)
+	#@(docker system prune -a)
+	docker images -q | xargs docker rmi -f
 	#@(rm $(ENV_PATH))
 
 re: fclean all
