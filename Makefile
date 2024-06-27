@@ -37,11 +37,11 @@ stop:
 	@($(DOCKER_COMPOSE) stop)
 
 clean: down
+	@(docker images -q | xargs docker rmi -f)
 	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
-	#@(docker system prune -a)
-	docker images -q | xargs docker rmi -f
+	@(docker volume rm $$(docker volume ls -q))
 	#@(rm $(ENV_PATH))
 
 re: fclean all
