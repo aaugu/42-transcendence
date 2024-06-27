@@ -41,7 +41,7 @@ clean: down
 
 fclean: clean
 	@(docker volume rm $$(docker volume ls -q))
-	#@(rm $(ENV_PATH))
+	@(rm $(ENV_PATH))
 
 re: fclean all
 
