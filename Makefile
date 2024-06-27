@@ -25,24 +25,27 @@ up-detached:
 	@(echo "Building, creating and starting containers...")
 	@($(DOCKER_COMPOSE) up -d)
 
-down:
-	@(echo "Stopping containers...")
+down :
+	@(echo "Stopping and remove containers...")
 	@($(DOCKER_COMPOSE) down)
 
-start:
-	@($(DOCKER_COMPOSE) start)
+start :
+	@(echo "Starting containers...")
+	$(DOCKER_COMPOSE) start
 
-stop:
+stop :
 	@(echo "Stopping containers...")
-	@($(DOCKER_COMPOSE) stop)
+	$(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
 
 clean: down
+	@(echo "Removing images and image volumes...")
 	@(docker images -q | xargs docker rmi -f)
 	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
+	@(echo "Clearing persistent volumes and remove .env file...")
 	@(docker volume rm $$(docker volume ls -q))
-	#@(rm $(ENV_PATH))
+	@(rm $(ENV_PATH))
 
 re: fclean all
 
