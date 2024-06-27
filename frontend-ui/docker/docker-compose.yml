@@ -3,9 +3,9 @@ services:
         build:
             context: nginx
             dockerfile: Dockerfile
-        # networks:
-        #     transcendence:
-        #         ipv4_address: 172.20.4.4
+        networks:
+            transcendence:
+                ipv4_address: 172.20.4.4
         volumes:
             - ../app/:/var/www/html/
         environment:
