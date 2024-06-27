@@ -10,7 +10,7 @@ RUN apt-get install -y openssl
 RUN openssl req -x509 -nodes \
 			-out /etc/nginx/ssl/certificate.crt \
 			-keyout /etc/nginx/ssl/private.key \
-			-subj "/C=SW/ST=VD/L=Lausanne/O=42-transcendence/CN=localhost"
+			-subj "/C=SW/ST=VD/L=Lausanne/O=42-transcendence/CN=172.20.4.4"
 
 # Configure NGINX by overwritting configuration file
 COPY config/nginx.conf /etc/nginx/nginx.conf
