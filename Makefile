@@ -36,7 +36,6 @@ stop :
 	$(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
 
 clean: down
-	@(docker rm -f $(docker ps -qa))
 	@(docker images -q | xargs docker rmi -f)
 	@(sh ./common/destroy_transcendence.sh)
 
