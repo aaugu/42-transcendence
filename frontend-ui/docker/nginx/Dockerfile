@@ -13,7 +13,7 @@ RUN openssl req -x509 -nodes \
 			-subj "/C=SW/ST=VD/L=Lausanne/O=42-transcendence/CN=localhost"
 
 # Configure NGINX by overwritting configuration file
-COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY config/nginx.conf /etc/nginx/transcendence.conf
 
 # Exposes port 443 and makes it available only for inter-container communication (required for SSL protocol)
 EXPOSE 443

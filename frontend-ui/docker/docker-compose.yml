@@ -3,17 +3,12 @@ services:
         build:
             context: nginx
             dockerfile: Dockerfile
-        networks:
-            transcendence:
-                ipv4_address: 172.20.4.4
+        # networks:
+        #     transcendence:
+        #         ipv4_address: 172.20.4.4
         volumes:
             - ../app/:/var/www/html/
         environment:
             NGINX_HOST: ${UI_NGINX_HOST}
             NGINX_PORT: ${UI_NGINX_PORT}
-        healthcheck:
-            test: curl --fail https://172.20.4.4/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
         restart: on-failure
