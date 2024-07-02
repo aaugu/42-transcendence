@@ -5,6 +5,8 @@ RUN apt update -y && apt upgrade -y
 COPY config/requirements.txt config/
 COPY config/start_aetheryte.sh config/
 
+RUN chmod 777 config/start_aetheryte.sh
+
 RUN pip install --upgrade pip
 
 RUN pip install --no-cache-dir -r config/requirements.txt

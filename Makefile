@@ -7,7 +7,7 @@ ENV_PATH			= .env
 GREEN			= \033[0;32m
 END				= \033[0m
 
-all : prepare build up-detached
+all : prepare down build up-detached
 
 prepare :
 	@(sh ./common/prepare_transcendence.sh)

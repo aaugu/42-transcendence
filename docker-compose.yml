@@ -39,6 +39,8 @@ services:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
             service: aetheryte-python
+        ports:
+            - "8000:8000"
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy
