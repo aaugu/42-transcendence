@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd /app/aetheryte
 python3 -m manage migrate
