@@ -5,9 +5,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from .views import (
-    CustomTokenObtainPairView,
-    general_user,
-    detail_user  
+    CustomTokenObtainPairView
     )
 
 urlpatterns = [

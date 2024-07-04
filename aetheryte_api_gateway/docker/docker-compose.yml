@@ -28,6 +28,8 @@ services:
         networks:
             transcendence :
                 ipv4_address: 172.20.0.2
+        env_file:
+            - ../../.env
         # healthcheck:
         #     test: curl --fail https://172.20.0.2:8000/ || exit 1
         #     interval: 10s
