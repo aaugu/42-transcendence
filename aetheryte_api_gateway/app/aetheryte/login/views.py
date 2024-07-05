@@ -1,34 +1,31 @@
-from rest_framework import status, views, generics, permissions
+from rest_framework import status, generics, permissions
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+
+
 from .models import UserVerification, CustomUser
 from .utils import generate_verification_code
 from .serializers import LoginSerializer, VerifyCodeSerializer, Enable2FASerializer
-from django.shortcuts import get_object_or_404
-
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import status
-
-from rest_framework.views import APIView
-
 from .serializers import CustomTokenObtainPairSerializer
 
-from rest_framework_simplejwt.tokens import RefreshToken
 
-class Enable2FAView(generics.UpdateAPIView):
-    serializer_class = Enable2FASerializer
-    permission_classes = [permissions.IsAuthenticated]
+# class Enable2FAView(generics.UpdateAPIView):
+#     serializer_class = Enable2FASerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+#     def get_object(self):
+#         return self.request.user
 
-    def patch(self, request, *args, **kwargs):
-        user = self.get_object()
-        serializer = self.get_serializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({"detail": "2FA settings updated"})
+#     def patch(self, request, *args, **kwargs):
+#         user = self.get_object()
+#         serializer = self.get_serializer(user, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"detail": "2FA settings updated"})
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -41,7 +38,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 verification_code = generate_verification_code()
                 UserVerification.objects.update_or_create(user=user, defaults={'verification_code': verification_code})
 
-                # Send the verification code via email
                 send_mail(
                     'Your verification code',
                     f'Your verification code is {verification_code}',
@@ -73,46 +69,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     samesite='Lax',
                 )
         return response
-
-# class LoginView(views.APIView):
-#     def post(self, request, *args, **kwargs):
-#         serializer = LoginSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data
-#         if isinstance(user, CustomUser):
-#             if user.is_2fa_enabled:
-#                 verification_code = generate_verification_code()
-#                 UserVerification.objects.update_or_create(user=user, defaults={'verification_code': verification_code})
-
-#                 send_mail(
-#                     'Your verification code',
-#                     f'Your verification code is {verification_code}',
-#                     'from@example.com',
-#                     [user.email],
-#                     fail_silently=False,
-#                 )
-
-#                 request.session['verification_user_id'] = user.id
-#                 return Response({"detail": "Verification code sent to email"}, status=status.HTTP_200_OK)
-#             else:
-#                 login(request, user)
-#                 response.set_cookie(
-#                 key='access_token',
-#                 value=access_token,
-#                 httponly=True,
-#                 secure=True,
-#                 samesite='Lax',
-#                 )
-#                 response.set_cookie(
-#                     key='refresh_token',
-#                     value=refresh_token,
-#                     httponly=True,
-#                     secure=True,
-#                     samesite='Lax',
-#                 )
-#                 return Response({"detail": "Login successful"}, status=status.HTTP_200_OK)
-#         else:
-#             return Response({"detail": "Invalid user type"}, status=status.HTTP_400_BAD_REQUEST)
 
 class Verify2FACodeView(APIView):
     def post(self, request, *args, **kwargs):
