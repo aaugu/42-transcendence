@@ -11,16 +11,53 @@
 	<title>42 Transcendence</title>
 </head>
 <body>
-	<div class="container">
-		<div id="main">
-			<nav>
-				<a href="/">Home</a>
-				<a href="/about">About us</a>
-				<a href="/contact">Contact</a>
-			</nav>
-			<div id="content"></div>
-		</div>
+	<!-- <br>
+    <div class="container">
+        <div id="main">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <strong>Using Hashes</strong>
+                            <p>Using hashes may not be the best route for SEO and it may also be unusual for some users which may make them not use the website.<br>
+                            <small>Use cases: Apps, Landing Pages</small>
+                            </p>
+                            <div>
+                                <a href="/">Home</a>
+                                <a href="#about">About</a>
+                                <a href="#contact">Contact</a>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="root">
+            
+                    <nav id="main-nav" class="sidebar">
+                        <a href="/">Home</a>
+                        <a href="/about">About</a>
+                        <a href="/contact">Contact</a>
+                    </nav>
+					<div id="main-page"></div>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+	<div id="root">
+		<nav id="main-nav" class="sidebar">
+			<a href="/" onclick="route()">Home</a>
+			<a href="/about" onclick="route()">About</a>
+			<a href="/contact" onclick="route()">Contact</a>
+		</nav>
+		<div id="main-page"></div>
 	</div>
-	<script src="/js/url-router.js"></script>
+
+    <!-- <script src="/js/hash-router.js"></script>
+    <script src="/js/url-router.js"></script> -->
+	<script src="/js/router.js"></script>
 </body>
 </html>
