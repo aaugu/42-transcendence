@@ -1,9 +1,10 @@
 export function arrivalPage() {
     const navbarItems = document.getElementsByClassName('nav-item')
-    navbarItems[3].children[0].innerText = 'Login'
     // navbarItems[0].children[0].style.display = 'none'
     // navbarItems[1].children[0].style.display = 'none'
     // navbarItems[2].children[0].style.display = 'none'
+    navbarItems[3].children[0].innerText = 'Login'
+    navbarItems[3].children[0].href = "/"
     return `
     <div class="text-overlay rainbow-container w-50" id="main-container">
         <h1 class="text-bold display-3">Welcome!</h1>

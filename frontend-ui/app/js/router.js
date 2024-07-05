@@ -9,27 +9,27 @@ document.addEventListener('click', (e) => {
 const urlRoutes = {
     404 : {
         path: "/error",
-        functionPath: "../partials/error404Page.js",
+        functionPath: "./partials/error404Page.js",
         templateFunction: "error404Page"
     },
     "/" : {
         path: "/",
-        functionPath: "../partials/arrivalPage.js",
+        functionPath: "./partials/arrivalPage.js",
         templateFunction: "arrivalPage"
     },
     "/newgame" : {
         path: "/newgame",
-        functionPath: "../partials/newGamePage.js",
+        functionPath: "./partials/newGamePage.js",
         templateFunction: "newGamePage"
     },
     "/profile" : {
         path: "/profile",
-        functionPath: "../partials/profilePage.js",
+        functionPath: "./partials/profilePage.js",
         templateFunction: "profilePage"
     },
     "/stats" : {
     path: "/stats",
-    functionPath: "../partials/statsPage.js",
+    functionPath: "./partials/statsPage.js",
     templateFunction: "statsPage"
     }
 }
