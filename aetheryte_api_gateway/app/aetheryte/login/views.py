@@ -8,24 +8,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from .models import UserVerification, CustomUser
-from .utils import generate_verification_code
-from .serializers import LoginSerializer, VerifyCodeSerializer, Enable2FASerializer
-from .serializers import CustomTokenObtainPairSerializer
+from .utils import generate_verification_code, check_autentication, get_user_from_jwt
+from .serializers import *
 
 
-# class Enable2FAView(generics.UpdateAPIView):
-#     serializer_class = Enable2FASerializer
-#     permission_classes = [permissions.IsAuthenticated]
-
-#     def get_object(self):
-#         return self.request.user
-
-#     def patch(self, request, *args, **kwargs):
-#         user = self.get_object()
-#         serializer = self.get_serializer(user, data=request.data, partial=True)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({"detail": "2FA settings updated"})
     
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
@@ -53,19 +39,18 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 access_token = tokens.get('access')
                 refresh_token = tokens.get('refresh')
 
-                # Set the tokens in the cookies
                 response.set_cookie(
                     key='access_token',
                     value=access_token,
                     httponly=True,
-                    secure=True,
+                    secure=False,
                     samesite='Lax',
                 )
                 response.set_cookie(
                     key='refresh_token',
                     value=refresh_token,
                     httponly=True,
-                    secure=True,
+                    secure=False,
                     samesite='Lax',
                 )
         return response
@@ -86,21 +71,37 @@ class Verify2FACodeView(APIView):
                     'refresh': str(refresh),
                 }
                 response = Response(response_data, status=status.HTTP_200_OK)
+                request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + str(refresh.access_token)
+                print(request.META['HTTP_AUTHORIZATION'])
                 response.set_cookie(
                     key='access_token',
                     value=str(refresh.access_token),
                     httponly=True,
-                    secure=True,
+                    secure=False,
                     samesite='Lax',
                 )
                 response.set_cookie(
                     key='refresh_token',
                     value=str(refresh),
                     httponly=True,
-                    secure=True,
+                    secure=False,
                     samesite='Lax',
                 )
                 return response
             else:
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "Verification code not found"}, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateUser(APIView):
+    def get_object(self, user_id):
+        return get_object_or_404(CustomUser, id=user_id)
+
+    def patch(self, request):
+        user_id = get_user_from_jwt(request)
+        user = self.get_object(user_id)
+        serializer = CustomUserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
