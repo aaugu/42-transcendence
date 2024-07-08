@@ -1,8 +1,7 @@
 import {inputValue} from "./utils.js"
 
 export function signUpButton() {
-    const signInBtn = document.getElementById('signup');
-    inputValue('username');
-    inputValue('nickname');
-    inputValue('email');
+    const userName = inputValue('username');
+    const nickName = inputValue('nickname');
+    const email = inputValue('email');
 }
