@@ -34,5 +34,5 @@ services:
             test: curl --fail https://172.20.1.2:8000/ || exit 1
             interval: 10s
             timeout: 5s
-            retries: 5
+            retries: 10
         restart: on-failure
