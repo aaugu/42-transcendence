@@ -33,10 +33,4 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_2fa_enabled', 'verification_code']
-
-class CustomUser2faSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ['id', 'is_2fa_enabled']
-
+        fields = ['id', 'username', 'email', 'is_2fa_enabled']

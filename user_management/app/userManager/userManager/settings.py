@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-oyp)s21z_ubrb+k3rm(i-&k+u&cxg-g-w*uua%!3+pkc(4$gj9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '172.20.1.2']
 
 
 # Application definition
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 	
     'rest_framework',
+	
+    'customUser',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# JWT Paramaeters
+SIMPLE_JWT = {
+    'SIGNING_KEY': "je mange des pingouins saveur arc en ciel tout les matins",
+}

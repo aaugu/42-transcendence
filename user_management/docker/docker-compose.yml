@@ -30,9 +30,9 @@ services:
         # Volumes supplémentaire à rajouter si on met les photos de profil j'imagine?
         volumes:
             - ../app/:/app/
-        healthcheck:
-            test: curl --fail https://172.20.1.2:8000/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 10
+        # healthcheck:
+        #     test: curl --fail https://172.20.1.2:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 10
         restart: on-failure

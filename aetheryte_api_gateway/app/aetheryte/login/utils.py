@@ -2,8 +2,15 @@ import random
 import jwt
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from colorama import Fore, Style
+
 def generate_verification_code():
     return str(random.randint(100000, 999999))
+
+def dprint(msg):
+    full_msg = "DEBUG ==> " + str(msg)
+    colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
+    print(colored_msg)
 
 def check_autentication(request):
     access_token = request.COOKIES.get('access_token')

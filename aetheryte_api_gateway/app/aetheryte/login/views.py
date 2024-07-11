@@ -5,14 +5,22 @@ from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.decorators import api_view
 
 
 from .models import UserVerification, CustomUser
 from .utils import generate_verification_code, check_autentication, get_user_from_jwt
 from .serializers import *
 
+@api_view(['GET', 'POST'])
+def testFunction(request):
+    if request.method == 'GET':
+        return Response({"status": "valid request in GET header"}, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        return Response({"status": "valid request in POST header"}, status=status.HTTP_200_OK)
 
-    
+
+
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
@@ -37,18 +45,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             else:
                 tokens = response.data
                 access_token = tokens.get('access')
-                refresh_token = tokens.get('refresh')
 
                 response.set_cookie(
                     key='access_token',
                     value=access_token,
-                    httponly=True,
-                    secure=False,
-                    samesite='Lax',
-                )
-                response.set_cookie(
-                    key='refresh_token',
-                    value=refresh_token,
                     httponly=True,
                     secure=False,
                     samesite='Lax',
@@ -68,7 +68,6 @@ class Verify2FACodeView(APIView):
                 refresh = RefreshToken.for_user(user)
                 response_data = {
                     'access': str(refresh.access_token),
-                    'refresh': str(refresh),
                 }
                 response = Response(response_data, status=status.HTTP_200_OK)
                 request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + str(refresh.access_token)
@@ -76,13 +75,6 @@ class Verify2FACodeView(APIView):
                 response.set_cookie(
                     key='access_token',
                     value=str(refresh.access_token),
-                    httponly=True,
-                    secure=False,
-                    samesite='Lax',
-                )
-                response.set_cookie(
-                    key='refresh_token',
-                    value=str(refresh),
                     httponly=True,
                     secure=False,
                     samesite='Lax',
