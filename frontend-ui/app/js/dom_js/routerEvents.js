@@ -1,4 +1,4 @@
-import {arrivalPage} from "../html/arrivalPage.js"
+import {arrivalPage} from "../html/signUpPage.js"
 import {error404Page} from "../html/error404Page.js"
 import {newGamePage} from "../html/newGamePage.js"
 import {profilePage} from "../html/profilePage.js"
@@ -25,9 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     urlRoute = (url) => {
-        const event = url;
-        event.preventDefault();
-        window.history.pushState({}, '', event.target.href);
+        if (typeof url !== 'string')
+        {
+            const event = url;
+            event.preventDefault();
+            url = event.target.href;
+        }
+        window.history.pushState({}, '', url);
         goToRoute();
     }
 
@@ -38,13 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const routeFunction = urlRoutes[currentLocation] || urlRoutes[404];
         const html = routeFunction();
-        const appDiv = document.getElementById('main-container');
+        const mainCont = document.getElementById('main-container');
 
-        appDiv.innerHTML = html;
+        mainCont.innerHTML = html;
     }
 
     window.onpopstate = goToRoute;
-    window.route = urlRoute;
+    window.route = urlRoute; 
 
     goToRoute();
 
