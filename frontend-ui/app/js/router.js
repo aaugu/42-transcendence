@@ -1,25 +1,34 @@
-const route = (event) => {
-    event = event || window.event;
-    event.preventDefault();
-    window.history.pushState({}, "", event.target.href);
-    handleLocation();
-};
+export default class Router {
+	constructor(routes) {
+		this.routes = routes;
+		this._loadInitialRoute();
+	}
 
-const routes = {
-    404: "templates/404.html",
-    "/": "templates/index.html",
-    "/about": "templates/about.html",
-    "/contact": "templates/contact.html",
+	_loadInitialRoute() {
+		this._navigateTo("/");
+	}
+	
+	loadRoute = async () => {
+		const path = this._getCurrentURL();
+		window.history.pushState({}, '', path);
+		this._navigateTo(path);
+	}
+
+	_getCurrentURL() {
+		const path = window.location.pathname;
+		return path;
+	}
+	
+	_navigateTo(urlPath) {
+		const matchedRoute = this._matchUrlToRoute(urlPath);
+		matchedRoute.renderContent();
+	}
+	
+	_matchUrlToRoute(path) {
+		const matchedRoute = this.routes[path];
+		if (!matchedRoute)
+			return this.routes["404"];
+
+		return matchedRoute;
+	}
 }
-
-const handleLocation = async () => {
-    const   path = window.location.pathname;
-    const   route = routes[path] || routes[404];
-    const   html = await fetch(route).then((data) => data.text());
-    document.getElementById("main-page").innerHTML = html;
-}
-
-window.onpopstate = handleLocation;
-window.route = route; // gives global access to route function
-
-handleLocation();
