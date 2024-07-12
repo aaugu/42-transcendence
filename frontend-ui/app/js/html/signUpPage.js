@@ -1,11 +1,4 @@
-export function arrivalPage() {
-    const navbarItems = document.getElementsByClassName('nav-item');
-    // navbarItems[0].children[0].style.display = 'none';
-    // navbarItems[1].children[0].style.display = 'none';
-    // navbarItems[2].children[0].style.display = 'none';
-    navbarItems[3].children[0].innerText = 'Login';
-    navbarItems[3].children[0].href = "/";
-
+export function signupPage() {
     return `
     <h1 class="text-bold display-5">Sign up here</h1>
     <br>

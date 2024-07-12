@@ -1,8 +1,10 @@
-import {arrivalPage} from "../html/signUpPage.js"
-import {error404Page} from "../html/error404Page.js"
-import {newGamePage} from "../html/newGamePage.js"
-import {profilePage} from "../html/profilePage.js"
-import {statsPage} from "../html/statsPage.js"
+import { signupPage } from "../html/signUpPage.js"
+import { error404Page } from "../html/error404Page.js"
+import { gamePage } from "../html/gamePage.js"
+import { profilePage } from "../html/profilePage.js"
+import { statsPage } from "../html/statsPage.js"
+import { loginPage } from "../html/logInPage.js"
+import { homePage } from "../html/homePage.js"
 
 let urlRoute;
 
@@ -18,8 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const urlRoutes = {
         404 : error404Page,
-        "/" : arrivalPage,
-        "/newgame" : newGamePage,
+        "/" : homePage,
+        "/login" : loginPage,
+        "/signup" : signupPage,
+        "/game" : gamePage,
         "/profile" : profilePage,
         "/stats" : statsPage
     }
