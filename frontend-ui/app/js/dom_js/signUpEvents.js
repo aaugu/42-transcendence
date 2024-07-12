@@ -45,7 +45,7 @@ function clearUserData(userData)
         userData[i].value = '';
 }
 
-export function signUpButton() {
+export async function signUpButton() {
     const userData = document.getElementsByClassName('form-control');
     const username = userData[0].value;
     const nickname = userData[1].value;
@@ -53,35 +53,60 @@ export function signUpButton() {
     const password = userData[3].value;
     const repeatPassword = userData[4].value;
 
-    if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
-        console.log('signupfield not valid')
-        clearUserData(userData);
-        return;
-    }
+    // if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
+    //     console.log('signupfield not valid')
+    //     clearUserData(userData);
+    //     return;
+    // }
 
 
     //send variables to microservice via API
-
-    //analyze response from API
-
+    /*
+        try/catch is used to get errors when the promise gets rejected (network or CORS issues)
+        response.ok is used to handle server errors (404 or 500, for example) when the promise gets resolved
+    */
+    await fetch('https://172.20.0.2/api/user/', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+            "username": username,
+            "nickname": nickname,
+            "email": email,
+            "password": password
+        })
+    })
+    .then(response => {
+            if (!response.ok) //analyze error code or body
+                throw new Error(`HTTP status code ${response.status}`);        
+            return response.json()
+    })
+    .then(responseData => {
+            if (data !== null) {
+                console.log(JSON.stringify(responseData))
+                // urlRoute("/profile");
+            }
+    })
+    .catch(e => console.error('Fetch error: '+ e));
 
    
-    //update nickname as well as userSignedIn variable in localstorage 
-
-    // urlRoute("/profile");
-
-    
+    //update nickname as well as userSignedIn variable in localstorage
 }
 
 
 /*
     JSON format user signup:
-    "username": ""
-    "nickname": ""
-    "email": ""
-    "password": ""
-
+    https://172.20.0.2/api/user/
+    {
+        "username": "",
+        "nickname": "",
+        "email": "",
+        "password": ""
+    }
     JSON format 2fa verification:
-    "verification": ""
+    https://172.20.0.2/api/token/verify-2fa/
+    {
+        "verification_code": "" 
+    }
 */
-
