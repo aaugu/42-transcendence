@@ -1,8 +1,10 @@
 import { error404 } from "./views/pages/error404.js";
 import { homePage } from "./views/pages/home.js"
+import { game } from "./views/pages/game.js"
+import { newGame } from "./views/pages/newGame.js"
+import { tournamentForm } from "./views/pages/tournamentForm.js"
 import { tournamentHome } from "./views/pages/tournamentHome.js"
 import { tournamentList } from "./views/pages/tournamentList.js"
-import { game } from "./views/pages/game.js"
 
 const pageTitleBase = "Pong | ";
 
@@ -28,15 +30,30 @@ const routes = {
 		description: "This is the home page",
 		renderContent: homePage,
 	},
-	"/game": {
-		title: "Game" + pageTitle,
-		description: "This is the game page",
-		renderContent: game,
+	"/newgame": {
+		title: "New Game" + pageTitle,
+		description: "This is the new game page",
+		renderContent: newGame,
+	},
+	"/tournament-home": {
+		title: "Tournament Home" + pageTitle,
+		description: "This is the tournament home page",
+		renderContent: tournamentHome,
 	},
 	"/tournaments": {
 		title: "Tournament List" + pageTitle,
 		description: "This is the tournament list page",
 		renderContent: tournamentList,
+	},
+	"/new-tournament": {
+		title: "Create Tournament" + pageTitle,
+		description: "This is the tournament creation form",
+		renderContent: tournamentForm,
+	},
+	"/game": {
+		title: "Game" + pageTitle,
+		description: "This is the game page",
+		renderContent: game,
 	},
 };
 
@@ -54,7 +71,7 @@ const renderRouteView = async () => {
 	}
 	const route = routes[path] || routes["404"];
     const html = route.renderContent();
-    document.getElementById("content").innerHTML = html;
+    document.getElementById("main-content").innerHTML = html;
 };
 
 window.onpopstate = renderRouteView;
