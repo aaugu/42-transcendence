@@ -15,68 +15,50 @@ from .utils import *
 @api_view(['GET', 'POST'])
 def generalUser(request):
     if request.method == 'GET':
-        response = requests.get('http://172.20.1.2:8000/api/user/')
-
-        if response.status_code == 200:
-            data = response.json()
-            return Response(data, status=status.HTTP_200_OK)
+        if check_autentication(request):
+            users = CustomUser.objects.all()
+            serializer = CustomUserSerializer(users, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            data = response.json()
-            return Response(data, status=response.status_code)
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        
     elif request.method == 'POST':
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             new_user = CustomUser(
                 username=serializer.validated_data['username'],
+                nickname=serializer.validated_data['username'],
                 email=serializer.validated_data['email'],
                 is_2fa_enabled=False
             )
             new_user.set_password(request.data['password'])
             new_user.save()
-
-            response = requests.post('http://172.20.1.2:8000/api/user/', {
-                "username": request.data['username'],
-                "nickname": request.data['username'],
-                "email": request.data['email']
-            })
-            data = response.json()
-            return Response(data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 @api_view(['GET', 'PATCH', 'DELETE'])
 def detailedUser(request, pk):
-    try:
-        user = CustomUser.objects.get(pk=pk)
-    except CustomUser.DoesNotExist:
-        return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
-    
-    if request.method == 'GET':
-        response = requests.get('http://172.20.1.2:8000/api/user/' + str(pk))
-        if response.status_code == 200:
-            data = response.json()
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            data = response.json()
-            return Response(data, status=response.status_code)
-        
-    elif request.method == 'PATCH':
-        serializer = CustomUserSerializer(user, data=request.data, partial=request.method == 'PATCH')
-        if serializer.is_valid():
-            serializer.save()
-            dprint(request.data)
+    if check_autentication(request):
         try:
-            response = requests.patch(f'http://172.20.1.2:8000/api/user/{pk}/', json=request.data)
-            # response.raise_for_status()  # Lève une exception pour les erreurs HTTP
-            data = response.json()
-            return Response(data, status=status.HTTP_200_OK)
-        except requests.exceptions.RequestException as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    elif request.method == 'DELETE':
-        user = get_object_or_404(CustomUser, id=pk)
-        user.delete()
-        response = requests.delete(f'http://172.20.1.2:8000/api/user/{pk}/')
-        data = response.json()
-        return Response(data, status=status.HTTP_200_OK)
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+        
+        if request.method == 'GET':
+            serializer = CustomUserSerializer(user)
+            return Response(serializer.data)
+        
+        elif request.method == 'PATCH':
+            serializer = CustomUserSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        elif request.method == 'DELETE':
+            user.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT) 
     else:
-        return Response({"status": "WIP"}, status=status.HTTP_200_OK)
+        return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

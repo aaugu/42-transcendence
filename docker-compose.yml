@@ -72,19 +72,3 @@ services:
         depends_on:
             tournament-postgres:
                 condition: service_healthy
-
-    # User management
-    user-management-postgres:
-        extends:
-            file: user_management/docker/docker-compose.yml
-            service: user-management-postgres
-    user-management-python:
-        extends:
-            file: user_management/docker/docker-compose.yml
-            service: user-management-python
-        # TODO Remove that after clompete integration
-        ports:
-            - "8001:8000"
-        depends_on:
-            user-management-postgres:
-                condition: service_healthy
