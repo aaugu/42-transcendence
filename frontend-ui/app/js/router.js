@@ -1,34 +1,63 @@
-export default class Router {
-	constructor(routes) {
-		this.routes = routes;
-		this._loadInitialRoute();
-	}
+import { error404 } from "./views/pages/error404.js";
+import { homePage } from "./views/pages/home.js"
+import { tournamentHome } from "./views/pages/tournamentHome.js"
+import { tournamentList } from "./views/pages/tournamentList.js"
+import { game } from "./views/pages/game.js"
 
-	_loadInitialRoute() {
-		this._navigateTo("/");
-	}
-	
-	loadRoute = async () => {
-		const path = this._getCurrentURL();
-		window.history.pushState({}, '', path);
-		this._navigateTo(path);
-	}
+const pageTitleBase = "Pong | ";
 
-	_getCurrentURL() {
-		const path = window.location.pathname;
-		return path;
+document.addEventListener('click', (event) => {
+    const { target } = event;
+    if (!target.matches('nav a')){
+        return ;
 	}
-	
-	_navigateTo(urlPath) {
-		const matchedRoute = this._matchUrlToRoute(urlPath);
-		matchedRoute.renderContent();
-	}
-	
-	_matchUrlToRoute(path) {
-		const matchedRoute = this.routes[path];
-		if (!matchedRoute)
-			return this.routes["404"];
+    event.preventDefault();
+    handleRoute(event);
+});
 
-		return matchedRoute;
+const pageTitle = " | Pong";
+
+const routes = {
+	404: {
+		title: "Error 404" + pageTitle,
+		description: "Page not found",
+		renderContent: error404,
+	},
+	"/": {
+		title: "Home" + pageTitle,
+		description: "This is the home page",
+		renderContent: homePage,
+	},
+	"/game": {
+		title: "Game" + pageTitle,
+		description: "This is the game page",
+		renderContent: game,
+	},
+	"/tournaments": {
+		title: "Tournament List" + pageTitle,
+		description: "This is the tournament list page",
+		renderContent: tournamentList,
+	},
+};
+
+const handleRoute = (event) => {
+	event = event || window.event;
+	event.preventDefault();
+	window.history.pushState({}, "", event.target.href);
+	renderRouteView();
+};
+
+const renderRouteView = async () => {
+	const path = window.location.pathname;
+	if (path.length == 0) {
+		path = "/";
 	}
-}
+	const route = routes[path] || routes["404"];
+    const html = route.renderContent();
+    document.getElementById("content").innerHTML = html;
+};
+
+window.onpopstate = renderRouteView;
+window.route = handleRoute;
+
+renderRouteView();
