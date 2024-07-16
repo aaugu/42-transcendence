@@ -5,7 +5,7 @@ import { logoutButton } from "./logoutButton.js";
 
 document.addEventListener('DOMContentLoaded', (e) => {
     const mainContainer = document.getElementById('main-container');
-    document.addEventListener('click', async function (e) {
+    mainContainer.addEventListener('click', async function (e) {
         switch (e.target.id) {
             case "signup-submit":
                 console.log("button click: signup-submit");

@@ -4,7 +4,8 @@ import { user_is_active } from "./user.js";
 export async function logoutButton() {
     if (user_is_active === true)
     {
-        localStorage.removeItem('user_is_active');
+        localStorage.removeItem('access_token');
+		// localStorage.removeItem('refresh_token');
         urlRoute('/');
     }
     else {

@@ -6,7 +6,7 @@ export async function loginButton() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (user_is_active === true)
+    if (localStorage.getItem('access_token') !== null)
     {
         errormsg("You are already logged in");
         return;
@@ -28,7 +28,7 @@ export async function loginButton() {
     // })
     // .then(response => {
     //         if (!response.ok) //analyze error code or body
-    //             throw new Error(`HTTP status code ${response.status}`);        
+    //             throw new Error(`HTTP status code ${response.status}`);
     //         return response.json()
     // })
     // .then(responseData => {
@@ -59,6 +59,6 @@ export async function loginButton() {
     JSON format 2fa verification:
     https://172.20.0.2/api/token/verify-2fa/
     {
-        "verification_code": "" 
+        "verification_code": ""
     }
 */
