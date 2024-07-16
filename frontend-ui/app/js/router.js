@@ -1,10 +1,7 @@
-import { error404 } from "./views/pages/error404.js";
-import { homePage } from "./views/pages/home.js"
-import { game } from "./views/pages/game.js"
-import { newGame } from "./views/pages/newGame.js"
-import { tournamentForm } from "./views/pages/tournamentForm.js"
-import { tournamentHome } from "./views/pages/tournamentHome.js"
-import { tournamentList } from "./views/pages/tournamentList.js"
+import { error404 } from "./renders/pages/error404.js";
+import { homePage } from "./renders/pages/home.js"
+import { newGame } from "./renders/pages/newGame.js"
+import { tournamentHome } from "./renders/pages/tournamentHome.js"
 
 const pageTitleBase = "Pong | ";
 
@@ -39,22 +36,7 @@ const routes = {
 		title: "Tournament Home" + pageTitle,
 		description: "This is the tournament home page",
 		renderContent: tournamentHome,
-	},
-	"/tournaments": {
-		title: "Tournament List" + pageTitle,
-		description: "This is the tournament list page",
-		renderContent: tournamentList,
-	},
-	"/new-tournament": {
-		title: "Create Tournament" + pageTitle,
-		description: "This is the tournament creation form",
-		renderContent: tournamentForm,
-	},
-	"/game": {
-		title: "Game" + pageTitle,
-		description: "This is the game page",
-		renderContent: game,
-	},
+	}
 };
 
 const handleRoute = (event) => {

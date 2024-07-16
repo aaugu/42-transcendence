@@ -49,23 +49,17 @@ a {
 	#f17400 60%,
 	#A9C1FF 60%,
 	#A9C1FF 100%);
-	height : 92%;
+	height : 92vh;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 769px) {
 	#main-content {
-		max-width: 50%;
-	}
-}
-
-@media (max-width: 1024px) {
-	#main-content {
-		max-width: 75%;
+		width: 75%;
 	}
 }
 
 @media (max-width: 768px) {
 	#main-content {
-		max-width: 95%;
+		width: 90%;
 	}
 }
