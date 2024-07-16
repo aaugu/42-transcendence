@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pong Game</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
+    <!-- <form method="post">
+        {% csrf_token %}
+        <label for="ball_speed">Ball Speed: </label>
+        <input type="text" id="ball_speed" name="ball_speed" value="{{ ball_velocity_x }}">
+        <button type="submit">Set Parameters</button>
+        <button type="reset">Reset</button>
+    </form> -->
+    <script>
+      const canvasWidth = "{{ canvas_width }}";
+      const canvasHeight = "{{ canvas_height }}";
+      const ballRadius = "{{ ball_radius }}";
+      const paddleWidth = "{{ paddle_width }}";
+      const paddleHeight = "{{ paddle_height }}";
+    </script>
+    <div>
+      <div>Player 1:</div>
+      <div id="score-p-1">0</div>
+      <div>Player 2:</div>
+      <div id="score-p-2">0</div>
+      <canvas id="pongCanvas"></canvas>
+    </div>
+
+    <!-- <script src="{% static 'js/index.js' %}"></script> -->
+    <script src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+}
+canvas {
+  border: 1px solid #fff;
+}
+form {
+  margin-bottom: 20px;
+}
+form p {
+  margin: 10px 0;
+}
+form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+form input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+form button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+form button:hover {
+  background-color: #45a049;
+}
+.invalid-input {
+  background-color: red;
+}
