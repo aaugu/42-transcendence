@@ -1,0 +1,4 @@
+Django~=4.1.9
+channels~=3.0.5
+daphne~=3.0.2
+djangorestframework==3.15.1
