@@ -4,12 +4,13 @@ let html = `
         <h3 class="main-content-sub-title w-75 text-center">Do you want to join an existing tournament or create your own ?</h3>
     </div>
     <div class="mw-50 h-50 buttons d-flex justify-content-around align-items-center">
-        <a class="btn btn-dark text-white text-break p-5" href="/tournaments">Join tournament</a>
-        <a class="btn btn-lightgrey text-dark text-break p-5" href="/new-tournament">Create Tournament</a>
+        <div class="btn btn-dark py-3 mb-2 w-100"><a class="text-white text-break" href="/tournaments">Join tournament</a></div>
+        <div class="btn btn-lightgrey py-3 mb-2 w-100"><a class="text-break" href="/new-tournament">Create Tournament</a></div>
     </div>
 `;
 
 export function tournamentHome() {
+    document.getElementById("check").checked = false;
 	return html;
 }
 

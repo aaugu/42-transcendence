@@ -69,7 +69,7 @@ const renderRouteView = async () => {
 	if (path.length == 0) {
 		path = "/";
 	}
-	const route = routes[path] || routes["404"];
+	const route = routes[path] || routes[404];
     const html = route.renderContent();
     document.getElementById("main-content").innerHTML = html;
 };

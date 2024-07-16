@@ -52,6 +52,18 @@ a {
 	height : 92%;
 }
 
+@media (min-width: 1200px) {
+	#main-content {
+		max-width: 50%;
+	}
+}
+
+@media (max-width: 1024px) {
+	#main-content {
+		max-width: 75%;
+	}
+}
+
 @media (max-width: 768px) {
 	#main-content {
 		max-width: 95%;

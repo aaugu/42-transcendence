@@ -4,8 +4,8 @@ let html = `
         <h3 class="main-content-sub-title w-75 text-center">Choose your type of game</h3>
     </div>
     <div class="mw-50 h-50 buttons d-flex justify-content-around align-items-center">
-        <button class="btn btn-lightgrey text-dark text-break p-5">2 Player Game</button>
-        <a class="btn btn-lightgrey text-dark text-break p-5" href="/tournament-home">Tournament Game</a>
+        <div class="btn btn-lightgrey text-dark text-break py-4 mb-2 w-100">2 Player Game</div>
+        <div class="btn btn-lightgrey text-dark text-break py-4 mb-2 w-100"><a href="/tournament-home">Tournament Game</a></div>
     </div>
 `;
 
