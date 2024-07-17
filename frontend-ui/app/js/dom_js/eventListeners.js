@@ -1,28 +1,28 @@
 import { urlRoute } from "./router.js"
-import { signUpButton } from "./signUpButton.js"
-import { loginButton } from "./loginButton.js";
-import { logoutButton } from "./logoutButton.js";
+import { signupButton } from "../pages/signup/signupButton.js"
+import { loginButton } from "../pages/login/loginButton.js";
+import { logoutButton } from "../pages/logout/logoutButton.js";
 
 document.addEventListener('DOMContentLoaded', (e) => {
     const mainContainer = document.getElementById('main-container');
     mainContainer.addEventListener('click', async function (e) {
         switch (e.target.id) {
-            case "signup-submit":
-                console.log("button click: signup-submit");
-                signUpButton();
-                break;
-            case "login-submit":
-                console.log("button click: login-submit");
-                loginButton();
-                break;
-            case "signup":
-                console.log("button click: signup");
-                urlRoute(e.target.getAttribute('href'));
-                break;
-            case "login":
-                console.log("button click: login");
-                urlRoute(e.target.getAttribute('href'));
-                break;
+            // case "signup-submit":
+            //     console.log("button click: signup-submit");
+            //     signUpButton();
+            //     break;
+            // case "login-submit":
+            //     console.log("button click: login-submit");
+            //     loginButton();
+            //     break;
+            // case "signup":
+            //     console.log("button click: signup");
+            //     urlRoute(e.target.getAttribute('href'));
+            //     break;
+            // case "login":
+            //     console.log("button click: login");
+            //     urlRoute(e.target.getAttribute('href'));
+            //     break;
             case "logout":
                 console.log("button click: logout");
                 logoutButton();

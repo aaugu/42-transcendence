@@ -1,12 +1,11 @@
-import { urlRoute } from "./router.js"
-import { user_is_active } from "./user.js";
-import { errormsg } from "./utils.js"
+import { urlRoute } from "../../dom_js/router.js"
+import { errormsg } from "../../dom_js/errormsg.js"
 
 export async function loginButton() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (localStorage.getItem('access_token') !== null)
+    if (sessionStorage.getItem('access_token') !== null)
     {
         errormsg("You are already logged in");
         return;
@@ -24,7 +23,8 @@ export async function loginButton() {
     //     body: JSON.stringify({
     //         "username": username,
     //         "password": password
-    //     })
+    //     )},
+	//		credentials: 'include' //include cookies
     // })
     // .then(response => {
     //         if (!response.ok) //analyze error code or body

@@ -1,6 +1,5 @@
-import { urlRoute } from "./router.js"
-import { errormsg } from "./utils.js"
-import { user_is_active, fa_is_active } from "./user.js";
+import { urlRoute } from "../../dom_js/router.js"
+import { errormsg } from "../../dom_js/errormsg.js"
 
 function passwordValidity(password)
 {
@@ -41,7 +40,7 @@ function signUpFieldsValidity(username, nickname, email, password, repeatPasswor
 }
 
 //save userData in backend, save token in localStorage
-async function sendUserDataToAPI() {
+async function sendUserDataToAPI(username, nickname, email, password) {
 	    //send variables to microservice via API
     /*
         try/catch is used to get errors when the promise gets rejected (network or CORS issues)
@@ -57,7 +56,8 @@ async function sendUserDataToAPI() {
     //         "nickname": nickname,
     //         "email": email,
     //         "password": password
-    //     })
+    //     }),
+			// credentials: 'include' //include cookies
     // })
     // .then(response => {
     //         if (!response.ok) //analyze error code or body
@@ -66,18 +66,24 @@ async function sendUserDataToAPI() {
     // })
     // .then(responseData => {
     //         if (responseData !== null) {
-					localStorage.setItem('access_token', responseData.access);
-					// localStorage.setItem('refresh_token', responseData.refresh);
+				// setCookieSessionStorage(responseData, username);
     //             console.log(JSON.stringify(responseData))
     //             // urlRoute("/profile");
     //         }
     // })
     // .catch(e => console.error('Fetch error: '+ e));
 
-
 }
 
-export async function signUpButton() {
+//set cookies in sessionStorage
+function setCookieSessionStorage(responseData, username) {
+	// sessionStorage.setItem('access_token', responseData.access);
+	// sessionStorage.setItem('refresh_token', responseData.refresh);
+
+	sessionStorage.setItem('access_token', username);
+}
+
+export async function signupButton() {
     const userData = document.getElementsByClassName('form-control');
     const username = userData[0].value;
     const nickname = userData[1].value;
@@ -85,12 +91,12 @@ export async function signUpButton() {
     const password = userData[3].value;
     const repeatPassword = userData[4].value;
 
-    if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
-        console.log('signupfield not valid')
-        return;
-    }
+    // if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
+    //     console.log('signupfield not valid')
+    //     return;
+    // }
 
-	await sendUserDataToAPI();
+	await sendUserDataToAPI(username, nickname, email, password);
 
     urlRoute("/profile");
 }
