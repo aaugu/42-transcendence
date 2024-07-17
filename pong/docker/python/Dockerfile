@@ -2,14 +2,14 @@ FROM python:3.12.4-bookworm
 
 RUN apt update -y && apt upgrade -y
 
-COPY config/requirements.txt app/
+COPY config/requirements.txt config/
 
-RUN pip install --no-cache-dir -r app/requirements.txt
+RUN pip install --no-cache-dir -r config/requirements.txt
 
 WORKDIR /app
 
 COPY . .
 
-# EXPOSE 9000
+EXPOSE 9000
 
-CMD ["sh", "-c", "while true; do sleep 1; done"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:9000"]

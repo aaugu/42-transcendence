@@ -17,7 +17,7 @@ services:
             test: ["CMD-SHELL", "sh -c 'pg_isready -U ${TOURNAMENT_POSTGRES_USER} -d ${TOURNAMENT_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
-            retries: 5
+            retries: 10
         restart: unless-stopped
 
     tournament-python:
