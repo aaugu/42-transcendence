@@ -12,5 +12,4 @@ COPY . .
 
 # EXPOSE 9000
 
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-
+CMD ["sh", "-c", "while true; do sleep 1; done"]
