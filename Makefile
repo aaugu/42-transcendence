@@ -5,6 +5,8 @@ ENV_PATH			= .env
 
 # Colors
 GREEN			= \033[0;32m
+CYAN			= \033[0;36m
+RED				= \033[0;31m
 END				= \033[0m
 
 all : prepare down build up-detached
@@ -14,37 +16,39 @@ prepare :
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
 build :
-	@(echo "Creating images...")
+	@(echo "${CYAN}Creating images...${END}")
 	@($(DOCKER_COMPOSE) build)
 
 up :
-	@(echo "Building, creating and starting containers...")
+	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
 
 up-detached :
-	@(echo "Building, creating and starting containers...")
+	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)
 
 down :
-	@(echo "Stopping and remove containers...")
+	@(if [ ! -e ./.env ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
+	@(echo "${CYAN}Stopping and remove containers...")
 	@($(DOCKER_COMPOSE) down)
 
 start :
-	@(echo "Starting containers...")
+	@(echo "${CYAN}Starting containers...${END}")
 	$(DOCKER_COMPOSE) start
 
 stop :
-	@(echo "Stopping containers...")
-	$(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
+	@(echo "${CYAN}Stopping existing containers...${END}")
+	
+	# $(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
 
 clean: down
-	@(echo "Removing images and image volumes...")
-	@(docker images -q | xargs docker rmi -f)
+	@(echo "${CYAN}Removing existing images and image volumes...${END}")
+	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
 	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
-	@(echo "Clearing persistent volumes and remove .env file...")
-	@(docker volume rm $$(docker volume ls -q))
+	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
+	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
 	@(rm $(ENV_PATH))
 
 re: fclean all
