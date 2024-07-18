@@ -1,22 +1,18 @@
 import { urlRoute } from "../../dom_js/router.js"
-import { errormsg } from "../../dom_js/errormsg.js"
+import { isLoggedIn } from "./isLoggedIn.js";
 
-export async function loginButton() {
+export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (sessionStorage.getItem('access_token') !== null)
-    {
-        errormsg("You are already logged in");
+    if (isLoggedIn(username, password) === null){
         return;
     }
     //send variables to microservice via API
-    /*
-        try/catch is used to get errors when the promise gets rejected (network or CORS issues)
-        response.ok is used to handle server errors (404 or 500, for example) when the promise gets resolved
-    */
+    //handle case if user is already logged in
+    const sendLoginDataToAPI = async (username, password) => {
     // await fetch('https://172.20.0.2/api/login/', {
-    //     method: 'GET',
+    //     method: 'POST',
     //     headers: {
     //         'Accept': 'application/json',
     //     },
@@ -24,7 +20,6 @@ export async function loginButton() {
     //         "username": username,
     //         "password": password
     //     )},
-	//		credentials: 'include' //include cookies
     // })
     // .then(response => {
     //         if (!response.ok) //analyze error code or body
@@ -33,16 +28,17 @@ export async function loginButton() {
     // })
     // .then(responseData => {
     //         if (data !== null) {
+                // set access token in httponly cookies
     //             console.log(JSON.stringify(responseData))
     //             // urlRoute("/profile");
     //         }
     // })
     // .catch(e => console.error('Fetch error: '+ e));
+    }
 
-    //clear fields if error occurs
+    await sendLoginDataToAPI(username, password);
 
-
-
+    sessionStorage.setItem('access_token', username);
     urlRoute("/profile");
 }
 

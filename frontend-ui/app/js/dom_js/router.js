@@ -6,6 +6,7 @@ import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
+import { logoutEvent } from "../pages/logout/logoutEvent.js"
 import { homePage } from "../pages/homePage.js"
 
 let urlRoute;
@@ -67,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/logout" : {
 			content: homePage,
-			eventListener: null,
+			eventListener: logoutEvent,
 			description: "logout redirecting to homepage"
 		}
     }

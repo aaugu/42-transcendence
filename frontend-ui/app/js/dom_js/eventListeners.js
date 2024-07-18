@@ -1,7 +1,4 @@
 import { urlRoute } from "./router.js"
-import { signupButton } from "../pages/signup/signupButton.js"
-import { loginButton } from "../pages/login/loginButton.js";
-import { logoutButton } from "../pages/logout/logoutButton.js";
 
 document.addEventListener('DOMContentLoaded', (e) => {
     const mainContainer = document.getElementById('main-container');
@@ -23,10 +20,10 @@ document.addEventListener('DOMContentLoaded', (e) => {
             //     console.log("button click: login");
             //     urlRoute(e.target.getAttribute('href'));
             //     break;
-            case "logout":
-                console.log("button click: logout");
-                logoutButton();
-                break;
+            // case "logout":
+            //     console.log("button click: logout");
+            //     logoutButton();
+            //     break;
             default:
                 break ;
 
