@@ -39,7 +39,6 @@ stop :
 
 clean: down
 	@(echo "Removing images and image volumes...")
-	
 	@(docker images -q | xargs docker rmi -f)
 	@(sh ./common/destroy_transcendence.sh)
 
