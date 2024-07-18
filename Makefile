@@ -43,10 +43,10 @@ clean: down
 	@(docker images -q | xargs docker rmi -f)
 	@(sh ./common/destroy_transcendence.sh)
 
-fclean: #clean
+fclean: clean
 	@(echo "Clearing persistent volumes and remove .env file...")
 	@(docker volume rm $$(docker volume ls -q))
-	#@(rm $(ENV_PATH))
+	@(rm $(ENV_PATH))
 
 re: fclean all
 
