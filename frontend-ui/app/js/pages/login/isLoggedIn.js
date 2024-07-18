@@ -5,7 +5,7 @@ import { errormsg } from "../../dom/errormsg.js"
 export async function isLoggedIn(username, password) {
 	if (sessionStorage.getItem('access_token') !== null)
 	{
-		errormsg("You are already logged in");
+		// errormsg("You are already logged in");
 		return true;
 	}
 	else
