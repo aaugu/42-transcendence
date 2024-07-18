@@ -1,20 +1,35 @@
 .btn-lightgrey {
-    background-color: #d7d7d7;
+    background-color: #D7D7D7;
 }
 .btn-lightgrey:hover {
-    background-color: rgb(177, 173, 173);
+    background-color: #B1ADAD;
 }
 
-.btn {
-	font-size: 1.2rem;
-	/* padding: 0 6vh; */
+.select-btn {
+	height: 42%;
 }
 
-/* @media (max-width: 1200px) {
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
 }
 
-@media (max-width: 768px) {
-	.btn {
-		font-size: 0.8rem;
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	.select-btn {
+		max-width: 40%;
 	}
-} */
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}

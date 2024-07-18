@@ -52,14 +52,21 @@ a {
 	height : 92vh;
 }
 
-@media (min-width: 769px) {
+/* Extra small devices (portrait phones, less than 576px) */
+#main-content {
+	width: 90%;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
 	#main-content {
 		width: 75%;
 	}
 }
 
-@media (max-width: 768px) {
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
 	#main-content {
-		width: 90%;
+		width: 50%;
 	}
 }
