@@ -1,14 +1,3 @@
-.btn-lightgrey {
-    background-color: #D7D7D7;
-}
-.btn-lightgrey:hover {
-    background-color: #B1ADAD;
-}
-
-.select-btn {
-	height: 42%;
-}
-
 /* Extra small devices (portrait phones, less than 576px) */
 /* No media query for `xs` since this is the default in Bootstrap */
 
@@ -21,15 +10,29 @@
 @media (min-width: 768px) {
 	.select-btn {
 		max-width: 40%;
+		font-size: 1rem;
 	}
 }
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-
+	.select-btn {
+		font-size: 1.2rem;
+	}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
 
+}
+
+.btn-lightgrey {
+    background-color: #D7D7D7;
+}
+.btn-lightgrey:hover {
+    background-color: #B1ADAD;
+}
+
+.select-btn {
+	height: 42%;
 }
