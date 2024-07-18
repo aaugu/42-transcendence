@@ -39,6 +39,9 @@ services:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
             service: aetheryte-python
+        # TODO Remove that after clompete integration
+        ports:
+            - "8000:8000"
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy
@@ -68,17 +71,4 @@ services:
             service: tournament-python
         depends_on:
             tournament-postgres:
-                condition: service_healthy
-
-    # User management
-    user-management-postgres:
-        extends:
-            file: user_management/docker/docker-compose.yml
-            service: user-management-postgres
-    user-management-python:
-        extends:
-            file: user_management/docker/docker-compose.yml
-            service: user-management-python
-        depends_on:
-            user-management-postgres:
                 condition: service_healthy

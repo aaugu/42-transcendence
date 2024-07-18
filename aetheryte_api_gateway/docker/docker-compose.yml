@@ -16,7 +16,7 @@ services:
             test: ["CMD-SHELL", "sh -c 'pg_isready -U ${AETHERYTE_POSTGRES_USER} -d ${AETHERYTE_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
-            retries: 5
+            retries: 10
         restart: unless-stopped
 
     aetheryte-python:
@@ -24,13 +24,15 @@ services:
             context: python
             dockerfile: Dockerfile
         volumes:
-            - ../src:/app
+            - ../app:/app
         networks:
             transcendence :
                 ipv4_address: 172.20.0.2
-        healthcheck:
-            test: curl --fail https://172.20.0.2:8000/ || exit 1
-            interval: 10s
-            timeout: 5s
-            retries: 5
+        env_file:
+            - ../../.env
+        # healthcheck:
+        #     test: curl --fail https://172.20.0.2:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 5
         restart: on-failure

@@ -13,15 +13,15 @@ prepare :
 	@(sh ./common/prepare_transcendence.sh)
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
-build :
+build:
 	@(echo "Creating images...")
 	@($(DOCKER_COMPOSE) build)
 
-up :
+up:
 	@(echo "Building, creating and starting containers...")
 	@($(DOCKER_COMPOSE) up)
 
-up-detached :
+up-detached:
 	@(echo "Building, creating and starting containers...")
 	@($(DOCKER_COMPOSE) up -d)
 
@@ -50,4 +50,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all prepare build up up-detached down start stop clean fclean re
-
