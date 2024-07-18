@@ -1,4 +1,4 @@
-import { errormsg } from "../../dom_js/errormsg.js"
+import { errormsg } from "../../dom/errormsg.js"
 
 //need to verify path and backend handling of this
 //possible responses: user does not exist, is not logged in, is logged in

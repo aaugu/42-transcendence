@@ -1,4 +1,4 @@
-import { urlRoute } from "../../dom_js/router.js"
+import { urlRoute } from "../../dom/router.js"
 
 export async function logoutProcess() {
     if (sessionStorage.getItem('access_token') !== null)

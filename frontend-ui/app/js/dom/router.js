@@ -1,7 +1,7 @@
 import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
-import { gamePage } from "../pages/game/gamePage.js"
+import { newGame } from "../pages/game/newGame.js"
 import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
@@ -14,11 +14,12 @@ let urlRoute;
 let currentEventListener = null;
 
 function updateEventListenerMainCont(newEventListener) {
-	const mainCont = document.getElementById('main-container');
+	const mainCont = document.getElementById('main-content');
 	if (currentEventListener !== null)
 			mainCont.removeEventListener('click', currentEventListener);
 	currentEventListener = newEventListener;
-	mainCont.addEventListener('click', currentEventListener);
+	if (currentEventListener !== null)
+		mainCont.addEventListener('click', currentEventListener);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			eventListener: signupEvent,
 			description: "signup page"
 		},
-        "/game" : {
-			content: gamePage,
+        "/newgame" : {
+			content: newGame,
 			eventListener: null,
-			description: "game page"
+			description: "new game page"
 		},
         "/profile" : {
 			content: profilePage,
@@ -94,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const html = (currentRouteDetails.content)();
 		updateEventListenerMainCont(currentRouteDetails.eventListener);
 
-		const mainCont = document.getElementById('main-container');
+		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
 	}
 

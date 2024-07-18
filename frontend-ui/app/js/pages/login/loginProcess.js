@@ -1,4 +1,4 @@
-import { urlRoute } from "../../dom_js/router.js"
+import { urlRoute } from "../../dom/router.js"
 import { isLoggedIn } from "./isLoggedIn.js";
 
 export async function loginProcess() {

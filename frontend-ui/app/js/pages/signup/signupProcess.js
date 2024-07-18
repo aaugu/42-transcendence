@@ -1,5 +1,5 @@
-import { urlRoute } from "../../dom_js/router.js"
-import { errormsg } from "../../dom_js/errormsg.js"
+import { urlRoute } from "../../dom/router.js"
+import { errormsg } from "../../dom/errormsg.js"
 
 function signUpFieldsValidity(username, nickname, email, password, repeatPassword)
 {
