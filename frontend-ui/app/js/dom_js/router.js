@@ -8,6 +8,7 @@ import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { logoutEvent } from "../pages/logout/logoutEvent.js"
 import { homePage } from "../pages/homePage.js"
+import { isLoggedIn } from "../pages/login/isLoggedIn.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -86,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const goToRoute = async () => {
         const currentRoute = window.location.pathname;
-        if (currentRoute.length == 0)
-		currentRoute = "/";
+        if (currentRoute.length == 0 || isLoggedIn("", "") === false)
+			currentRoute = "/";
 
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];
         const html = (currentRouteDetails.content)();

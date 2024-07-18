@@ -3,7 +3,7 @@ import { errormsg } from "../../dom_js/errormsg.js"
 //need to verify path and backend handling of this
 //possible responses: user does not exist, is not logged in, is logged in
 export async function isLoggedIn(username, password) {
-	if (sessionStorage.getItem('access_token') === username)
+	if (sessionStorage.getItem('access_token') !== null)
 	{
 		errormsg("You are already logged in");
 		return true;
