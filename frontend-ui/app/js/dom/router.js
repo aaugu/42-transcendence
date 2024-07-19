@@ -8,6 +8,7 @@ import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
+import { chatPage } from "../pages/chat/chatPage.js"
 import { isLoggedIn } from "../pages/login/isLoggedIn.js"
 
 let urlRoute;
@@ -67,7 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			content: statsPage,
 			eventListener: null,
 			description: "stats page"
-		}
+		},
+		"/chat" : {
+			content: chatPage,
+			eventListener: null,
+			description: "stats page"
+		},
     }
 
     urlRoute = (url) => {

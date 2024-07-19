@@ -53,13 +53,6 @@ a {
 	height: 92vh;
 }
 
-/* Clearfix */
-.clearfix::after {
-  display: block;
-  clear: both;
-  content: "";
-}
-
 .error-container {
 	display: flex;
 	flex-direction: column;
@@ -77,10 +70,10 @@ a {
 	transform: translateX(-50%);
   }
 
-  .hidden {
-	opacity: 0;
-	display: none;
-  }
+.hidden {
+opacity: 0;
+display: none;
+}
 
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {

@@ -33,12 +33,13 @@
     background-color: #B1ADAD;
 }
 
-/* .btn-dark {
-    background-color: #121212;
+.form-control::placeholder {
+	color: #d3d3d3;
 }
-.btn-dark:hover {
-    background-color: #232323;
-} */
+
+.form-label {
+	margin: 5px;
+}
 
 .select-btn {
 	height: 42%;
