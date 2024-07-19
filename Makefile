@@ -11,46 +11,47 @@ END				= \033[0m
 
 all : prepare down build up-detached
 
-prepare :
+env_check :
+	@(if [ ! -e ./.env ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
+
+prepare : env_check
 	@(sh ./common/prepare_transcendence.sh)
 	@(sh ./common/generate_postgres_config.sh)
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
-build :
+build : env_check
 	@(echo "${CYAN}Creating images...${END}")
 	@($(DOCKER_COMPOSE) build)
 
-up :
+up : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
 
-up-detached :
+up-detached : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)
 
 down :
-	@(if [ ! -e ./.env ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
 	@(echo "${CYAN}Stopping and remove containers...")
 	@($(DOCKER_COMPOSE) down)
 
 start :
 	@(echo "${CYAN}Starting containers...${END}")
-	$(DOCKER_COMPOSE) start
+	@($(DOCKER_COMPOSE) start)
 
 stop :
-	@(echo "${CYAN}Stopping existing containers...${END}")
-	
-	# $(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
+	@(echo "${CYAN}Stopping containers...${END}")
+	@($(DOCKER_COMPOSE) stop)
 
 clean: down
-	@(echo "${CYAN}Removing existing images...${END}")
+	@(echo "${CYAN}Removing images and image volumes...${END}")
 	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
+	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
 	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
-	@(sh ./common/destroy_transcendence.sh)
 	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
-	@(rm $(ENV_PATH))
+	@(if [ -e ./.env ]; then rm $(ENV_PATH); fi)
 
 re: fclean all
 

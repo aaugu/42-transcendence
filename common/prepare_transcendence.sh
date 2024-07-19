@@ -16,13 +16,6 @@ ENV_PATH=".env"
 
 echo "${CYAN}-------------------- PREPARING DOCKER TO START... --------------------${NC}"
 
-if [ ! -f ${ENV_PATH} ]; then
-	echo "${RED}.env file is missing!${NC}"
-	exit 1
-else
-	echo "${GREEN}.env file successfully found${NC}"
-fi
-
 if [ ! -d ${USER_MANAGEMENT_DB_VOLUME_PATH} ]
 then
 	mkdir -p ${USER_MANAGEMENT_DB_VOLUME_PATH}
