@@ -13,6 +13,7 @@ all : prepare down build up-detached
 
 prepare :
 	@(sh ./common/prepare_transcendence.sh)
+	@(sh ./common/generate_postgres_config.sh)
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
 build :
@@ -42,12 +43,12 @@ stop :
 	# $(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
 
 clean: down
-	@(echo "${CYAN}Removing existing images and image volumes...${END}")
+	@(echo "${CYAN}Removing existing images...${END}")
 	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
-	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
 	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
+	@(sh ./common/destroy_transcendence.sh)
 	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
 	@(rm $(ENV_PATH))
 
