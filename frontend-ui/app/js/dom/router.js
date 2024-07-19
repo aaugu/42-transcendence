@@ -6,7 +6,7 @@ import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
-import { logoutEvent } from "../pages/logout/logoutEvent.js"
+import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { isLoggedIn } from "../pages/login/isLoggedIn.js"
 
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         const {target} = e;
-        if (!target.matches('nav a') && !target.matches('row a'))
+        if (!target.matches('nav a') && target.id !== 'login' && target.id !== 'signup')
             return ;
         e.preventDefault();
         urlRoute(e);
@@ -60,18 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
         "/profile" : {
 			content: profilePage,
-			eventListener: null,
+			eventListener: profileEvent,
 			description: "profile page"
 		},
         "/stats" : {
 			content: statsPage,
 			eventListener: null,
 			description: "stats page"
-		},
-		"/logout" : {
-			content: homePage,
-			eventListener: logoutEvent,
-			description: "logout redirecting to homepage"
 		}
     }
 

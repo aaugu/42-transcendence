@@ -79,6 +79,7 @@ a {
 
   .hidden {
 	opacity: 0;
+	display: none;
   }
 
 /* Extra small devices (portrait phones, less than 576px) */
