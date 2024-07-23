@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .game import PARAMS
+from .consumers import PongConsumer
 from django.views.decorators.csrf import csrf_protect
+from django.http import JsonResponse
 
 # Create your views here.
 def pong_view(request):
@@ -26,3 +28,7 @@ def pong_view(request):
         'paddle_height': PARAMS['paddle_height'],
     }
     return render(request, 'pong_app/pong.html', context)
+
+def pong_state(request):
+  state_dict = PongConsumer.shared_game_state.to_dict()
+  return JsonResponse(state_dict)

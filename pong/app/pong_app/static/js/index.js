@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   const startButton = document.getElementById("start-button");
   const stopButton = document.getElementById("stop-button");
+  const resetButton = document.getElementById("reset-button");
 
   if (startButton) {
     startButton.addEventListener("click", () => {
@@ -48,6 +49,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
   } else {
     console.error("Stop button not found");
+  }
+
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      console.log("Reset button clicked");
+      socket.send(JSON.stringify({ action: "reset" }));
+    });
+  } else {
+    console.error("Reset button not found");
   }
 
   function throttle(fn, wait) {
@@ -81,6 +91,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
       return;
     }
   }
+
+  // console.log("Game state status", gameState.status);
+
+  // function handleKeyPress() {
+  //   if (keysPressed["j"]) {
+  //     socket.send(JSON.stringify({ direction_right_paddle: "up" }));
+  //   } else if (keysPressed["m"] || keysPressed["n"]) {
+  //     socket.send(JSON.stringify({ direction_right_paddle: "down" }));
+  //   } else if (keysPressed["f"]) {
+  //     socket.send(JSON.stringify({ direction_left_paddle: "up" }));
+  //   } else if (keysPressed["c"] || keysPressed["v"]) {
+  //     socket.send(JSON.stringify({ direction_left_paddle: "down" }));
+  //   }
+  // }
 
   function updateGameState(gameState) {
     const ball = gameState.ball;

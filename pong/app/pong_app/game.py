@@ -111,8 +111,8 @@ class GameState:
 
 
     def update(self):
-      print(f"", self.paused)
-      if(self.paused == False):
+      # print(f"", self.paused)
+      if(self.paused == False and self.score[0] < PARAMS["points_to_win"] and self.score[1] < PARAMS["points_to_win"]):
         if self.reset_timer is None:
           self.ball.move()
           checkCollisionWithEdgesBall(self.ball)
@@ -133,6 +133,9 @@ class GameState:
         if (self.paused == True):
           self.paused = False
 
+    def reset_score(self):
+      self.score = [0, 0]
+
     def ballReset(self, pos):
         self.ball.position[0] = PARAMS["canvas_width"] / 2
         self.ball.position[1] = PARAMS["canvas_height"] / 2
@@ -146,9 +149,6 @@ class GameState:
           self.ball.velocity[0] = -PARAMS["ball_velocity_x"]
           self.ball.velocity[1] = 0
 
-        # for key, value in PARAMS.items():
-        #     print(f"{key}: {value}")
-        # print(self.ball.velocity[0], self.ball.velocity[1])
 
     def to_dict(self):
         return {
