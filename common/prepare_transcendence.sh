@@ -88,3 +88,8 @@ if [ ! -d ${TRASH_TOURNAMENT_PATH} ]
 then
 	mkdir -p ${TRASH_TOURNAMENT_PATH}
 fi
+
+if [ ! -d ${TRASH_LIVECHAT_PATH} ]
+then
+	mkdir -p ${TRASH_LIVECHAT_PATH}
+fi
