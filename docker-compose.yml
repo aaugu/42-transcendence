@@ -28,6 +28,13 @@ volumes:
             type: none
             o: bind
             device: user_management/docker/volumes/data/
+    # Live chat
+    livechat_postgres_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: livechat/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway

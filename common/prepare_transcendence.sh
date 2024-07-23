@@ -8,10 +8,12 @@ TRASH_PATH="trash"
 TRASH_USER_PATH="${TRASH_PATH}/user"
 TRASH_AETHERYTE_PATH="${TRASH_PATH}/aetheryte"
 TRASH_TOURNAMENT_PATH="${TRASH_PATH}/tournament"
+TRASH_LIVECHAT_PATH="${TRASH_PATH}/livechat"
 
 USER_MANAGEMENT_DB_VOLUME_PATH="user_management/docker/volumes/data"
 TOURNAMENT_DB_VOLUME_PATH="tournament/docker/volumes/data"
 AETHERYTE_DB_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/data"
+LIVECHAT_DB_VOLUME_PATH="livechat/docker/volumes/data"
 ENV_PATH=".env"
 
 echo "${CYAN}-------------------- PREPARING DOCKER TO START... --------------------${NC}"
@@ -48,6 +50,20 @@ if [ ! -d ${AETHERYTE_DB_VOLUME_PATH} ]
 then
 	mkdir -p ${AETHERYTE_DB_VOLUME_PATH}
 	if [ ! -d ${AETHERYTE_DB_VOLUME_PATH} ]
+	then
+		echo "${RED}ERROR: Could not create Aetheryte data directory!${NC}"
+		exit 1
+	else
+		echo "${GREEN}Aetheryte data directory created!${NC}"
+	fi
+else
+	echo "${YELLOW}Aetheryte data directory was already created!${NC}"
+fi
+
+if [ ! -d ${LIVECHAT_DB_VOLUME_PATH} ]
+then
+	mkdir -p ${LIVECHAT_DB_VOLUME_PATH}
+	if [ ! -d ${LIVECHAT_DB_VOLUME_PATH} ]
 	then
 		echo "${RED}ERROR: Could not create Aetheryte data directory!${NC}"
 		exit 1
