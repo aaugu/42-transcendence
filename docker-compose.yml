@@ -7,7 +7,7 @@ networks:
                   gateway: 172.20.0.1
 
 volumes:
-    API Gateway
+    # API Gateway
     aetheryte_postgres:
         driver: local
         driver_opts:
