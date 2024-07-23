@@ -93,11 +93,11 @@ services:
     # Live chat
     livechat-postgres:
         extends:
-            file: user_management/docker/docker-compose.yml
+            file: livechat/docker/docker-compose.yml
             service: livechat-postgres
     livechat-python:
         extends:
-            file: user_management/docker/docker-compose.yml
+            file: livechat/docker/docker-compose.yml
             service: livechat-python
         depends_on:
             livechat-postgres:
