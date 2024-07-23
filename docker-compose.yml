@@ -7,7 +7,7 @@ networks:
                   gateway: 172.20.0.1
 
 volumes:
-    # API Gateway
+    API Gateway
     aetheryte_postgres:
         driver: local
         driver_opts:
@@ -88,4 +88,17 @@ services:
             service: user-management-python
         depends_on:
             user-management-postgres:
+                condition: service_healthy
+
+    # Live chat
+    livechat-postgres:
+        extends:
+            file: user_management/docker/docker-compose.yml
+            service: livechat-postgres
+    livechat-python:
+        extends:
+            file: user_management/docker/docker-compose.yml
+            service: livechat-python
+        depends_on:
+            livechat-postgres:
                 condition: service_healthy
