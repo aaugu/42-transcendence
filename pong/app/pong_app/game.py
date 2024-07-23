@@ -60,7 +60,7 @@ def checkCollisionWithPaddlesBall(ball, paddles):
     if (ball.position[0] + PARAMS["ball_radius"] >= paddles[1].position[0] and
       ball.position[1] >= paddles[1].position[1] and
       ball.position[1] <= paddles[1].position[1] + paddles[1].height):
-        relativeIntersectY = (paddles[1].position[1] + (paddles[1].height / 2)) - ball.position[1]
+        relativeIntersectY = ball.position[1] - (paddles[1].position[1] + (paddles[1].height / 2)) 
         normalizedRelativeIntersectionY = relativeIntersectY / (paddles[1].height / 2)
         bounceAngle = normalizedRelativeIntersectionY * MAX_BOUNCE_ANGLE
 
@@ -71,7 +71,7 @@ def checkCollisionWithPaddlesBall(ball, paddles):
     if (ball.position[0] - PARAMS["ball_radius"] <= paddles[0].position[0] + paddles[0].width and
       ball.position[1] >= paddles[0].position[1] and
       ball.position[1] <= paddles[0].position[1] + paddles[0].height):
-        relativeIntersectY = (paddles[0].position[1] + (paddles[0].height / 2)) - ball.position[1]
+        relativeIntersectY = ball.position[1] - (paddles[0].position[1] + (paddles[0].height / 2))
         normalizedRelativeIntersectionY = relativeIntersectY / (paddles[0].height / 2)
         bounceAngle = normalizedRelativeIntersectionY * MAX_BOUNCE_ANGLE
 
@@ -106,20 +106,32 @@ class GameState:
 
         self.reset_timer = None
 
+        self.paused = True
+
 
 
     def update(self):
-      if self.reset_timer is None:
-        self.ball.move()
-        checkCollisionWithEdgesBall(self.ball)
-        checkCollisonWithEdgesPaddle(self.paddles[0])
-        checkCollisonWithEdgesPaddle(self.paddles[1])
-        checkCollisionWithPaddlesBall(self.ball, self.paddles)
-        checkGoal(self.ball, self.score, self)
-      else:
-         if time.time() >= self.reset_timer:
-            self.reset_timer = None
-            self.ball.radius = PARAMS["ball_radius"]
+      print(f"", self.paused)
+      if(self.paused == False):
+        if self.reset_timer is None:
+          self.ball.move()
+          checkCollisionWithEdgesBall(self.ball)
+          checkCollisonWithEdgesPaddle(self.paddles[0])
+          checkCollisonWithEdgesPaddle(self.paddles[1])
+          checkCollisionWithPaddlesBall(self.ball, self.paddles)
+          checkGoal(self.ball, self.score, self)
+        else:
+          if time.time() >= self.reset_timer:
+              self.reset_timer = None
+              self.ball.radius = PARAMS["ball_radius"]
+
+    def pause(self):
+      if (self.paused == False):
+        self.paused = True 
+    
+    def start(self):
+        if (self.paused == True):
+          self.paused = False
 
     def ballReset(self, pos):
         self.ball.position[0] = PARAMS["canvas_width"] / 2
@@ -134,9 +146,9 @@ class GameState:
           self.ball.velocity[0] = -PARAMS["ball_velocity_x"]
           self.ball.velocity[1] = 0
 
-        for key, value in PARAMS.items():
-            print(f"{key}: {value}")
-        print(self.ball.velocity[0], self.ball.velocity[1])
+        # for key, value in PARAMS.items():
+        #     print(f"{key}: {value}")
+        # print(self.ball.velocity[0], self.ball.velocity[1])
 
     def to_dict(self):
         return {
@@ -148,5 +160,5 @@ class GameState:
                 {'player_id': paddle.player_id, 'position': paddle.position, 'velocity': paddle.velocity, 'width': paddle.width, 'height': paddle.height}
                 for paddle in self.paddles
             ],
-            'scores': self.score
+            'scores': self.score,
         }

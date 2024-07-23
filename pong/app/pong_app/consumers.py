@@ -39,22 +39,30 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         direction_right_paddle = text_data_json.get('direction_right_paddle')
         direction_left_paddle = text_data_json.get('direction_left_paddle')
+        start_stop = text_data_json.get('action')
 
         # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[0][1])
 
         if direction_right_paddle == 'up':
             self.shared_game_state.paddles[1].position[1] -= PARAMS["paddle_velocity_y"]
-            print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
+            # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
         elif direction_right_paddle == 'down':
             self.shared_game_state.paddles[1].position[1] += PARAMS["paddle_velocity_y"]
-            print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
+            # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
 
         if direction_left_paddle == 'up':
             self.shared_game_state.paddles[0].position[1] -= PARAMS["paddle_velocity_y"]
-            print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
+            # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
         elif direction_left_paddle == 'down':
             self.shared_game_state.paddles[0].position[1] += PARAMS["paddle_velocity_y"]
-            print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
+            # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
+
+        if start_stop == "start":
+            print(f"Start Triggered")
+            self.shared_game_state.start()
+        elif start_stop == "pause":
+            print(f"Stop Triggered")
+            self.shared_game_state.pause()
 
     async def game_loop(self):
         while True:

@@ -1,5 +1,3 @@
-console.log("Hello From index.js");
-
 document.addEventListener("DOMContentLoaded", (event) => {
   const canvas = document.getElementById("pongCanvas");
 
@@ -16,12 +14,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   };
 
-  // const canvasWidth = "{{ canvas_width }}";
-  // const canvasHeight = "{{ canvas_height }}";
-  // const ballRadius = "{{ ball_radius }}";
-  // const paddleWidth = "{{ paddle_width }}";
-  // const paddleHeight = "{{ paddle_height }}";
-
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
@@ -36,6 +28,27 @@ document.addEventListener("DOMContentLoaded", (event) => {
     keysPressed[event.key] = false;
     handleKeyPress();
   });
+
+  const startButton = document.getElementById("start-button");
+  const stopButton = document.getElementById("stop-button");
+
+  if (startButton) {
+    startButton.addEventListener("click", () => {
+      console.log("Start button clicked");
+      socket.send(JSON.stringify({ action: "start" }));
+    });
+  } else {
+    console.error("Start button not found");
+  }
+
+  if (stopButton) {
+    stopButton.addEventListener("click", () => {
+      console.log("Stop button clicked");
+      socket.send(JSON.stringify({ action: "pause" }));
+    });
+  } else {
+    console.error("Stop button not found");
+  }
 
   function throttle(fn, wait) {
     let lastCall = 0;

@@ -22,11 +22,18 @@
       const paddleWidth = "{{ paddle_width }}";
       const paddleHeight = "{{ paddle_height }}";
     </script>
-    <div>
-      <div>Player 1:</div>
-      <div id="score-p-1">0</div>
-      <div>Player 2:</div>
-      <div id="score-p-2">0</div>
+    <div class="info-ctn">
+      <div>
+        <span>Player 1: <span id="score-p-1">0</span></span>
+      </div>
+      <div>
+        <span>Player 1: <span id="score-p-2">0</span></span>
+      </div>
+
+      <button id="start-button">Start</button>
+      <button id="stop-button">Stop</button>
+    </div>
+    <div class="canvas-ctn">
       <canvas id="pongCanvas"></canvas>
     </div>
 
