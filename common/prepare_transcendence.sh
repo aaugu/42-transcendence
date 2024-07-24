@@ -14,11 +14,18 @@ ENV_PATH=".env"
 
 echo "${CYAN}-------------------- PREPARING DOCKER TO START... --------------------${NC}"
 
-if [ ! -f ${ENV_PATH} ]; then
-	echo "${RED}.env file is missing!${NC}"
-	exit 1
+if [ ! -d ${USER_MANAGEMENT_DB_VOLUME_PATH} ]
+then
+	mkdir -p ${USER_MANAGEMENT_DB_VOLUME_PATH}
+	if [ ! -d ${USER_MANAGEMENT_DB_VOLUME_PATH} ]
+	then
+		echo "${RED}ERROR: Could not create User management data directory!${NC}"
+		exit 1
+	else
+		echo "${GREEN}User management data directory created!${NC}"
+	fi
 else
-	echo "${GREEN}.env file successfully found${NC}"
+	echo "${YELLOW}User management data directory was already created!${NC}"
 fi
 
 if [ ! -d ${TOURNAMENT_DB_VOLUME_PATH} ]

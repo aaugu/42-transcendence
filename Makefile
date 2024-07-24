@@ -5,47 +5,53 @@ ENV_PATH			= .env
 
 # Colors
 GREEN			= \033[0;32m
+CYAN			= \033[0;36m
+RED				= \033[0;31m
 END				= \033[0m
 
 all : prepare down build up-detached
 
-prepare :
+env_check :
+	@(if [ ! -e ./.env ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
+
+prepare : env_check
 	@(sh ./common/prepare_transcendence.sh)
+	@(sh ./common/generate_postgres_config.sh)
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
-build:
-	@(echo "Creating images...")
+build : env_check
+	@(echo "${CYAN}Creating images...${END}")
 	@($(DOCKER_COMPOSE) build)
 
-up:
-	@(echo "Building, creating and starting containers...")
+up : env_check
+	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
 
-up-detached:
-	@(echo "Building, creating and starting containers...")
+up-detached : env_check
+	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)
 
 down :
-	@(echo "Stopping and remove containers...")
+	@(echo "${CYAN}Stopping and remove containers...")
 	@($(DOCKER_COMPOSE) down)
 
 start :
-	@(echo "Starting containers...")
-	$(DOCKER_COMPOSE) start
+	@(echo "${CYAN}Starting containers...${END}")
+	@($(DOCKER_COMPOSE) start)
 
 stop :
-	@(echo "Stopping containers...")
-	$(DOCKER_COMPOSE) -f $(DC_FILE) $(NAME) stop
+	@(echo "${CYAN}Stopping containers...${END}")
+	@($(DOCKER_COMPOSE) stop)
 
 clean: down
-	@(echo "Removing images and image volumes...")
-	@(docker images -q | xargs docker rmi -f)
+	@(echo "${CYAN}Removing images and image volumes...${END}")
+	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
 	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
-	@(echo "Clearing persistent volumes and remove .env file...")
-	@(docker volume rm $$(docker volume ls -q))
-	@(rm $(ENV_PATH))
+	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
+	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
+	@(if [ -e ./.env ]; then rm $(ENV_PATH); fi)
 
 re: fclean all
 
