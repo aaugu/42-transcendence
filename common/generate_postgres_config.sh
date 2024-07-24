@@ -6,5 +6,3 @@ AETHERYTE_SQL="ALTER USER ${AETHERYTE_POSTGRES_USER} WITH superuser createrole c
 echo $AETHERYTE_SQL > aetheryte_api_gateway/docker/postgres/config/init.sql
 
 # Micro service TOURNAMENT
-
-# Micro service USER MANAGEMENT

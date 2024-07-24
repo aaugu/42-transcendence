@@ -21,13 +21,6 @@ volumes:
             type: none
             o: bind
             device: tournament/docker/volumes/data
-    # User management
-    user_management_postgres_volume:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: user_management/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway
