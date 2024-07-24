@@ -78,6 +78,7 @@ display: none;
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {
 	width: 85%;
+	/* max-height: 92vh; */
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -90,6 +91,6 @@ display: none;
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
 	#main-content {
-		width: 50%;
+		width: 75%;
 	}
 }
