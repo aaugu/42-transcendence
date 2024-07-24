@@ -2,6 +2,8 @@
 
 cd /app/aetheryte
 
+sudo service nginx start
+
 python3 -m manage makemigrations
 python3 -m manage migrate
 

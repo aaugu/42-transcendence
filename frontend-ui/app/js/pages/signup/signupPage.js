@@ -16,6 +16,6 @@ export function signupPage() {
     </div>
     <row class="justify-content-center">
         <button type="submit" class="btn btn-dark" id="signup-submit">Sign up</button>
-    </row> 
+    </row>
     `;
 }

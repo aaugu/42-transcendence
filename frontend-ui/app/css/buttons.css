@@ -33,6 +33,14 @@
     background-color: #B1ADAD;
 }
 
+.form-control::placeholder {
+	color: #d3d3d3;
+}
+
+.form-label {
+	margin: 5px;
+}
+
 .select-btn {
 	height: 42%;
 }

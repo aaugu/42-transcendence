@@ -32,8 +32,10 @@ services:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
             service: aetheryte-python
-        # TODO Remove that after clompete integration
+        # TODO Remove that after complete integration
         ports:
+            - "80:80"
+            - "10444:443"
             - "8000:8000"
         depends_on:
             aetheryte-postgres:
