@@ -7,6 +7,7 @@
 	padding: 0;
 	color: black;
 	font-family: 'Press Start 2P';
+	font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 	font-size: max(10px, min(calc(1vw + 1vh), 15px));
 }
 
@@ -50,7 +51,7 @@ a {
 	#f17400 60%,
 	#A9C1FF 60%,
 	#A9C1FF 100%);
-	height: 92vh;
+	height: 100vh;
 	justify-content: center;
 	display: flex;
 }
@@ -81,7 +82,7 @@ display: none;
 #main-content {
 	width: 85%;
 	background-color: rgba(245, 245, 245, 1);
-	margin-top: 8vh;
+	/* margin-top: 8vh; */
 	/* max-height: 92vh; */
 }
 
