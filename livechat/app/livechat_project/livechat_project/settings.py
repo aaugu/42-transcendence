@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vny!eg&*i67hs2kv*3vxj24ins&=bb9hc4e8(u1=(zwd_1=7=p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.13.2.1', '10.13.1.5', '172.20.5.2']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -75,11 +75,14 @@ WSGI_APPLICATION = 'livechat_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'livechat',
+        'USER': 'aaugu',
+        'PASSWORD': 'aaugutra',
+        'HOST': '172.20.5.3',
+        'PORT': '5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

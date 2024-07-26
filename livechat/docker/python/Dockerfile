@@ -6,11 +6,12 @@ COPY config/requirements.txt app/
 
 RUN pip install --no-cache-dir -r app/requirements.txt
 
-# WORKDIR /app
+COPY config/config.sh config/
+RUN chmod +x config/config.sh
 
-# COPY . .
+RUN apt install dos2unix
+RUN dos2unix config/config.sh
 
 EXPOSE 8000
 
-# CMD ["python3", "manage.py", "runserver", "172.20.5.2:8000"]
-CMD ["sh", "-c", "while true; do sleep 1; done"]
+ENTRYPOINT [ "sh", "config/config.sh" ]

@@ -99,6 +99,8 @@ services:
         extends:
             file: livechat/docker/docker-compose.yml
             service: livechat-python
+        ports:
+            - "8000:8000"
         depends_on:
             livechat-postgres:
                 condition: service_healthy
