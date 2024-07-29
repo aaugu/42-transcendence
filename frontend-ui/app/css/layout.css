@@ -7,7 +7,7 @@
 	padding: 0;
 	color: black;
 	font-family: 'Press Start 2P';
-	font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+	/* font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
 	font-size: max(10px, min(calc(1vw + 1vh), 15px));
 }
 
@@ -81,7 +81,7 @@ display: none;
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {
 	width: 85%;
-	background-color: rgba(245, 245, 245, 1);
+	/* background-color: rgba(245, 245, 245, 0); */
 	/* margin-top: 8vh; */
 	/* max-height: 92vh; */
 }

@@ -1,3 +1,5 @@
+/*  PROFILE CONTAINERS  */
+
 .profile-row {
     display: flex;
     flex-direction: row;
@@ -25,14 +27,103 @@
 .profile-box {
     display: flex;
 	flex-direction: column;
-    justify-content: center;
-    align-items: space-between;
     width: 100%;
+    margin: 5px;
     color: rgb(0, 0, 0);
 	background-color: rgb(255, 255, 255);
+    border-radius: 10px;
 }
 
-.selected {
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Ensure left alignment */
+}
+
+.profile-details p {
+    margin: 0.5rem; /* Optional: Remove default margin for tighter layout */
+    text-align: left; /* Ensure left alignment */
+    font-size: 12px;
+}
+
+/*  USER MANAGEMENT  */
+
+.usermanagement-item {
+    display: flex;
+    align-items: center; /* Align text and button vertically */
+    gap: 0.5rem; /* Space between text and button */
+    margin-bottom: 0.5rem; /* Space between rows */
+}
+
+.edit-btn {
+    background: #f8f9fa; /* Light background color (or any color of your choice) */
+    border: 1px solid transparent; /* Border color (adjust as needed) */
+    border-radius: 50%; /* Rounded corners */
+    padding: 0.5rem; /* Space around the icon */
+    width: 2rem; /* Width of the button */
+    height: 2rem; /* Height of the button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem; /* Size of the icon */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #e9ecef; /* Background color on hover */
+    border-color: #adb5bd; /* Border color on hover */
+}
+
+.edit-btn i {
+    margin: 0; /* Remove any default margin around the icon */
+}
+
+.avatar-img {
+    border-radius: 50%; /* Circular avatar */
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Adjust size as needed */
+    object-fit: contain; /* Ensures the image covers the container without distortion */
+    border: 2px solid #e9ecef; /* Optional: Border color and thickness */
+}
+
+/*  PERSONAL STATS  */
+
+#list-group {
+	display: flex;
+    justify-items: center;
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	#list-group {
+        display: flex;
+        justify-items: center;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	#list-group {
+        display: flex;
+        justify-items: center;
+    }
+}
+
+.list-group-item {
+	display: flex;
+	justify-content: space-between;
+    font-size: 13px;
+}
+
+.list-group-item text {
+    font-size: 13px;
+}
+
+
+/*  OTHER (img, buttons, cleafix, etc)  */
+
+.centered {
 	align-self: center;
   }
 
@@ -40,17 +131,6 @@
 	width: 50px; /* Adjust the size as needed */
     height: 50px;
     margin-bottom: 10px;
-}
-
-.list-group {
-    display: flex;
-    max-width: 500px;
-}
-
-.list-group-item {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
 }
 
 .clearfix::after {
