@@ -12,11 +12,13 @@ END				= \033[0m
 all : prepare down build up-detached
 
 env_check :
-	@(if [ ! -e ./.env ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
+	@(if [ ! -e ${ENV_PATH} ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
+	@(chmod 744 ${ENV_PATH})
 
 prepare : env_check
-	@(sh ./common/prepare_transcendence.sh)
+	@(bash ./common/generate_env_files.sh)
 	@(sh ./common/generate_postgres_config.sh)
+	@(sh ./common/prepare_docker.sh)
 	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
 build : env_check
