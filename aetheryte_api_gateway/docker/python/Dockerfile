@@ -16,4 +16,3 @@ RUN pip install --no-cache-dir -r config/requirements.txt
 EXPOSE 8000
 
 CMD ["sh", "config/start_aetheryte.sh"]
-# CMD ["sh", "-c", "while true; do sleep 1; done"]

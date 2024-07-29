@@ -21,16 +21,19 @@ volumes:
             type: none
             o: bind
             device: tournament/docker/volumes/data
-    # User management
-    user_management_postgres_volume:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: user_management/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway
+    aetheryte-nginx:
+        extends:
+            file: aetheryte_api_gateway/docker/docker-compose.yml
+            service: aetheryte-nginx
+        depends_on:
+            aetheryte-python:
+                condition: service_healthy
+        ports:
+            # - "80:80"
+            - "10444:443"
     aetheryte-postgres:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
@@ -39,9 +42,6 @@ services:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
             service: aetheryte-python
-        # TODO Remove that after clompete integration
-        ports:
-            - "8000:8000"
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy

@@ -20,6 +20,6 @@ def check_autentication(request):
 {
 	"username":"afavre",
 	"nickname":"arnaud",
-	"email":"afavre@ffxiv.ch",
+	"email":"arnaud.favree@gmail.com",
 	"password":"q"
 }
