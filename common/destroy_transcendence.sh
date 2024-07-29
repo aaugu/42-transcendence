@@ -5,9 +5,9 @@ file_name=scrap
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 new_fileName=$file_name.$current_time
 
+LIVECHAT_VOLUME_PATH="livechat/docker/volumes/data"
 TOURNAMENT_VOLUME_PATH="tournament/docker/volumes/data"
 AETHERYTE_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/data"
-LIVECHAT_VOLUME_PATH="livechat/docker/volumes/data"
 
 if [ -d $LIVECHAT_VOLUME_PATH ]; then
     mv -f livechat/docker/volumes trash/aetheryte/$new_fileName
