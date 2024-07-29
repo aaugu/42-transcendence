@@ -23,9 +23,13 @@ fi
 
 
 # Remove Postgres config files
+LIVECHAT_CONFIG_FILE="livechat/docker/postgres/init.sql"
 TOURNAMENT_CONFIG_FILE="tournament/docker/postgres/init.sql"
 AETHERYTE_CONFIG_FILE="aetheryte_api_gateway/docker/postgres/init.sql"
-LIVECHAT_CONFIG_FILE="livechat/docker/postgres/init.sql"
+
+if [ -f $LIVECHAT_CONFIG_FILE ]; then
+    rm $LIVECHAT_CONFIG_FILE
+fi
 
 if [ -f $TOURNAMENT_CONFIG_FILE ]; then
     rm $TOURNAMENT_CONFIG_FILE
@@ -33,10 +37,6 @@ fi
 
 if [ -f $AETHERYTE_CONFIG_FILE ]; then
     rm $AETHERYTE_CONFIG_FILE
-fi
-
-if [ -f $LIVECHAT_CONFIG_FILE ]; then
-    rm $LIVECHAT_CONFIG_FILE
 fi
 
 # Remove Env files
