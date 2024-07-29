@@ -14,4 +14,5 @@ RUN dos2unix config/config.sh
 
 EXPOSE 8000
 
+# CMD ["sh", "-c", "while true; do sleep 1; done"]
 ENTRYPOINT [ "sh", "config/config.sh" ]

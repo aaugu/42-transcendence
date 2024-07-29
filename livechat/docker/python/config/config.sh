@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /app/livechat_project
+cd /app/liveChatProject
 
 python3 -m manage makemigrations
 python3 -m manage migrate
