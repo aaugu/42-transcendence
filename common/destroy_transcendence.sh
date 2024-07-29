@@ -9,6 +9,10 @@ TOURNAMENT_VOLUME_PATH="tournament/docker/volumes/data"
 AETHERYTE_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/data"
 LIVECHAT_VOLUME_PATH="livechat/docker/volumes/data"
 
+if [ -d $LIVECHAT_VOLUME_PATH ]; then
+    mv -f livechat/docker/volumes trash/aetheryte/$new_fileName
+fi
+
 if [ -d $TOURNAMENT_VOLUME_PATH ]; then
     mv -f tournament/docker/volumes trash/tournament/$new_fileName
 fi
@@ -16,11 +20,6 @@ fi
 if [ -d $AETHERYTE_VOLUME_PATH ]; then
     mv -f aetheryte_api_gateway/docker/volumes trash/aetheryte/$new_fileName
 fi
-
-if [ -d $LIVECHAT_VOLUME_PATH ]; then
-    mv -f livechat/docker/volumes trash/aetheryte/$new_fileName
-fi
-
 
 # Remove Postgres config files
 LIVECHAT_CONFIG_FILE="livechat/docker/postgres/init.sql"
