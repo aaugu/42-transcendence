@@ -12,7 +12,6 @@ RUN chmod +x config/config.sh
 RUN apt install dos2unix
 RUN dos2unix config/config.sh
 
-EXPOSE 8000
+EXPOSE 800
 
-# CMD ["sh", "-c", "while true; do sleep 1; done"]
 ENTRYPOINT [ "sh", "config/config.sh" ]
