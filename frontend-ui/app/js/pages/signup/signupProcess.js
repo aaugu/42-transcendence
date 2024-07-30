@@ -62,19 +62,19 @@ export async function signupProcess() {
         response.ok is used to handle server errors (404 or 500, for example) when the promise gets resolved
     */
     const sendUserDataToAPI = async (username, nickname, email, password) => {
-        await fetch('https://172.20.0.3/api/user/', {
+        await fetch('https://localhost:10444/api/user/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "username": username,
-                "nickname": nickname,
-                "email": email,
-                "password": password
+                "username": "username",
+                "nickname": "nickname",
+                "email": "email@email.com",
+                "password": "password"
             }),
-                credentials: 'include' //include cookies
+                // credentials: 'include' //include cookies
         })
         .then(response => {
                 console.log("first then");
