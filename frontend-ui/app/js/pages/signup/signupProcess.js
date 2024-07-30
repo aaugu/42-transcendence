@@ -62,39 +62,43 @@ export async function signupProcess() {
         response.ok is used to handle server errors (404 or 500, for example) when the promise gets resolved
     */
     const sendUserDataToAPI = async (username, nickname, email, password) => {
-    // await fetch('https://172.20.0.2/api/user/', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Accept': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         "username": username,
-    //         "nickname": nickname,
-    //         "email": email,
-    //         "password": password
-    //     }),
-			// credentials: 'include' //include cookies
-    // })
-    // .then(response => {
-    //         if (!response.ok) //analyze error code or body
-    //             throw new Error(`HTTP status code ${response.status}`);
-    //         return response.json()
-    // })
-    // .then(responseData => {
-    //         if (responseData !== null) {
-                // set access token in httponly cookies
-				// sessionStorage.setItem('access_token', username);
-    //             console.log(JSON.stringify(responseData))
-    //             // urlRoute("/profile");
-    //         }
-    // })
-    // .catch(e => console.error('Fetch error: '+ e));
+        await fetch('https://172.20.0.3/api/user/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "username": username,
+                "nickname": nickname,
+                "email": email,
+                "password": password
+            }),
+                credentials: 'include' //include cookies
+        })
+        .then(response => {
+                console.log("first then");
+                if (!response.ok) //analyze error code or body
+                    throw new Error(`HTTP status code ${response.status}`);
+                return response.json()
+        })
+        .then(responseData => {
+                console.log("second then");
+                if (responseData !== null) {
+                    // set access token in httponly cookies
+                    sessionStorage.setItem('access_token', username);
+                    console.log(JSON.stringify(responseData))
+                    urlRoute("/profile");
+                }
+        })
+        .catch(e => console.error('Fetch error: '+ e));
     }
 
+    console.log("before send user data to api");
 	await sendUserDataToAPI(username, nickname, email, password);
-
-    sessionStorage.setItem('access_token', username);
-    urlRoute("/profile");
+    console.log("after send user data to api");
+    // sessionStorage.setItem('access_token', username);
+    // urlRoute("/profile");
 }
 
 

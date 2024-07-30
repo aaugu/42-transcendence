@@ -3,7 +3,7 @@ export function profilePage() {
     mainCont.style.backgroundColor = "rgba(245, 245, 245, 0)";
     return `
     <h2 class="text-bold display-6"></h2>
-    <div class="profile-row">
+    <div class="profile-content">
         <div class="profile-column-left">
             <div id="user-management" class="profile-box clearfix">
                 <h5 class="m-2">User management</h5>

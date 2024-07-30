@@ -1,9 +1,9 @@
 export function signupPage() {
     return `
     <div class="profile-box">
-        <h1 class="text-bold display-5">Sign up here</h1>
+        <h1 class="text-bold display-5 m-2">Sign up here</h1>
         <br>
-        <div class="mb-3 text-start clearfix">
+        <div class="text-start m-2 clearfix">
             <label class="form-label" for="username">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Bob">
             <label class="form-label" for="nickname">Nickname</label>

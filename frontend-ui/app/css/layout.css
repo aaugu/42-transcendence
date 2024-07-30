@@ -54,6 +54,7 @@ a {
 	height: 100vh;
 	justify-content: center;
 	display: flex;
+	position: absolute;
 }
 
 .error-container {
@@ -74,16 +75,17 @@ a {
   }
 
 .hidden {
-opacity: 0;
-display: none;
+	display: none;
+}
+
+.btn {
+	margin: 0.5rem;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {
 	width: 85%;
-	/* background-color: rgba(245, 245, 245, 0); */
 	/* margin-top: 8vh; */
-	/* max-height: 92vh; */
 }
 
 /* Medium devices (tablets, 768px and up) */
