@@ -69,10 +69,10 @@ export async function signupProcess() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                "username": "username",
-                "nickname": "nickname",
-                "email": "email@email.com",
-                "password": "password"
+                "username": username,
+                "nickname": nickname,
+                "email": email,
+                "password": password
             }),
                 // credentials: 'include' //include cookies
         })
@@ -94,10 +94,8 @@ export async function signupProcess() {
         .catch(e => console.error('Fetch error: '+ e));
     }
 
-    console.log("before send user data to api");
 	await sendUserDataToAPI(username, nickname, email, password);
-    console.log("after send user data to api");
-    // sessionStorage.setItem('access_token', username);
+    sessionStorage.setItem('access_token', username);
     // urlRoute("/profile");
 }
 
