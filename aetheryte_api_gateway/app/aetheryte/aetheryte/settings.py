@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'rest_framework',
 	'rest_framework_simplejwt',
 	
+    'corsheaders',
+	
     'login'
 ]
 
@@ -41,6 +43,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	
+    'corsheaders.middleware.CorsMiddleware',
+	'django.middleware.common.CommonMiddleware'
 ]
 
 ROOT_URLCONF = 'aetheryte.urls'
@@ -136,3 +141,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ffxivtranscendence@gmail.com'
 EMAIL_HOST_PASSWORD = 'cnnc bmsc zrip yvbn'
+
+# Cors parameters
+CORS_ALLOWED_ORIGINS = [
+    "https://localhost:10443",
+]
