@@ -134,6 +134,7 @@ class GameState:
           self.paused = False
 
     def reset_score(self):
+      self.ballReset(1)
       self.score = [0, 0]
 
     def ballReset(self, pos):

@@ -66,8 +66,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.shared_game_state.pause()
         elif start_stop_reset == "reset":
             self.shared_game_state.reset_score()
-            self.shared_game_state.pause()
-            self.shared_game_state.ballReset(1)
+            
 
     async def game_loop(self):
         while True:

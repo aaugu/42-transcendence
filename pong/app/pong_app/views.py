@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from .game import PARAMS
 from .consumers import PongConsumer
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
+import logging
+
 
 # Create your views here.
 def pong_view(request):
@@ -29,6 +31,42 @@ def pong_view(request):
     }
     return render(request, 'pong_app/pong.html', context)
 
-def pong_state(request):
+def game_state(request):
   state_dict = PongConsumer.shared_game_state.to_dict()
   return JsonResponse(state_dict)
+
+@csrf_exempt
+def game_points(request):
+  if request.method == 'POST':
+    points_to_win = request.POST.get('points_to_win')
+    
+    # Check if points_to_win is provided and is a valid number
+    if points_to_win and points_to_win.isdigit():
+      points_to_win = int(points_to_win)
+      PARAMS['points_to_win'] = points_to_win
+      
+    # Redirect to the same view to see the updated game parameters
+    # return redirect('pong')  # Ensure 'pong_points_to_win' matches your URL name
+  
+  return JsonResponse({'points_to_win': PARAMS['points_to_win']})
+
+def game_start(request):
+  PongConsumer.shared_game_state.start()
+  return redirect('pong')  # Ensure 'pong_start' matches your URL name
+  
+def game_stop(request):
+  PongConsumer.shared_game_state.pause()
+  return redirect('pong')  # Ensure 'pong_stop' matches your URL name
+  
+# def game_reset(request):
+#   PongConsumer.shared_game_reset.reset_score()
+#   return redirect('pong')  # Ensure 'pong_stop' matches your URL name
+
+def game_reset(request):
+    try:
+        PongConsumer.shared_game_state.reset_score()
+    except Exception as e:
+        logging.exception("Error resetting game: %s", e)
+        return JsonResponse({'error': 'Error resetting game'}, status=500)
+
+    return redirect('pong')  # Ensure 'pong_stop' matches your URL name
