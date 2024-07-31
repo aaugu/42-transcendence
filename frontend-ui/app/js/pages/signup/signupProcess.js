@@ -96,7 +96,15 @@ export async function signupProcess() {
 
 	await sendUserDataToAPI(username, nickname, email, password);
     sessionStorage.setItem('access_token', username);
+    var csrf_token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+    console.log("csrf_token: ", csrf_token);
     // urlRoute("/profile");
+
+
+    // check not only username but e-mail address for double users
+    // make sure to not be able to go back with browser arrows
+    // how to retrieve cookie?
+    // only one cookie per session?
 }
 
 
