@@ -1,18 +1,12 @@
 import { urlRoute } from "../../dom/router.js";
+import { updateProfile } from "../user/user.js";
 
 export async function profileEvent(e) {
 	switch (e.target.id) {
 		case "logout":
-			console.log("button click: logout");
-			if (sessionStorage.getItem('access_token') !== null)
-			{
-				sessionStorage.removeItem('access_token');
-				console.log('being logged out');
+			updateProfile(localStorage.getItem('username'), false, null);
+				console.log('LOGOUT');
 				urlRoute('/');
-			}
-			else {
-				console.log('user was not active');
-			}
 			break;
 		default:
 			break;

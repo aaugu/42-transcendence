@@ -9,7 +9,7 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
-import { isLoggedIn } from "../pages/login/isLoggedIn.js"
+import { user_is_active } from "../pages/user/user.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         const {target} = e;
-        if (!target.matches('nav a') && target.id !== 'login' && target.id !== 'signup')
+        if (!target.matches('nav a, #login, #signup'))
             return ;
         e.preventDefault();
         urlRoute(e);
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const goToRoute = async () => {
         const currentRoute = window.location.pathname;
-        if (currentRoute.length == 0 || isLoggedIn("", "") === false)
+        if (currentRoute.length == 0)
 			currentRoute = "/";
 
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];

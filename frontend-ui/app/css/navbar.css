@@ -3,7 +3,7 @@ nav {
 	box-sizing: border-box;
 	background-color: #6d96ff;
 	padding: 0 20px;
-	position: absolute;
+	position: sticky;
 }
 
 .logo a {
