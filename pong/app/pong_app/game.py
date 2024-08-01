@@ -13,7 +13,9 @@ PARAMS = {
     "paddle_height": 150,
     "paddle_velocity_x": 5,
     "paddle_velocity_y": 60,
-    "points_to_win": 5
+    "points_to_win": 5,
+    "controller_right": {"up": "j", "down": "n"},
+    "controller_left": {"up": "f", "down": "c"},
 }
 
 
