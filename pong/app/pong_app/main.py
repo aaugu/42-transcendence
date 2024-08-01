@@ -31,6 +31,8 @@ def main():
 
   parser.add_argument('--quit', help='Quit the program', action='store_true')
 
+  parser.add_argument('--goals', type=int, help='Set how many points to win the game')
+
   # parser.add_argument('--', help='', action='store_true')
 
   # parser.add_argument('--', help='', action='store_true')
@@ -53,6 +55,9 @@ def main():
     elif (args.reset):
         subprocess.run(['curl', 'http://localhost:9000/api/game_reset'])
         print('Score resetted')
+    elif args.goals:
+        subprocess.run(['curl', '-X', 'POST', '-d', f'points_to_win={args.goals}', 'http://localhost:9000/api/game_points'])
+
     elif (args.quit):
         print("Until next time fellow Ponger!")
         break

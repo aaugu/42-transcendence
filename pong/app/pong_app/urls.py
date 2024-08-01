@@ -10,5 +10,6 @@ urlpatterns = [
     path('api/game_start', game_start),
     path('api/game_stop', game_stop),
     path('api/game_reset', game_reset),
+    path('api/game_points', game_points)
     # path('api/pong/change_controllers', pong_change_controllers),
 ]

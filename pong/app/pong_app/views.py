@@ -43,12 +43,19 @@ def game_points(request):
     # Check if points_to_win is provided and is a valid number
     if points_to_win and points_to_win.isdigit():
       points_to_win = int(points_to_win)
-      PARAMS['points_to_win'] = points_to_win
+      if (points_to_win > 0):
+        PARAMS['points_to_win'] = points_to_win
+      else:
+        return JsonResponse({'message': 'Please enter a value greater than 0'})
+
+    else:
+        return JsonResponse({'message': 'Bad Parameter'})
       
     # Redirect to the same view to see the updated game parameters
     # return redirect('pong')  # Ensure 'pong_points_to_win' matches your URL name
   
-  return JsonResponse({'points_to_win': PARAMS['points_to_win']})
+  # return JsonResponse({'points_to_win': PARAMS['points_to_win']})
+  return redirect('pong')
 
 def game_start(request):
   PongConsumer.shared_game_state.start()
