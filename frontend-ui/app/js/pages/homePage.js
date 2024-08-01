@@ -1,4 +1,4 @@
-import { user_is_active } from "./user/user.js";
+import { userIsConnected } from "./user/user.js";
 
 export function homePage() {
     return `

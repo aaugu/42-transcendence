@@ -1,11 +1,11 @@
 import { urlRoute } from "../../dom/router.js"
-import { user_is_active } from "../user/user.js";
+import { userIsConnected } from "../user/user.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (user_is_active(username, password) === null){
+    if (userIsConnected(username, password) === null){
         return;
     }
     //send variables to microservice via API

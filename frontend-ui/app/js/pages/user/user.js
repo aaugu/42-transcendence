@@ -1,5 +1,6 @@
 
-export var user_is_active = localStorage.getItem("user_is_active") || false;
+export var userIsConnected = localStorage.getItem("userIsConnected") || false;
+export var defaultAvatar = "images/default_avatar.png"
 
 //set username and profile pic in navbar
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,8 +22,10 @@ export const updateProfile = async (user, isConnected, token) => {
 		navLogoLink.href = "/profile";
 		// navProfilePic.src = user.avatar;
 		// navUsername.textContent = user.username;
-		localStorage.setItem('user_is_active', true);
-		user_is_active = true;
+		localStorage.setItem('userIsConnected', true);
+		localStorage.setItem('username', user.username);
+		localStorage.setItem('avatar', user.avatar);
+		userIsConnected = true;
 		// localStorage.setItem('username', user.username);
 		// localStorage.setItem('avatar', user.avatar);
 		localStorage.setItem('token', token);
@@ -34,11 +37,13 @@ export const updateProfile = async (user, isConnected, token) => {
 		navLogoLink.href = "/";
 		// navProfilePic.src = "";
 		// navUsername.textContent = "";
-		localStorage.setItem('user_is_active', false);
-		user_is_active = false;
+		localStorage.setItem('userIsConnected', false);
+		localStorage.setItem('username', 'guest');
+		localStorage.setItem('avatar', defaultAvatar);
+		userIsConnected = false;
 		// localStorage.removeItem('username');
 		// localStorage.removeItem('avatar');
-		localStorage.removeItem('token');
+		localStorage.setItem('token', token);
 
 
 	}

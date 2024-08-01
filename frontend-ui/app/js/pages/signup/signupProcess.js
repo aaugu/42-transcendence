@@ -1,6 +1,7 @@
 import { urlRoute } from "../../dom/router.js"
 import { errormsg } from "../../dom/errormsg.js"
 import { updateProfile } from "../user/user.js"
+import { defaultAvatar } from "../user/user.js";
 
 function signUpFieldsValidity(username, nickname, email, password, repeatPassword)
 {
@@ -35,11 +36,14 @@ export async function signupProcess() {
     const email = userData[2].value;
     const password = userData[3].value;
     const repeatPassword = userData[4].value;
+    const avatar = defaultAvatar;
 
     if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
-
         return;
     }
+
+    if (avatar === '')
+        avatar = defaultAvatar;
 
     const sendUserDataToAPI = async (username, nickname, email, password) => {
         await fetch('https://localhost:10444/api/user/', {
@@ -86,9 +90,11 @@ export async function signupProcess() {
         })
         .then(responseData => {
                 if (responseData !== null) {
-                    // set access token in httponly cookies
-                    // sessionStorage.setItem('access_token', username);
-					updateProfile(username, true, responseData.token);
+                    const user = {
+                        "username": username,
+                        "avatar": avatar,
+                    }
+					updateProfile(user, true, responseData.token);
                     console.log(JSON.stringify(responseData))
                     urlRoute("/profile");
                 }
@@ -97,8 +103,6 @@ export async function signupProcess() {
     }
 
 	await sendUserDataToAPI(username, nickname, email, password);
-
-    // sessionStorage.setItem('access_token', username);
 
 	const getCookie = (name) => {
 		const value = "; " + document.cookie;

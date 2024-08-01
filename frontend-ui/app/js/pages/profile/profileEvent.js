@@ -4,9 +4,9 @@ import { updateProfile } from "../user/user.js";
 export async function profileEvent(e) {
 	switch (e.target.id) {
 		case "logout":
-			updateProfile(localStorage.getItem('username'), false, null);
-				console.log('LOGOUT');
-				urlRoute('/');
+			updateProfile(null, false, null);
+			console.log('LOGOUT');
+			urlRoute('/');
 			break;
 		default:
 			break;
