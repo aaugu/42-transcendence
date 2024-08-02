@@ -2,32 +2,7 @@ import { urlRoute } from "../../dom/router.js"
 import { errormsg } from "../../dom/errormsg.js"
 import { updateProfile } from "../user/user.js"
 import { defaultAvatar } from "../user/user.js";
-
-function signUpFieldsValidity(username, nickname, email, password, repeatPassword)
-{
-    if (username == '' || nickname == '' || email == '' || password == '' || repeatPassword == '') {
-        errormsg("All fields must be filled out");
-        return false;
-    }
-    else if (password !== repeatPassword) {
-        errormsg("The passwords don't match");
-        return false;
-    }
-    const passwordValidity = (password) => {
-        const hasUpperCase = /[A-Z]/.test(password);
-        const hasLowerCase = /[a-z]/.test(password);
-        const hasDigit = /\d/.test(password);
-        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-        const isLongEnough = password.length >= 8 && password.length <= 25;
-
-        return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough;
-    }
-    if (passwordValidity(password) == false) {
-        errormsg("Your password must be 8 - 25 characters long and include at least 1 special, 1 uppercase and 1 digit");
-		return false;
-    }
-	return true;
-}
+import { signupFieldsValidity } from "./signupFieldsValidity.js";
 
 export async function signupProcess() {
     const userData = document.getElementsByClassName('form-control');
@@ -38,7 +13,8 @@ export async function signupProcess() {
     const repeatPassword = userData[4].value;
     const avatar = defaultAvatar;
 
-    if (!signUpFieldsValidity(username, nickname, email, password, repeatPassword)) {
+    if (!signupFieldsValidity(username, nickname, email, password, repeatPassword)) {
+        console.log("User log: SIGNUP FAILED");
         return;
     }
 
@@ -82,11 +58,10 @@ export async function signupProcess() {
 						// 	else
 						// 		errormsg(error.password[0]);
 						// }
-						return null;
 					}
 					throw new Error(`HTTP status code ${response.status}`);
 				}
-					return response.json();
+				return response.json();
         })
         .then(responseData => {
                 if (responseData !== null) {
@@ -95,11 +70,12 @@ export async function signupProcess() {
                         "avatar": avatar,
                     }
 					updateProfile(user, true, responseData.token);
-                    console.log(JSON.stringify(responseData))
+                    // console.log(JSON.stringify(responseData));
+                    console.log("User log: SIGNUP SUCCESSFUL");
                     urlRoute("/profile");
                 }
         })
-        .catch(e => console.error('Fetch error: '+ e));
+        .catch(e => console.error('User log: SIGNUP FETCH FAILURE, '+ e));
     }
 
 	await sendUserDataToAPI(username, nickname, email, password);
@@ -118,10 +94,6 @@ export async function signupProcess() {
 	else
 		console.log("csrf_token is null");
 
-
-    // check not only username but e-mail address for double users
-    // make sure to not be able to go back with browser arrows
-    // only one cookie per session?
 }
 
 
