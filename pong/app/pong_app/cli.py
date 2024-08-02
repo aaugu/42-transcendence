@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 import subprocess, sys
 import readline
+import json
 
 
 class NonExitingArgumentParser(ArgumentParser):
@@ -43,13 +44,6 @@ def main():
 
     parser.add_argument("--goals", type=int, help="Set how many points to win the game")
 
-    # parser.add_argument('--set-right-up', type=int, help="Set key for up action on right paddle")
-
-    # parser.add_argument('--set-right-down', type=int, help="Set key for down action on right paddle")
-    # parser.add_argument('--set-left-up', type=int, help="Set key for up action on left paddle")
-
-    # parser.add_argument('--set-left-down', type=int, help="Set key for down action on left paddle")
-
     parser.add_argument(
         "--set_keys_right",
         nargs=2,
@@ -59,6 +53,12 @@ def main():
         "--set_keys_left",
         nargs=2,
         help="Set keys for up and down actions on left paddle",
+    )
+
+    parser.add_argument(
+      "--move_right_paddle",
+      nargs=1,
+      help="Moove the right paddle in the direction of your choice. Specify up or down",
     )
 
     # parser.add_argument('--', help='', action='store_true')
@@ -155,6 +155,30 @@ def main():
                 else:
                     print(
                         "Invalid input for set_keys_left. It should be a list or tuple of exactly two single characters."
+                    )
+
+            elif args.move_right_paddle:
+                if (
+                  "up" in args.move_right_paddle or "down" in args.move_right_paddle
+                ):
+                    direction = args.move_right_paddle[0]
+                    print("Argsmove...", args.move_right_paddle[0])
+                    print("direction in cli", direction)
+                    subprocess.run(
+                        [
+                            "curl",
+                            "-X",
+                            "POST",
+                            "-H",
+                            "Content-Type: application/json",
+                            "-d",
+                            json.dumps({"direction_right_paddle": direction}),
+                            "http://localhost:9000/api/move_right_paddle",
+                        ]
+                    )
+                else:
+                    print(
+                        args.move_right_paddle, "Invalid entry!"
                     )
 
             elif args.quit:

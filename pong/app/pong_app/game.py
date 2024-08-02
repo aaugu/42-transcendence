@@ -104,6 +104,14 @@ class Paddle:
         self.width = width
         self.height = height
 
+    def move(self, direction):
+      print(f"in game", direction)
+      if (direction == "up"):
+        self.position[1] -= PARAMS['paddle_velocity_y']
+      elif (direction == "down"):
+        self.position[1] += PARAMS['paddle_velocity_y']
+      checkCollisonWithEdgesPaddle(self)
+
 
 def checkCollisonWithEdgesPaddle(paddle):
     if paddle.position[1] >= PARAMS["canvas_height"] - PARAMS["paddle_height"]:

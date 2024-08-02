@@ -4,6 +4,7 @@ from .consumers import PongConsumer
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import logging
+import json
 
 
 # Create your views here.
@@ -109,3 +110,42 @@ def game_reset(request):
         return JsonResponse({'error': 'Error resetting game'}, status=500)
 
     return redirect('pong')  # Ensure 'pong_stop' matches your URL name
+
+@csrf_exempt
+def move_right_paddle(request):
+  if request.method == 'POST':
+    print("request body:", request.body)
+    data = json.loads(request.body)
+    direction = data.get('direction_right_paddle')
+    print(f"in views", direction)
+    if direction == "up":
+      PongConsumer.shared_game_state.paddles[1].move("up")
+    else:
+      PongConsumer.shared_game_state.paddles[1].move("down")
+      
+  #   left_controller_down = request.POST.get('left_controller_down')
+  #   print(left_controller_down)
+
+  #   if (ord(left_controller_up) >= 97 and ord(left_controller_up) <= 122 and ord(left_controller_down) >= 97 and ord(left_controller_down) <= 122):
+  #     PARAMS["controller_left_up"] = left_controller_up
+  #     PARAMS["controller_left_down"] = left_controller_down
+  #   else:
+  #     return JsonResponse({'message': 'Controller must be a single character'})
+      
+  return JsonResponse({'message': 'Position Updated\n'})
+
+# @csrf_exempt
+# def move_left_paddle(request):
+#   if request.method == 'POST':
+#     left_controller_up = request.POST.get('left_controller_up')
+#     print(left_controller_up)
+#     left_controller_down = request.POST.get('left_controller_down')
+#     print(left_controller_down)
+
+#     if (ord(left_controller_up) >= 97 and ord(left_controller_up) <= 122 and ord(left_controller_down) >= 97 and ord(left_controller_down) <= 122):
+#       PARAMS["controller_left_up"] = left_controller_up
+#       PARAMS["controller_left_down"] = left_controller_down
+#     else:
+#       return JsonResponse({'message': 'Controller must be a single character'})
+      
+#   return JsonResponse({'message': f'controller_left_up: {left_controller_up} controller_left_down: {left_controller_down}'})
