@@ -1,3 +1,5 @@
+DEBUG = 1;
+
 document.addEventListener("DOMContentLoaded", (event) => {
   const canvas = document.getElementById("pongCanvas");
 
@@ -77,20 +79,42 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }, 50);
 
   function handleKeyPress() {
-    if (keysPressed["j"]) {
+    if (DEBUG) {
+      console.log("Controller Right Up:", controllerRightUp);
+      console.log("Controller Right Down:", controllerRightDown);
+      console.log("Controller Left Up:", controllerLeftUp);
+      console.log("Controller Left Down:", controllerLeftDown);
+    }
+    if (keysPressed[controllerRightUp]) {
       throttleSend({ direction_right_paddle: "up" });
       return;
-    } else if (keysPressed["m"] || keysPressed["n"]) {
+    } else if (keysPressed[controllerRightDown]) {
       throttleSend({ direction_right_paddle: "down" });
       return;
-    } else if (keysPressed["f"]) {
+    } else if (keysPressed[controllerLeftUp]) {
       throttleSend({ direction_left_paddle: "up" });
       return;
-    } else if (keysPressed["c"] || keysPressed["v"]) {
+    } else if (keysPressed[controllerLeftDown]) {
       throttleSend({ direction_left_paddle: "down" });
       return;
     }
   }
+
+  // function handleKeyPress() {
+  //   if (keysPressed["j"]) {
+  //     throttleSend({ direction_right_paddle: "up" });
+  //     return;
+  //   } else if (keysPressed["m"] || keysPressed["n"]) {
+  //     throttleSend({ direction_right_paddle: "down" });
+  //     return;
+  //   } else if (keysPressed["f"]) {
+  //     throttleSend({ direction_left_paddle: "up" });
+  //     return;
+  //   } else if (keysPressed["c"] || keysPressed["v"]) {
+  //     throttleSend({ direction_left_paddle: "down" });
+  //     return;
+  //   }
+  // }
 
   // console.log("Game state status", gameState.status);
 

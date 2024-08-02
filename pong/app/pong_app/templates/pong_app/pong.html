@@ -8,13 +8,6 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   </head>
   <body>
-    <!-- <form method="post">
-        {% csrf_token %}
-        <label for="ball_speed">Ball Speed: </label>
-        <input type="text" id="ball_speed" name="ball_speed" value="{{ ball_velocity_x }}">
-        <button type="submit">Set Parameters</button>
-        <button type="reset">Reset</button>
-    </form> -->
     <script>
       const canvasWidth = "{{ canvas_width }}";
       const canvasHeight = "{{ canvas_height }}";
@@ -22,8 +15,11 @@
       const paddleWidth = "{{ paddle_width }}";
       const paddleHeight = "{{ paddle_height }}";
 
-      const controllerRight = "{{ controller_right }}";
-      const controllerLeft = "{{ controller_left }}";
+      const controllerRightUp = "{{ controller_right_up }}";
+      const controllerRightDown = "{{ controller_right_down }}";
+      const controllerLeftUp = "{{ controller_left_up }}";
+      const controllerLeftDown = "{{ controller_left_down }}";
+
     </script>
     <div class="info-ctn">
       <div>

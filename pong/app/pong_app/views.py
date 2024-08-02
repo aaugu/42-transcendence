@@ -28,6 +28,10 @@ def pong_view(request):
         'ball_y': PARAMS['ball_y'],
         'paddle_width': PARAMS['paddle_width'],
         'paddle_height': PARAMS['paddle_height'],
+        'controller_right_up': PARAMS['controller_right_up'],
+        'controller_right_down': PARAMS['controller_right_down'],
+        'controller_left_up': PARAMS['controller_left_up'],
+        'controller_left_down': PARAMS['controller_left_down'],
     }
     return render(request, 'pong_app/pong.html', context)
 
@@ -51,11 +55,23 @@ def game_points(request):
     else:
         return JsonResponse({'message': 'Bad Parameter'})
       
-    # Redirect to the same view to see the updated game parameters
-    # return redirect('pong')  # Ensure 'pong_points_to_win' matches your URL name
-  
-  # return JsonResponse({'points_to_win': PARAMS['points_to_win']})
   return redirect('pong')
+
+@csrf_exempt
+def right_controller(request):
+  if request.method == 'POST':
+    right_controller_up = request.POST.get('right_controller_up')
+    print(right_controller_up)
+    right_controller_down = request.POST.get('right_controller_down')
+    print(right_controller_down)
+
+  #   if (ord(right_controller_up) >= 97 and ord(right_controller_up) <= 122 and ord(right_controller_down) >= 97 and ord(right_controller_down) >= 122):
+  #     PARAMS["controller_right_up"] = right_controller_up
+  #     PARAMS["controller_right_down"] = right_controller_down
+  #   else:
+  #     return JsonResponse({'message': 'Controller must be a single character'})
+      
+  # return JsonResponse({'message': f'controller_right_up: {right_controller_up} controller_right_down: {right_controller_down}'})
 
 def game_start(request):
   PongConsumer.shared_game_state.start()
