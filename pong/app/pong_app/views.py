@@ -65,13 +65,29 @@ def right_controller(request):
     right_controller_down = request.POST.get('right_controller_down')
     print(right_controller_down)
 
-  #   if (ord(right_controller_up) >= 97 and ord(right_controller_up) <= 122 and ord(right_controller_down) >= 97 and ord(right_controller_down) >= 122):
-  #     PARAMS["controller_right_up"] = right_controller_up
-  #     PARAMS["controller_right_down"] = right_controller_down
-  #   else:
-  #     return JsonResponse({'message': 'Controller must be a single character'})
+    if (ord(right_controller_up) >= 97 and ord(right_controller_up) <= 122 and ord(right_controller_down) >= 97 and ord(right_controller_down) <= 122):
+      PARAMS["controller_right_up"] = right_controller_up
+      PARAMS["controller_right_down"] = right_controller_down
+    else:
+      return JsonResponse({'message': 'Controller must be a single character'})
       
-  # return JsonResponse({'message': f'controller_right_up: {right_controller_up} controller_right_down: {right_controller_down}'})
+  return JsonResponse({'message': f'controller_right_up: {right_controller_up} controller_right_down: {right_controller_down}'})
+
+@csrf_exempt
+def left_controller(request):
+  if request.method == 'POST':
+    left_controller_up = request.POST.get('left_controller_up')
+    print(left_controller_up)
+    left_controller_down = request.POST.get('left_controller_down')
+    print(left_controller_down)
+
+    if (ord(left_controller_up) >= 97 and ord(left_controller_up) <= 122 and ord(left_controller_down) >= 97 and ord(left_controller_down) <= 122):
+      PARAMS["controller_left_up"] = left_controller_up
+      PARAMS["controller_left_down"] = left_controller_down
+    else:
+      return JsonResponse({'message': 'Controller must be a single character'})
+      
+  return JsonResponse({'message': f'controller_left_up: {left_controller_up} controller_left_down: {left_controller_down}'})
 
 def game_start(request):
   PongConsumer.shared_game_state.start()

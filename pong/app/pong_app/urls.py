@@ -7,6 +7,7 @@ from .views import (
     game_stop,
     game_reset,
     right_controller,
+    left_controller,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -21,5 +22,6 @@ urlpatterns = [
     path("api/game_reset", game_reset),
     path("api/game_points", game_points),
     path("api/right_controller", right_controller),
+    path("api/left_controller", left_controller),
     # path('api/pong/change_controllers', pong_change_controllers),
 ]

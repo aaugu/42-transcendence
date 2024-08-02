@@ -58,7 +58,6 @@ def main():
     parser.add_argument(
         "--set_keys_left",
         nargs=2,
-        type=ascii,
         help="Set keys for up and down actions on left paddle",
     )
 
@@ -132,8 +131,31 @@ def main():
                         "Invalid input for set_keys_right. It should be a list or tuple of exactly two single characters."
                     )
 
-            # elif (args.set_keys_left):
-            #     subprocess.run(['curl', '-X', 'POST', '-d', f'points_to_win={args.goals}', 'http://localhost:9000/api/game_points'])
+            elif args.set_keys_left:
+                if (
+                    isinstance(args.set_keys_left, (list, tuple))
+                    and len(args.set_keys_left) == 2
+                    and all(
+                        isinstance(key, str) and len(key) == 1
+                        for key in args.set_keys_left
+                    )
+                ):
+                    subprocess.run(
+                        [
+                            "curl",
+                            "-X",
+                            "POST",
+                            "-d",
+                            f"left_controller_up={args.set_keys_left[0]}",
+                            "-d",
+                            f"left_controller_down={args.set_keys_left[1]}",
+                            "http://localhost:9000/api/left_controller",
+                        ]
+                    )
+                else:
+                    print(
+                        "Invalid input for set_keys_left. It should be a list or tuple of exactly two single characters."
+                    )
 
             elif args.quit:
                 print("Until next time fellow Ponger!")

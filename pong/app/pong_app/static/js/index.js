@@ -79,7 +79,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
   }, 50);
 
   function handleKeyPress() {
+    count = 0;
     if (DEBUG) {
+      console.log(count += 1);
       console.log("Controller Right Up:", controllerRightUp);
       console.log("Controller Right Down:", controllerRightDown);
       console.log("Controller Left Up:", controllerLeftUp);
