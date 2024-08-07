@@ -9,7 +9,7 @@ from .views import (
     right_controller,
     left_controller,
     move_right_paddle,
-    # move_left_paddle,
+    move_left_paddle,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,6 +26,5 @@ urlpatterns = [
     path("api/right_controller", right_controller),
     path("api/left_controller", left_controller),
     path('api/move_right_paddle', move_right_paddle),
-    # path('api/move_left_paddle', move_left_paddle),
-    # path('api/pong/change_controllers', pong_change_controllers),
+    path('api/move_left_paddle', move_left_paddle),
 ]

@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   function handleKeyPress() {
     count = 0;
     if (DEBUG) {
-      console.log(count += 1);
+      console.log((count += 1));
       console.log("Controller Right Up:", controllerRightUp);
       console.log("Controller Right Down:", controllerRightDown);
       console.log("Controller Left Up:", controllerLeftUp);
@@ -102,36 +102,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
   }
 
-  // function handleKeyPress() {
-  //   if (keysPressed["j"]) {
-  //     throttleSend({ direction_right_paddle: "up" });
-  //     return;
-  //   } else if (keysPressed["m"] || keysPressed["n"]) {
-  //     throttleSend({ direction_right_paddle: "down" });
-  //     return;
-  //   } else if (keysPressed["f"]) {
-  //     throttleSend({ direction_left_paddle: "up" });
-  //     return;
-  //   } else if (keysPressed["c"] || keysPressed["v"]) {
-  //     throttleSend({ direction_left_paddle: "down" });
-  //     return;
-  //   }
-  // }
-
-  // console.log("Game state status", gameState.status);
-
-  // function handleKeyPress() {
-  //   if (keysPressed["j"]) {
-  //     socket.send(JSON.stringify({ direction_right_paddle: "up" }));
-  //   } else if (keysPressed["m"] || keysPressed["n"]) {
-  //     socket.send(JSON.stringify({ direction_right_paddle: "down" }));
-  //   } else if (keysPressed["f"]) {
-  //     socket.send(JSON.stringify({ direction_left_paddle: "up" }));
-  //   } else if (keysPressed["c"] || keysPressed["v"]) {
-  //     socket.send(JSON.stringify({ direction_left_paddle: "down" }));
-  //   }
-  // }
-
   function updateGameState(gameState) {
     const ball = gameState.ball;
     const context = canvas.getContext("2d");
@@ -141,6 +111,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById("score-p-2").textContent = score[1];
 
     context.clearRect(0, 0, canvas.width, canvas.height);
+
+    context.beginPath();
+    context.moveTo(canvas.width / 2, 0);
+    context.lineTo(canvas.width / 2, canvas.height);
+    context.strokeStyle = "white";
+    context.stroke();
+
+    context.beginPath();
+    context.moveTo(0, canvas.height / 2);
+    context.lineTo(canvas.width, canvas.height / 2);
+    context.strokeStyle = "white";
+    context.stroke();
+
+    if (DEBUG) {
+      for (let i = 0; i < canvasHeight; i += 100) {
+        context.fillText(i, 10, i);
+        context.fillText(i, canvas.width - 50, i);
+        context.beginPath();
+        context.moveTo(0, i);
+        context.lineTo(canvasWidth, i);
+        context.strokeStyle = "rgba(255, 255, 255, 0.5)"; // Change the opacity value (0.5) as desired
+        context.stroke();
+      }
+    }
 
     context.beginPath();
     context.arc(

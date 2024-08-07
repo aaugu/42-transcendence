@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bq!xn6bn@*4f^cd3&d)9k-dv(b+*z9kbhvyj&wb0!k7k$w+oij'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '10.13.2.1', '10.13.1.5', '172.20.3.2']
 
@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
-STATICFILES_DIR = [
-  BASE_DIR / "/pong_app" / "static"
+STATICFILES_DIRS = [
+  BASE_DIR / "pong_app" / "static"
 ]
 
 ASGI_APPLICATION = 'pong_project.asgi.application'
@@ -131,7 +131,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

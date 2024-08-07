@@ -9,6 +9,7 @@ from .game import (
     GameState,
     PARAMS,
 )
+from .ai import * 
 import asyncio
 
 
@@ -44,46 +45,16 @@ class PongConsumer(AsyncWebsocketConsumer):
         direction_left_paddle = text_data_json.get("direction_left_paddle")
         start_stop_reset = text_data_json.get("action")
 
-        # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[0][1])
-        # if not self.shared_game_state.paused:
-        #     if direction_right_paddle == "up":
-        #         self.shared_game_state.paddles[1].position[1] -= PARAMS[
-        #             "paddle_velocity_y"
-        #         ]
-        #         # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
-        #     elif direction_right_paddle == "down":
-        #         self.shared_game_state.paddles[1].position[1] += PARAMS[
-        #             "paddle_velocity_y"
-        #         ]
-        #         # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
-
-        #     if direction_left_paddle == "up":
-        #         self.shared_game_state.paddles[0].position[1] -= PARAMS[
-        #             "paddle_velocity_y"
-        #         ]
-        #         # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
-        #     elif direction_left_paddle == "down":
-        #         self.shared_game_state.paddles[0].position[1] += PARAMS[
-        #             "paddle_velocity_y"
-        #         ]
-        #         # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
-
-        if not self.shared_game_state.paused:
+        if not self.shared_game_state.paused and not self.shared_game_state.finished:
             if direction_right_paddle == "up":
                 self.shared_game_state.paddles[1].move("up")
-                print("consumer up")
-                # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
             elif direction_right_paddle == "down":
-                print("consumer down")
                 self.shared_game_state.paddles[1].move("down")
-                # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
 
             if direction_left_paddle == "up":
                 self.shared_game_state.paddles[0].move("up")
-                # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
             elif direction_left_paddle == "down":
                 self.shared_game_state.paddles[0].move("down")
-                # print(f"Paddle position updated", self.shared_game_state.paddles[1].position[1])
 
         if start_stop_reset == "start":
             print(f"Start Triggered")
@@ -95,6 +66,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             self.shared_game_state.reset_score()
 
     async def game_loop(self):
+        ai = AI(PongConsumer.shared_game_state)
+
+        asyncio.create_task(ai.play_2())
         while True:
             # Update shared game state
             PongConsumer.shared_game_state.update()

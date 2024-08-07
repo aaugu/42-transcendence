@@ -105,7 +105,6 @@ class Paddle:
         self.height = height
 
     def move(self, direction):
-      print(f"in game", direction)
       if (direction == "up"):
         self.position[1] -= PARAMS['paddle_velocity_y']
       elif (direction == "down"):
@@ -151,24 +150,27 @@ class GameState:
 
         self.paused = True
 
+        self.finished = False
+
     def update(self):
-        # print(f"", self.paused)
-        if (
-            self.paused == False
-            and self.score[0] < PARAMS["points_to_win"]
-            and self.score[1] < PARAMS["points_to_win"]
-        ):
-            if self.reset_timer is None:
-                self.ball.move()
-                checkCollisionWithEdgesBall(self.ball)
-                checkCollisonWithEdgesPaddle(self.paddles[0])
-                checkCollisonWithEdgesPaddle(self.paddles[1])
-                checkCollisionWithPaddlesBall(self.ball, self.paddles)
-                checkGoal(self.ball, self.score, self)
-            else:
-                if time.time() >= self.reset_timer:
-                    self.reset_timer = None
-                    self.ball.radius = PARAMS["ball_radius"]
+        if self.score[0] == PARAMS["points_to_win"] or self.score[1] == PARAMS["points_to_win"]:
+          self.finished = True
+          
+        if self.finished == False:
+          if (
+              self.paused == False
+          ):
+              if self.reset_timer is None:
+                  self.ball.move()
+                  checkCollisionWithEdgesBall(self.ball)
+                  checkCollisonWithEdgesPaddle(self.paddles[0])
+                  checkCollisonWithEdgesPaddle(self.paddles[1])
+                  checkCollisionWithPaddlesBall(self.ball, self.paddles)
+                  checkGoal(self.ball, self.score, self)
+              else:
+                  if time.time() >= self.reset_timer:
+                      self.reset_timer = None
+                      self.ball.radius = PARAMS["ball_radius"]
 
     def pause(self):
         if self.paused == False:
@@ -181,6 +183,7 @@ class GameState:
     def reset_score(self):
         self.ballReset(1)
         self.score = [0, 0]
+        self.finished = False
 
     def ballReset(self, pos):
         self.ball.position[0] = PARAMS["canvas_width"] / 2

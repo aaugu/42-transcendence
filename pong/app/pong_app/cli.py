@@ -61,6 +61,11 @@ def main():
       help="Moove the right paddle in the direction of your choice. Specify up or down",
     )
 
+    parser.add_argument(
+      "--move_left_paddle",
+      nargs=1,
+      help="Moove the left paddle in the direction of your choice. Specify up or down",
+    )
     # parser.add_argument('--', help='', action='store_true')
 
     # parser.add_argument('--', help='', action='store_true')
@@ -180,6 +185,31 @@ def main():
                     print(
                         args.move_right_paddle, "Invalid entry!"
                     )
+
+            elif args.move_left_paddle:
+                if (
+                  "up" in args.move_left_paddle or "down" in args.move_left_paddle
+                ):
+                    direction = args.move_left_paddle[0]
+                    print("Argsmove...", args.move_left_paddle[0])
+                    print("direction in cli", direction)
+                    subprocess.run(
+                        [
+                            "curl",
+                            "-X",
+                            "POST",
+                            "-H",
+                            "Content-Type: application/json",
+                            "-d",
+                            json.dumps({"direction_left_paddle": direction}),
+                            "http://localhost:9000/api/move_left_paddle",
+                        ]
+                    )
+                else:
+                    print(
+                        args.move_left_paddle, "Invalid entry!"
+                    )
+
 
             elif args.quit:
                 print("Until next time fellow Ponger!")

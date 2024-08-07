@@ -98,10 +98,6 @@ def game_stop(request):
   PongConsumer.shared_game_state.pause()
   return redirect('pong')  # Ensure 'pong_stop' matches your URL name
   
-# def game_reset(request):
-#   PongConsumer.shared_game_reset.reset_score()
-#   return redirect('pong')  # Ensure 'pong_stop' matches your URL name
-
 def game_reset(request):
     try:
         PongConsumer.shared_game_state.reset_score()
@@ -123,29 +119,19 @@ def move_right_paddle(request):
     else:
       PongConsumer.shared_game_state.paddles[1].move("down")
       
-  #   left_controller_down = request.POST.get('left_controller_down')
-  #   print(left_controller_down)
-
-  #   if (ord(left_controller_up) >= 97 and ord(left_controller_up) <= 122 and ord(left_controller_down) >= 97 and ord(left_controller_down) <= 122):
-  #     PARAMS["controller_left_up"] = left_controller_up
-  #     PARAMS["controller_left_down"] = left_controller_down
-  #   else:
-  #     return JsonResponse({'message': 'Controller must be a single character'})
-      
   return JsonResponse({'message': 'Position Updated\n'})
 
-# @csrf_exempt
-# def move_left_paddle(request):
-#   if request.method == 'POST':
-#     left_controller_up = request.POST.get('left_controller_up')
-#     print(left_controller_up)
-#     left_controller_down = request.POST.get('left_controller_down')
-#     print(left_controller_down)
 
-#     if (ord(left_controller_up) >= 97 and ord(left_controller_up) <= 122 and ord(left_controller_down) >= 97 and ord(left_controller_down) <= 122):
-#       PARAMS["controller_left_up"] = left_controller_up
-#       PARAMS["controller_left_down"] = left_controller_down
-#     else:
-#       return JsonResponse({'message': 'Controller must be a single character'})
+@csrf_exempt
+def move_left_paddle(request):
+  if request.method == 'POST':
+    print("request body:", request.body)
+    data = json.loads(request.body)
+    direction = data.get('direction_left_paddle')
+    print(f"in views", direction)
+    if direction == "up":
+      PongConsumer.shared_game_state.paddles[0].move("up")
+    else:
+      PongConsumer.shared_game_state.paddles[0].move("down")
       
-#   return JsonResponse({'message': f'controller_left_up: {left_controller_up} controller_left_down: {left_controller_down}'})
+  return JsonResponse({'message': 'Position Updated\n'})
