@@ -1,5 +1,6 @@
 import { urlRoute } from "../../dom/router.js";
 import { updateProfile } from "../user/user.js";
+import { twoFactorAuthButton } from "../login/twoFactorAuth.js";
 
 export async function profileEvent(e) {
 	switch (e.target.id) {
@@ -8,6 +9,9 @@ export async function profileEvent(e) {
 			console.log('User log: LOGOUT');
 			urlRoute('/');
 			break;
+		case "twoFactorAuth-btn":
+			console.log("twoFactorAuth-btn clicked");
+			twoFactorAuthButton();
 		default:
 			break;
 	}

@@ -14,6 +14,20 @@ export function signupPage() {
             <input type="password" class="form-control" id="password" placeholder="***">
             <label class="form-label mt-3" for="repeat-password">Repeat password</label>
             <input type="password" class="form-control" id="repeat-password" placeholder="***">
+             <label class="form-label mt-3" for="avatar">Avatar</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="avatarOption" id="defaultAvatar" value="default" checked>
+                <label class="form-check-label" for="defaultAvatar">
+                    Use default avatar
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="avatarOption" id="uploadAvatar" value="upload">
+                <label class="form-check-label" for="uploadAvatar">
+                    Upload your own avatar
+                </label>
+            </div>
+            <input type="file" class="form-control mt-2" id="avatarUpload" accept="image/png, image/jpeg" style="display: none;">
         </div>
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="signup-submit">Sign up</button>

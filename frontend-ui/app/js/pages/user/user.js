@@ -1,13 +1,7 @@
+import { twoFactorAuth } from "../login/twoFactorAuth.js";
 
-export var userIsConnected = localStorage.getItem("userIsConnected") || false;
+export var userIsConnected = (localStorage.getItem("userIsConnected") === "true");
 export var defaultAvatar = "images/default_avatar.png"
-
-//set username and profile pic in navbar
-document.addEventListener('DOMContentLoaded', () => {
-
-
-});
-
 
 //change user state (log in or log out)
 // update profile view, store username & avatar in local storage
@@ -30,6 +24,12 @@ export const updateProfile = async (user, isConnected, token) => {
 		// localStorage.setItem('avatar', user.avatar);
 		localStorage.setItem('token', token);
 
+		if (twoFactorAuth == true) {
+			const FAbtn = document.getElementById("twoFactorAuth-btn");
+			FAbtn.innerHTML = "Deactivate";
+			FAbtn.classList.remove("btn-outline-success");
+			FAbtn.classList.add("btn-outline-danger");
+		}
 
 	}
 	else {

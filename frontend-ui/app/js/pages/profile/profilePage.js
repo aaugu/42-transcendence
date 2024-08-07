@@ -1,6 +1,18 @@
+
 export function profilePage() {
-    const mainCont = document.getElementById("main-content");
-    mainCont.style.backgroundColor = "rgba(245, 245, 245, 0)";
+    // const mainCont = document.getElementById("main-content");
+    // mainCont.style.backgroundColor = "rgba(245, 245, 245, 0)";
+
+    const username = localStorage.getItem("username") || "Guest";
+    const nickname = localStorage.getItem("nickname") || "Guest-nickname";
+    const email = localStorage.getItem("email") || "Guest-email";
+    const avatar = localStorage.getItem("avatar") || "images/default_avatar.png";
+
+
+    // <button type="button" class="centered btn btn-outline-success m-2" id="2fa-button" data-toggle="modal" data-target="#exampleModalCenter">
+    //                 Activate
+    //             </button>
+
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="profile-content">
@@ -9,19 +21,19 @@ export function profilePage() {
                 <h5 class="m-2">User management</h5>
                 <div class="profile-details">
                     <div class="usermanagement-item centered">
-                        <img id="profile-avatar" src="images/default_avatar.png" alt="User Avatar" class="avatar-img">
+                        <img id="profile-avatar" src="${avatar}" alt="User Avatar" class="avatar-img">
                         <button id="edit-avatar" class="edit-btn"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
-                        <p id="profile-username">"Username"</p>
+                        <p id="profile-username">${username}</p>
                         <button id="edit-username" class="edit-btn"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
-                        <p id="profile-nickname">"Nickname"</p>
+                        <p id="profile-nickname">${nickname}</p>
                         <button id="edit-nickname" class="edit-btn"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
-                        <p id="profile-email">"E-mail@email.com"</p>
+                        <p id="profile-email">${email}</p>
                         <button id="edit-email" class="edit-btn"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
@@ -32,7 +44,7 @@ export function profilePage() {
             </div>
             <div id="2fa" class="profile-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
-                <button type="text" class="centered btn btn-outline-success m-2" id="2fa-button">Activate</button>
+                <button type="text" class="centered btn btn-outline-success m-2" id="twoFactorAuth-btn">Activate</button>
             </div>
         </div>
         <div class="profile-column-right">
