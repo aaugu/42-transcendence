@@ -2,7 +2,6 @@ export var twoFactorAuth = (localStorage.getItem("twoFactorAuth") === "true");
 
 export function twoFactorAuthButton() {
 	const twoFAbtn = document.getElementById("twoFactorAuth-btn");
-	console.log("two factor value in local storage: ", twoFactorAuth);
 	if (twoFactorAuth === false) {
 		console.log("twoFactorAuth is true");
 		twoFAbtn.innerHTML = "Deactivate";

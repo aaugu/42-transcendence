@@ -1,3 +1,4 @@
+import { twoFactorAuth } from "../login/twoFactorAuth.js";
 
 export function profilePage() {
     // const mainCont = document.getElementById("main-content");
@@ -8,10 +9,17 @@ export function profilePage() {
     const email = localStorage.getItem("email") || "Guest-email";
     const avatar = localStorage.getItem("avatar") || "images/default_avatar.png";
 
+	var twoFAbtnText;
+	var twoFAbtnColor;
 
-    // <button type="button" class="centered btn btn-outline-success m-2" id="2fa-button" data-toggle="modal" data-target="#exampleModalCenter">
-    //                 Activate
-    //             </button>
+	if (twoFactorAuth == true) {
+		twoFAbtnText = "Deactivate";
+		twoFAbtnColor = "btn-outline-danger";
+	}
+	else {
+		twoFAbtnText = "Activate";
+		twoFAbtnColor = "btn-outline-success";
+	}
 
     return `
     <h2 class="text-bold display-6"></h2>
@@ -44,7 +52,7 @@ export function profilePage() {
             </div>
             <div id="2fa" class="profile-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
-                <button type="text" class="centered btn btn-outline-success m-2" id="twoFactorAuth-btn">Activate</button>
+                <button type="text" class="centered btn ${twoFAbtnColor} m-2" id="twoFactorAuth-btn">${twoFAbtnText}</button>
             </div>
         </div>
         <div class="profile-column-right">

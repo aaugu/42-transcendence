@@ -24,13 +24,6 @@ export const updateProfile = async (user, isConnected, token) => {
 		// localStorage.setItem('avatar', user.avatar);
 		localStorage.setItem('token', token);
 
-		if (twoFactorAuth == true) {
-			const FAbtn = document.getElementById("twoFactorAuth-btn");
-			FAbtn.innerHTML = "Deactivate";
-			FAbtn.classList.remove("btn-outline-success");
-			FAbtn.classList.add("btn-outline-danger");
-		}
-
 	}
 	else {
 		navProfileElements.classList.add('hidden');

@@ -10,7 +10,7 @@ export async function profileEvent(e) {
 			urlRoute('/');
 			break;
 		case "twoFactorAuth-btn":
-			console.log("twoFactorAuth-btn clicked");
+			console.log('User log: 2FA changed');
 			twoFactorAuthButton();
 		default:
 			break;
