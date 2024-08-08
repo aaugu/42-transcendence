@@ -1,22 +1,10 @@
 import { urlRoute } from "../../dom/router.js"
 import { errormsg } from "../../dom/errormsg.js"
-import { updateProfile } from "../user/user.js"
-import { defaultAvatar } from "../user/user.js";
+import { updateProfile } from "../user/updateProfile.js"
+import { defaultAvatar } from "../user/updateProfile.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
-import { userIsConnected } from "../user/user.js";
-
-function readAvatarFile(file) {
-    return new Promise((resolve, reject) => {
-        var reader = new FileReader();
-        reader.onload = function(event) {
-            resolve(event.target.result);
-        };
-        reader.onerror = function(error) {
-            reject(error);
-        };
-        reader.readAsDataURL(file);
-    });
-}
+import { userIsConnected } from "../user/updateProfile.js";
+import { readAvatarFile } from "../user/avatar.js";
 
 export async function signupProcess() {
     const userData = document.getElementsByClassName('form-control');

@@ -1,4 +1,4 @@
-import { userIsConnected } from "./user/user.js";
+import { userIsConnected } from "./user/updateProfile.js";
 
 export function homePage() {
     return `

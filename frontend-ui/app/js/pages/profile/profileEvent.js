@@ -1,7 +1,7 @@
 import { urlRoute } from "../../dom/router.js";
-import { updateProfile } from "../user/user.js";
+import { updateProfile } from "../user/updateProfile.js";
 import { twoFactorAuthButton } from "../login/twoFactorAuth.js";
-import { editUserInfoButton } from "../user/user.js";
+import { editUserInfoButton } from "../user/editUserInfo.js";
 
 export async function profileEvent(e) {
 	if (e.target.classList.contains('edit-btn') || e.target.parentElement.classList.contains('edit-btn')) {
@@ -16,9 +16,6 @@ export async function profileEvent(e) {
 			urlRoute('/');
 			break;
 		case "confirm-2fa-activation":
-			console.log('User log: 2FA changed');
-			twoFactorAuthButton();
-			break;
 		case "confirm-2fa-deactivation":
 			console.log('User log: 2FA changed');
 			twoFactorAuthButton();

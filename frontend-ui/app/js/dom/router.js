@@ -9,7 +9,7 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
-import { userIsConnected } from "../pages/user/user.js"
+import { userIsConnected } from "../pages/user/updateProfile.js"
 
 let urlRoute;
 let currentEventListener = null;

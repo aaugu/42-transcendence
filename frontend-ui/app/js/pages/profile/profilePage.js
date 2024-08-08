@@ -21,6 +21,7 @@ export function profilePage() {
 		twoFAbtnColor = "btn-outline-success";
 	}
 
+
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="profile-content">
@@ -60,12 +61,7 @@ export function profilePage() {
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-					<form id="editForm">
-						<div class="mb-3">
-							<label for="edit-input" class="form-label" id="edit-label">Edit</label>
-							<input type="text" class="form-control" id="edit-input">
-						</div>
-					</form>
+					<form id="editForm"></form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
