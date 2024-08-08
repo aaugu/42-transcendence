@@ -22,9 +22,9 @@ if [ -d $AETHERYTE_VOLUME_PATH ]; then
 fi
 
 # Remove Postgres config files
-LIVECHAT_CONFIG_FILE="livechat/docker/postgres/init.sql"
-TOURNAMENT_CONFIG_FILE="tournament/docker/postgres/init.sql"
-AETHERYTE_CONFIG_FILE="aetheryte_api_gateway/docker/postgres/init.sql"
+LIVECHAT_CONFIG_FILE="livechat/docker/postgres/config/init.sql"
+TOURNAMENT_CONFIG_FILE="tournament/docker/postgres/config/init.sql"
+AETHERYTE_CONFIG_FILE="aetheryte_api_gateway/docker/postgres/config/init.sql"
 
 if [ -f $LIVECHAT_CONFIG_FILE ]; then
     rm $LIVECHAT_CONFIG_FILE
