@@ -9,7 +9,6 @@ class Conversation(models.Model):
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     sender = models.PositiveIntegerField(blank=False)
-    senderName = models.CharField(blank=False)
     message = models.TextField(blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
