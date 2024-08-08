@@ -24,5 +24,5 @@ export async function editAvatar(input) {
 	localStorage.setItem('avatar', avatar);
 	document.getElementById('profile-avatar').src = avatar;
 
-	editUserInfo('avatar', avatar);
+	// editUserInfo('avatar', avatar);
 }

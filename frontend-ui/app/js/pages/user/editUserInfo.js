@@ -33,7 +33,6 @@ async function editUserInfo(infoType, newInfo) {
 	.catch(e => console.error('User log: USER PATCH FETCH FAILURE, '+ e));
 }
 
-
 export function editUserInfoButton(e) {
 	const editButton = e.target.closest('.edit-btn');
 	const currentField = editButton.dataset.field;
@@ -41,8 +40,6 @@ export function editUserInfoButton(e) {
 	const editModalLabel = document.getElementById('edit-modal-label');
 
 	editModalLabel.textContent = `Edit ${currentField}`;
-	// editInput.value = document.getElementById(`profile-${currentField.toLowerCase()}`).textContent;
-
 	editForm.innerHTML = '';
 
     if (currentField === 'Avatar') {
@@ -72,19 +69,24 @@ export function editUserInfoButton(e) {
 	document.getElementById('edit-save').onclick = function() {
 		const editInput = document.getElementById('edit-input');
 		const newValue = editInput.value;
+		const userInfoID = document.getElementById("profile-" + currentField.toLowerCase());
 
 		switch (currentField) {
 			case 'Avatar':
 				editAvatar(editInput);
 				break;
 			case 'Username':
-				editUserInfo('username', newValue);
+				// editUserInfo('username', newValue);
+				userInfoID.innerText = newValue;
+				localStorage.setItem('username', newValue);
 				break;
 			case 'Nickname':
-				editUserInfo('nickname', newValue);
+				// editUserInfo('nickname', newValue);
+				userInfoID.innerText = newValue;
 				break;
 			case 'Email':
-				editUserInfo('email', newValue);
+				// editUserInfo('email', newValue);
+				userInfoID.innerText = newValue;
 				break;
 			case 'Password':
 				editPassword(newValue, document.getElementById('edit-input-repeat').value);
@@ -95,6 +97,7 @@ export function editUserInfoButton(e) {
 		console.log(`User log: Changed ${currentField} to: ${newValue}`);
 		editModal.hide();
 	};
+
 
 	editModal.show();
   }

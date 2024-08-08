@@ -1,4 +1,4 @@
-function passwordValidity (password) {
+export function passwordValidity (password) {
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasDigit = /\d/.test(password);
@@ -20,5 +20,5 @@ export function editPassword(newPassword, repeatNewPassword) {
 		return;
 	}
 
-	editUserInfo('password', newPassword);
+	// editUserInfo('password', newPassword);
 }
