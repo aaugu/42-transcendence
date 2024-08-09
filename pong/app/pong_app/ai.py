@@ -32,6 +32,7 @@ class AI:
               print(f"Ball: {self.game_state.ball.position[1]}")
               print(f"Paddle: {self.game_state.paddles[1].position[1]}")
               print(f"Middle paddle: {self.game_state.paddles[1].position[1] + (PARAMS['paddle_height'] / 2)}")
+              print(f"Ball Velocity: {self.game_state.ball.velocity[0]} - {self.game_state.ball.velocity[1]} ")
               if self.game_state.ball.position[1] > self.game_state.paddles[1].position[1]:
                 self.game_state.paddles[1].move("down")
               elif self.game_state.ball.position[1] < self.game_state.paddles[1].position[1]:
