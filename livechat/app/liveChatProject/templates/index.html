@@ -39,17 +39,25 @@
 			<div id="main-content" class="h-75 bg-white p-4">
 				<div id="livechat" class="row h-100 mx-2 border border-primary border-2 rounded-end rounded-3">
 					<div id="contact-list" class="col-lg-4 h-100 mh-100 overflow-auto d-flex flex-column justify-content-start p-0 border-end border-primary">
-						<div id="user-info" class="w-100 h-100 d-flex justify-content-center align-items-center border-bottom border-primary">Username</div>
-						<div id="contact" class="w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 1</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 2</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 3</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 4</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 5</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 6</div>
-						<div id="contact" class="contact w-100 d-flex justify-content-center align-items-center border-bottom border-primary">Contact 7</div>
+						<div id="livechat-menu" class="w-100 d-flex flex-column justify-content-around align-items-center border-bottom border-primary">
+							<div id="user-info w-100">{{ username }}</div>
+							<form action="post" id="search-bar" class="w-75 text-small">
+								<input class="form-control" type="search" placeholder="contacts..." aria-label="Search">
+      							<button class="btn" type="submit">Search</button>
+							</form>
+						</div>
+						{% for contact in contact_list %} 
+							<div id="contact" class="w-100 d-flex justify-content-center align-items-center border-bottom border-primary">
+								{% if contact.user_1.id == user %}
+									{{ contact.user_2.username }}
+								{% elif contact.user_2.id == user %}
+									{{ contact.user_1.username }}
+								{% endif %}
+							</div>
+						{% endfor %}
 					</div>
 					<div id="conversation" class="d-lg-flex flex-column justify-content-center align-items-center d-none d-lg-block h-100 overflow-auto bg-lightgrey px-5">
-						<div class="h1 text-center mb-5">Welcome to Live Chat</div>
+						<div class="h2 text-center mb-5">Welcome to Live Chat</div>
 						<div class="h6 text-center">Select a contact to start a conversation</div>
 					</div>
 				</div>
