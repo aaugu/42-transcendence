@@ -11,14 +11,17 @@ export function profilePage() {
 
 	var twoFAbtnText;
 	var twoFAbtnColor;
+    var twoFAtargetModal;
 
 	if (twoFactorAuth == true) {
 		twoFAbtnText = "Deactivate";
 		twoFAbtnColor = "btn-outline-danger";
+        twoFAtargetModal = "#deactivate-2fa-modal"
 	}
 	else {
 		twoFAbtnText = "Activate";
 		twoFAbtnColor = "btn-outline-success";
+        twoFAtargetModal = "#activate-2fa-modal"
 	}
 
 
@@ -74,7 +77,7 @@ export function profilePage() {
             <div id="2fa" class="profile-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
 				<button type="button" class="btn ${twoFAbtnColor}" data-bs-toggle="modal"
-				data-bs-target="#activate-2fa-modal" id="twoFactorAuth-btn">${twoFAbtnText}</button>
+				data-bs-target=${twoFAtargetModal} id="twoFactorAuth-btn">${twoFAbtnText}</button>
 
 				<!-- 2FA Modals -->
 				<div class="modal fade" id="activate-2fa-modal" tabindex="-1" aria-labelledby="activate-2fa" aria-hidden="true">
@@ -87,6 +90,7 @@ export function profilePage() {
 							<div class="modal-body">
 								<p>A code has been sent to your email. Please enter the code below to activate 2FA.</p>
           						<input type="text" class="form-control" id="activationCode" placeholder="Enter activation code">
+                                <p class="hidden m-2 text-danger" id="twoFAerrormsg">Please enter a code</p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>

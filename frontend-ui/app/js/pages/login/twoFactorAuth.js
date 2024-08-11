@@ -1,6 +1,8 @@
+import { errormsg } from "../../dom/errormsg.js";
+
 export var twoFactorAuth = (localStorage.getItem("twoFactorAuth") === "true");
 
-async function twoFactorAuthVerification(twoFactorAuthCode) {
+async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	const token = localStorage.getItem("token");
     await fetch('api/login/token/verify-2fa/', {
         method: 'POST',
@@ -10,7 +12,7 @@ async function twoFactorAuthVerification(twoFactorAuthCode) {
             'Authorization': `Bearer ${token}`,
         },
 		body: JSON.stringify({
-			"twoFactorAuth": twoFactorAuthCode,
+			"verification_code": twoFactorAuthCode,
 		}),
     })
     .then(async response => {
@@ -34,47 +36,55 @@ async function twoFactorAuthVerification(twoFactorAuthCode) {
     });
 }
 
-async function verifyTwoFactorAuthCode()
+async function sendTwoFactorAuthCode()
 {
-    document.getElementById('confirm-2fa-activation').onclick = async function() {
-        const input = document.getElementById('activationCode');
-		const twoFaAuthCode = input.value;
-        const response = await twoFactorAuthVerification(twoFaAuthCode);
-
-        if (response.success) {
-            console.log("User log: 2FA activation successful");
-            return true;
-        }
-        else {
-            console.log("User log: 2FA activation error ", response.error);
-            return false;
-        }
-    }
+    //send verification code to email
 }
 
-export function twoFactorAuthButton() {
+export async function twoFactorAuthButton() {
 	const twoFAbtn = document.getElementById("twoFactorAuth-btn");
-    const activateModal = new bootstrap.Modal(document.getElementById('activate-2fa-modal'));
 	if (twoFactorAuth === false) {
-        if (verifyTwoFactorAuthCode() === true) {
+        // sendTwoFactorAuthCode();
+        const input = document.getElementById('activationCode');
+        const twoFaAuthCode = input.value;
+        if (twoFaAuthCode == '') {
+            const errmsg = document.getElementById('twoFAerrormsg');
+            errmsg.classList.remove('hidden');
+            setTimeout(() => {
+                errmsg.classList.add('hidden');
+            }, 3000);
+            return ;
+        }
+        // const response = await verifyTwoFactorAuth(twoFaAuthCode);
+
+        // if (response.success == true) {
+            console.log("User log: 2FA activation successful");
             twoFAbtn.innerHTML = "Deactivate";
             twoFAbtn.classList.remove("btn-outline-success");
             twoFAbtn.classList.add("btn-outline-danger");
             twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
-            activateModal.hide();
             localStorage.setItem('twoFactorAuth', true);
             twoFactorAuth = true;
             //set 2fa verification to true in backend
-        }
-        else
-            activateModal.hide();
+            const activateModal = bootstrap.Modal.getInstance(document.getElementById('activate-2fa-modal'));
+            if (activateModal) {
+                activateModal.hide();
+            }
+        // }
+        // else {
+        //     console.log("User log: 2FA activation error ", response.error);
+        //     activateModal.hide();
+        // }
 	} else {
+        console.log("User log: 2FA de-activation successful");
 		twoFAbtn.innerHTML = "Activate";
 		twoFAbtn.classList.remove("btn-outline-danger");
 		twoFAbtn.classList.add("btn-outline-success");
 		twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
 		const deactivateModal = bootstrap.Modal.getInstance(document.getElementById('deactivate-2fa-modal'));
-        deactivateModal.hide();
+        if (deactivateModal) {
+            deactivateModal.hide();
+        }
 		localStorage.setItem('twoFactorAuth', false);
 		twoFactorAuth = false;
 	}
