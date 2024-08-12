@@ -1,7 +1,7 @@
 import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
-import { newGame } from "../pages/game/newGame.js"
+import { twoPlayerGamePage } from "../pages/game/twoPlayerGamePage.js"
 import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
@@ -10,6 +10,7 @@ import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
+import { mainGame } from "../pages/game/gameplay/mainGame.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -55,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "signup page"
 		},
         "/newgame" : {
-			content: newGame,
-			eventListener: null,
+			content: twoPlayerGamePage,
+			eventListener: mainGame,
 			description: "new game page"
 		},
         "/profile" : {

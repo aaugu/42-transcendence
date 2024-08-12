@@ -1,0 +1,25 @@
+body {
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+}
+canvas {
+  border: 1px solid #fff;
+}
+
+.info-ctn {
+  display: flex;
+  /* background-color: red; */
+  justify-content: center;
+}
+
+.info-ctn > * {
+  margin: 0 1rem;
+}
+
+.canvas-ctn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
