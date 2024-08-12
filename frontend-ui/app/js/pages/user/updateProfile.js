@@ -10,7 +10,7 @@ export const updateProfile = async (user, isConnected, token) => {
 	// const navUsername = document.getElementById('nav-username');
 
 	if (isConnected) {
-		navProfileElements.classList.remove('hidden');
+		// navProfileElements.classList.remove('hidden');
 		navLogoLink.href = "/profile";
 		// navProfilePic.src = user.avatar;
 		// navUsername.textContent = user.username;
@@ -24,7 +24,7 @@ export const updateProfile = async (user, isConnected, token) => {
 
 	}
 	else {
-		navProfileElements.classList.add('hidden');
+		// navProfileElements.classList.add('hidden');
 		navLogoLink.href = "/";
 		// navProfilePic.src = "";
 		// navUsername.textContent = "";

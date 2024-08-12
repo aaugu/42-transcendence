@@ -21,16 +21,25 @@
 	</head>
 	<body>
 		<!-- RESPONSIVE NAVBAR -->
-		<nav class="d-flex justify-content-between align-items-center fixed-top">
+		<nav class="fixed-top">
 			<input type="checkbox" id="check" class="d-none">
 			<label for="check" class="checkbtn pb-2">
 				<i class="fas fa-bars"></i>
 			</label>
 			<label class="logo"><a href="/" id="logo">Pong</a></label>
-			<ul class="hidden" id="nav-profile-elements">
-				<li class="text-center" id="new-game"><a href="/newgame">Game</a></li>
-				<li class="text-center" id="profile"><a href="/profile">Profile</a></li>
-				<li class="text-center" id="chat"><a href="/chat">Chat</a></li>
+			<ul id="nav-profile-elements">
+				<div class="dropdown">
+					<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					  Game
+					</button>
+					<ul class="dropdown-menu">
+					  <li><a class="dropdown-item" id="new-game" href="/newgame">Two players</a></li>
+					  <li><a class="dropdown-item" href="#">Tournament</a></li>
+					</ul>
+				</div>
+				<!-- <li class="text-center" id="new-game"><a href="/newgame">Game</a></li> -->
+				<li id="profile"><a href="/profile">Profile</a></li>
+				<li id="chat"><a href="/chat">Chat</a></li>
 			</ul>
 		</nav>
 		<!-- MAIN CONTENT -->
