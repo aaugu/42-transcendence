@@ -1,5 +1,5 @@
-export async function errormsg(msg) {
-    const errorCont = document.getElementById('error-msg');
+export async function errormsg(msg, id) {
+    const errorCont = document.getElementById(id);
 
     errorCont.classList.remove('hidden');
     errorCont.textContent = msg;

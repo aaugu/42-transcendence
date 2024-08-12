@@ -14,17 +14,17 @@ async function getUserInfo() {
             if (response.status === 401) {
                 if (error.detail) {
                     if (typeof(error.detail) == 'string')
-                        errormsg(error.detail);
+                        errormsg(error.detail, "homepage-errormsg");
                     else
-                        errormsg(error.detail[0]);
+                        errormsg(error.detail[0], "homepage-errormsg");
                 }
             }
             else if (response.status === 404) {
                 if (error.detail) {
                     if (typeof(error.detail) == 'string')
-                        errormsg(error.detail);
+                        errormsg(error.detail, "homepage-errormsg");
                     else
-                        errormsg(error.detail[0]);
+                        errormsg(error.detail[0], "homepage-errormsg");
                 }
             }
             throw new Error(`HTTP status code ${response.status}`);

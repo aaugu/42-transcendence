@@ -1,9 +1,6 @@
 import { twoFactorAuth } from "../login/twoFactorAuth.js";
 
 export function profilePage() {
-    // const mainCont = document.getElementById("main-content");
-    // mainCont.style.backgroundColor = "rgba(245, 245, 245, 0)";
-
     const username = localStorage.getItem("username") || "Guest";
     const nickname = localStorage.getItem("nickname") || "Guest-nickname";
     const email = localStorage.getItem("email") || "Guest-email";
@@ -23,7 +20,6 @@ export function profilePage() {
 		twoFAbtnColor = "btn-outline-success";
         twoFAtargetModal = "#activate-2fa-modal"
 	}
-
 
     return `
     <h2 class="text-bold display-6"></h2>
@@ -65,6 +61,7 @@ export function profilePage() {
 					</div>
 					<div class="modal-body">
 					<form id="editForm"></form>
+					<p class="hidden m-2 text-danger" id="editmodal-errormsg"></p>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
@@ -90,7 +87,7 @@ export function profilePage() {
 							<div class="modal-body">
 								<p>A code has been sent to your email. Please enter the code below to activate 2FA.</p>
           						<input type="text" class="form-control" id="activationCode" placeholder="Enter activation code">
-                                <p class="hidden m-2 text-danger" id="twoFAerrormsg">Please enter a code</p>
+                                <p class="hidden m-2 text-danger" id="twoFA-errormsg"></p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>

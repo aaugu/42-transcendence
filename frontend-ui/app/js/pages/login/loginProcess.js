@@ -9,7 +9,7 @@ export async function loginProcess() {
     const password = document.getElementById('password').value;
 
     if (userIsConnected === true){
-        errormsg("You are already logged in, redirecting to profile page...");
+        errormsg("You are already logged in, redirecting to profile page...", "homepage-errormsg");
         console.log("User log: ALREADY LOGGED IN");
         setTimeout(() => {
             urlRoute("/profile");
@@ -35,23 +35,23 @@ export async function loginProcess() {
                     if (response.status === 400) {
 						if (error.username) {
 							if (typeof(error.username) == 'string')
-								errormsg(error.username);
+								errormsg(error.username, "homepage-errormsg");
 							else
-								errormsg(error.username[0]);
+								errormsg(error.username[0], "homepage-errormsg");
 						}
 						else if (error.password) {
 							if (typeof(error.password) == 'string')
-								errormsg(error.password);
+								errormsg(error.password, "homepage-errormsg");
 							else
-								errormsg(error.password[0]);
+								errormsg(error.password[0], "homepage-errormsg");
 						}
                     }
                     else if (response.status === 401) {
                         if (error.detail) {
 							if (typeof(error.detail) == 'string')
-								errormsg(error.detail);
+								errormsg(error.detail, "homepage-errormsg");
 							else
-								errormsg(error.detail[0]);
+								errormsg(error.detail[0], "homepage-errormsg");
 						}
                     }
                     throw new Error(`HTTP status code ${response.status}`);

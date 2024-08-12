@@ -47,12 +47,9 @@ export async function twoFactorAuthButton() {
         // sendTwoFactorAuthCode();
         const input = document.getElementById('activationCode');
         const twoFaAuthCode = input.value;
+		input.value = '';
         if (twoFaAuthCode == '') {
-            const errmsg = document.getElementById('twoFAerrormsg');
-            errmsg.classList.remove('hidden');
-            setTimeout(() => {
-                errmsg.classList.add('hidden');
-            }, 3000);
+            errormsg('Please enter a code', 'twoFA-errormsg');
             return ;
         }
         // const response = await verifyTwoFactorAuth(twoFaAuthCode);
