@@ -9,6 +9,7 @@ class Ray {
 
 document.addEventListener("DOMContentLoaded", (event) => {
   const canvas = document.getElementById("pongCanvas");
+  console.log('window location host: ', window.location.host);
 
   const socket = new WebSocket("ws://" + window.location.host + "/ws/pong/");
 
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     const context = canvas.getContext("2d");
 
     // console.log(ball);
-    
+
 
     const score = gameState.scores;
     document.getElementById("score-p-1").textContent = score[0];

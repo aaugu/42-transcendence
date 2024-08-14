@@ -8,7 +8,7 @@ import { canvasWidth, canvasHeight } from './GameConstants.js';
 export async function mainGame (event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
-	// const socket = createWebSocketConnection();
+	const socket = createWebSocketConnection();
 
 	infoCtn.innerHTML = "";
 	infoCtn.innerHTML = `<div>
@@ -22,18 +22,15 @@ export async function mainGame (event) {
 							<span id="score-p-2">0</span>
 						</div>`;
 
-
-	console.log("in main.js", canvasWidth, canvasHeight);
-
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
 
-	// socket.onmessage = function (event) {
-	// 	const data = JSON.parse(event.data);
-	// 	if (data.game_state) {
-	// 	updateGameState(data.game_state, canvas);
-	// 	}
-	// };
+	socket.onmessage = function (event) {
+		const data = JSON.parse(event.data);
+		if (data.game_state) {
+		updateGameState(data.game_state, canvas);
+		}
+	};
 
 	const startButton = document.getElementById("start-button");
 	const stopButton = document.getElementById("stop-button");
