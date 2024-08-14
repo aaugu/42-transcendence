@@ -1,3 +1,6 @@
+import { ballRadius, paddleWidth, paddleHeight } from "./GameConstants.js";
+
+
 export default function updateGameState(gameState, canvas) {
   const ball = gameState.ball;
   const context = canvas.getContext("2d");
@@ -48,7 +51,7 @@ export default function updateGameState(gameState, canvas) {
     0,
     2 * Math.PI
   );
-  context.fillStyle = "white";
+  context.fillStyle = "black";
   context.fill();
   context.closePath();
 
@@ -60,7 +63,7 @@ export default function updateGameState(gameState, canvas) {
       parseInt(paddleWidth),
       parseInt(paddleHeight)
     );
-    context.fillStyle = "white";
+    context.fillStyle = "black";
     context.fill();
     context.closePath();
   });

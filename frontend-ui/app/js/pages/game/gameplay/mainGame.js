@@ -9,6 +9,7 @@ export async function mainGame (event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 	const socket = createWebSocketConnection();
+  console.log(`Protocol: ${socket.protocol} | ReadyState: ${socket.readyState} | URL: ${socket.url}`);
 
 	infoCtn.innerHTML = "";
 	infoCtn.innerHTML = `<div>
@@ -41,11 +42,13 @@ export async function mainGame (event) {
 	let keysPressed = {}
 
 	document.addEventListener("keydown", function (event) {
+    console.log("Keypressed");
 		keysPressed[event.key] = true;
 		handleKeyPress(keysPressed, socket);
 	});
 
 	document.addEventListener("keyup", function (event) {
+    console.log("Keypressed");
 		keysPressed[event.key] = false;
 		handleKeyPress(keysPressed, socket);
 	});
