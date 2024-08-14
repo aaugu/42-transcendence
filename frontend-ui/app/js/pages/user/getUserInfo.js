@@ -5,7 +5,7 @@ async function getUserInfo() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+			'HTTP_AUTHORIZATION': `Bearer ${token}`,
         },
     })
     .then(async response => {

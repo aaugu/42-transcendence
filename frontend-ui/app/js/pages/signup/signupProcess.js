@@ -5,6 +5,7 @@ import { defaultAvatar } from "../user/updateProfile.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
 import { userIsConnected } from "../user/updateProfile.js";
 import { readAvatarFile } from "../user/avatar.js";
+import { loginProcess } from "../login/loginProcess.js";
 
 export async function signupProcess() {
     const userData = document.getElementsByClassName('form-control');
@@ -88,14 +89,8 @@ export async function signupProcess() {
         })
         .then(responseData => {
                 if (responseData !== null) {
-                    const user = {
-                        "username": userdata.username,
-                        "avatar": userdata.avatar,
-                    }
-                    updateProfile(user, true, responseData.token);
-                    // console.log(JSON.stringify(responseData));
-                    console.log("User log: SIGNUP SUCCESSFUL");
-                    urlRoute("/profile");
+                    console.log("User log: SIGNUP SUCCESSFUL, LOGGING IN...");
+                    loginProcess();
                 }
         })
         .catch(e => console.error('User log: SIGNUP FETCH FAILURE, '+ e));

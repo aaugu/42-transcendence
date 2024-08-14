@@ -10,6 +10,7 @@ async function editUserInfo(infoType, newInfo) {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
+			'HTTP_AUTHORIZATION': `Bearer ${token}`,
 		},
 		body: JSON.stringify({
 			infoType : newInfo,

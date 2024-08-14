@@ -60,15 +60,21 @@ export async function loginProcess() {
         })
         .then(responseData => {
                 if (responseData !== null) {
-                    const user = {
-                        "username": username,
-                        "avatar": defaultAvatar, //needs to be changed to user avatar
-                    }
-                    updateProfile(user, true, responseData.access);
-                    // console.log(JSON.stringify(responseData));
-                    console.log("User log: LOGIN SUCCESSFUL");
-                    urlRoute("/profile");
-                }
+					if (responseData.detail) {
+						console.log("User log: TWO FACTOR AUTHENTICATION REQUIRED");
+						urlRoute("/twoFA");
+					}
+					else {
+						const user = {
+							"username": username,
+							"avatar": defaultAvatar, //needs to be changed to user avatar
+						}
+						console.log("login response: ", JSON.stringify(responseData));
+						updateProfile(user, true, responseData.access);
+						console.log("User log: LOGIN SUCCESSFUL");
+						urlRoute("/profile");
+					}
+				}
         })
         .catch(e => console.error('User log: LOGIN FETCH FAILURE, '+ e));
     }

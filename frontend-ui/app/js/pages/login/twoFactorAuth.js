@@ -2,14 +2,12 @@ import { errormsg } from "../../dom/errormsg.js";
 
 export var twoFactorAuth = (localStorage.getItem("twoFactorAuth") === "true");
 
-async function verifyTwoFactorAuth(twoFactorAuthCode) {
-	const token = localStorage.getItem("token");
-    await fetch('api/login/token/verify-2fa/', {
+export async function verifyTwoFactorAuth(twoFactorAuthCode) {
+    await fetch('https://localhost:10444/api/login/token/verify-2fa/', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
         },
 		body: JSON.stringify({
 			"verification_code": twoFactorAuthCode,
@@ -18,7 +16,14 @@ async function verifyTwoFactorAuth(twoFactorAuthCode) {
     .then(async response => {
         if (!response.ok) {
             const error = await response.json();
-			//handle error code correctly
+			if (error.status === 400) {
+				if (error.detail) {
+					if (typeof(error.detail) == 'string')
+						errormsg(error.detail, "homepage-errormsg");
+					else
+						errormsg(error.detail[0], "homepage-errormsg");
+				}
+			}
             throw new Error(`HTTP status code ${response.status}`);
         }
         return response.json()
@@ -36,25 +41,16 @@ async function verifyTwoFactorAuth(twoFactorAuthCode) {
     });
 }
 
-async function sendTwoFactorAuthCode()
-{
-    //send verification code to email
+async function editTwoFactorAuthStatus(status){
+	//edit is_2fa_enabled in backend to true / false
 }
 
-export async function twoFactorAuthButton() {
+export async function twoFactorAuthModalButton() {
 	const twoFAbtn = document.getElementById("twoFactorAuth-btn");
 	if (twoFactorAuth === false) {
-        // sendTwoFactorAuthCode();
-        const input = document.getElementById('activationCode');
-        const twoFaAuthCode = input.value;
-		input.value = '';
-        if (twoFaAuthCode == '') {
-            errormsg('Please enter a code', 'twoFA-errormsg');
-            return ;
-        }
-        // const response = await verifyTwoFactorAuth(twoFaAuthCode);
 
-        // if (response.success == true) {
+		//change if 2fa is activated or deactivated
+
             console.log("User log: 2FA activation successful");
             twoFAbtn.innerHTML = "Deactivate";
             twoFAbtn.classList.remove("btn-outline-success");
@@ -66,13 +62,11 @@ export async function twoFactorAuthButton() {
             const activateModal = bootstrap.Modal.getInstance(document.getElementById('activate-2fa-modal'));
             if (activateModal) {
                 activateModal.hide();
-            }
-        // }
-        // else {
-        //     console.log("User log: 2FA activation error ", response.error);
-        //     activateModal.hide();
-        // }
+			}
 	} else {
+
+		//change if 2fa is activated or deactivated
+
         console.log("User log: 2FA de-activation successful");
 		twoFAbtn.innerHTML = "Activate";
 		twoFAbtn.classList.remove("btn-outline-danger");
