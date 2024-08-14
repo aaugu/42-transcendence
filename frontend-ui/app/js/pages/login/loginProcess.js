@@ -62,7 +62,8 @@ export async function loginProcess() {
                 if (responseData !== null) {
 					if (responseData.detail) {
 						console.log("User log: TWO FACTOR AUTHENTICATION REQUIRED");
-						urlRoute("/twoFA");
+						var twoFAmodal = new bootstrap.Modal(document.getElementById('login-2fa-modal'));
+						twoFAmodal.show();
 					}
 					else {
 						const user = {

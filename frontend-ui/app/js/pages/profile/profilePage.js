@@ -74,7 +74,7 @@ export function profilePage() {
             <div id="2fa" class="profile-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
 				<button type="button" class="btn ${twoFAbtnColor}" data-bs-toggle="modal"
-				data-bs-target=${twoFAtargetModal} id="twoFactorAuth-btn">${twoFAbtnText}</button>
+				data-bs-target=${twoFAtargetModal} id="2fa-profile-btn">${twoFAbtnText}</button>
 
 				<!-- 2FA Modals -->
 				<div class="modal fade" id="activate-2fa-modal" tabindex="-1" aria-labelledby="activate-2fa" aria-hidden="true">
@@ -85,13 +85,11 @@ export function profilePage() {
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								<p>A code has been sent to your email. Please enter the code below to activate 2FA.</p>
-          						<input type="text" class="form-control" id="activationCode" placeholder="Enter activation code">
-                                <p class="hidden m-2 text-danger" id="twoFA-errormsg"></p>
+								<p>You will be prompted to log in again. Are you sure?</p>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-dark" id="confirm-2fa-activation">Verify code</button>
+								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
+								<button type="button" class="btn btn-dark" id="confirm-2fa-activation">Yes</button>
 							</div>
 						</div>
 					</div>
@@ -104,7 +102,7 @@ export function profilePage() {
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								<p>Are you sure you want to deactivate 2FA?</p>
+								<p>Are you sure?</p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>

@@ -1,6 +1,6 @@
 import { urlRoute } from "../../dom/router.js";
 import { updateProfile } from "../user/updateProfile.js";
-import { twoFactorAuth, twoFactorAuthModalButton } from "../login/twoFactorAuth.js";
+import { twoFactorAuth, twoFactorAuthProfileButton } from "../login/twoFactorAuth.js";
 import { editUserInfoButton } from "../user/editUserInfo.js";
 
 export async function profileEvent(e) {
@@ -15,21 +15,10 @@ export async function profileEvent(e) {
 			console.log('User log: LOGOUT');
 			urlRoute('/');
 			break;
-		// case "twoFactorAuth-btn":
-		// 	if (twoFactorAuth === false) {
-		// 		const sendCode = await sendTwoFactorAuthCode();
-		// 		console.log("sendCode: ", sendCode);
-		// 		if (sendCode.success == true) {
-		// 			console.log('User log: 2FA code send success');
-		// 		}
-		// 		else {
-		// 			console.log('User log: 2FA code send failure');
-		// 		}
-		// 	}
 		case "confirm-2fa-activation":
 		case "confirm-2fa-deactivation":
 			console.log('User log: 2FA change');
-			twoFactorAuthModalButton();
+			twoFactorAuthProfileButton();
 			break;
 		// case "edit-save":
 		// 	const editButton = e.target.closest('.edit-btn');

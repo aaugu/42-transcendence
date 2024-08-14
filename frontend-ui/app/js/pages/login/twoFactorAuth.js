@@ -1,4 +1,5 @@
 import { errormsg } from "../../dom/errormsg.js";
+import { urlRoute } from "../../dom/router.js"
 
 export var twoFactorAuth = (localStorage.getItem("twoFactorAuth") === "true");
 
@@ -31,12 +32,12 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
     .then(responseData => {
             if (responseData !== null) {
                 console.log(JSON.stringify(responseData));
-                console.log("User log: TWO FACTOR AUTHORIZATION SUCCESSFUL");
+                console.log("User log: TWO FACTOR AUTHENTICATION SUCCESSFUL");
                 return { success: true, data: responseData };
             }
     })
     .catch(e => {
-        console.error('User log: TWO FACTOR AUTHORIZATION FETCH FAILURE, '+ e);
+        console.error('User log: TWO FACTOR AUTHENTICATION FETCH FAILURE, '+ e);
         return { success: false, error: e.message || "Fetch error" };
     });
 }
@@ -45,8 +46,8 @@ async function editTwoFactorAuthStatus(status){
 	//edit is_2fa_enabled in backend to true / false
 }
 
-export async function twoFactorAuthModalButton() {
-	const twoFAbtn = document.getElementById("twoFactorAuth-btn");
+export async function twoFactorAuthProfileButton() {
+	const twoFAbtn = document.getElementById("2fa-profile-btn");
 	if (twoFactorAuth === false) {
 
 		//change if 2fa is activated or deactivated
@@ -78,5 +79,24 @@ export async function twoFactorAuthModalButton() {
         }
 		localStorage.setItem('twoFactorAuth', false);
 		twoFactorAuth = false;
+	}
+}
+
+export async function twoFactorAuthLoginButton() {
+	const input = document.getElementById('2fa-code');
+	const twoFaAuthCode = input.value;
+	input.value = '';
+	if (twoFaAuthCode == '') {
+		errormsg('Please enter a code', 'login-twoFA-errormsg');
+		return ;
+	}
+	const response = await verifyTwoFactorAuth(twoFaAuthCode);
+	if (response.success == true) {
+		localStorage.setItem('token', response.data.access);
+		console.log("User log: LOGIN SUCCESSFUL");
+		urlRoute('/profile');
+	}
+	else {
+		errormsg("Invalid verification code", 'login-twoFA-errormsg');
 	}
 }

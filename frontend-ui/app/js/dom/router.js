@@ -11,8 +11,6 @@ import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
 import { mainGame } from "../pages/game/gameplay/mainGame.js"
-import { twoFactorAuthPage } from "../pages/login/twoFactorAuthPage.js"
-import { twoFactorAuthEvent } from "../pages/login/twoFactorAuthEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -56,11 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			content: signupPage,
 			eventListener: signupEvent,
 			description: "signup page"
-		},
-		"/twoFA" : {
-			content: twoFactorAuthPage,
-			eventListener: twoFactorAuthEvent,
-			description: "two factor authentication page"
 		},
         "/newgame" : {
 			content: twoPlayerGamePage,
