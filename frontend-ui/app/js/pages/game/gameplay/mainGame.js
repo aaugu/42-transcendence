@@ -42,13 +42,11 @@ export async function mainGame (event) {
 	let keysPressed = {}
 
 	document.addEventListener("keydown", function (event) {
-    console.log("Keypressed");
 		keysPressed[event.key] = true;
 		handleKeyPress(keysPressed, socket);
 	});
 
 	document.addEventListener("keyup", function (event) {
-    console.log("Keypressed");
 		keysPressed[event.key] = false;
 		handleKeyPress(keysPressed, socket);
 	});
