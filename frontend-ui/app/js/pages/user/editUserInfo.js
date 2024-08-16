@@ -1,6 +1,5 @@
 import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
-// import jwt_decode from 'jwt-decode';
 
 async function editUserInfo(infoType, newInfo) {
 	//HOW TO HANDLE TOKEN

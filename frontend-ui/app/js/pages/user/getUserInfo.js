@@ -1,8 +1,10 @@
-// import jwt_decode from 'jwt-decode';
 
-async function getUserInfo() {
-    const token = localStorage.getItem("token");
-    await fetch('api/user/', {
+export async function getUserInfo() {
+    const token = localStorage.getItem('token');
+	const decodedToken = jwt_decode(token);
+
+	const url = 'https://localhost:10444/api/user/';
+	await fetch(url + decodedToken.user_id + '/', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

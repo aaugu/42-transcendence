@@ -1,6 +1,6 @@
 import { twoFactorAuth } from "../login/twoFactorAuth.js";
 
-export function profilePage() {
+export async function profilePage() {
     const username = localStorage.getItem("username") || "Guest";
     const nickname = localStorage.getItem("nickname") || "Guest-nickname";
     const email = localStorage.getItem("email") || "Guest-email";
