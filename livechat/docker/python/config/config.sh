@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /app/liveChatProject
+cd /app/livechatProject
 
 python manage.py collectstatic
 
