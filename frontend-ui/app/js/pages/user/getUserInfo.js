@@ -1,3 +1,5 @@
+// import jwt_decode from 'jwt-decode';
+
 async function getUserInfo() {
     const token = localStorage.getItem("token");
     await fetch('api/user/', {
@@ -5,8 +7,9 @@ async function getUserInfo() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-			'HTTP_AUTHORIZATION': `Bearer ${token}`,
+			// 'Authorization': `Bearer ${token}`,
         },
+		credentials: 'include', //include the cookies like this
     })
     .then(async response => {
         if (!response.ok) {

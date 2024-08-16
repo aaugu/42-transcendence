@@ -1,20 +1,24 @@
 import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
+// import jwt_decode from 'jwt-decode';
 
 async function editUserInfo(infoType, newInfo) {
 	//HOW TO HANDLE TOKEN
 	const token = localStorage.getItem('token');
-	const url = 'https://localhost:10444/api/user/'+ token;
-	await fetch(url, {
+	const decodedToken = jwt_decode(token);
+
+	const url = 'https://localhost:10444/api/user/';
+	await fetch(url + decodedToken.user_id + '/', {
 		method: 'PATCH',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-			'HTTP_AUTHORIZATION': `Bearer ${token}`,
+			// 'Authorization': `Bearer ${token}`,
 		},
 		body: JSON.stringify({
 			infoType : newInfo,
 		}),
+		credentials: 'include', //include the cookies like this
 	})
 	.then(async response => {
 			if (!response.ok) {
@@ -82,7 +86,7 @@ export function editUserInfoButton(e) {
 				localStorage.setItem('username', newValue);
 				break;
 			case 'Nickname':
-				// editUserInfo('nickname', newValue);
+				editUserInfo('nickname', newValue);
 				userInfoID.innerText = newValue;
 				break;
 			case 'Email':
