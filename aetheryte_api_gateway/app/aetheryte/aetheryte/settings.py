@@ -26,12 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	
+
     'rest_framework',
 	'rest_framework_simplejwt',
-	
+
     'corsheaders',
-	
+
     'login'
 ]
 
@@ -43,7 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	
+
     'corsheaders.middleware.CorsMiddleware',
 	'django.middleware.common.CommonMiddleware'
 ]
@@ -146,3 +146,5 @@ EMAIL_HOST_PASSWORD = 'cnnc bmsc zrip yvbn'
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:10443",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
