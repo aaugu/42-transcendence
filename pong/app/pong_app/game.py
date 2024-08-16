@@ -2,8 +2,8 @@ import math
 import time
 
 PARAMS = {
-    "canvas_width": 1300,
-    "canvas_height": 800,
+    "canvas_width": 800,
+    "canvas_height": 600,
     "ball_x": 200,
     "ball_y": 200,
     "ball_radius": 10,
