@@ -9,7 +9,6 @@ export async function mainGame (event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 	const socket = createWebSocketConnection();
-  console.log(`Protocol: ${socket.protocol} | ReadyState: ${socket.readyState} | URL: ${socket.url}`);
 
 	infoCtn.innerHTML = "";
 	infoCtn.innerHTML = `<div>
