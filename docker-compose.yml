@@ -21,6 +21,13 @@ volumes:
             type: none
             o: bind
             device: tournament/docker/volumes/data
+    # Live chat
+    livechat_postgres_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: livechat/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway
@@ -71,4 +78,19 @@ services:
             service: tournament-python
         depends_on:
             tournament-postgres:
+                condition: service_healthy
+
+    # Live chat
+    livechat-postgres:
+        extends:
+            file: livechat/docker/docker-compose.yml
+            service: livechat-postgres
+    livechat-python:
+        extends:
+            file: livechat/docker/docker-compose.yml
+            service: livechat-python
+        ports:
+            - "8000:8000"
+        depends_on:
+            livechat-postgres:
                 condition: service_healthy
