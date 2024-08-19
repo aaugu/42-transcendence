@@ -13,6 +13,7 @@
   .info-ctn {
 	display: flex;
 	/* background-color: red; */
+	background-color: blue;
 	justify-content: center;
   }
 
@@ -26,4 +27,5 @@
 	align-items: center;
 	border: 1px solid #020202;
 	width: 100%;
+
   }

@@ -1,5 +1,6 @@
 import { ballRadius, paddleWidth, paddleHeight } from "./GameConstants.js";
 
+
 export default function updateGameState(gameState, canvas) {
   const ball = gameState.ball;
   const context = canvas.getContext("2d");
