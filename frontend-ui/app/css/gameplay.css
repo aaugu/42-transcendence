@@ -5,7 +5,9 @@
 	margin: 0;
   } */
   canvas {
-	border: 1px solid #fff;
+	border: 1px solid #020202;
+	justify-content: center;
+	align-items: center;
   }
 
   .info-ctn {
@@ -22,4 +24,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border: 1px solid #020202;
+	width: 100%;
   }

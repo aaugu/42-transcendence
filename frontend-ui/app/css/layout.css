@@ -36,10 +36,10 @@ body {
 		display: flex;
 }
 
-img, picture, video, canvas, svg {
+/* img, picture, video, svg {
     display: block;
     max-width: 100%;
-}
+} */
 
 input, button, textarea, select, label {
     font: inherit;

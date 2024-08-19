@@ -1,8 +1,8 @@
-export const canvasWidth = '1300';
-export const canvasHeight = '600';
-export const ballRadius = 10;
-export const paddleWidth = 10;
-export const paddleHeight = 150;
+export const canvasWidth = 600;
+export const canvasHeight = 300;
+export const ballRadius = 5;
+export const paddleWidth = 5;
+export const paddleHeight = 100;
 
 export const controllerRightUp = "j";
 export const controllerRightDown = "n";
