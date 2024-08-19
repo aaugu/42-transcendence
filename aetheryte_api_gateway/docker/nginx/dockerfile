@@ -28,8 +28,7 @@ RUN systemctl enable logstash
 RUN mkdir /etc/logstash/pattern
 
 COPY config/logNginx.conf /etc/logstash/conf.d 
-
-RUN systemctl start logstash
+COPY /config/launchLogstash.sh /docker-entrypoint.d/
 
 # Exposes port 443 and makes it available only for inter-container communication (required for SSL protocol)
 EXPOSE 443
