@@ -30,33 +30,33 @@ export async function loginProcess() {
             }),
         })
         .then(async response => {
-                if (!response.ok) {
-                    const error = await response.json();
-                    if (response.status === 400) {
-						if (error.username) {
-							if (typeof(error.username) == 'string')
-								errormsg(error.username, "homepage-errormsg");
-							else
-								errormsg(error.username[0], "homepage-errormsg");
-						}
-						else if (error.password) {
-							if (typeof(error.password) == 'string')
-								errormsg(error.password, "homepage-errormsg");
-							else
-								errormsg(error.password[0], "homepage-errormsg");
-						}
+            if (!response.ok) {
+                const error = await response.json();
+                if (response.status === 400) {
+                    if (error.username) {
+                        if (typeof(error.username) == 'string')
+                            errormsg(error.username, "homepage-errormsg");
+                        else
+                            errormsg(error.username[0], "homepage-errormsg");
                     }
-                    else if (response.status === 401) {
-                        if (error.detail) {
-							if (typeof(error.detail) == 'string')
-								errormsg(error.detail, "homepage-errormsg");
-							else
-								errormsg(error.detail[0], "homepage-errormsg");
-						}
+                    else if (error.password) {
+                        if (typeof(error.password) == 'string')
+                            errormsg(error.password, "homepage-errormsg");
+                        else
+                            errormsg(error.password[0], "homepage-errormsg");
                     }
-                    throw new Error(`HTTP status code ${response.status}`);
                 }
-                    return response.json()
+                else if (response.status === 401) {
+                    if (error.detail) {
+                        if (typeof(error.detail) == 'string')
+                            errormsg(error.detail, "homepage-errormsg");
+                        else
+                            errormsg(error.detail[0], "homepage-errormsg");
+                    }
+                }
+                throw new Error(`HTTP status code ${response.status}`);
+            }
+                return response.json()
         })
         .then(responseData => {
                 if (responseData !== null) {
@@ -70,7 +70,7 @@ export async function loginProcess() {
 							"username": username,
 							"avatar": defaultAvatar, //needs to be changed to user avatar
 						}
-						console.log("login response: ", JSON.stringify(responseData));
+						// console.log("login response: ", JSON.stringify(responseData));
 						updateProfile(user, true, responseData.access);
 						console.log("User log: LOGIN SUCCESSFUL");
 						urlRoute("/profile");

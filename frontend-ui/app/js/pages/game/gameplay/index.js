@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const canvas = document.getElementById("pongCanvas");
   console.log('window location host: ', window.location.host);
 
-  const socket = new WebSocket("ws://" + window.location.host + "/ws/pong/");
+  const socket = new WebSocket("ws://" + 'localhost:9000' + "/ws/pong/");
 
   socket.onopen = function () {
     console.log("Websocket connection established");

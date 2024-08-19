@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			currentRoute = "/";
 
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];
-        const html = (currentRouteDetails.content)();
+        const html = await (currentRouteDetails.content)();
 		updateEventListenerMainCont(currentRouteDetails.eventListener);
 
 		const mainCont = document.getElementById('main-content');

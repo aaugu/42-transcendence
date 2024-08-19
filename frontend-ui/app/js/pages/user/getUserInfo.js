@@ -40,11 +40,11 @@ export async function getUserInfo() {
             if (responseData !== null) {
                 console.log(JSON.stringify(responseData));
                 console.log("User log: GET USER INFO SUCCESSFUL");
-                return responseData;
+                return { success: true, data: responseData };
             }
     })
     .catch(e => {
         console.error('User log: GET USER INFO FETCH FAILURE, '+ e);
-        return null;
+        return { success: false, error: e.message || "Fetch error" };
     });
 }

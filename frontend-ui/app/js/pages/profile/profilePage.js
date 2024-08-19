@@ -21,6 +21,7 @@ export async function profilePage() {
         twoFAtargetModal = "#activate-2fa-modal"
 	}
 
+
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="profile-content">
@@ -60,8 +61,8 @@ export async function profilePage() {
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-					<form id="editForm"></form>
-					<p class="hidden m-2 text-danger" id="editmodal-errormsg"></p>
+                        <form id="editForm"></form>
+                        <p class="hidden m-2 text-danger" id="editmodal-errormsg"></p>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
@@ -86,6 +87,7 @@ export async function profilePage() {
 							</div>
 							<div class="modal-body">
 								<p>You will be prompted to log in again. Are you sure?</p>
+                                <p class="hidden m-2 text-danger" id="activate2fa-errormsg"></p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
@@ -103,6 +105,7 @@ export async function profilePage() {
 							</div>
 							<div class="modal-body">
 								<p>Are you sure?</p>
+                                <p class="hidden m-2 text-danger" id="deactivate2fa-errormsg"></p>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>

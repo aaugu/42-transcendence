@@ -1,8 +1,7 @@
 import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
 
-async function editUserInfo(infoType, newInfo) {
-	//HOW TO HANDLE TOKEN
+export async function editUserInfo(infoType, newInfo) {
 	const token = localStorage.getItem('token');
 	const decodedToken = jwt_decode(token);
 
@@ -12,29 +11,32 @@ async function editUserInfo(infoType, newInfo) {
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
-			// 'Authorization': `Bearer ${token}`,
 		},
 		body: JSON.stringify({
-			infoType : newInfo,
+			[infoType] : newInfo,
 		}),
 		credentials: 'include', //include the cookies like this
 	})
 	.then(async response => {
-			if (!response.ok) {
-				const error = await response.json();
-				//determine which error codes to handle
-				throw new Error(`HTTP status code ${response.status}`);
-			}
-			return response.json()
+		if (!response.ok) {
+			const error = await response.json();
+			//determine which error codes to handle
+			throw new Error(`HTTP status code ${response.status}`);
+		}
+		return response.json()
 	})
 	.then(responseData => {
-			if (responseData !== null) {
-				//if concerning username -> update in localStorage
-				console.log(JSON.stringify(responseData));
-				console.log("User log: USER PATCH SUCCESSFUL");
-			}
+		if (responseData !== null) {
+			//if concerning username -> update in localStorage
+			console.log(JSON.stringify(responseData));
+			console.log("User log: USER PATCH SUCCESSFUL");
+			return { success: true, data: responseData };
+		}
 	})
-	.catch(e => console.error('User log: USER PATCH FETCH FAILURE, '+ e));
+	.catch(e => {
+		console.error('User log: USER PATCH FETCH FAILURE, '+ e);
+		return { success: false, error: e.message || "Fetch error" };
+	});
 }
 
 export function editUserInfoButton(e) {

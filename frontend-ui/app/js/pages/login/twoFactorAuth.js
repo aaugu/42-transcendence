@@ -1,5 +1,6 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
+import { editUserInfo } from "../user/editUserInfo.js";
 
 export var twoFactorAuth = (localStorage.getItem("twoFactorAuth") === "true");
 
@@ -42,43 +43,46 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
     });
 }
 
-async function editTwoFactorAuthStatus(status){
-	//edit is_2fa_enabled in backend to true / false
-}
-
 export async function twoFactorAuthProfileButton() {
 	const twoFAbtn = document.getElementById("2fa-profile-btn");
 	if (twoFactorAuth === false) {
-
-		//change if 2fa is activated or deactivated
-
-            console.log("User log: 2FA activation successful");
-            twoFAbtn.innerHTML = "Deactivate";
-            twoFAbtn.classList.remove("btn-outline-success");
-            twoFAbtn.classList.add("btn-outline-danger");
-            twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
-            localStorage.setItem('twoFactorAuth', true);
-            twoFactorAuth = true;
-            //set 2fa verification to true in backend
-            const activateModal = bootstrap.Modal.getInstance(document.getElementById('activate-2fa-modal'));
-            if (activateModal) {
-                activateModal.hide();
-			}
+		const response = await editUserInfo("is_2fa_enabled", true);
+		if (response.success == true) {
+			twoFAbtn.innerHTML = "Deactivate";
+			twoFAbtn.classList.remove("btn-outline-success");
+			twoFAbtn.classList.add("btn-outline-danger");
+			twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
+			localStorage.setItem('twoFactorAuth', true);
+			twoFactorAuth = true;
+			console.log("User log: 2FA activation successful");
+		}
+		else
+			errormsg("Unable to change 2FA", "activate2fa-errormsg");
+		const activateModal = bootstrap.Modal.getInstance(document.getElementById('activate-2fa-modal'));
+		if (activateModal) {
+			setTimeout(() => {
+				activateModal.hide();
+			}, 1000);
+		}
 	} else {
-
-		//change if 2fa is activated or deactivated
-
-        console.log("User log: 2FA de-activation successful");
-		twoFAbtn.innerHTML = "Activate";
-		twoFAbtn.classList.remove("btn-outline-danger");
-		twoFAbtn.classList.add("btn-outline-success");
-		twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
+		const response = await editUserInfo("is_2fa_enabled", false);
+		if (response.success == true) {
+			twoFAbtn.innerHTML = "Activate";
+			twoFAbtn.classList.remove("btn-outline-danger");
+			twoFAbtn.classList.add("btn-outline-success");
+			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
+			localStorage.setItem('twoFactorAuth', false);
+			twoFactorAuth = false;
+			console.log("User log: 2FA de-activation successful");
+		}
+		else
+			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
 		const deactivateModal = bootstrap.Modal.getInstance(document.getElementById('deactivate-2fa-modal'));
-        if (deactivateModal) {
-            deactivateModal.hide();
-        }
-		localStorage.setItem('twoFactorAuth', false);
-		twoFactorAuth = false;
+		if (deactivateModal) {
+			setTimeout(() => {
+				deactivateModal.hide();
+			}, 1000);
+		}
 	}
 }
 

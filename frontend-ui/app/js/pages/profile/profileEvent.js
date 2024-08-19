@@ -17,7 +17,6 @@ export async function profileEvent(e) {
 			break;
 		case "confirm-2fa-activation":
 		case "confirm-2fa-deactivation":
-			console.log('User log: 2FA change');
 			twoFactorAuthProfileButton();
 			break;
 		// case "edit-save":
