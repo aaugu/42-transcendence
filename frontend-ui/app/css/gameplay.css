@@ -29,17 +29,3 @@
 	border: 1px solid #020202;
 	width: 100%;
   }
-
-  .tournament-column-left, .tournament-column-right {
-    display: flex;
-    flex-direction: column;
-	/* gap: 1rem; */
-}
-
-.tournament-column-left {
-    flex: 1 1 50%;
-}
-
-.tournament-column-right {
-    flex: 1 1 50%;
-}

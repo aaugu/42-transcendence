@@ -25,7 +25,7 @@ export async function profilePage() {
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="two-column-container">
-        <div class="profile-column-left">
+        <div class="column-left">
             <div id="user-management" class="content-box clearfix">
                 <h5 class="m-2">User management</h5>
                 <div class="profile-details">
@@ -116,7 +116,7 @@ export async function profilePage() {
 				</div>
             </div>
         </div>
-        <div class="profile-column-right">
+        <div class="column-right">
             <div id="personal-stats" class="content-box clearfix">
                 <h5 class="m-2">Personal stats</h5>
                 <div class="profile-details">
