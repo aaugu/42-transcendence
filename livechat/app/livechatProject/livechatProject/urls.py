@@ -22,7 +22,6 @@ from livechat.views import userViewSet
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('livechat/', include(livechat.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path("livechat/", include("livechat.urls")),
     path('users/', userViewSet)
 ]

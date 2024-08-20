@@ -1,7 +1,6 @@
 from django.urls import path
-
-from livechat import views
+from views import *
 
 urlpatterns = [
-
+    path('conversations/', conversationViewSet)
 ]

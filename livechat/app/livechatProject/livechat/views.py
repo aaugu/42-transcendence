@@ -1,9 +1,12 @@
-from livechat.models import User
+from django.db.models import Q
+from django.http import HttpResponse
+
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
+from livechat.models import User, Conversation
 from livechat.serializers import UserSerializer
 
 @api_view(['GET', 'POST'])
@@ -11,8 +14,20 @@ def userViewSet(request):
     if request.method == 'GET':
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return Response({"status": serializer.data, "args": "coucou"}, status=status.HTTP_200_OK)
-
+        return Response({"status": serializer.data, }, status=status.HTTP_200_OK)
+    
+@api_view(['GET', 'POST'])
+def conversationViewSet(request):
+    if request.method == 'GET':
+        conversations = Conversation.objects.all().filter()
+        serializer = UserSerializer(conversations, many=True)
+        return Response({"status": serializer.data, }, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST':
+        conversation = Conversation(request.user_id, request.target_id)
+        conversation.save()
+        return Response(status=status.HTTP_200_OK)
+    
 # class UserViewSet(viewsets.ModelViewSet):
 #     """
 #     API endpoint that allows users to be viewed or edited.

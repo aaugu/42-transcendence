@@ -27,12 +27,14 @@ class Message(models.Model):
     author = models.PositiveIntegerField(blank=False)
     message = models.TextField(blank=False)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.author
+    date = models.CharField()
+    time = models.CharField()
 
     def date(self):
         return dateformat.format(timezone.localtime(self.timestamp), 'Y-m-d')
     
     def time(self):
         return dateformat.format(timezone.localtime(self.timestamp), 'H:i')
+
+    def __str__(self):
+        return str(self.author) + " " + str(self.message)
