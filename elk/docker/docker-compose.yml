@@ -1,0 +1,21 @@
+services:
+    elastic-debian:
+        build:
+            context: elastic
+            dockerfile: Dockerfile
+        networks:
+            transcendence :
+                ipv4_address: 172.20.6.2
+        env_file:
+            - ../../.env
+        restart: on-failure
+    kibana-debian:
+        build:
+            context: kibana
+            dockerfile: Dockerfile
+        networks:
+            transcendence :
+                ipv4_address: 172.20.6.3
+        env_file:
+            - ../../.env
+        restart: on-failure

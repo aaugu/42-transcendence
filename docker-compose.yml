@@ -94,3 +94,13 @@ services:
         depends_on:
             livechat-postgres:
                 condition: service_healthy
+    # Elasticsearch / Kibana
+    elastic-debian:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: elastic-debian
+    kibana-debian:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: kibana-debian
+    
