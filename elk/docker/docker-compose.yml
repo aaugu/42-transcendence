@@ -1,21 +1,31 @@
 services:
-    elastic-debian:
-        build:
-            context: elastic
-            dockerfile: Dockerfile
-        networks:
-            transcendence :
-                ipv4_address: 172.20.6.2
-        env_file:
-            - ../../.env
-        restart: on-failure
-    kibana-debian:
-        build:
-            context: kibana
-            dockerfile: Dockerfile
-        networks:
-            transcendence :
-                ipv4_address: 172.20.6.3
-        env_file:
-            - ../../.env
-        restart: on-failure
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: transcendence-elasticsearch
+    env_file:
+      - ../../.env
+    networks:
+        transcendence:
+            ipv4_address: 172.20.6.2
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic_data_volume:/usr/share/elasticsearch/data
+      - ./elastic/config:/config/
+    entrypoint: ["/bin/bash", "-c", "/usr/local/bin/docker-entrypoint.sh eswrapper"]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    container_name: transcendence-kibana
+    networks:
+        transcendence:
+            ipv4_address: 172.20.6.3
+    ports:
+      - "5601:5601"
+    env_file:
+      - ../../.env
+    depends_on:
+      - elasticsearch
+
+
+#  

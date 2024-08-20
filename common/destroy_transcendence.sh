@@ -8,6 +8,7 @@ new_fileName=$file_name.$current_time
 LIVECHAT_VOLUME_PATH="livechat/docker/volumes/data"
 TOURNAMENT_VOLUME_PATH="tournament/docker/volumes/data"
 AETHERYTE_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/data"
+ELASTIC_VOLUME_PATH="elk/docker/volumes/data"
 
 if [ -d $LIVECHAT_VOLUME_PATH ]; then
     mv -f livechat/docker/volumes trash/livechat/$new_fileName
@@ -19,6 +20,10 @@ fi
 
 if [ -d $AETHERYTE_VOLUME_PATH ]; then
     mv -f aetheryte_api_gateway/docker/volumes trash/aetheryte/$new_fileName
+fi
+
+if [ -d $ELASTIC_VOLUME_PATH ]; then
+    mv -f elk/docker/volumes trash/elk/$new_fileName
 fi
 
 # Remove Postgres config files

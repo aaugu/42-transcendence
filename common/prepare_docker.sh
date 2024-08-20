@@ -10,10 +10,12 @@ TRASH_PATH="trash"
 TRASH_LIVECHAT_PATH="${TRASH_PATH}/livechat"
 TRASH_AETHERYTE_PATH="${TRASH_PATH}/aetheryte"
 TRASH_TOURNAMENT_PATH="${TRASH_PATH}/tournament"
+TRASH_ELK_PATH="${TRASH_PATH}/elk"
 
 LIVECHAT_DATA_VOLUME_PATH="livechat/docker/volumes/data"
 TOURNAMENT_DATA_VOLUME_PATH="tournament/docker/volumes/data"
 AETHERYTE_DATA_VOLUME_PATH="aetheryte_api_gateway/docker/volumes/data"
+ELASTIC_DATA_VOLUME_PATH="elk/docker/volumes/data"
 ENV_PATH=".env"
 
 echo "${CYAN}-------------------- PREPARING DOCKER TO START... --------------------${NC}"
@@ -60,6 +62,21 @@ else
 	echo "${YELLOW}Aetheryte data directory was already created!${NC}"
 fi
 
+if [ ! -d ${ELASTIC_DATA_VOLUME_PATH} ]
+then
+	mkdir -p ${ELASTIC_DATA_VOLUME_PATH}
+	if [ ! -d ${ELASTIC_DATA_VOLUME_PATH} ]
+	then
+		echo "${RED}ERROR: Could not create elasticsearch data directory!${NC}"
+		exit 1
+	else
+		echo "${GREEN}elasticsearch data directory created!${NC}"
+	fi
+else
+	echo "${YELLOW}elasticsearch data directory was already created!${NC}"
+fi
+
+
 if [ ! -d ${TRASH_AETHERYTE_PATH} ]
 then
 	mkdir -p ${TRASH_AETHERYTE_PATH}
@@ -73,4 +90,14 @@ fi
 if [ ! -d ${TRASH_TOURNAMENT_PATH} ]
 then
 	mkdir -p ${TRASH_TOURNAMENT_PATH}
+fi
+
+if [ ! -d ${TRASH_TOURNAMENT_PATH} ]
+then
+	mkdir -p ${TRASH_TOURNAMENT_PATH}
+fi
+
+if [ ! -d ${TRASH_ELK_PATH} ]
+then
+	mkdir -p ${TRASH_ELK_PATH}
 fi

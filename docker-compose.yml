@@ -28,6 +28,13 @@ volumes:
             type: none
             o: bind
             device: livechat/docker/volumes/data/
+    #elk volumes
+    elastic_data_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: elk/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway
@@ -95,12 +102,16 @@ services:
             livechat-postgres:
                 condition: service_healthy
     # Elasticsearch / Kibana
-    elastic-debian:
+    elasticsearch:
         extends:
             file: elk/docker/docker-compose.yml
-            service: elastic-debian
-    kibana-debian:
+            service: elasticsearch
+        ports:
+            - "9200:9200"
+    kibana:
         extends:
             file: elk/docker/docker-compose.yml
-            service: kibana-debian
+            service: kibana
+        ports:
+            - "5601:5601"
     
