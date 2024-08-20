@@ -1,6 +1,6 @@
 export function signupPage() {
     return `
-    <div class="profile-box">
+    <div class="content-box">
         <h1 class="text-bold display-5 m-2">Sign up here</h1>
         <br>
         <div class="text-start m-2 w-75 centered clearfix">

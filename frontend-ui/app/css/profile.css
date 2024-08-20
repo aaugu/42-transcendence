@@ -1,6 +1,6 @@
 /*  PROFILE CONTAINERS  */
 
-.profile-content {
+.two-column-container {
     display: flex;
     flex-direction: row;
 	flex-wrap: wrap;
@@ -23,7 +23,7 @@
     flex: 1 1 60%;
 }
 
-.profile-box {
+.content-box {
     display: flex;
 	flex-direction: column;
     width: 100%;
@@ -120,7 +120,7 @@
 }
 
 
-/*  OTHER (img, buttons, cleafix, etc)  */
+/*  OTHER (img, buttons, clearfix, etc)  */
 
 .centered {
 	align-self: center;

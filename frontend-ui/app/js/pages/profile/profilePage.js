@@ -24,9 +24,9 @@ export async function profilePage() {
 
     return `
     <h2 class="text-bold display-6"></h2>
-    <div class="profile-content">
+    <div class="two-column-container">
         <div class="profile-column-left">
-            <div id="user-management" class="profile-box clearfix">
+            <div id="user-management" class="content-box clearfix">
                 <h5 class="m-2">User management</h5>
                 <div class="profile-details">
                     <div class="usermanagement-item centered">
@@ -72,7 +72,7 @@ export async function profilePage() {
 				</div>
 			</div>
 
-            <div id="2fa" class="profile-box clearfix">
+            <div id="2fa" class="content-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
 				<button type="button" class="btn ${twoFAbtnColor}" data-bs-toggle="modal"
 				data-bs-target=${twoFAtargetModal} id="2fa-profile-btn">${twoFAbtnText}</button>
@@ -117,7 +117,7 @@ export async function profilePage() {
             </div>
         </div>
         <div class="profile-column-right">
-            <div id="personal-stats" class="profile-box clearfix">
+            <div id="personal-stats" class="content-box clearfix">
                 <h5 class="m-2">Personal stats</h5>
                 <div class="profile-details">
                     <p>Total wins: 3</p>
@@ -153,7 +153,7 @@ export async function profilePage() {
                 </ul>
                 </div>
             </div>
-            <div id="friends" class="profile-box">
+            <div id="friends" class="content-box">
                 <h5 class="m-2">Friend list</h5>
             </div>
         </div>

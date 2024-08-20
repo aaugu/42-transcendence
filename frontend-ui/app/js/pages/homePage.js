@@ -2,7 +2,7 @@ import { userIsConnected } from "./user/updateProfile.js";
 
 export function homePage() {
     return `
-    <div class="profile-box">
+    <div class="content-box">
         <h1 class="text-bold display-5 m-2">Come play pong</h1>
         <br>
         <row class="justify-content-center m-2">

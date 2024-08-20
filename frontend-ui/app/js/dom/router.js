@@ -1,7 +1,9 @@
 import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
-import { twoPlayerGamePage } from "../pages/game/twoPlayerGamePage.js"
+import { localTwoPlayerGamePage } from "../pages/game/localTwoPlayerGamePage.js"
+import { remoteTwoPlayerGamePage } from "../pages/game/remoteTwoPlayerGamePage.js"
+import { localAIgamePage } from "../pages/game/localAIgamePage.js"
 import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
@@ -11,6 +13,7 @@ import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
 import { mainGame } from "../pages/game/gameplay/mainGame.js"
+import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -55,10 +58,25 @@ document.addEventListener('DOMContentLoaded', () => {
 			eventListener: signupEvent,
 			description: "signup page"
 		},
-        "/newgame" : {
-			content: twoPlayerGamePage,
+        "/local-twoplayer" : {
+			content: localTwoPlayerGamePage,
 			eventListener: mainGame,
-			description: "new game page"
+			description: "local two player game page"
+		},
+		"/local-ai" : {
+			content: localAIgamePage,
+			eventListener: mainGame,
+			description: "local IA game page"
+		},
+		"/remote-twoplayer" : {
+			content: remoteTwoPlayerGamePage,
+			eventListener: mainGame,
+			description: "remote two player game page"
+		},
+		"/tournament" : {
+			content: tournamentPage,
+			eventListener: null,
+			description: "new tournament page"
 		},
         "/profile" : {
 			content: profilePage,
