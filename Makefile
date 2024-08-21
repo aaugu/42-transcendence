@@ -28,7 +28,7 @@ build : env_check
 up : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
-
+	./test.sh
 up-detached : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)

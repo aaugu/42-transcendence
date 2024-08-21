@@ -4,28 +4,46 @@ services:
     container_name: transcendence-elasticsearch
     env_file:
       - ../../.env
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
     networks:
-        transcendence:
-            ipv4_address: 172.20.6.2
+      transcendence:
+        ipv4_address: 172.20.6.2
     ports:
       - "9200:9200"
     volumes:
       - elastic_data_volume:/usr/share/elasticsearch/data
-      - ./elastic/config:/config/
     entrypoint: ["/bin/bash", "-c", "/usr/local/bin/docker-entrypoint.sh eswrapper"]
+
+  init-script:
+    image: debian
+    container_name: init_script_elasticsearch
+    networks:
+      transcendence:
+        ipv4_address: 172.20.6.4
+    depends_on:
+      - elasticsearch
+    env_file:
+      - ../../.env
+    volumes:
+      - ./elastic/config:/scripts
+    entrypoint: ["sleep", "infinity"]
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.10.2
     container_name: transcendence-kibana
     networks:
-        transcendence:
-            ipv4_address: 172.20.6.3
+      transcendence:
+        ipv4_address: 172.20.6.3
     ports:
       - "5601:5601"
-    env_file:
-      - ../../.env
+    environment:
+      - ELASTICSEARCH_HOSTS=https://172.20.6.2:9200
+      - ELASTICSEARCH_USERNAME=arnaud
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+      - SERVER_SSL_ENABLED=false 
     depends_on:
       - elasticsearch
-
-
-#  
+      - init-script

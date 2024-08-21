@@ -108,6 +108,10 @@ services:
             service: elasticsearch
         ports:
             - "9200:9200"
+    init-script:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: init-script
     kibana:
         extends:
             file: elk/docker/docker-compose.yml
