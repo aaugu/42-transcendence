@@ -6,3 +6,6 @@ aetheryte_api_gateway/docker/volumes/
 tournament/docker/volumes/
 aetheryte_api_gateway/docker/postgres/config/init.sql
 tournament/docker/postgres/config/init.sql
+# Ignore __pycache__ directories
+__pycache__/
+*.pyc
