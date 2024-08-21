@@ -5,7 +5,14 @@ import updateGameState from './GameDraw.js';
 import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 
+let start = false
+
 export async function mainGame (event) {
+  if (start) {
+    return;
+  }
+
+
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 	const socket = createWebSocketConnection();
@@ -49,4 +56,7 @@ export async function mainGame (event) {
 		keysPressed[event.key] = false;
 		handleKeyPress(keysPressed, socket);
 	});
+
+
+  start = true
 }

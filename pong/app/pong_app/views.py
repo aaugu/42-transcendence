@@ -5,21 +5,14 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import logging
 import json
+import uuid
+
+def generate_unique_id():
+    return str(uuid.uuid4())
 
 
 # Create your views here.
 def pong_view(request):
-    # if request.method == 'POST':
-    #     ball_speed = request.POST.get('ball_speed')
-
-    #     # Check if ball_speed is provided and is a valid number
-    #     if ball_speed and ball_speed.isdigit():
-    #         ball_speed = int(ball_speed)
-    #         PARAMS['ball_velocity_x'] = ball_speed
-    #         PARAMS['ball_velocity_y'] = ball_speed  # Assuming you want to update both velocities
-
-    #     # Redirect to the same view to see the updated game parameters
-    #     return redirect('pong')  # Ensure 'pong_view' matches your URL name
 
     context = {
         "canvas_width": PARAMS["canvas_width"],
@@ -34,6 +27,7 @@ def pong_view(request):
         "controller_left_up": PARAMS["controller_left_up"],
         "controller_left_down": PARAMS["controller_left_down"],
     }
+
     JsonResponse(context)
 
     return render(request, "pong_app/pong.html", context)

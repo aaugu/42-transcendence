@@ -13,26 +13,46 @@ from .ai import *
 import asyncio
 
 
+# class PongConsumer(AsyncWebsocketConsumer):
+#     # Shared across all instances (class-level)
+#     shared_game_state = GameState()
+#     game_loop_running = False  # To check if the game loop is already running
+
+#     async def connect(self):
+#         print("Connected")
+#         self.room_name = "pong"
+#         self.room_group_name = f"pong_{self.room_name}"
+
+#         # Join the room group
+#         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+
+#         # Accept the WebSocket connection
+#         await self.accept()
+
+#         # Check if the game loop is already running; if not, start it
+#         if not PongConsumer.game_loop_running:
+#             PongConsumer.game_loop_running = True
+#             asyncio.create_task(self.game_loop())
+
 class PongConsumer(AsyncWebsocketConsumer):
-    # Shared across all instances (class-level)
-    shared_game_state = GameState()
-    game_loop_running = False  # To check if the game loop is already running
+    game_loops = {}
+    game_states = {}
 
     async def connect(self):
-        print("Connected")
-        self.room_name = "pong"
-        self.room_group_name = f"pong_{self.room_name}"
+      self.game_id = self.scope['url_route']['kwargs']['game_id']
+      self.room_group_name = f"pong_{self.game_id}"
+      print("Connected")
 
-        # Join the room group
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+      await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-        # Accept the WebSocket connection
-        await self.accept()
+      await self.accept()
 
-        # Check if the game loop is already running; if not, start it
-        if not PongConsumer.game_loop_running:
-            PongConsumer.game_loop_running = True
-            asyncio.create_task(self.game_loop())
+      if self.game_id not in PongConsumer.game_loops:
+          PongConsumer.game_states[self.game_id] = GameState()
+          PongConsumer.game_loops[self.game_id] = True
+          
+          asyncio.create_task(self.game_loop())
+
 
     async def disconnect(self, close_code):
         # Leave the room group
@@ -45,40 +65,41 @@ class PongConsumer(AsyncWebsocketConsumer):
         direction_left_paddle = text_data_json.get("direction_left_paddle")
         start_stop_reset = text_data_json.get("action")
 
-        if not self.shared_game_state.paused and not self.shared_game_state.finished:
+        if not PongConsumer.game_states[self.game_id].paused and not PongConsumer.game_states[self.game_id].finished:
             if direction_right_paddle == "up":
-                self.shared_game_state.paddles[1].move("up")
+              PongConsumer.game_states[self.game_id].paddles[1].move("up")
             elif direction_right_paddle == "down":
-                self.shared_game_state.paddles[1].move("down")
+              PongConsumer.game_states[self.game_id].paddles[1].move("down")
 
             if direction_left_paddle == "up":
-                self.shared_game_state.paddles[0].move("up")
+              PongConsumer.game_states[self.game_id].paddles[0].move("up")
             elif direction_left_paddle == "down":
-                self.shared_game_state.paddles[0].move("down")
+              PongConsumer.game_states[self.game_id].paddles[0].move("down")
 
         if start_stop_reset == "start":
             print(f"Start Triggered")
-            self.shared_game_state.start()
+            PongConsumer.game_states[self.game_id].start()
         elif start_stop_reset == "pause":
             print(f"Stop Triggered")
-            self.shared_game_state.pause()
+            PongConsumer.game_states[self.game_id].pause()
         elif start_stop_reset == "reset":
-            self.shared_game_state.reset_score()
+            PongConsumer.game_states[self.game_id].reset_score()
 
     async def game_loop(self):
-        ai = AI(PongConsumer.shared_game_state)
+        # ai = AI(PongConsumer.game_state)
 
-        asyncio.create_task(ai.play_2())
+        # asyncio.create_task(ai.play_2())
         while True:
             # Update shared game state
-            PongConsumer.shared_game_state.update()
+            # PongConsumer.game_state.update()
+            PongConsumer.game_states[self.game_id].update()
 
             # Broadcast the updated game state to all clients
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     "type": "game_state_update",
-                    "game_state": PongConsumer.shared_game_state.to_dict(),
+                    "game_state": PongConsumer.game_states[self.game_id].to_dict(),
                 },
             )
 
