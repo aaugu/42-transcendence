@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 def check_autentication(request):
-    access_token = request.COOKIES.get('access_token')
+    access_token = request.COOKIES.get('csrf_token')
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token
     else:
