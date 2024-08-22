@@ -12,28 +12,6 @@ from .game import (
 from .ai import * 
 import asyncio
 
-
-# class PongConsumer(AsyncWebsocketConsumer):
-#     # Shared across all instances (class-level)
-#     shared_game_state = GameState()
-#     game_loop_running = False  # To check if the game loop is already running
-
-#     async def connect(self):
-#         print("Connected")
-#         self.room_name = "pong"
-#         self.room_group_name = f"pong_{self.room_name}"
-
-#         # Join the room group
-#         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-
-#         # Accept the WebSocket connection
-#         await self.accept()
-
-#         # Check if the game loop is already running; if not, start it
-#         if not PongConsumer.game_loop_running:
-#             PongConsumer.game_loop_running = True
-#             asyncio.create_task(self.game_loop())
-
 class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
     game_states = {}
@@ -103,7 +81,6 @@ class PongConsumer(AsyncWebsocketConsumer):
                 },
             )
 
-            # Pause for a short duration
             await asyncio.sleep(1 / 120)
 
     async def game_state_update(self, event):
@@ -111,3 +88,15 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Send the game state to the client
         await self.send(text_data=json.dumps({"game_state": game_state}))
+
+def extract_game_mode(path):
+  game_id = path.split("/")[-1]
+  
+  if "local-twoplayers" in path:
+    return "local-twoplayers"
+  elif "local-vs-ia" in path:
+    return "local-ai"
+  elif "online" in path:
+    return "online"
+  elif "tournament" in path:
+    return "tournament"
