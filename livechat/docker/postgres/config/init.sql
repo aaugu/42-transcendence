@@ -1,1 +1,1 @@
-ALTER USER aaa WITH superuser createrole createdb replication bypassrls;
+ALTER USER afavre WITH superuser createrole createdb replication bypassrls;

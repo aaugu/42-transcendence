@@ -1,4 +1,3 @@
-import { twoFactorAuth } from "../login/twoFactorAuth.js";
 import { getUserInfo } from "../user/getUserInfo.js"
 
 export async function profilePage() {
@@ -6,22 +5,23 @@ export async function profilePage() {
     var nickname = "Guest-nickname";
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
-    var twoFactorAuth = false;
-
-    const userinfo = await getUserInfo();
-    console.log("userinfo: ", userinfo);
-    if (userinfo.success  == true) {
+    var is_2fa_enabled = false;
+     const userinfo = await getUserInfo();
+    
+     if (userinfo.success  == true) {
         username = userinfo.data.username;
         nickname = userinfo.data.nickname;
         email = userinfo.data.email;
         avatar = userinfo.data.avatar;
+        localStorage.setItem('avatar', avatar);
+        is_2fa_enabled = userinfo.data.is_2fa_enabled;
     }
 
 	var twoFAbtnText;
 	var twoFAbtnColor;
     var twoFAtargetModal;
 
-	if (twoFactorAuth == true) {
+	if (is_2fa_enabled == true) {
 		twoFAbtnText = "Deactivate";
 		twoFAbtnColor = "btn-outline-danger";
         twoFAtargetModal = "#deactivate-2fa-modal"
@@ -47,7 +47,6 @@ export async function profilePage() {
                     </div>
                     <div class="usermanagement-item">
                         <p id="profile-username">${username}</p>
-                        <button id="edit-username" class="edit-btn" data-field="Username"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
                         <p id="profile-nickname">${nickname}</p>

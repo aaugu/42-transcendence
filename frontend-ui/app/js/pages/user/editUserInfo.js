@@ -1,6 +1,7 @@
 import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
 import { getCookie } from "./cookie.js";
+import { errormsg } from "../../dom/errormsg.js";
 
 export async function editUserInfo(infoType, newInfo) {
 	const token = getCookie('csrf_token');
@@ -25,16 +26,19 @@ export async function editUserInfo(infoType, newInfo) {
 
         if (!response.ok) {
             const error = await response.json();
-            //determine which error codes to handle
+			if (response.status === 400 || response.status === 404) {
+				if (error.email)
+					errormsg(error.email, "editmodal-errormsg");
+			}
             throw new Error(`HTTP status code ${response.status}`);
         }
-
         const responseData = await response.json();
         if (responseData !== null) {
             console.log("User log: USER PATCH SUCCESSFUL");
             return { success: true, data: responseData };
         } else {
-            throw new Error(`No data returned`);
+			errormsg("Internal error", "editmodal-errormsg");
+            throw new Error(`Empty response`);
         }
     } catch (e) {
         console.error('User log: USER PATCH FETCH FAILURE, ' + e);
@@ -75,35 +79,40 @@ export function editUserInfoButton(e) {
             </div>`;
     }
 
-	document.getElementById('edit-save').onclick = function() {
+	document.getElementById('edit-save').onclick = async function() {
 		const editInput = document.getElementById('edit-input');
 		const newValue = editInput.value;
 		const userInfoID = document.getElementById("profile-" + currentField.toLowerCase());
+		var response = null;
+
+		if (newValue === '') {
+			errormsg('Field cannot be empty', 'editmodal-errormsg');
+			return;
+		}
 
 		switch (currentField) {
 			case 'Avatar':
-				editAvatar(editInput);
-				break;
-			case 'Username':
-				editUserInfo('username', newValue);
-				userInfoID.innerText = newValue;
-				localStorage.setItem('username', newValue);
+				response = await editAvatar(editInput);
 				break;
 			case 'Nickname':
-				editUserInfo('nickname', newValue);
-				userInfoID.innerText = newValue;
+				response = await editUserInfo('nickname', newValue);
+				if (response.success == true)
+					userInfoID.innerText = newValue;
 				break;
 			case 'Email':
-				editUserInfo('email', newValue);
-				userInfoID.innerText = newValue;
+				response = await editUserInfo('email', newValue);
+				if (response.success == true)
+					userInfoID.innerText = newValue;
 				break;
 			case 'Password':
-				editPassword(newValue, document.getElementById('edit-input-repeat').value);
+				response = editPassword(newValue, document.getElementById('edit-input-repeat').value);
 				break;
 			default:
+				response.success = false;
 				break;
 		}
-		// console.log(`User log: Changed ${currentField} to: ${newValue}`);
+		if (response.success == true)
+			console.log(`User log: CHANGED ${currentField} TO ${newValue}`);
 		editModal.hide();
 	};
 

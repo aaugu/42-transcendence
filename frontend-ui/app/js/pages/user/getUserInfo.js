@@ -33,7 +33,6 @@ export async function getUserInfo() {
 
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("responseData in getUserInfo: ", JSON.stringify(responseData));
             console.log("User log: GET USER INFO SUCCESSFUL");
             return { success: true, data: responseData };
         } else {

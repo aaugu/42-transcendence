@@ -1,7 +1,7 @@
 import { urlRoute } from "../../dom/router.js"
 import { errormsg } from "../../dom/errormsg.js"
 import { updateProfile } from "../user/updateProfile.js"
-import { defaultAvatar } from "../user/updateProfile.js";
+import { defaultAvatar } from "../user/avatar.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
 import { userIsConnected } from "../user/updateProfile.js";
 import { readAvatarFile } from "../user/avatar.js";

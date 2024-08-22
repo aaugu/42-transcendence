@@ -1,6 +1,6 @@
 import { urlRoute } from "../../dom/router.js";
 import { updateProfile } from "../user/updateProfile.js";
-import { twoFactorAuth, twoFactorAuthProfileButton } from "../login/twoFactorAuth.js";
+import { twoFactorAuthProfileButton } from "../login/twoFactorAuth.js";
 import { editUserInfoButton } from "../user/editUserInfo.js";
 
 export async function profileEvent(e) {
@@ -16,8 +16,10 @@ export async function profileEvent(e) {
 			urlRoute('/');
 			break;
 		case "confirm-2fa-activation":
+			twoFactorAuthProfileButton(false);
+			break;
 		case "confirm-2fa-deactivation":
-			twoFactorAuthProfileButton();
+			twoFactorAuthProfileButton(true);
 			break;
 		// case "edit-save":
 		// 	const editButton = e.target.closest('.edit-btn');
