@@ -1,42 +1,45 @@
 import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
+import { getCookie } from "./cookie.js";
 
 export async function editUserInfo(infoType, newInfo) {
-	const token = localStorage.getItem('token');
-	const decodedToken = jwt_decode(token);
+	const token = getCookie('csrf_token');
+	if (token === null)
+        return { success: false, data: "No token" };
 
+	const decodedToken = jwt_decode(token);
 	const url = 'https://localhost:10444/api/user/';
-	await fetch(url + decodedToken.user_id + '/', {
-		method: 'PATCH',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			[infoType] : newInfo,
-		}),
-		credentials: 'include', //include the cookies like this
-	})
-	.then(async response => {
-		if (!response.ok) {
-			const error = await response.json();
-			//determine which error codes to handle
-			throw new Error(`HTTP status code ${response.status}`);
-		}
-		return response.json()
-	})
-	.then(responseData => {
-		if (responseData !== null) {
-			//if concerning username -> update in localStorage
-			console.log(JSON.stringify(responseData));
-			console.log("User log: USER PATCH SUCCESSFUL");
-			return { success: true, data: responseData };
-		}
-	})
-	.catch(e => {
-		console.error('User log: USER PATCH FETCH FAILURE, '+ e);
-		return { success: false, error: e.message || "Fetch error" };
-	});
+
+	try {
+        const response = await fetch(url + decodedToken.user_id + '/', {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                [infoType]: newInfo,
+            }),
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            //determine which error codes to handle
+            throw new Error(`HTTP status code ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        if (responseData !== null) {
+            console.log("User log: USER PATCH SUCCESSFUL");
+            return { success: true, data: responseData };
+        } else {
+            throw new Error(`No data returned`);
+        }
+    } catch (e) {
+        console.error('User log: USER PATCH FETCH FAILURE, ' + e);
+        return { success: false, data: e.message || "Fetch error" };
+    }
 }
 
 export function editUserInfoButton(e) {
@@ -82,7 +85,7 @@ export function editUserInfoButton(e) {
 				editAvatar(editInput);
 				break;
 			case 'Username':
-				// editUserInfo('username', newValue);
+				editUserInfo('username', newValue);
 				userInfoID.innerText = newValue;
 				localStorage.setItem('username', newValue);
 				break;
@@ -91,7 +94,7 @@ export function editUserInfoButton(e) {
 				userInfoID.innerText = newValue;
 				break;
 			case 'Email':
-				// editUserInfo('email', newValue);
+				editUserInfo('email', newValue);
 				userInfoID.innerText = newValue;
 				break;
 			case 'Password':
@@ -100,7 +103,7 @@ export function editUserInfoButton(e) {
 			default:
 				break;
 		}
-		console.log(`User log: Changed ${currentField} to: ${newValue}`);
+		// console.log(`User log: Changed ${currentField} to: ${newValue}`);
 		editModal.hide();
 	};
 

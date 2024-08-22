@@ -23,11 +23,11 @@ export function signupPage() {
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="avatarOption" id="uploadAvatar" value="upload">
-                <label class="form-check-label" for="uploadAvatar">
+                <label class="form-check-label" for="avatar-upload-file">
                     Upload your own avatar
                 </label>
             </div>
-            <input type="file" class="form-control mt-2" id="avatarUpload" accept="image/png, image/jpeg" style="display: none;">
+            <input type="file" class="form-control mt-2" id="avatar-upload-file" accept="image/png, image/jpeg" style="display: none;">
         </div>
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="signup-submit">Sign up</button>

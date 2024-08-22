@@ -1,10 +1,21 @@
 import { twoFactorAuth } from "../login/twoFactorAuth.js";
+import { getUserInfo } from "../user/getUserInfo.js"
 
 export async function profilePage() {
-    const username = localStorage.getItem("username") || "Guest";
-    const nickname = localStorage.getItem("nickname") || "Guest-nickname";
-    const email = localStorage.getItem("email") || "Guest-email";
-    const avatar = localStorage.getItem("avatar") || "images/default_avatar.png";
+    var username = "Guest";
+    var nickname = "Guest-nickname";
+    var email = "Guest-email";
+    var avatar = "images/default_avatar.png";
+    var twoFactorAuth = false;
+
+    const userinfo = await getUserInfo();
+    console.log("userinfo: ", userinfo);
+    if (userinfo.success  == true) {
+        username = userinfo.data.username;
+        nickname = userinfo.data.nickname;
+        email = userinfo.data.email;
+        avatar = userinfo.data.avatar;
+    }
 
 	var twoFAbtnText;
 	var twoFAbtnColor;
@@ -21,6 +32,7 @@ export async function profilePage() {
         twoFAtargetModal = "#activate-2fa-modal"
 	}
 
+    
 
     return `
     <h2 class="text-bold display-6"></h2>

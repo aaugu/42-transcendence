@@ -31,7 +31,8 @@ export async function signupProcess() {
     }
 
     if (document.getElementById('uploadAvatar').checked) {
-        var avatarFile = document.getElementById('avatarUpload').files[0];
+        console.log("avatar file uploaded");
+        var avatarFile = document.getElementById('avatar-upload-file').files[0];
         try {
             avatar = await readAvatarFile(avatarFile);
         } catch (error) {
@@ -41,6 +42,8 @@ export async function signupProcess() {
     }
     else
         avatar = defaultAvatar;
+
+    console.log("avatar: ", avatar);
 
     var userdata = {
         "username": username,
@@ -76,12 +79,6 @@ export async function signupProcess() {
                             else
                                 errormsg(error.email[0], "homepage-errormsg");
                         }
-                        // else if (error.password) {
-                        // 	if (typeof(error.password) == 'string')
-                        // 		errormsg(error.password, "homepage-errormsg");
-                        // 	else
-                        // 		errormsg(error.password[0], "homepage-errormsg");
-                        // }
                     }
                     throw new Error(`HTTP status code ${response.status}`);
                 }
