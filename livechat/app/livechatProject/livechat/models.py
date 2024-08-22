@@ -26,15 +26,17 @@ class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     author = models.PositiveIntegerField(blank=False)
     message = models.TextField(blank=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    date = models.CharField()
-    time = models.CharField()
+    date = models.CharField(blank=False)
+    time = models.CharField(blank=False)
 
-    def date(self):
+    def get_date(self):
         return dateformat.format(timezone.localtime(self.timestamp), 'Y-m-d')
     
-    def time(self):
+    def get_time(self):
         return dateformat.format(timezone.localtime(self.timestamp), 'H:i')
 
     def __str__(self):
-        return str(self.author) + " " + str(self.message)
+        return str(self.author) + ": " + str(self.message)
+
+
+# timestamp = models.DateTimeField(auto_now_add=True)

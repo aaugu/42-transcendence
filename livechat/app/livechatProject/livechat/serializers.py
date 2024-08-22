@@ -11,12 +11,12 @@ class BlacklistSerializer(serializers.ModelSerializer):
         model = Blacklist
         fields = ['initiator', 'blacklist']
 
-class Conversation(serializers.ModelSerializer):
+class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
         fields = ['id', 'user_1', 'user_2']
 
-class Message(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ['author', 'message', 'date', 'time']

@@ -1,6 +1,7 @@
 from django.urls import path
-from views import *
+from livechat.views import *
 
 urlpatterns = [
-    path('conversations/', conversationViewSet)
+    path('conversations/<int:pk>/', conversationViewSet),
+    path('conversation/<int:pk>/', messageViewSet),
 ]
