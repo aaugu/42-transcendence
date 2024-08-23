@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -14,7 +16,7 @@ SECRET_KEY = 'django-insecure-^d7ouzku=r@(7xd(^@#q+jie8(*lwlu_iznln-b_qlcbj8v1u0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '10.13.1.5']
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -76,11 +78,11 @@ WSGI_APPLICATION = 'aetheryte.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aetheryte',
-        'USER': 'afavre',
-        'PASSWORD': 'afavretra',
-        'HOST': '172.20.0.3',
-        'PORT': '',
+        'NAME': os.environ.get('AETHERYTE_POSTGRES_DB'),
+        'USER': os.environ.get('AETHERYTE_POSTGRES_USER'),
+        'PASSWORD': os.environ.get('AETHERYTE_POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('AETHERYTE_POSTGRES_IP'),
+        'PORT': os.environ.get('AETHERYTE_POSTGRES_PORT'),
     }
 }
 
