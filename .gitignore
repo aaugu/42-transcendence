@@ -4,6 +4,7 @@
 trash/
 aetheryte_api_gateway/docker/volumes/
 tournament/docker/volumes/
+livechat/docker/volumes/
 aetheryte_api_gateway/docker/postgres/config/init.sql
 tournament/docker/postgres/config/init.sql
-pong/app/pong_app/__pycache__/
+livechat/docker/postgres/config/init.sql
