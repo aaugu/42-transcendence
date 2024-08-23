@@ -20,11 +20,11 @@ from random import randrange
 import requests
 
 for i in range(nb_user):
-    user = User(i,i)
+    user = User(user_id=i)
     user.save()
 
 for i in range(nb_conversations):
-    conversation = Conversation(i, last_user, i)
+    conversation = Conversation(user_1=last_user, user_2=i)
     conversation.save()
 
 word_site = "https://www.mit.edu/~ecprice/wordlist.10000"
@@ -44,5 +44,5 @@ for i in range(60):
         time = "13:0" + str(i)
     else:
         time = "13:" + str(i)
-    message = Message(id=i, conversation=conversation, author=author, message=text_message, date=date, time=time)
+    message = Message(conversation=conversation, author=author, message=text_message, date=date, time=time)
     message.save()

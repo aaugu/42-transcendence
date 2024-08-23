@@ -10,7 +10,7 @@ class User(models.Model):
     
 class Blacklist(models.Model):
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiator')
-    blacklisted = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blacklisted')
+    target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
 
     def __str__(self):
         return str(self.id)
