@@ -14,6 +14,7 @@ import { chatPage } from "../pages/chat/chatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
 import { mainGame } from "../pages/game/gameplay/mainGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
+import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/tournament" : {
 			content: tournamentPage,
-			eventListener: null,
+			eventListener: tournamentEvent,
 			description: "new tournament page"
 		},
         "/profile" : {

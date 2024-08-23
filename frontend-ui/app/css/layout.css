@@ -79,6 +79,7 @@ a {
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {
 	width: 85%;
+	padding-top: 100px;
 	/* margin-top: 8vh; */
 }
 
@@ -86,6 +87,7 @@ a {
 @media (min-width: 768px) {
 	#main-content {
 		width: 75%;
+		padding-top: 100px;
 	}
 }
 
@@ -93,5 +95,6 @@ a {
 @media (min-width: 1200px) {
 	#main-content {
 		width: 75%;
+		padding-top: 100px;
 	}
 }
