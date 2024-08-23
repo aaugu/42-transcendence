@@ -144,7 +144,11 @@ EMAIL_HOST_PASSWORD = 'cnnc bmsc zrip yvbn'
 
 # Cors parameters
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:10443",
+    "https://localhost:10443"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
