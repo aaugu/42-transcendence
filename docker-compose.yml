@@ -31,6 +31,16 @@ volumes:
 
 services:
     # Aetheryte API Gateway
+    aetheryte-nginx:
+        extends:
+            file: aetheryte_api_gateway/docker/docker-compose.yml
+            service: aetheryte-nginx
+        depends_on:
+            aetheryte-python:
+                condition: service_healthy
+        ports:
+            # - "80:80"
+            - "10444:443"
     aetheryte-postgres:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
@@ -56,6 +66,8 @@ services:
         extends:
             file: pong/docker/docker-compose.yml
             service: pong-python
+        ports:
+            - "9000:9000"
 
     # Tournament
     tournament-postgres:

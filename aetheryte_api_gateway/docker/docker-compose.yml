@@ -1,4 +1,15 @@
 services:
+    aetheryte-nginx:
+        build:
+            context: nginx
+            dockerfile: Dockerfile
+        networks:
+            transcendence :
+                ipv4_address: 172.20.0.4
+        env_file:
+            - ../../.env
+        restart: on-failure
+
     aetheryte-postgres:
         build:
             context: postgres
@@ -16,7 +27,7 @@ services:
             test: ["CMD-SHELL", "sh -c 'pg_isready -U ${AETHERYTE_POSTGRES_USER} -d ${AETHERYTE_POSTGRES_DB}'"]
             interval: 10s
             timeout: 5s
-            retries: 5
+            retries: 10
         restart: unless-stopped
 
     aetheryte-python:
@@ -24,13 +35,15 @@ services:
             context: python
             dockerfile: Dockerfile
         volumes:
-            - ../src:/app
+            - ../app:/app
         networks:
             transcendence :
                 ipv4_address: 172.20.0.2
+        env_file:
+            - ../../.env
         healthcheck:
-            test: curl --fail https://172.20.0.2:8000/ || exit 1
+            test: curl --fail http://localhost:8000/api/user || exit 1
             interval: 10s
             timeout: 5s
-            retries: 5
+            retries: 10
         restart: on-failure
