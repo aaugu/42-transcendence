@@ -73,6 +73,8 @@ services:
         extends:
             file: pong/docker/docker-compose.yml
             service: pong-python
+        ports:
+            - "9000:9000"
 
     # Tournament
     tournament-postgres:

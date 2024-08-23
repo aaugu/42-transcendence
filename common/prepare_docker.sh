@@ -87,11 +87,7 @@ then
 	mkdir -p ${TRASH_LIVECHAT_PATH}
 fi
 
-if [ ! -d ${TRASH_TOURNAMENT_PATH} ]
-then
-	mkdir -p ${TRASH_TOURNAMENT_PATH}
-fi
-
+>>>>>>>>> Temporary merge branch 2:common/prepare_docker.sh
 if [ ! -d ${TRASH_TOURNAMENT_PATH} ]
 then
 	mkdir -p ${TRASH_TOURNAMENT_PATH}

@@ -7,7 +7,6 @@
 	padding: 0;
 	color: black;
 	font-family: 'Press Start 2P';
-	font-size: min(calc(1vw + 1vh), 15px);
 }
 
 html, body {
@@ -50,29 +49,7 @@ a {
 	#f17400 60%,
 	#A9C1FF 60%,
 	#A9C1FF 100%);
-	height: 92vh;
-}
-
-.error-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	width: 75%;
-	margin: 0 auto; /* Center the box horizontally */
-	padding: 20px; /* Add some padding inside the box */
-	border: 2px solid red; /* Red border */
-	color: black; /* Black text */
-	background-color: #f8d7da; /* Light red background for better visibility */
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-  }
-
-.hidden {
-opacity: 0;
-display: none;
+	height : 92vh;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
