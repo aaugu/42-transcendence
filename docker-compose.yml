@@ -15,12 +15,12 @@ volumes:
             o: bind
             device: aetheryte_api_gateway/docker/volumes/data
     # Tournament
-    # tournament_postgres_volume:
-    #     driver: local
-    #     driver_opts:
-    #         type: none
-    #         o: bind
-    #         device: tournament/docker/volumes/data
+    tournament_postgres_volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: tournament/docker/volumes/data
 
 services:
     # Aetheryte API Gateway
@@ -55,22 +55,22 @@ services:
             - "10443:443"
 
     # Pong
-    # pong-python:
-    #     extends:
-    #         file: pong/docker/docker-compose.yml
-    #         service: pong-python
-    #     ports:
-    #         - "9000:9000"
+    pong-python:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-python
+        ports:
+            - "9000:9000"
 
-    # # Tournament
-    # tournament-postgres:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-postgres
-    # tournament-python:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-python
-    #     depends_on:
-    #         tournament-postgres:
-    #             condition: service_healthy
+    # Tournament
+    tournament-postgres:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-postgres
+    tournament-python:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-python
+        depends_on:
+            tournament-postgres:
+                condition: service_healthy
