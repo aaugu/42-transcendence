@@ -28,7 +28,7 @@ export async function loginProcess() {
                 "username": username,
                 "password": password
             }),
-            // credentials: 'include',
+            credentials: 'include',
         })
         .then(async response => {
             if (!response.ok) {

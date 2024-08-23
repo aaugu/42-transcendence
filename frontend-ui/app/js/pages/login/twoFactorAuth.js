@@ -14,7 +14,7 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 		body: JSON.stringify({
 			"verification_code": twoFactorAuthCode,
 		}),
-		// credentials: 'include',
+		credentials: 'include',
     })
     .then(async response => {
         if (!response.ok) {
