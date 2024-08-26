@@ -2,7 +2,7 @@
 
 cd /app/livechatProject
 
-python manage.py collectstatic
+# python manage.py collectstatic
 
 
 python3 -m manage makemigrations
