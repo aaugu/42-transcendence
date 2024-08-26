@@ -14,6 +14,7 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
             body: JSON.stringify({
                 "verification_code": twoFactorAuthCode,
             }),
+			credentials: 'include'
         });
 
         if (!response.ok) {

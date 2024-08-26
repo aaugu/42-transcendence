@@ -1,12 +1,8 @@
 nav {
 	height: 8vh;
-	/* box-sizing: border-box; */
+	box-sizing: border-box;
 	background-color: #6d96ff;
 	padding: 0 20px;
-	justify-content: space-between;
-	align-items: center;
-	display: flex;
-	flex-direction: row;
 }
 
 .logo a {
@@ -16,32 +12,31 @@ nav {
 .logo a:hover {
 	color: white;
 }
-
+	
 ul {
 	display: flex;
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
-
+	
 ul li {
 	margin-right: 20px;
-	align-content: center;
 }
-
+	
 ul li a {
 	transition: color 0.3s;
 }
-
-ul li:hover, .dropdown-toggle:hover  {
+	
+ul li:hover {
 	cursor: pointer;
 	color: white;
 }
 
-ul li a:hover{
+ul li a:hover {
 	color: white;
 }
-
+	
 .checkbtn {
 	font-size: 2rem;
 	cursor: pointer;
@@ -51,7 +46,7 @@ ul li a:hover{
 .checkbtn:hover {
 	color: white;
 }
-
+	
 @media (max-width: 768px) {
 	.checkbtn {
 		display: block;
@@ -90,7 +85,7 @@ ul li a:hover{
 	ul li a {
 		font-size: 2rem;
 	}
-
+	
 	ul li a:hover {
 		color: white;
 	}
