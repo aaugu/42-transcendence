@@ -10,7 +10,7 @@ curl -X POST "http://172.20.6.3:5601/api/saved_objects/index-pattern/my-data-vie
   -u "${ELASTICSEARCH_USERNAME}:${ELASTIC_PASSWORD}" \
   -d '{
     "attributes": {
-      "title": "my-data-view-*",
+      "title": "logs-transcendence-*",
       "timeFieldName": "@timestamp"
     }
   }'

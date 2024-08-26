@@ -5,4 +5,4 @@ RUN apt update -y && apt upgrade -y
 RUN apt install -y curl
 
 COPY config/init-kibana.sh /scripts/init-kibana.sh
-RUN chmod +x /scripts/init-kibana.sh
+RUN chmod 777 /scripts/init-kibana.sh

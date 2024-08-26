@@ -60,5 +60,8 @@ services:
     environment:
       - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    # entrypoint: ["sh", "-c", "/srcipts/init-kibana.sh"]
+    networks:
+      transcendence:
+        ipv4_address: 172.20.6.5
+    # entrypoint: ["sh", "-c", " srcipts/init-kibana.sh"]
     entrypoint: ["sleep", "infinity"]
