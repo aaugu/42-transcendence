@@ -86,6 +86,12 @@
     border: 2px solid #e9ecef; /* Optional: Border color and thickness */
 }
 
+.profile-icon {
+	width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
 /*  PERSONAL STATS  */
 
 #list-group {
@@ -119,22 +125,6 @@
     font-size: 13px;
 }
 
-
-/*  OTHER (img, buttons, clearfix, etc)  */
-
-.centered {
-	align-self: center;
-  }
-
-.profile-icon {
-	width: 50px; /* Adjust the size as needed */
-    height: 50px;
-    margin-bottom: 10px;
+.form-control::placeholder {
+    color: #c6c6c6 !important;
 }
-
-.clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-

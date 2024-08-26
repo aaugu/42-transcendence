@@ -72,8 +72,14 @@ a {
 	display: none;
 }
 
-.btn {
-	margin: 0.5rem;
+.centered {
+	align-self: center;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */

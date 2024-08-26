@@ -43,7 +43,7 @@ export async function signupProcess() {
     else
         avatar = defaultAvatar;
 
-    console.log("avatar: ", avatar);
+    console.log("SIGNUP avatar: ", avatar);
 
     var userdata = {
         "username": username,
@@ -52,6 +52,8 @@ export async function signupProcess() {
         "password": password,
         "avatar": avatar
     };
+
+    console.log("User log: SIGNUP DATA: ", userdata);
 
     const sendSignupDataToAPI = async (userdata) => {
         await fetch('https://localhost:10444/api/user/', {
