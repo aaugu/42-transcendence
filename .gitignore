@@ -2,6 +2,6 @@
 .DS_Store
 .vscode/
 trash/
-*/**/__pycache__/
-*/**/init.sql/
-*/**/volumes/
+**/__pycache__/
+**/init.sql/
+**/volumes/
