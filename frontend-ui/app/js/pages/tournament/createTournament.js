@@ -1,3 +1,5 @@
+import { errormsg } from '../../dom/errormsg.js';
+
 export async function createTournament(tournamentName, username, playerNr, playerNames) {
 	try {
 		const response = await fetch('https://localhost:10444/api/tournament/create', {
@@ -20,8 +22,7 @@ export async function createTournament(tournamentName, username, playerNr, playe
 			// 	//check correct error codes
 			// 	errormsg("Internal error, try again later", "t-modal-errormsg");
 			// }
-			console.log(`User log: TOURNAMENT RESPONSE STATUS ${response.status}`);
-            throw new Error('Could not be created');
+			throw new Error(`${response.status}`);
         }
 		const responseData = await response.json();
         if (responseData !== null) {
@@ -32,6 +33,8 @@ export async function createTournament(tournamentName, username, playerNr, playe
         }
 	}
 	catch (e){
-		errormsg(e.value, "t-modal-errormsg");
+		// errormsg(e.value, "t-modal-errormsg");
+		console.log(`User log: CREATE TOURNAMENT ${tournamentName} FAILED, STATUS: ${e.value}`);
+		return { success: false, data: e.value };
 	}
 }

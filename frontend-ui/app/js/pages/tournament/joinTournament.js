@@ -1,3 +1,5 @@
+import { errormsg } from '../../dom/errormsg.js';
+
 export async function joinTournament(tournamentName, username) {
 	try {
 		const response = await fetch('https://localhost:10444/api/tournament/create', {
@@ -18,8 +20,7 @@ export async function joinTournament(tournamentName, username) {
 			// 	//check correct error codes
 			// 	errormsg("Internal error, try again later", "t-modal-errormsg");
 			// }
-			console.log(`User log: JOIN TOURNAMENT RESPONSE STATUS ${response.status}`);
-            throw new Error('Could not be joined');
+			throw new Error(`${response.status}`);
         }
 		const responseData = await response.json();
         if (responseData !== null) {
@@ -31,6 +32,7 @@ export async function joinTournament(tournamentName, username) {
 	}
 	catch (e){
 		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: ${username} COULD NOT JOIN TOURNAMENT ${tournamentName}`);
+		console.log(`User log: ${username} COULD NOT JOIN TOURNAMENT ${tournamentName}, STATUS: ${e.value}`);
+		return { success: false, data: e.value };
 	}
 }

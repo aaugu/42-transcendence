@@ -1,4 +1,6 @@
-export async function changeStatusTournament(tournamentName, status) {
+import { errormsg } from '../../dom/errormsg.js';
+
+export async function changeStatusTournament(tournamentName, gameStatus) {
 	try {
 		const response = await fetch('https://localhost:10444/api/tournament/create', {
 			method: 'POST',
@@ -8,7 +10,7 @@ export async function changeStatusTournament(tournamentName, status) {
 			},
 			body: JSON.stringify({
 				tournamentName: tournamentName,
-				status: status,
+				status: gameStatus,
 			}),
 			credentials: 'include'
 		});
@@ -18,12 +20,11 @@ export async function changeStatusTournament(tournamentName, status) {
 			// 	//check correct error codes
 			// 	errormsg("Internal error, try again later", "t-modal-errormsg");
 			// }
-			console.log(`User log: ${status} TOURNAMENT RESPONSE STATUS ${response.status}`);
-            throw new Error('Could not be joined');
+			throw new Error(`${response.status}`);
         }
 		const responseData = await response.json();
         if (responseData !== null) {
-            console.log(`User log: TOURNAMENT ${tournamentName} ${status}`);
+            console.log(`User log: TOURNAMENT ${tournamentName} ${gameStatus}`);
             return { success: true, data: responseData };
         } else {
             throw new Error('Empty response');
@@ -31,6 +32,7 @@ export async function changeStatusTournament(tournamentName, status) {
 	}
 	catch (e){
 		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: EROR TOURNAMENT ${tournamentName} ${status}`);
+		console.log(`User log: ERROR TOURNAMENT ${tournamentName} ${gameStatus}, STATUS: ${e.value}`);
+		return { success: false, data: e.value };
 	}
 }
