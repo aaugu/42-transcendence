@@ -291,23 +291,6 @@ class EndMatchView(View):
             else:
                 next_match.player_2 = match.winner
             next_match.save()
-
-class StartTournamentView(View):
-    @staticmethod
-    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
-        try:
-            tournament = Tournament.objects.get(id=tournament_id)
-            players = tournament.players.all()
-            matches = tournament.matches.all()
-        except ObjectDoesNotExist:
-            return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        tournament.status = Tournament.IN_PROGRESS
-        tournament.start_datetime = datetime.datetime.now(datetime.UTC)
-
-        return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
     
 class TournamentView(View):
     def post(request: HttpRequest) -> JsonResponse:
@@ -550,6 +533,23 @@ class TournamentlocalView(View):
             except Exception as e:
                 return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
         return None
+
+class StartTournamentView(View):
+    @staticmethod
+    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
+        try:
+            tournament = Tournament.objects.get(id=tournament_id)
+            players = tournament.players.all()
+            matches = tournament.matches.all()
+        except ObjectDoesNotExist:
+            return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=500)
+
+        tournament.status = Tournament.IN_PROGRESS
+        tournament.start_datetime = datetime.datetime.now(datetime.UTC)
+
+        return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
 
 class DeleteInactiveTournamentView(View):
     def delete(request: HttpRequest) -> JsonResponse:
