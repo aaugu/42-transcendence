@@ -55,6 +55,14 @@ export function tournamentCreateButton() {
 		playerNames = [username];
 	}
 	console.log("playerNames, tournamentName: ", playerNames, tournamentName);
-	//Fetch request to create tournament
-	// createTournament(tournamentName, username, playerNames.length, playerNames);
+	const new_tournament = {
+		"name": tournamentName,
+		"user_id": username,
+		"max_players": playerNames.length,
+		"player_names": playerNames,
+		"is_private": false,
+		"password": ""
+	};
+	//Fetch request to create tournament (local or remote)
+	createTournament(new_tournament, local);
 }

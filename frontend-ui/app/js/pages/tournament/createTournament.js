@@ -1,18 +1,21 @@
 import { errormsg } from '../../dom/errormsg.js';
+import { urlRoute } from '../../dom/router.js';
 
-export async function createTournament(tournamentName, username, playerNr, playerNames) {
+export async function createTournament(new_tournament, mode) {
 	try {
-		const response = await fetch('https://localhost:10444/api/tournament/create', {
+		const response = await fetch('https://localhost:10444/api/tournament/' + mode + '/', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				tournamentName: tournamentName,
-				username: username,
-				playerNr: playerNr,
-				playerNames: playerNames
+				"name": new_tournament.name,
+				"user_id": new_tournament.user_id,
+				"max_players": new_tournament.max_players,
+				"player_names": new_tournament.player_names,
+				"is_private": new_tournament.is_private,
+				"password": new_tournament.password
 			}),
 			credentials: 'include'
 		});
@@ -27,6 +30,10 @@ export async function createTournament(tournamentName, username, playerNr, playe
 		const responseData = await response.json();
         if (responseData !== null) {
             console.log("User log: TOURNAMENT CREATION SUCCESSFUL");
+			// if (mode === 'local') {
+			// 	//directly go to tournament game page
+			// 	urlRoute('/tournament/game');
+			// }
             return { success: true, data: responseData };
         } else {
             throw new Error('Empty response');
@@ -34,7 +41,7 @@ export async function createTournament(tournamentName, username, playerNr, playe
 	}
 	catch (e){
 		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: CREATE TOURNAMENT ${tournamentName} FAILED, STATUS: ${e.value}`);
+		console.log(`User log: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.value}`);
 		return { success: false, data: e.value };
 	}
 }

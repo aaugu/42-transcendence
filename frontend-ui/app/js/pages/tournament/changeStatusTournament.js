@@ -1,17 +1,16 @@
 import { errormsg } from '../../dom/errormsg.js';
 
-export async function changeStatusTournament(tournamentName, gameStatus) {
+//status: "start", "end", "/matches/generate/"
+export async function changeStatusTournament(tournament_id, gameStatus) {
 	try {
-		const response = await fetch('https://localhost:10444/api/tournament/create', {
-			method: 'POST',
+		const url = 'https://localhost:10444/api/tournament/' + tournament_id + '/match/' + gameStatus + '/';
+		const response = await fetch(url, {
+			method: 'PATCH',
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
-				tournamentName: tournamentName,
-				status: gameStatus,
-			}),
+			body: null,
 			credentials: 'include'
 		});
 		if (!response.ok) {

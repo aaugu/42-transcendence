@@ -1,9 +1,7 @@
 import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
-import { localTwoPlayerGamePage } from "../pages/game/localTwoPlayerGamePage.js"
-import { remoteTwoPlayerGamePage } from "../pages/game/remoteTwoPlayerGamePage.js"
-import { localAIgamePage } from "../pages/game/localAIgamePage.js"
+import { gamePage } from "../pages/game/gamePage.js"
 import { profilePage } from "../pages/profile/profilePage.js"
 import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
@@ -62,19 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "signup page"
 		},
         "/local-twoplayer" : {
-			content: localTwoPlayerGamePage,
+			content: gamePage,
 			eventListener: null,
 			startFunction: startGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
-			content: localAIgamePage,
+			content: gamePage,
 			eventListener: null,
 			startFunction: startGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
-			content: remoteTwoPlayerGamePage,
+			content: gamePage,
 			eventListener: null,
 			startFunction: startGame,
 			description: "remote two player game page"
@@ -83,7 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
 			content: tournamentPage,
 			eventListener: tournamentEvent,
 			startFunction: startGame,
-			description: "new tournament page"
+			description: "create or join tournament page"
+		},
+		"/tournament/game" : {
+			content: gamePage,
+			eventListener: null,
+			startFunction: startGame,
+			description: "tournament game page"
 		},
         "/profile" : {
 			content: profilePage,

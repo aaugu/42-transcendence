@@ -1,4 +1,7 @@
-export async function joinTournament(tournamentName) {
+
+//TBD if GET all tournaments or just one
+
+export async function getTournament(tournamentName) {
 	try {
         const url = 'https://localhost:10444/api/tournament/create';
 

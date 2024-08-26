@@ -1,16 +1,21 @@
 import { errormsg } from '../../dom/errormsg.js';
 
-export async function joinTournament(tournamentName, username) {
+export async function joinTournament(tournament_id, nickname) {
 	try {
-		const response = await fetch('https://localhost:10444/api/tournament/create', {
+		const token = getCookie('csrf_token');
+		if (token === null)
+			return { success: false, data: "No token" };
+
+		const decodedToken = jwt_decode(token);
+		const response = await fetch('https://localhost:10444/api/tournament/' + tournament_id + '/players/', {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				tournamentName: tournamentName,
-				username: username,
+				"user_id": decodedToken.user_id,
+				"user_nickname": nickname,
 			}),
 			credentials: 'include'
 		});
@@ -24,7 +29,7 @@ export async function joinTournament(tournamentName, username) {
         }
 		const responseData = await response.json();
         if (responseData !== null) {
-            console.log(`User log: ${username} JOINED TOURNAMENT ${tournamentName}`);
+            console.log(`User log: ${nickname} JOINED TOURNAMENT ${tournamentName}`);
             return { success: true, data: responseData };
         } else {
             throw new Error('Empty response');
@@ -32,7 +37,7 @@ export async function joinTournament(tournamentName, username) {
 	}
 	catch (e){
 		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: ${username} COULD NOT JOIN TOURNAMENT ${tournamentName}, STATUS: ${e.value}`);
+		console.log(`User log: ${nickname} COULD NOT JOIN TOURNAMENT ${tournamentName}, STATUS: ${e.value}`);
 		return { success: false, data: e.value };
 	}
 }
