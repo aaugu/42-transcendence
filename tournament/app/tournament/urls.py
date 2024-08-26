@@ -14,7 +14,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
 from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView, TournamentlocalView, DeleteInactiveTournamentView)
 
@@ -23,8 +22,8 @@ urlpatterns = [
     path('tournament/local/', TournamentlocalView.as_view(), name='new_tournament_local'),  
     path('<int:tournament_id>/players/', TournamentPlayersView.as_view(), name='tournament_players'),
     path('<int:tournament_id>/start/', StartTournamentView.as_view(), name='start_tournament'),
-    path('delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament'),
-    path('<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate-matches'),
-    path('<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start-match'),
-    path('<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end-match')
+    path('<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
+    path('<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
+    path('<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
+    path('delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
 ]
