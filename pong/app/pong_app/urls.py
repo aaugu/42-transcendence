@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     pong_view,
+    create_game,
     game_state,
     game_points,
     game_start,
@@ -11,11 +12,10 @@ from .views import (
     move_right_paddle,
     move_left_paddle,
 )
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path("pong/", pong_view, name="pong"),
+    path("api/create-game", create_game),
     # API ENDPOINTS
     path("api/game_state", game_state),
     path("api/game_points", game_points),

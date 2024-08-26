@@ -3,9 +3,8 @@ from .game import PARAMS
 from .consumers import PongConsumer
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
-import logging
 import json
-import uuid
+from .services import GameService
 
 def generate_unique_id():
     return str(uuid.uuid4())
@@ -32,10 +31,15 @@ def pong_view(request):
 
     return render(request, "pong_app/pong.html", context)
 
+def create_game(request):
+    game_id = GameService.create_game()
+    return JsonResponse({"game_id": game_id})
+
 
 def game_state(request):
     state_dict = PongConsumer.shared_game_state.to_dict()
     return JsonResponse(state_dict)
+
 
 
 @csrf_exempt
