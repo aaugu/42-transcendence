@@ -12,9 +12,10 @@ import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { chatPage } from "../pages/chat/chatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
-import { mainGame } from "../pages/game/gameplay/mainGame.js"
+import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
+import { socket } from "../pages/game/gameplay/startGame.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -22,10 +23,11 @@ let currentEventListener = null;
 function updateEventListenerMainCont(newEventListener) {
 	const mainCont = document.getElementById('main-content');
 	if (currentEventListener !== null)
-			mainCont.removeEventListener('click', currentEventListener);
+		mainCont.removeEventListener('click', currentEventListener);
 	currentEventListener = newEventListener;
-	if (currentEventListener !== null)
+	if (currentEventListener !== null) {
 		mainCont.addEventListener('click', currentEventListener);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,22 +63,26 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
         "/local-twoplayer" : {
 			content: localTwoPlayerGamePage,
-			eventListener: mainGame,
+			eventListener: null,
+			startFunction: startGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
 			content: localAIgamePage,
-			eventListener: mainGame,
+			eventListener: null,
+			startFunction: startGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
 			content: remoteTwoPlayerGamePage,
-			eventListener: mainGame,
+			eventListener: null,
+			startFunction: startGame,
 			description: "remote two player game page"
 		},
 		"/tournament" : {
 			content: tournamentPage,
 			eventListener: tournamentEvent,
+			startFunction: startGame,
 			description: "new tournament page"
 		},
         "/profile" : {
@@ -108,6 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const goToRoute = async () => {
+		if (socket) {
+			socket.close();
+			console.log('GAME LOG: Websocket connection closed');
+		}
         const currentRoute = window.location.pathname;
         if (currentRoute.length == 0)
 			currentRoute = "/";
@@ -118,6 +128,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
+		if (currentRoute ==="/local-twoplayer" || currentRoute === "/local-ai" || currentRoute === "/remote-twoplayer") {
+			currentRouteDetails.startFunction();
+		}
 	}
 
     window.onpopstate = goToRoute;

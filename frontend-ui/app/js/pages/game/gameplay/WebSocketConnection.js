@@ -5,7 +5,7 @@ export default function createWebSocketConnection() {
 
 
   socket.onopen = function () {
-    console.log("Websocket connection established");
+    console.log("GAME LOG: Websocket connection established");
   };
 
   return socket;

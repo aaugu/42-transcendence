@@ -5,10 +5,12 @@ import updateGameState from './GameDraw.js';
 import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 
-export async function mainGame (event) {
+export var socket;
+
+export async function startGame (event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
-	const socket = createWebSocketConnection();
+	socket = createWebSocketConnection();
 
 	infoCtn.innerHTML = "";
 	infoCtn.innerHTML = `<div>
