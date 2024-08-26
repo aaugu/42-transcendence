@@ -27,7 +27,7 @@ def generalUser(request):
         if serializer.is_valid():
             new_user = CustomUser(
                 username=serializer.validated_data['username'],
-                nickname=serializer.validated_data['username'],
+                nickname=serializer.validated_data['nickname'],
                 email=serializer.validated_data['email'],
                 avatar=serializer.validated_data['avatar'],
                 is_2fa_enabled=False
