@@ -46,7 +46,6 @@ services:
             aetheryte-python:
                 condition: service_healthy
         ports:
-            # - "80:80"
             - "10444:443"
     aetheryte-postgres:
         extends:
@@ -110,10 +109,14 @@ services:
             service: elasticsearch
         ports:
             - "9200:9200"
-    init-script:
+    init-elasticsearch:
         extends:
             file: elk/docker/docker-compose.yml
-            service: init-script
+            service: init-elasticsearch
+    init-kibana:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: init-kibana
     kibana:
         extends:
             file: elk/docker/docker-compose.yml

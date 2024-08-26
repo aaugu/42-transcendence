@@ -18,9 +18,9 @@ services:
       - elastic_data_volume:/usr/share/elasticsearch/data
     entrypoint: ["/bin/bash", "-c", "/usr/local/bin/docker-entrypoint.sh eswrapper"]
 
-  init-script:
+  init-elasticsearch:
     build:
-      context: init-script
+      context: init-elasticsearch
       dockerfile: Dockerfile
     container_name: init_script_elasticsearch
     networks:
@@ -47,8 +47,18 @@ services:
       - SERVER_SSL_ENABLED=false 
     depends_on:
       - elasticsearch
-      - init-script
+      - init-elasticsearch
+    entrypoint: ["sh", "-c", "while docker inspect -f '{{.State.Running}}' transcendence_init_script | grep true; do sleep 1; done; /usr/local/bin/kibana-docker"]
+  
+  init-kibana:
+    build:
+      context: init-kibana
+      dockerfile: dockerfile
+    container_name: init-script-kibana
+    depends_on:
+      - kibana
+    environment:
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    # entrypoint: ["sh", "-c", "/srcipts/init-kibana.sh"]
     entrypoint: ["sleep", "infinity"]
-    #entrypoint: ["sh", "-c", "while docker inspect -f '{{.State.Running}}' transcendence_init_script | grep true; do sleep 1; done; /usr/local/bin/kibana-docker"]
-
-    # 
