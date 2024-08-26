@@ -2,6 +2,7 @@ import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
 import { editUserInfo } from "../user/editUserInfo.js";
 import { updateProfile } from "../user/updateProfile.js";
+import { hideModal } from "../../dom/modal.js";
 
 export async function verifyTwoFactorAuth(twoFactorAuthCode) {
     try {
@@ -56,16 +57,12 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			console.log("User log: 2FA ACTIVATION SUCCESSFUL");
 			updateProfile(null, false, null);
 			console.log('User log: LOGOUT');
+			hideModal('activate-2fa-modal');
 			urlRoute('/');
 		}
 		else {
 			errormsg("Unable to change 2FA", "activate2fa-errormsg");
-			const activateModal = bootstrap.Modal.getInstance(document.getElementById('activate-2fa-modal'));
-			if (activateModal) {
-				setTimeout(() => {
-					activateModal.hide();
-				}, 1000);
-			}
+			hideModal('activate-2fa-modal');
 		}
 
 	} else {
@@ -77,14 +74,10 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
 			console.log("User log: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
-		else
+		else {
 			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
-		const deactivateModal = bootstrap.Modal.getInstance(document.getElementById('deactivate-2fa-modal'));
-		if (deactivateModal) {
-			setTimeout(() => {
-				deactivateModal.hide();
-			}, 1000);
 		}
+		hideModal('deactivate-2fa-modal');
 	}
 }
 

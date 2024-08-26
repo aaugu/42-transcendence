@@ -2,6 +2,7 @@ import { editAvatar } from "./avatar.js";
 import { editPassword } from "./password.js";
 import { getCookie } from "./cookie.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { hideModal } from "../../dom/modal.js";
 
 export async function editUserInfo(infoType, newInfo) {
 	const token = getCookie('csrf_token');
@@ -49,7 +50,6 @@ export async function editUserInfo(infoType, newInfo) {
 export function editUserInfoButton(e) {
 	const editButton = e.target.closest('.edit-btn');
 	const currentField = editButton.dataset.field;
-	const editModal = new bootstrap.Modal(document.getElementById('edit-modal'));
 	const editModalLabel = document.getElementById('edit-modal-label');
 
 	editModalLabel.textContent = `Edit ${currentField}`;
@@ -113,7 +113,7 @@ export function editUserInfoButton(e) {
 		}
 		if (response.success == true)
 			console.log(`User log: CHANGED ${currentField} TO ${newValue}`);
-		editModal.hide();
+		hideModal('edit-modal');
 	};
 
 
