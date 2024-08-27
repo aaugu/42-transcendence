@@ -9,7 +9,7 @@ CYAN			= \033[0;36m
 RED				= \033[0;31m
 END				= \033[0m
 
-all : prepare down build up-detached
+all : prepare down build up-detached init-kibana
 
 env_check :
 	@(if [ ! -e ${ENV_PATH} ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
@@ -28,7 +28,10 @@ build : env_check
 up : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
-	./test.sh
+
+init-kibana:
+	@(sh ./elk/script/init-kibana.sh)
+
 up-detached : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)

@@ -113,10 +113,6 @@ services:
         extends:
             file: elk/docker/docker-compose.yml
             service: init-elasticsearch
-    init-kibana:
-        extends:
-            file: elk/docker/docker-compose.yml
-            service: init-kibana
     kibana:
         extends:
             file: elk/docker/docker-compose.yml

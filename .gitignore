@@ -2,9 +2,6 @@
 .DS_Store
 .vscode/
 trash/
-aetheryte_api_gateway/docker/volumes/
-tournament/docker/volumes/
-livechat/docker/volumes/
-aetheryte_api_gateway/docker/postgres/config/init.sql
-tournament/docker/postgres/config/init.sql
-livechat/docker/postgres/config/init.sql
+**/__pycache__/
+**/init.sql/
+**/volumes/
