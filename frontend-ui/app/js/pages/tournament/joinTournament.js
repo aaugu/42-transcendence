@@ -22,8 +22,8 @@ export async function joinTournament(tournament_id, nickname) {
 		if (!response.ok) {
             // const error = await response.json();
 			// if (response.status === 400) {
-			// 	//check correct error codes
-			// 	errormsg("Internal error, try again later", "t-modal-errormsg");
+			// 	nickname already in use
+			// user_id already registered for this tournament
 			// }
 			throw new Error(`${response.status}`);
         }
@@ -37,7 +37,7 @@ export async function joinTournament(tournament_id, nickname) {
 	}
 	catch (e){
 		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: ${nickname} COULD NOT JOIN TOURNAMENT ${tournamentName}, STATUS: ${e.value}`);
-		return { success: false, data: e.value };
+		console.log(`User log: ${nickname} COULD NOT JOIN TOURNAMENT ${tournamentName}, STATUS: ${e.message}`);
+		return { success: false, data: e.message };
 	}
 }

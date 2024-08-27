@@ -30,18 +30,12 @@ export async function createTournament(new_tournament, mode) {
 		const responseData = await response.json();
         if (responseData !== null) {
             console.log("User log: TOURNAMENT CREATION SUCCESSFUL");
-			// if (mode === 'local') {
-			// 	//directly go to tournament game page
-			// 	urlRoute('/tournament/game');
-			// }
-            return { success: true, data: responseData };
         } else {
-            throw new Error('Empty response');
+            throw new Error('No response from server');
         }
 	}
 	catch (e){
-		// errormsg(e.value, "t-modal-errormsg");
-		console.log(`User log: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.value}`);
-		return { success: false, data: e.value };
+		console.log(`User log: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.message}`);
+		throw new Error('Create tournament failed, try again later');
 	}
 }

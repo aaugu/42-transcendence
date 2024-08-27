@@ -7,7 +7,7 @@ import { hideModal } from "../../dom/modal.js";
 export async function editUserInfo(infoType, newInfo) {
 	const token = getCookie('csrf_token');
 	if (token === null)
-        return { success: false, data: "No token" };
+        throw new Error ("Could not identify user");
 
 	const decodedToken = jwt_decode(token);
 	const url = 'https://localhost:10444/api/user/';
@@ -29,21 +29,19 @@ export async function editUserInfo(infoType, newInfo) {
             const error = await response.json();
 			if (response.status === 400 || response.status === 404) {
 				if (error.email)
-					errormsg(error.email, "editmodal-errormsg");
+					throw new Error(error.email);
 			}
-            throw new Error(`HTTP status code ${response.status}`);
+            throw new Error('Could not edit user info');
         }
         const responseData = await response.json();
         if (responseData !== null) {
             console.log("User log: USER PATCH SUCCESSFUL");
-            return { success: true, data: responseData };
         } else {
-			errormsg("Internal error", "editmodal-errormsg");
-            throw new Error(`Empty response`);
+            throw new Error(`No response from server`);
         }
     } catch (e) {
-        console.error('User log: USER PATCH FETCH FAILURE, ' + e);
-        return { success: false, data: e.message || "Fetch error" };
+        console.error('User log: USER PATCH FETCH FAILURE, ' + e.message);
+        throw new Error(e.message);
     }
 }
 
@@ -83,39 +81,39 @@ export function editUserInfoButton(e) {
 		const editInput = document.getElementById('edit-input');
 		const newValue = editInput.value;
 		const userInfoID = document.getElementById("profile-" + currentField.toLowerCase());
-		var response = null;
 
 		if (newValue === '') {
 			errormsg('Field cannot be empty', 'editmodal-errormsg');
 			return;
 		}
-
-		switch (currentField) {
-			case 'Avatar':
-				response = await editAvatar(editInput);
+        try {
+            switch (currentField) {
+                case 'Avatar':
+                    await editAvatar(editInput);
+                    break;
+                case 'Nickname':
+                    await editUserInfo('nickname', newValue);
+                    userInfoID.innerText = newValue;
+                    break;
+                case 'Email':
+                    await editUserInfo('email', newValue);
+                    userInfoID.innerText = newValue;
+                    break;
+                case 'Password':
+                    await editPassword(newValue, document.getElementById('edit-input-repeat').value);
+                    break;
+                default:
 				break;
-			case 'Nickname':
-				response = await editUserInfo('nickname', newValue);
-				if (response.success == true)
-					userInfoID.innerText = newValue;
-				break;
-			case 'Email':
-				response = await editUserInfo('email', newValue);
-				if (response.success == true)
-					userInfoID.innerText = newValue;
-				break;
-			case 'Password':
-				response = editPassword(newValue, document.getElementById('edit-input-repeat').value);
-				break;
-			default:
-				response.success = false;
-				break;
-		}
-		if (response.success == true)
-			console.log(`User log: CHANGED ${currentField} TO ${newValue}`);
-		hideModal('edit-modal');
+            }
+            console.log(`User log: CHANGED ${currentField} TO ${newValue}`);
+            hideModal('edit-modal');
+        } catch (e) {
+            errormsg(e.message, 'editmodal-errormsg');
+            return;
+        }
+        
 	};
 
-
+    const editModal = new bootstrap.Modal(document.getElementById('edit-modal'));
 	editModal.show();
   }

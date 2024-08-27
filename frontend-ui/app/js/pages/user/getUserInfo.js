@@ -39,7 +39,7 @@ export async function getUserInfo() {
             throw new Error(`No data returned`);
         }
     } catch (e) {
-        console.error('User log: GET USER INFO FETCH FAILURE, ' + e);
+        console.error('User log: GET USER INFO FETCH FAILURE, ' + e.message);
         return { success: false, data: e.message || "Fetch error" };
     }
 }

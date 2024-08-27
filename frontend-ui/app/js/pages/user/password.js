@@ -23,7 +23,7 @@ export async function editPassword(newPassword, repeatNewPassword) {
 	try {
 		const token = getCookie('csrf_token');
 		if (token === null)
-			throw new Error("No token");
+			throw new Error("Could not identify user");
 
 		const decodedToken = jwt_decode(token);
 		const url = 'https://localhost:10444/api/user/changepass/';
@@ -42,22 +42,21 @@ export async function editPassword(newPassword, repeatNewPassword) {
 
 		if (!response.ok) {
 			const error = await response.json();
-			if (response.status === 400 || response.status === 404) {
-				if (error.password)
-					errormsg(error.password, "editmodal-errormsg");
-			}
-			throw new Error(`HTTP status code ${response.status}`);
+			// if (response.status === 400 || response.status === 404) {
+			// 	if (error.password)
+			// 		errormsg(error.password, "editmodal-errormsg");
+			// }
+			throw new Error(error.password);
 		}
 		const responseData = await response.json();
 		if (responseData !== null) {
 			console.log("User log: USER PATCH SUCCESSFUL");
-			return { success: true, data: responseData };
 		} else {
-			throw new Error(`Empty response`);
+			throw new Error('No response from server');
 		}
 	} catch (error) {
-		console.error("User log: PASSWORD CHANGE", error);
+		console.error("User log: PASSWORD CHANGE", error.message);
 		errormsg("Internal error, try later", "editmodal-errormsg");
-		return { success: false };
+		throw new Error(error.message);
 	}
 }

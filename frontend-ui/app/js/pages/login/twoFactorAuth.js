@@ -20,28 +20,27 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 
         if (!response.ok) {
             const error = await response.json();
-            if (error.status === 400) {
-                if (error.detail) {
-                    if (typeof(error.detail) === 'string')
-                        errormsg(error.detail, "homepage-errormsg");
-                    else
-                        errormsg(error.detail[0], "homepage-errormsg");
-                }
-            }
-            throw new Error(`HTTP status code ${response.status}`);
+            // if (error.status === 400) {
+            //     if (error.detail) {
+            //         if (typeof(error.detail) === 'string')
+            //             errormsg(error.detail, "homepage-errormsg");
+            //         else
+            //             errormsg(error.detail[0], "homepage-errormsg");
+            //     }
+            // }
+            throw new Error(error.detail);
         }
 
         const responseData = await response.json();
         if (responseData !== null) {
             console.log(JSON.stringify(responseData));
             console.log("User log: TWO FACTOR AUTHENTICATION SUCCESSFUL");
-            return { success: true, data: responseData };
         } else {
-            throw new Error(`No data returned`);
+            throw new Error('No response from server');
         }
     } catch (e) {
-        console.error('User log: TWO FACTOR AUTHENTICATION FETCH FAILURE, ' + e);
-        return { success: false, error: e.message || "Fetch error" };
+        console.error('User log: TWO FACTOR AUTHENTICATION FETCH FAILURE, ' + e.message);
+        throw new Error(e.message);
     }
 }
 
@@ -66,16 +65,17 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 		}
 
 	} else {
-		const response = await editUserInfo("is_2fa_enabled", false);
-		if (response.success == true) {
+		try {
+			await editUserInfo("is_2fa_enabled", false);
 			twoFAbtn.innerHTML = "Activate";
 			twoFAbtn.classList.remove("btn-outline-danger");
 			twoFAbtn.classList.add("btn-outline-success");
 			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
 			console.log("User log: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
-		else {
-			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
+		catch (e) {
+			errormsg(e.message, "deactivate2fa-errormsg");
+			console.log("User log: 2FA DE-ACTIVATION FAILED");
 		}
 		hideModal('deactivate-2fa-modal');
 	}
@@ -85,17 +85,18 @@ export async function twoFactorAuthLoginButton() {
 	const input = document.getElementById('2fa-code');
 	const twoFaAuthCode = input.value;
 	input.value = '';
-	if (twoFaAuthCode == '') {
-		errormsg('Please enter a code', 'login-twoFA-errormsg');
-		return ;
-	}
-	const response = await verifyTwoFactorAuth(twoFaAuthCode);
-	if (response.success == true) {
+	try {
+		if (twoFaAuthCode == '') {
+			errormsg('Please enter a code', 'login-twoFA-errormsg');
+			return ;
+		}
+		await verifyTwoFactorAuth(twoFaAuthCode);
+
 		localStorage.setItem('token', response.data.access);
 		console.log("User log: LOGIN SUCCESSFUL");
 		urlRoute('/profile');
 	}
-	else {
-		errormsg("Invalid verification code", 'login-twoFA-errormsg');
+	catch (e) {
+		errormsg(e.message, 'login-twoFA-errormsg');
 	}
 }

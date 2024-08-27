@@ -1,5 +1,7 @@
 import { errormsg } from "../../dom/errormsg.js";
+import { urlRoute } from "../../dom/router.js";
 import { createTournament } from "./createTournament.js";
+import { hideModal } from "../../dom/modal.js";
 
 export function tournamentOpenModal() {
 	if (document.getElementById('tournament-name').value == "") {
@@ -30,9 +32,22 @@ export function tournamentOpenModal() {
 	t_modal.show();
 }
 
-export function tournamentCreateButton() {
+function newTournamentData(tournamentName, username, playerNames, is_private, password) {
+	const new_tournament = {
+		"name": tournamentName,
+		"user_id": username,
+		"max_players": playerNames.length,
+		"player_names": playerNames,
+		"is_private": is_private,
+		"password": password
+	};
+	return new_tournament;
+}
+
+export async function tournamentCreateButton() {
 	const local = document.getElementById("t-local").checked;
 	var playerNames;
+	var new_tournament;
 	const username = localStorage.getItem('username') || 'guest';
 	const tournamentName = document.getElementById('tournament-name').value;
 
@@ -44,25 +59,25 @@ export function tournamentCreateButton() {
 					throw new Error("Fill out all fields");
 				}
 			});
+			playerNames = Array.from(inputs).map(input => input.value);
+			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
+
+			await createTournament(new_tournament, local);
+			hideModal();
+			urlRoute('/tournament/game');
 		}
 		catch (e){
-			errormsg ("Fill out all fields", "t-modal-errormsg");
-			return;
+			console.log("in catch, e.value: ", e.message);
+			errormsg (e.message, "t-modal-errormsg");
 		}
-		playerNames = Array.from(inputs).map(input => input.value);
+		
 	}
 	else {
 		playerNames = [username];
-	}
-	console.log("playerNames, tournamentName: ", playerNames, tournamentName);
-	const new_tournament = {
-		"name": tournamentName,
-		"user_id": username,
-		"max_players": playerNames.length,
-		"player_names": playerNames,
-		"is_private": false,
-		"password": ""
-	};
-	//Fetch request to create tournament (local or remote)
-	createTournament(new_tournament, local);
+		new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
+
+		await createTournament(new_tournament, local);
+		hideModal();
+		// refresh the join list
+	}	
 }

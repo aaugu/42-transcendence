@@ -26,10 +26,9 @@ export async function editAvatar(input) {
 		if (response.success == true) {
 			document.getElementById('profile-avatar').src = avatar;
 			localStorage.setItem('avatar', avatar);
-			return response;
 		}
 	} catch (error) {
 		console.error("User log: ERROR READING FILE,", error);
+		throw new Error("Error reading new file");
 	}
-	return { success: false, error: "Error reading file" };
 }
