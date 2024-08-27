@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from django.shortcuts import get_object_or_404
 
 import requests
 
@@ -15,12 +14,13 @@ from .utils import *
 @api_view(['GET', 'POST'])
 def generalUser(request):
     if request.method == 'GET':
-        if check_autentication(request):
-            users = CustomUser.objects.all()
-            serializer = CustomUserSerializer(users, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        dprint("blabla")
+        # if check_autentication(request):
+        users = CustomUser.objects.all()
+        serializer = CustomUserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        # else:
+            # return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         
     elif request.method == 'POST':
         serializer = CustomUserSerializer(data=request.data)

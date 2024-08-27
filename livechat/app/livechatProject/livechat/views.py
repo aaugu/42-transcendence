@@ -25,17 +25,14 @@ def userViewSet(request):
 def conversationViewSet(request, pk):
 	# GET: conversations involving current user
 	if request.method == 'GET':
-		# if not is_user_valid(pk):
-		#     return Response(status=status.HTTP_404_NOT_FOUND)
 		if not user_exists(pk):
 			if not create_user(pk):
 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversations = Conversation.objects.filter(Q(user_1=pk) | Q(user_2=pk))
 		serializer = ConversationSerializer(conversations, many=True)
-		# users = get_users()
 
-		return Response({ "conversations": serializer.data, "users": [] }, status=status.HTTP_200_OK)
+		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
 
 	# POST: create conversation with two users
 	elif request.method == 'POST':
@@ -96,23 +93,6 @@ def blacklistViewSet(request):
 # ------------------------------ Utils ------------------------------
 
 # Users
-def get_users(void):
-	users = "https://172.20.0.4:10444/api/user/"
-	response = requests.get(users)
-	return response
-
-def get_user_info(user_id):
-	user = "https://172.20.0.4:10444/api/user/" + str(user_id)
-	response = requests.get(user)
-	return response
-
-def is_user_valid(user_id):
-	user = "https://172.20.0.4:10444/api/user/" + str(user_id)
-	response = requests.get(user)
-	if response.status_code == 404:
-		return False
-	return True
-
 def user_exists(user_id):
 	user = User.objects.filter(Q(user_id=user_id))
 
