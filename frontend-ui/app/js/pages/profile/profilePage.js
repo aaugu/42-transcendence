@@ -1,4 +1,5 @@
 import { getUserInfo } from "../user/getUserInfo.js"
+import { getUsers } from "../user/getUsers.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -14,6 +15,9 @@ export async function profilePage() {
         email = userinfo.email;
         avatar = userinfo.avatar;
         is_2fa_enabled = userinfo.is_2fa_enabled;
+
+        const users = await getUsers();
+
     }
     catch (e) {
         console.error("User log: ", e.message);
@@ -35,8 +39,6 @@ export async function profilePage() {
 		twoFAbtnColor = "btn-outline-success";
         twoFAtargetModal = "#activate-2fa-modal"
 	}
-
-    
 
     return `
     <h2 class="text-bold display-6"></h2>
@@ -133,43 +135,43 @@ export async function profilePage() {
         </div>
         <div class="column-right">
             <div id="personal-stats" class="content-box clearfix">
-                <h5 class="m-2">Personal stats</h5>
-                <div class="profile-details">
+                <h5 class="m-2">Match history</h5>
+                <div class="profile-details centered">
                     <p>Total wins: 3</p>
                     <p>Total losses: 2</p>
                 </div>
                 <div>
-                <ul class="list-group overflow-auto m-2" style="max-height: 100px;">
+                <ul class="list-group overflow-auto m-2" style="max-height: 200px;">
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                 </ul>
                 </div>
             </div>
             <div id="friends" class="content-box">
-                <h5 class="m-2">Friend list</h5>
+                <h5 class="m-2">User list</h5>
             </div>
         </div>
     </div>

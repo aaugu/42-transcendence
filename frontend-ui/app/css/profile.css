@@ -121,8 +121,13 @@
     font-size: 13px;
 }
 
-.list-group-item text {
+.list-group-item span {
+    align-content: center;
     font-size: 13px;
+}
+
+.list-group-item:hover {
+    background-color: #e4e4e4;
 }
 
 .form-control::placeholder {
