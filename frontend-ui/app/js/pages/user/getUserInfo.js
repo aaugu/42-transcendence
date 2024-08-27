@@ -3,7 +3,7 @@ import { getCookie } from "./cookie.js";
 export async function getUserInfo() {
     const token = getCookie('csrf_token');
     if (token === null)
-        return { success: false, data: "No token" };
+        throw new Error ("Could not identify user");
 
 	const decodedToken = jwt_decode(token);
 	const url = 'https://localhost:10444/api/user/';
@@ -22,24 +22,21 @@ export async function getUserInfo() {
             const error = await response.json();
             if (response.status === 401 || response.status === 404) {
                 if (error.detail) {
-                    if (typeof(error.detail) === 'string')
-                        errormsg(error.detail, "homepage-errormsg");
-                    else
-                        errormsg(error.detail[0], "homepage-errormsg");
+                    throw new Error (error.detail);
                 }
             }
-            throw new Error(`HTTP status code ${response.status}`);
+            throw new Error('Could not get user info');
         }
 
         const responseData = await response.json();
         if (responseData !== null) {
             console.log("User log: GET USER INFO SUCCESSFUL");
-            return { success: true, data: responseData };
+            return responseData;
         } else {
-            throw new Error(`No data returned`);
+            throw new Error('No response from server');
         }
     } catch (e) {
         console.error('User log: GET USER INFO FETCH FAILURE, ' + e.message);
-        return { success: false, data: e.message || "Fetch error" };
+        throw new Error(e.message);
     }
 }

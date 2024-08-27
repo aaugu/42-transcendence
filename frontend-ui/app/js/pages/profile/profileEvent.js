@@ -1,11 +1,11 @@
 import { urlRoute } from "../../dom/router.js";
 import { updateProfile } from "../user/updateProfile.js";
 import { twoFactorAuthProfileButton } from "../login/twoFactorAuth.js";
-import { editUserInfoButton } from "../user/editUserInfo.js";
+import { editUserInfoModal } from "../user/editUserInfo.js";
 
 export async function profileEvent(e) {
 	if (e.target.classList.contains('edit-btn') || e.target.parentElement.classList.contains('edit-btn')) {
-        editUserInfoButton(e);
+        editUserInfoModal(e);
         return;
       }
 

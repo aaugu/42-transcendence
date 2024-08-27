@@ -27,9 +27,11 @@ export async function editUserInfo(infoType, newInfo) {
 
         if (!response.ok) {
             const error = await response.json();
-			if (response.status === 400 || response.status === 404) {
+			if (response.status === 400) {
 				if (error.email)
 					throw new Error(error.email);
+                if (error.nickname)
+                    throw new Error(error.nickname);
 			}
             throw new Error('Could not edit user info');
         }
@@ -37,7 +39,7 @@ export async function editUserInfo(infoType, newInfo) {
         if (responseData !== null) {
             console.log("User log: USER PATCH SUCCESSFUL");
         } else {
-            throw new Error(`No response from server`);
+            throw new Error('No response from server');
         }
     } catch (e) {
         console.error('User log: USER PATCH FETCH FAILURE, ' + e.message);
@@ -45,7 +47,7 @@ export async function editUserInfo(infoType, newInfo) {
     }
 }
 
-export function editUserInfoButton(e) {
+export function editUserInfoModal(e) {
 	const editButton = e.target.closest('.edit-btn');
 	const currentField = editButton.dataset.field;
 	const editModalLabel = document.getElementById('edit-modal-label');

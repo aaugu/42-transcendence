@@ -6,17 +6,17 @@ export async function profilePage() {
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
-    const userinfo = await getUserInfo();
     
-    console.log("userinfo: ", userinfo);
-
-     if (userinfo.success  === true) {
-        username = userinfo.data.username;
-        nickname = userinfo.data.nickname;
-        email = userinfo.data.email;
-        avatar = userinfo.data.avatar;
-        console.log("avatar: ", avatar, "nickname: ", nickname);
-        is_2fa_enabled = userinfo.data.is_2fa_enabled;
+     try {
+        const userinfo = await getUserInfo();
+        username = userinfo.username;
+        nickname = userinfo.nickname;
+        email = userinfo.email;
+        avatar = userinfo.avatar;
+        is_2fa_enabled = userinfo.is_2fa_enabled;
+    }
+    catch (e) {
+        console.error("User log: ", e.message);
     }
 
     localStorage.setItem('avatar', avatar);

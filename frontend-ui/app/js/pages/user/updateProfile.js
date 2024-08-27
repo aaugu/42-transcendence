@@ -16,9 +16,8 @@ export const updateProfile = async (user, isConnected, token) => {
 		// localStorage.setItem('avatar', user.avatar);
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // 1 week
-		document.cookie = `csrf_token=${token}; path=/; SameSite=None; expires=${expirationDate.toUTCString()}`;
+		document.cookie = `csrf_token=${token}; path=/; SameSite=None; Secure=true; expires=${expirationDate.toUTCString()}`;
 		userIsConnected = true;
-		// localStorage.setItem('token', token);
 
 	}
 	else {
@@ -28,9 +27,8 @@ export const updateProfile = async (user, isConnected, token) => {
 		localStorage.setItem('username', 'guest');
 		localStorage.setItem('avatar', defaultAvatar);
 		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		userIsConnected = false;
-		// localStorage.setItem('token', token);
-
-
 	}
 }
