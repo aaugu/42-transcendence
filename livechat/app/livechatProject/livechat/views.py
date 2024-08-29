@@ -51,13 +51,13 @@ def conversationViewSet(request, pk):
 
 # Messages : get all messages from a conversation
 @api_view(['GET'])
-def messageViewSet(request, pk):        
-	messages = Message.objects.filter(Q(conversation_id=pk))
-	if not messages:
+def messageViewSet(request, pk):
+	if conversation_exists(pk):    
+		messages = Message.objects.filter(Q(conversation_id=pk))
+		serializer = MessageSerializer(messages, many=True)
+		return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
+	else:
 		return Response(status=status.HTTP_404_NOT_FOUND)
-
-	serializer = MessageSerializer(messages, many=True)
-	return Response({ "messages": serializer.data })
 
 # Blacklist
 @api_view(['POST', 'DELETE'])
@@ -107,13 +107,13 @@ def create_user(user_id):
 
 # Conversation
 def create_conversation(user_id, target_id):
-	if not user_exists(target_id):
-		if not create_user(target_id):
-			return 422
-
 	if conversation_exists(user_id, target_id):
 		return 409
 	else:
+		if not user_exists(target_id):
+			if not create_user(target_id):
+				return 422
+
 		conversation = Conversation(
 			user_1 = user_id,
 			user_2 = target_id,
@@ -128,6 +128,12 @@ def conversation_exists(user_id, target_id):
 	conversation_1 = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
 	conversation_2 = Conversation.objects.filter(Q(user_1=target_id) & Q(user_2=user_id))
 	if conversation_1 or conversation_2:
+		return True
+	return False
+
+def conversation_exists(id):
+	conversation = Conversation.objects.filter(id=id)
+	if conversation:
 		return True
 	return False
 	

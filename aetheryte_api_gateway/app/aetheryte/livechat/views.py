@@ -24,7 +24,7 @@ def conversationViewSet(request, pk):
 			response_json = response.json()
 			return Response({ "response": response_json}, status=status.HTTP_200_OK)
 		else:
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response(status=response.status_code)
 
 	# POST: create conversation with two users
 	elif request.method == 'POST':
@@ -35,6 +35,7 @@ def conversationViewSet(request, pk):
 
 		user_id = pk
 		target_id = body['target_id']
+
 		if not user_valid(user_id) or not user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -45,6 +46,22 @@ def conversationViewSet(request, pk):
 		}
 		response = requests.post( url, json = body)
 		return Response(status=response.status_code)
+
+
+@api_view(['GET'])
+def messageViewSet(request, pk):
+	# GET: messages from a conversation
+	if request.method == 'GET':		
+		request_url = "http://172.20.5.2:8000/livechat/conversation/" + str(pk) + "/messages/"
+		response = requests.get(url = request_url)
+		if response.status_code == status.HTTP_200_OK:
+			response_json = response.json()
+			return Response({ "response": response_json}, status=status.HTTP_200_OK)
+		else:
+			return Response(status=response.status_code)
+
+
+# ------------------------------ UTILS ------------------------------
 
 def user_valid(user_id):
 	user = CustomUser.objects.filter(Q(id=user_id))

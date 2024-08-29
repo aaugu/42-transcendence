@@ -29,11 +29,11 @@ class Message(models.Model):
     date = models.CharField(blank=False)
     time = models.CharField(blank=False)
 
-    def get_date(self):
-        return dateformat.format(timezone.localtime(self.timestamp), 'Y-m-d')
+    def get_date(timestamp):
+        return dateformat.format(timezone.localtime(timestamp), 'Y-m-d')
     
-    def get_time(self):
-        return dateformat.format(timezone.localtime(self.timestamp), 'H:i')
+    def get_time(timestamp):
+        return dateformat.format(timezone.localtime(timestamp), 'H:i')
 
     def __str__(self):
         return str(self.author) + ": " + str(self.message)

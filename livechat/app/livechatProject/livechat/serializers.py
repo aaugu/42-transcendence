@@ -14,7 +14,7 @@ class BlacklistSerializer(serializers.ModelSerializer):
 class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conversation
-        fields = ['user_1', 'user_2']
+        fields = ['id', 'user_1', 'user_2']
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
