@@ -27,13 +27,13 @@ export async function getUserInfo() {
 
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("User log: GET USER INFO SUCCESSFUL");
+            console.log("USER LOG: GET USER INFO SUCCESSFUL");
             return responseData;
         } else {
             throw new Error('No response from server');
         }
     } catch (e) {
-        console.error('User log: GET USER INFO FETCH FAILURE, ' + e.message);
+        console.error('USER LOG: GET USER INFO FETCH FAILURE, ' + e.message);
         throw new Error(e.message);
     }
 }

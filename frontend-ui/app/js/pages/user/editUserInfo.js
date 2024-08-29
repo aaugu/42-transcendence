@@ -34,12 +34,12 @@ export async function editUserInfo(infoType, newInfo) {
         }
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("User log: USER PATCH SUCCESSFUL");
+            console.log("USER LOG: USER PATCH SUCCESSFUL");
         } else {
             throw new Error('No response from server');
         }
     } catch (e) {
-        console.error('User log: USER PATCH FETCH FAILURE, ' + e.message);
+        console.error('USER LOG: USER PATCH FETCH FAILURE, ' + e.message);
         throw new Error(e.message);
     }
 }
@@ -104,7 +104,7 @@ export function editUserInfoModal(e) {
                 default:
 				break;
             }
-            console.log(`User log: CHANGED ${currentField} TO ${newValue}`);
+            console.log(`USER LOG: CHANGED ${currentField} TO ${newValue}`);
             hideModal('edit-modal');
         } catch (e) {
             errormsg(e.message, 'editmodal-errormsg');

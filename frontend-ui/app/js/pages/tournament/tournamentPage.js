@@ -1,40 +1,19 @@
-import { getTournaments } from "./getTournaments.js";
-
-export var all_tournaments = {};
-
-export function free_all_tournaments() {
-    all_tournaments = {};
-}
+import { get_all_tournaments, all_tournaments } from "./tournament.js";
 
 export async function tournamentPage() {
     var html_tournaments = ` <li class="list-group-item">
                                 <span >Some tournament</span>
                             </li>`;
-    all_tournaments = {
-        "first_tournament": {
-            "name": "first tournament",
-            "id": 1
-        },
-        "second_tournament": {
-            "name": "second tournament",
-            "id": 2
-        }
-    };
 
-    try {
-        // all_tournaments = await getTournaments();
-        const tournaments = Object.values(all_tournaments);
-        tournaments.forEach(tournament => {
-            html_tournaments += `
-                <li class="list-group-item">
-                    <span>${tournament.name}</span>
-                </li>`;
-        });
-    }
-    catch (e) {
-        console.error("User log: ", e.message);
-    }
-    
+    await get_all_tournaments();
+    const tournaments = Object.values(all_tournaments);
+    tournaments.forEach(tournament => {
+        html_tournaments += `
+            <li class="list-group-item">
+                <span>${tournament.name}</span>
+            </li>`;
+    });
+
 	return `
     <div class="two-column-container">
         <div class="column-left" style="flex: 1 1 40%;">
@@ -100,7 +79,7 @@ export async function tournamentPage() {
                 </ul>
             </div>
         </div>
-        <!-- Join or tournament modal -->
+        <!-- Join/start/play tournament modal -->
         <div class="modal fade" id="single-t-modal" tabindex="-1" aria-labelledby="single-t-modal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">

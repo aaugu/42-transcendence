@@ -34,12 +34,12 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
         const responseData = await response.json();
         if (responseData !== null) {
             console.log(JSON.stringify(responseData));
-            console.log("User log: TWO FACTOR AUTHENTICATION SUCCESSFUL");
+            console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
         } else {
             throw new Error('No response from server');
         }
     } catch (e) {
-        console.error('User log: TWO FACTOR AUTHENTICATION FETCH FAILURE, ' + e.message);
+        console.error('USER LOG: TWO FACTOR AUTHENTICATION FETCH FAILURE, ' + e.message);
         throw new Error(e.message);
     }
 }
@@ -53,9 +53,9 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-success");
 			twoFAbtn.classList.add("btn-outline-danger");
 			twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
-			console.log("User log: 2FA ACTIVATION SUCCESSFUL");
+			console.log("USER LOG: 2FA ACTIVATION SUCCESSFUL");
 			updateProfile(null, false, null);
-			console.log('User log: LOGOUT');
+			console.log('USER LOG: LOGOUT');
 			hideModal('activate-2fa-modal');
 			urlRoute('/');
 		}
@@ -71,11 +71,11 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-danger");
 			twoFAbtn.classList.add("btn-outline-success");
 			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
-			console.log("User log: 2FA DE-ACTIVATION SUCCESSFUL");
+			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
 			errormsg(e.message, "deactivate2fa-errormsg");
-			console.log("User log: 2FA DE-ACTIVATION FAILED");
+			console.log("USER LOG: 2FA DE-ACTIVATION FAILED");
 		}
 		hideModal('deactivate-2fa-modal');
 	}
@@ -93,7 +93,7 @@ export async function twoFactorAuthLoginButton() {
 		await verifyTwoFactorAuth(twoFaAuthCode);
 
 		localStorage.setItem('token', response.data.access);
-		console.log("User log: LOGIN SUCCESSFUL");
+		console.log("USER LOG: LOGIN SUCCESSFUL");
 		urlRoute('/profile');
 	}
 	catch (e) {

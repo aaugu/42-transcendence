@@ -21,13 +21,13 @@ export async function getUsers() {
 
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("User log: GET USERS SUCCESSFUL");
+            console.log("USER LOG: GET USERS SUCCESSFUL");
             return responseData;
         } else {
             throw new Error('No response from server');
         }
     } catch (e) {
-        console.error('User log: GET USERS FETCH FAILURE, ' + e.message);
+        console.error('USER LOG: GET USERS FETCH FAILURE, ' + e.message);
         throw new Error(e.message);
     }
 }

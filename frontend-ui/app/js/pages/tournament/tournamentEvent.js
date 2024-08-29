@@ -1,5 +1,7 @@
 import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
-import { tournamentCreateButton } from "./createTournament.js";
+import { createTournamentButton } from "./createTournament.js";
+import { joinTournamentButton } from "./joinTournament.js";
+import { startTournamentButton } from "./changeStatusTournament.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -12,13 +14,13 @@ export async function tournamentEvent(e) {
 			openCreateTournamentModal();
 			break;
 		case "t-create":
-			tournamentCreateButton();
+			createTournamentButton();
 			break;
 		case "t-join":
-			// console.log("All tournaments");
+			joinTournamentButton();
 			break;
 		case "t-start":
-			// console.log("All tournaments");
+			startTournamentButton();
 			break;
 		case "t-play":
 			break;

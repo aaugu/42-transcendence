@@ -1,5 +1,5 @@
 import { errormsg } from "../../dom/errormsg.js";
-import { all_tournaments } from "./tournamentPage.js";
+import { get_tournament_id } from "./tournament.js";
 import { getTournamentDetails } from "./getTournaments.js";
 import { userID } from "../user/updateProfile.js";
 
@@ -32,21 +32,20 @@ export function openCreateTournamentModal() {
 	t_modal.show();
 }
 
+//tournament status 0 = created, 1 = in_progress, 2 = finished
 export async function openSingleTournamentModal(e) {
 	try {
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
-		const t_values = Object.values(all_tournaments);
-		const tournament = t_values.find(t => t.name === t_name);
-		const t_id = tournament ? tournament.id : null;
+		const t_id = get_tournament_id(t_name);
 		if (!t_id) {
 			throw new Error('Could not find tournament');
 		}
 		const t_details = await getTournamentDetails(t_id);
-
 		const has_joined = (t_details.find(localStorage.getItem(nickname)) !== undefined);
-		//check what the different statuses are
-		const has_started = (t_details.find('status') === 'created');
+		const has_started = (t_details.find('status') === 0);
+		// const has_joined = true;
+		// const has_started = false;
 
 		console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
 
@@ -65,10 +64,14 @@ export async function openSingleTournamentModal(e) {
 			const playButton = document.getElementById('t-play');
 			playButton.classList.remove('hidden');
 		}
+		else {
+			t_modalText.innerText = 'Sorry, this tournament has already started without you!';
+
+		}
 		const t_modal = new bootstrap.Modal(document.getElementById('single-t-modal'));
 		t_modal.show();
 	}
 	catch (e) {
-		console.error("User log: ", e.message);
+		console.error("USER LOG: ", e.message);
 	}
 }

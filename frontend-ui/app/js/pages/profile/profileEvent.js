@@ -12,7 +12,7 @@ export async function profileEvent(e) {
 	switch (e.target.id) {
 		case "logout":
 			updateProfile(null, false, null);
-			console.log('User log: LOGOUT');
+			console.log('USER LOG: LOGOUT');
 			urlRoute('/');
 			break;
 		case "confirm-2fa-activation":

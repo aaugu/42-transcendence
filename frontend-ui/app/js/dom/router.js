@@ -14,7 +14,7 @@ import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
-import { free_all_tournaments } from "../pages/tournament/tournamentPage.js"
+import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -34,7 +34,7 @@ function resetDataRouteChange() {
 		socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}
-	free_all_tournaments();
+	reset_all_tournaments();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

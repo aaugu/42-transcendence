@@ -50,12 +50,12 @@ export async function editPassword(newPassword, repeatNewPassword) {
 		}
 		const responseData = await response.json();
 		if (responseData !== null) {
-			console.log("User log: USER PATCH SUCCESSFUL");
+			console.log("USER LOG: USER PATCH SUCCESSFUL");
 		} else {
 			throw new Error('No response from server');
 		}
 	} catch (error) {
-		console.error("User log: PASSWORD CHANGE", error.message);
+		console.error("USER LOG: PASSWORD CHANGE", error.message);
 		errormsg("Internal error, try later", "editmodal-errormsg");
 		throw new Error(error.message);
 	}

@@ -7,7 +7,7 @@ export async function profilePage() {
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
-    
+
      try {
         const userinfo = await getUserInfo();
         username = userinfo.username;
@@ -20,7 +20,7 @@ export async function profilePage() {
 
     }
     catch (e) {
-        console.error("User log: ", e.message);
+        console.error("USER LOG: ", e.message);
     }
 
     localStorage.setItem('avatar', avatar);

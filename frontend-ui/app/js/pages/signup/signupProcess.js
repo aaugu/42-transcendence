@@ -18,7 +18,7 @@ export async function signupProcess() {
 
     if (userIsConnected === true){
         errormsg("Please log out first before signing up as a new user...", "homepage-errormsg");
-        console.log("User log: ALREADY LOGGED IN");
+        console.log("USER LOG: ALREADY LOGGED IN");
         setTimeout(() => {
             urlRoute("/profile");
         }, 3000);
@@ -26,7 +26,7 @@ export async function signupProcess() {
     }
 
     if (!signupFieldsValidity(username, nickname, email, password, repeatPassword)) {
-        console.log("User log: SIGNUP FAILED");
+        console.log("USER LOG: SIGNUP FAILED");
         return;
     }
 
@@ -36,7 +36,7 @@ export async function signupProcess() {
         try {
             avatar = await readAvatarFile(avatarFile);
         } catch (error) {
-            console.error("User log: Error reading avatar file,", error);
+            console.error("USER LOG: Error reading avatar file,", error);
             avatar = defaultAvatar;
         }
     }
@@ -53,7 +53,7 @@ export async function signupProcess() {
         "avatar": avatar
     };
 
-    console.log("User log: SIGNUP DATA: ", userdata);
+    console.log("USER LOG: SIGNUP DATA: ", userdata);
 
     const sendSignupDataToAPI = async (userdata) => {
         await fetch('https://localhost:10444/api/user/', {
@@ -66,33 +66,25 @@ export async function signupProcess() {
                 // credentials: 'include' //include cookies
         })
         .then(async response => {
-                if (!response.ok) {
-                    if (response.status == 400) {
-                        const error = await response.json();
-                        if (error.username) {
-                            if (typeof(error.username) == 'string')
-                                errormsg(error.username, "homepage-errormsg");
-                            else
-                                errormsg(error.username[0], "homepage-errormsg");
-                        }
-                        else if (error.email) {
-                            if (typeof(error.email) == 'string')
-                                errormsg(error.email), "homepage-errormsg";
-                            else
-                                errormsg(error.email[0], "homepage-errormsg");
-                        }
-                    }
-                    throw new Error(`HTTP status code ${response.status}`);
+            if (!response.ok) {
+                const error = await response.json();
+                if (error.username) {
+                    errormsg(error.username, "homepage-errormsg");
                 }
-                return response.json();
+                else if (error.email) {
+                    errormsg(error.email), "homepage-errormsg";
+                }
+                throw new Error(`HTTP status code ${response.status}`);
+            }
+            return response.json();
         })
         .then(responseData => {
-                if (responseData !== null) {
-                    console.log("User log: SIGNUP SUCCESSFUL, LOGGING IN...");
-                    loginProcess();
-                }
+            if (responseData !== null) {
+                console.log("USER LOG: SIGNUP SUCCESSFUL, LOGGING IN...");
+                loginProcess();
+            }
         })
-        .catch(e => console.error('User log: SIGNUP FETCH FAILURE, '+ e));
+        .catch(e => console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e));
     }
 
 	await sendSignupDataToAPI(userdata);

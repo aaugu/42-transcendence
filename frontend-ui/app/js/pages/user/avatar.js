@@ -28,7 +28,7 @@ export async function editAvatar(input) {
 			localStorage.setItem('avatar', avatar);
 		}
 	} catch (error) {
-		console.error("User log: ERROR READING FILE,", error);
+		console.error("USER LOG: ERROR READING FILE,", error);
 		throw new Error("Error reading new file");
 	}
 }
