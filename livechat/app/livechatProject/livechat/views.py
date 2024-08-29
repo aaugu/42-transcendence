@@ -27,25 +27,22 @@ class ListUsers(APIView):
 # 		serializer = UserSerializer(users, many=True)
 # 		return Response({"users": serializer.data }, status=status.HTTP_200_OK)
 
+
 # Conversations  
-@api_view(['GET', 'POST'])
-def conversationViewSet(request, pk):
+class ConversationView(APIView):
 	# GET: conversations involving current user
-	if request.method == 'GET':
-		if not user_exists(pk):
-			if not create_user(pk):
+	def get(self, request, pk):
+		if not self.user_exists(pk):
+			if not self.create_user(pk):
 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversations = Conversation.objects.filter(Q(user_1=pk) | Q(user_2=pk))
 		serializer = ConversationSerializer(conversations, many=True)
 
 		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
-
+	
 	# POST: create conversation with two users
-	elif request.method == 'POST':
-		body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		print(body)
+	def post(self, request, pk):	
 		serializer = ConversationSerializer(data=request.data)
 		if serializer.is_valid():
 			user_id = serializer.validated_data['user_1']
@@ -53,18 +50,106 @@ def conversationViewSet(request, pk):
 		else:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
-		status_code = create_conversation(user_id, target_id)
+		status_code = self.create_conversation(user_id, target_id)
 		return Response(status=status_code)
+	
+	# Create conversation
+	def create_conversation(self, user_id, target_id):
+		if self.conversation_exists(user_id, target_id):
+			return 409
+		else:
+			if not self.user_exists(target_id):
+				if not self.create_user(target_id):
+					return 422
+
+			conversation = Conversation(
+				user_1 = user_id,
+				user_2 = target_id,
+			)
+			conversation.save()
+			check_conversation = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
+			if not check_conversation:
+				return 422
+			return 201
+
+	# Check if conversation exists
+	def conversation_exists(self, user_id, target_id):
+		conversation_1 = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
+		conversation_2 = Conversation.objects.filter(Q(user_1=target_id) & Q(user_2=user_id))
+		if conversation_1 or conversation_2:
+			return True
+		return False
+
+	# Check if user exists
+	def user_exists(self, user_id):
+		user = User.objects.filter(Q(user_id=user_id))
+
+		if user:
+			return True
+		return False
+	
+	# Create user
+	def create_user(self, user_id):
+		user = User(user_id=user_id)
+		user.save()
+
+		user_created = User.objects.filter(Q(user_id=user_id))
+		return user_created
+
+
+# @api_view(['GET', 'POST'])
+# def conversationViewSet(request, pk):
+# 	# GET: conversations involving current user
+# 	if request.method == 'GET':
+# 		if not user_exists(pk):
+# 			if not create_user(pk):
+# 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+# 		conversations = Conversation.objects.filter(Q(user_1=pk) | Q(user_2=pk))
+# 		serializer = ConversationSerializer(conversations, many=True)
+
+# 		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
+
+# 	# POST: create conversation with two users
+# 	elif request.method == 'POST':
+# 		body_unicode = request.body.decode('utf-8')
+# 		body = json.loads(body_unicode)
+# 		print(body)
+# 		serializer = ConversationSerializer(data=request.data)
+# 		if serializer.is_valid():
+# 			user_id = serializer.validated_data['user_1']
+# 			target_id = serializer.validated_data['user_2']
+# 		else:
+# 			return Response(status=status.HTTP_400_BAD_REQUEST)
+		
+# 		status_code = create_conversation(user_id, target_id)
+# 		return Response(status=status_code)
+
 
 # Messages : get all messages from a conversation
-@api_view(['GET'])
-def messageViewSet(request, pk):
-	if conversation_exists(pk):    
-		messages = Message.objects.filter(Q(conversation_id=pk))
-		serializer = MessageSerializer(messages, many=True)
-		return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
-	else:
-		return Response(status=status.HTTP_404_NOT_FOUND)
+class MessageView(APIView):
+	def get(self, request, pk):
+		if self.conversation_exists(pk):    
+			messages = Message.objects.filter(Q(conversation_id=pk))
+			serializer = MessageSerializer(messages, many=True)
+			return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
+		else:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+
+	def conversation_exists(self, id):
+		conversation = Conversation.objects.filter(id=id)
+		if conversation:
+			return True
+		return False
+
+# @api_view(['GET'])
+# def messageViewSet(request, pk):
+# 	if conversation_exists(pk):    
+# 		messages = Message.objects.filter(Q(conversation_id=pk))
+# 		serializer = MessageSerializer(messages, many=True)
+# 		return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
+# 	else:
+# 		return Response(status=status.HTTP_404_NOT_FOUND)
 
 # Blacklist
 @api_view(['POST', 'DELETE'])
@@ -82,8 +167,6 @@ def blacklistViewSet(request):
 	target = User.objects.filter(Q(user_id=request.target_id))
 	if not target:
 		return Response(status=status.HTTP_404_NOT_FOUND)
-	
-
 
 	# POST: Blacklist a user
 	if request.method == 'POST':
@@ -97,52 +180,14 @@ def blacklistViewSet(request):
 
 # ------------------------------ Utils ------------------------------
 
-# Users
-def user_exists(user_id):
-	user = User.objects.filter(Q(user_id=user_id))
 
-	if user:
-		return True
-	return False
 
-def create_user(user_id):
-	user = User(user_id=user_id)
-	user.save()
 
-	user_created = User.objects.filter(Q(user_id=user_id))
-	return user_created
 
 # Conversation
-def create_conversation(user_id, target_id):
-	if conversation_exists(user_id, target_id):
-		return 409
-	else:
-		if not user_exists(target_id):
-			if not create_user(target_id):
-				return 422
 
-		conversation = Conversation(
-			user_1 = user_id,
-			user_2 = target_id,
-		)
-		conversation.save()
-		check_conversation = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
-		if not check_conversation:
-			return 422
-		return 201
 	
-def conversation_exists(user_id, target_id):
-	conversation_1 = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
-	conversation_2 = Conversation.objects.filter(Q(user_1=target_id) & Q(user_2=user_id))
-	if conversation_1 or conversation_2:
-		return True
-	return False
 
-def conversation_exists(id):
-	conversation = Conversation.objects.filter(id=id)
-	if conversation:
-		return True
-	return False
 	
 # Blacklist
 def blacklist_user(initiator, target):
