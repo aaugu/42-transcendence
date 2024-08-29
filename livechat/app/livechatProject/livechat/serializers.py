@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class BlacklistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blacklist
-        fields = ['initiator', 'blacklist']
+        fields = ['initiator', 'target']
 
 class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
