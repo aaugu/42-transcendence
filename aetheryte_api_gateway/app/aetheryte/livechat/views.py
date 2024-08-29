@@ -38,10 +38,10 @@ def conversationViewSet(request, pk):
 	elif request.method == 'POST':
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
-		if not body['user_id'] or not body['target_id']:
+		if not body['target_id']:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-		user_id = body['user_id']
+		user_id = pk
 		target_id = body['target_id']
 		if not user_valid(user_id) or not user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
