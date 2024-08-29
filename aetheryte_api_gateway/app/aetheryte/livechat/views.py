@@ -11,14 +11,6 @@ import requests, json
 
 from login.models import CustomUser
 
-# Remove after
-from colorama import Fore, Style
-def dprint(msg):
-    full_msg = "DEBUG ==> " + str(msg)
-    colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
-    print(colored_msg)
-#
-
 @api_view(['GET', 'POST'])
 def conversationViewSet(request, pk):
 	# GET: conversations involving current user
