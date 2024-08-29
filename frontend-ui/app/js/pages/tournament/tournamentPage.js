@@ -2,6 +2,10 @@ import { getTournaments } from "./getTournaments.js";
 
 export var all_tournaments = {};
 
+export function free_all_tournaments() {
+    all_tournaments = {};
+}
+
 export async function tournamentPage() {
     var html_tournaments = ` <li class="list-group-item">
                                 <span >Some tournament</span>

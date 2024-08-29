@@ -14,6 +14,7 @@ import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
+import { free_all_tournaments } from "../pages/tournament/tournamentPage.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -26,6 +27,14 @@ function updateEventListenerMainCont(newEventListener) {
 	if (currentEventListener !== null) {
 		mainCont.addEventListener('click', currentEventListener);
 	}
+}
+
+function resetDataRouteChange() {
+	if (socket) {
+		socket.close();
+		console.log('GAME LOG: Websocket connection closed');
+	}
+	free_all_tournaments();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -118,10 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const goToRoute = async () => {
-		if (socket) {
-			socket.close();
-			console.log('GAME LOG: Websocket connection closed');
-		}
+		resetDataRouteChange();
         const currentRoute = window.location.pathname;
         if (currentRoute.length == 0)
 			currentRoute = "/";
