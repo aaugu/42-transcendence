@@ -5,16 +5,17 @@ from django.http import HttpResponse
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework import status
 
 import requests, json
 
 from login.models import CustomUser
 
-@api_view(['GET', 'POST'])
-def conversationViewSet(request, pk):
+# Conversations  
+class ConversationView(APIView):
 	# GET: conversations involving current user
-	if request.method == 'GET':
+	def get(self, request, pk):
 		if not user_valid(pk):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		
@@ -25,9 +26,9 @@ def conversationViewSet(request, pk):
 			return Response({ "response": response_json}, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)
-
+	
 	# POST: create conversation with two users
-	elif request.method == 'POST':
+	def post(self, request, pk):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['target_id']:
@@ -36,7 +37,7 @@ def conversationViewSet(request, pk):
 		user_id = pk
 		target_id = body['target_id']
 
-		if not user_valid(user_id) or not user_valid(target_id):
+		if not self.user_valid(user_id) or not self.user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
@@ -46,12 +47,17 @@ def conversationViewSet(request, pk):
 		}
 		response = requests.post( url, json = body)
 		return Response(status=response.status_code)
+	
+	# Check if user is valid
+	def user_valid(self, user_id):
+		user = CustomUser.objects.filter(Q(id=user_id))
+		if user:
+			return True
+		return False
 
-
-@api_view(['GET'])
-def messageViewSet(request, pk):
-	# GET: messages from a conversation
-	if request.method == 'GET':		
+# Messages : get all messages from a conversation
+class MessageView(APIView):
+	def get(self, request, pk):
 		request_url = "http://172.20.5.2:8000/livechat/conversation/" + str(pk) + "/messages/"
 		response = requests.get(url = request_url)
 		if response.status_code == status.HTTP_200_OK:
@@ -59,12 +65,3 @@ def messageViewSet(request, pk):
 			return Response({ "response": response_json}, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)
-
-
-# ------------------------------ UTILS ------------------------------
-
-def user_valid(user_id):
-	user = CustomUser.objects.filter(Q(id=user_id))
-	if user:
-		return True
-	return False
