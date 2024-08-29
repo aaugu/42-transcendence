@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-import requests
+import requests, json
 
 from livechat.models import User, Conversation, Message, Blacklist
 from livechat.serializers import UserSerializer, ConversationSerializer, MessageSerializer
@@ -36,6 +36,9 @@ def conversationViewSet(request, pk):
 
 	# POST: create conversation with two users
 	elif request.method == 'POST':
+		body_unicode = request.body.decode('utf-8')
+		body = json.loads(body_unicode)
+		print(body)
 		serializer = ConversationSerializer(data=request.data)
 		if serializer.is_valid():
 			user_id = serializer.validated_data['user_1']
@@ -43,13 +46,8 @@ def conversationViewSet(request, pk):
 		else:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
-		response = create_conversation(user_id, target_id)
-		if   response == 201:
-			return Response(status=status.HTTP_201_CREATED)
-		elif response == 422:
-			return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-		elif response == 409:
-			return Response(status=status.HTTP_409_CONFLICT)
+		status_code = create_conversation(user_id, target_id)
+		return Response(status=status_code)
 
 # Messages : get all messages from a conversation
 @api_view(['GET'])

@@ -23,10 +23,10 @@ def dprint(msg):
 def conversationViewSet(request, pk):
 	# GET: conversations involving current user
 	if request.method == 'GET':
-		if not is_user_valid(pk):
+		if not user_valid(pk):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		
-		request_url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/conversations"
+		request_url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/conversations/"
 		response = requests.get(url = request_url)
 		if response.status_code == status.HTTP_200_OK:
 			response_json = response.json()
@@ -43,18 +43,18 @@ def conversationViewSet(request, pk):
 
 		user_id = body['user_id']
 		target_id = body['target_id']
-		if not is_user_valid(user_id) and not is_user_valid(target_id):
+		if not user_valid(user_id) or not user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations"
-		response = requests.get(url = request_url)
-		if response.status_code == status.HTTP_201_CREATED:
-			response_json = response.json()
-			return Response({ "response": response_json}, status.HTTP_201_CREATED)
-		else:
-			return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
+		body = {
+			"user_1": user_id,
+			"user_2": target_id
+		}
+		response = requests.post( url, json = body)
+		return Response(status=response.status_code)
 
-def is_user_valid(user_id):
+def user_valid(user_id):
 	user = CustomUser.objects.filter(Q(id=user_id))
 	if user:
 		return True
