@@ -67,12 +67,8 @@ export async function loginProcess() {
 						twoFAmodal.show();
 					}
 					else {
-						const user = {
-							"username": username,
-							"avatar": defaultAvatar, //needs to be changed to user avatar
-						}
 						// console.log("login response: ", JSON.stringify(responseData));
-						updateProfile(user, true, responseData.access);
+						updateProfile(nickname, true, responseData.access);
 						console.log("User log: LOGIN SUCCESSFUL");
 						urlRoute("/profile");
 					}

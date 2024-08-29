@@ -10,18 +10,31 @@ export async function tournamentPage() {
     var html_tournaments = ` <li class="list-group-item">
                                 <span >Some tournament</span>
                             </li>`;
+    all_tournaments = {
+        "first_tournament": {
+            "name": "first tournament",
+            "id": 1
+        },
+        "second_tournament": {
+            "name": "second tournament",
+            "id": 2
+        }
+    };
+
     try {
-        all_tournaments = await getTournaments();
-        for (let i = 0; i < all_tournaments.length; i++) {
+        // all_tournaments = await getTournaments();
+        const tournaments = Object.values(all_tournaments);
+        tournaments.forEach(tournament => {
             html_tournaments += `
                 <li class="list-group-item">
-                    <span >${all_tournaments[i].name}</span>
+                    <span>${tournament.name}</span>
                 </li>`;
-        }
+        });
     }
     catch (e) {
         console.error("User log: ", e.message);
     }
+    
 	return `
     <div class="two-column-container">
         <div class="column-left" style="flex: 1 1 40%;">
@@ -100,9 +113,9 @@ export async function tournamentPage() {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-dark" id="t-join">Join</button>
-                        <button type="button" class="btn btn-dark" id="t-start">Start</button>
-                        <button type="button" class="btn btn-dark" id="t-play">Play</button>
+                        <button type="button" class="btn btn-dark hidden" id="t-join">Join</button>
+                        <button type="button" class="btn btn-dark hidden" id="t-start">Start</button>
+                        <button type="button" class="btn btn-dark hidden" id="t-play">Play</button>
                     </div>
                 </div>
             </div>

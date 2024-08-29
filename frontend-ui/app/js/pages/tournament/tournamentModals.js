@@ -1,5 +1,7 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { all_tournaments } from "./tournamentPage.js";
+import { getTournamentDetails } from "./getTournaments.js";
+import { userID } from "../user/updateProfile.js";
 
 export function openCreateTournamentModal() {
 	if (document.getElementById('tournament-name').value == "") {
@@ -30,24 +32,43 @@ export function openCreateTournamentModal() {
 	t_modal.show();
 }
 
-export function openSingleTournamentModal(e) {
-	var has_joined = false;
-	var has_started = false;
-	const t_modalText = document.getElementById("single-t-modal-text");
-	const t_name = e.target.innerText;
+export async function openSingleTournamentModal(e) {
+	try {
+		const t_modalText = document.getElementById("single-t-modal-text");
+		const t_name = e.target.innerText;
+		const t_values = Object.values(all_tournaments);
+		const tournament = t_values.find(t => t.name === t_name);
+		const t_id = tournament ? tournament.id : null;
+		if (!t_id) {
+			throw new Error('Could not find tournament');
+		}
+		const t_details = await getTournamentDetails(t_id);
 
-	if (has_started === false && has_joined === false) {
-		//if has_joined and has_started are false, show join html modal
-        t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
+		const has_joined = (t_details.find(localStorage.getItem(nickname)) !== undefined);
+		//check what the different statuses are
+		const has_started = (t_details.find('status') === 'created');
+
+		console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
+
+		if (has_started === false && has_joined === false) {
+			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
+			const joinButton = document.getElementById('t-join');
+			joinButton.classList.remove('hidden');
+		}
+		else if (has_started === false && has_joined === true){
+			t_modalText.innerText = 'You are already a participant of this tournament. Wanna start it?';
+			const startButton = document.getElementById('t-start');
+			startButton.classList.remove('hidden');
+		}
+		else if (has_started === true && has_joined === true){
+			t_modalText.innerText = 'The tournament has already started. Go play!';
+			const playButton = document.getElementById('t-play');
+			playButton.classList.remove('hidden');
+		}
+		const t_modal = new bootstrap.Modal(document.getElementById('single-t-modal'));
+		t_modal.show();
 	}
-	else if (has_started === false && has_joined === true){
-		//if has_joined is true, has_started is false, show start html modal
-		t_modalText.innerText = 'You are already a participant of this tournament. Wanna start it?';
+	catch (e) {
+		console.error("User log: ", e.message);
 	}
-	else if (has_started === true && has_joined === true){
-		//if has_joined is true, has_started is true, show go to tournament html modal
-		t_modalText.innerText = 'The tournament has already started. Go play!';
-	}
-	const t_modal = new bootstrap.Modal(document.getElementById('single-t-modal'));
-	t_modal.show();
 }

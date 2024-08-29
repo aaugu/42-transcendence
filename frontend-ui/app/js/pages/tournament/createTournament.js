@@ -80,14 +80,14 @@ export async function tournamentCreateButton() {
 			console.log("in catch, e.value: ", e.message);
 			errormsg (e.message, "t-modal-errormsg");
 		}
-		
+
 	}
 	else {
 		playerNames = [username];
 		new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
 
-		await createTournament(new_tournament, local);
+		await createTournament(new_tournament, remote);
 		hideModal();
 		// refresh the join list
-	}	
+	}
 }

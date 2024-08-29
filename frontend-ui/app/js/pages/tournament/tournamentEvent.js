@@ -1,4 +1,5 @@
-import { openCreateTournamentModal, tournamentCreateButton, openSingleTournamentModal } from "./tournamentModals.js";
+import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
+import { tournamentCreateButton } from "./createTournament.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {

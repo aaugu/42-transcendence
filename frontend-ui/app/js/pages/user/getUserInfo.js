@@ -1,15 +1,12 @@
-import { getCookie } from "./cookie.js";
+import { userID } from "./updateProfile.js";
 
 export async function getUserInfo() {
-    const token = getCookie('csrf_token');
-    if (token === null)
+    if (userID === null)
         throw new Error ("Could not identify user");
-
-	const decodedToken = jwt_decode(token);
 	const url = 'https://localhost:10444/api/user/';
 
 	try {
-        const response = await fetch(url + decodedToken.user_id + '/', {
+        const response = await fetch(url + userID + '/', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
