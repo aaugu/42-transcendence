@@ -97,10 +97,10 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tournament_db',
-        'USER': 'tournament_user',
-        'PASSWORD': 'asdfjkl;qweruiop',
-        'HOST': '172.20.2.2',
+        'NAME': 'tournament',
+        'USER': 'aaa',
+        'PASSWORD': 'aaa',
+        'HOST': '172.20.0.3',
         'PORT': '',
     }
 }

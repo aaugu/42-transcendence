@@ -38,4 +38,3 @@ services:
             timeout: 5s
             retries: 5
         restart: on-failure
-        entrypoint: ["sleep", "infinity"]
