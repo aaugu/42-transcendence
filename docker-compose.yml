@@ -27,7 +27,6 @@ services:
             aetheryte-python:
                 condition: service_healthy
         ports:
-            # - "80:80"
             - "10444:443"
     aetheryte-postgres:
         extends:
