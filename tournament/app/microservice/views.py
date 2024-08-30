@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 
-from ..tournament import settings
+from tournament import settings
 from microservice import error_message as error
 from microservice.models import Match, Player, Tournament
 

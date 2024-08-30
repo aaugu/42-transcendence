@@ -1,4 +1,4 @@
-from ..tournament import settings
+from tournament import settings
 
 NAME_MISSING = 'Missing name field'
 NAME_TOO_SHORT = f'Tournament name must contain at least {settings.MIN_TOURNAMENT_NAME_LENGTH} characters'

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
-from ..tournament import settings
+from tournament import settings
 
 # Create your models here.
 
