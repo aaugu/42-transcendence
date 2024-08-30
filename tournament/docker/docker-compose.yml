@@ -5,16 +5,15 @@ services:
             dockerfile: Dockerfile
         volumes:
             - tournament_postgres_volume:/var/lib/postgresql/data/
-            - ../app/:/app/
         networks:
             transcendence:
                 ipv4_address: 172.20.2.3
         environment:
-            POSTGRES_DB: ${TOURNAMENT_POSTGRES_DB}
-            POSTGRES_USER: ${TOURNAMENT_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${TOURNAMENT_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${TOURNAMENT_POSTGRES_NAME}
+            POSTGRES_USER: ${ROOT_USER}
+            POSTGRES_PASSWORD: ${ROOT_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${TOURNAMENT_POSTGRES_USER} -d ${TOURNAMENT_POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${ROOT_USER} -d ${TOURNAMENT_POSTGRES_NAME}'"]
             interval: 10s
             timeout: 5s
             retries: 10
@@ -27,6 +26,10 @@ services:
         networks:
             transcendence:
                 ipv4_address: 172.20.2.2
+        environment:
+            TOURNAMENT_POSTGRES_DB: ${TOURNAMENT_POSTGRES_NAME}
+            TOURNAMENT_POSTGRES_USER: ${ROOT_USER}
+            TOURNAMENT_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
         volumes:
             - ../app/:/app/
         healthcheck:
@@ -35,3 +38,4 @@ services:
             timeout: 5s
             retries: 5
         restart: on-failure
+        entrypoint: ["sleep", "infinity"]
