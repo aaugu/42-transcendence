@@ -27,8 +27,9 @@ def generalUser(request):
         if serializer.is_valid():
             new_user = CustomUser(
                 username=serializer.validated_data['username'],
-                nickname=serializer.validated_data['username'],
+                nickname=serializer.validated_data['nickname'],
                 email=serializer.validated_data['email'],
+                avatar=serializer.validated_data['avatar'],
                 is_2fa_enabled=False
             )
             new_user.set_password(request.data['password'])
@@ -47,7 +48,7 @@ def detailedUser(request, pk):
         
         if request.method == 'GET':
             serializer = CustomUserSerializer(user)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
         elif request.method == 'PATCH':
             serializer = CustomUserSerializer(user, data=request.data, partial=True)

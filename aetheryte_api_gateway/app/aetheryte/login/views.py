@@ -47,7 +47,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 access_token = tokens.get('access')
 
                 response.set_cookie(
-                    key='access_token',
+                    key='csrf_token',
                     value=access_token,
                     httponly=True,
                     secure=False,
@@ -73,7 +73,7 @@ class Verify2FACodeView(APIView):
                 request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + str(refresh.access_token)
                 print(request.META['HTTP_AUTHORIZATION'])
                 response.set_cookie(
-                    key='access_token',
+                    key='csrf_token',
                     value=str(refresh.access_token),
                     httponly=True,
                     secure=False,
@@ -82,7 +82,7 @@ class Verify2FACodeView(APIView):
                 return response
             else:
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"detail": "Verification code not found"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "No session id found"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UpdateUser(APIView):
     def get_object(self, user_id):
