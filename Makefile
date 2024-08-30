@@ -23,9 +23,6 @@ up : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up)
 
-init-kibana:
-	@(sh ./elk/script/init-kibana.sh)
-
 up-detached : env_check
 	@(echo "${CYAN}Building, creating and starting containers...${END}")
 	@($(DOCKER_COMPOSE) up -d)

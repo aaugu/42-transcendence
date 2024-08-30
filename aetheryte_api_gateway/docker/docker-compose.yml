@@ -6,8 +6,9 @@ services:
         networks:
             transcendence :
                 ipv4_address: 172.20.0.4
-        env_file:
-            - ../../.env
+        environment:
+            ELASTIC_USER: ${ROOT_USER}
+            ELASTIC_PASSWORD: ${ROOT_PASSWORD}
         restart: on-failure
 
     aetheryte-postgres:

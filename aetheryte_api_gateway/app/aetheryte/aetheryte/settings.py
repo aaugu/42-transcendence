@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '10.13.1.5']
 
 
 # Application definition

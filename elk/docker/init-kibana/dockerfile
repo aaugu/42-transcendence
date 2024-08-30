@@ -1,0 +1,7 @@
+FROM debian:bookworm
+
+RUN apt update -y && apt upgrade -y
+
+RUN apt install -y curl
+
+COPY script/init-kibana.sh /scripts/init.sh
