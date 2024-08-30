@@ -10,17 +10,9 @@ volumes:
     # API Gateway
     aetheryte_postgres:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: aetheryte_api_gateway/docker/volumes/data
     # Tournament
     tournament_postgres_volume:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: tournament/docker/volumes/data
     # Live chat
     livechat_postgres_volume:
         driver: local
@@ -31,10 +23,6 @@ volumes:
     #elk volumes
     elastic_data_volume:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: elk/docker/volumes/data/
 
 services:
     # Aetheryte API Gateway

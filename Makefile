@@ -9,17 +9,11 @@ CYAN			= \033[0;36m
 RED				= \033[0;31m
 END				= \033[0m
 
-all : prepare down build up-detached init-kibana
+all : down build up-detached
 
 env_check :
 	@(if [ ! -e ${ENV_PATH} ]; then echo "${RED}Env file is missing${END}"; exit 1; fi)
 	@(chmod 744 ${ENV_PATH})
-
-prepare : env_check
-	@(bash ./common/generate_env_files.sh)
-	@(sh ./common/generate_postgres_config.sh)
-	@(sh ./common/prepare_docker.sh)
-	@(echo "${GREEN}Transcendence successfully prepared !${END}")
 
 build : env_check
 	@(echo "${CYAN}Creating images...${END}")
@@ -51,7 +45,6 @@ stop :
 clean: down
 	@(echo "${CYAN}Removing images and image volumes...${END}")
 	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
-	@(sh ./common/destroy_transcendence.sh)
 
 fclean: clean
 	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
