@@ -47,7 +47,6 @@ urlpatterns = [
 
 # TournamentPlayersView:
 #     -get    : optention de la liste des joueurs 'players'('nickname','user-id') avec 'max-players' et 'nb-players'
-#                 'id', 'name', 'max-players', 'nb-players', 'is-private', 'status','admin-id'
 #     -post   : ajoute un joueur a un tournois
 #     -delete : suprime un joueur d'un tournois (cas d'un joueur quitant le tournois par lui-meme)
 
