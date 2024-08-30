@@ -2,7 +2,6 @@ import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
 import { userIsConnected } from "../user/updateProfile.js";
 import { updateProfile } from "../user/updateProfile.js";
-import { defaultAvatar } from "../user/avatar.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
