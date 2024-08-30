@@ -55,3 +55,4 @@ if [ -f $LIVECHAT_ENV_FILE ]; then
     rm $LIVECHAT_ENV_FILE
 fi
 
+

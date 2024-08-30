@@ -11,7 +11,7 @@ export async function profileEvent(e) {
 
 	switch (e.target.id) {
 		case "logout":
-			updateProfile(null, false, null);
+			updateProfile(false, null);
 			console.log('USER LOG: LOGOUT');
 			urlRoute('/');
 			break;

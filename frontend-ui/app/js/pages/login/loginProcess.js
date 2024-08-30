@@ -54,7 +54,7 @@ export async function loginProcess() {
                 }
                 else {
                     // console.log("login response: ", JSON.stringify(responseData));
-                    updateProfile(nickname, true, responseData.access);
+                    updateProfile(true, responseData.access);
                     console.log("USER LOG: LOGIN SUCCESSFUL");
                     urlRoute("/profile");
                 }

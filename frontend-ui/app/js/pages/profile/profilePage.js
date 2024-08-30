@@ -16,14 +16,15 @@ export async function profilePage() {
         avatar = userinfo.avatar;
         is_2fa_enabled = userinfo.is_2fa_enabled;
 
-        const users = await getUsers();
+        // const users = await getUsers();
 
     }
     catch (e) {
-        console.error("USER LOG: ", e.message);
+        console.log("USER LOG: ", e.message);
     }
 
     localStorage.setItem('avatar', avatar);
+    localStorage.setItem('nickname', nickname);
 
 	var twoFAbtnText;
 	var twoFAbtnColor;

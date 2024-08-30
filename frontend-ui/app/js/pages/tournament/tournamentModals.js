@@ -35,20 +35,30 @@ export function openCreateTournamentModal() {
 //tournament status 0 = created, 1 = in_progress, 2 = finished
 export async function openSingleTournamentModal(e) {
 	try {
+		let has_joined = false;
+		const nickname = localStorage.getItem('nickname');
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
 		const t_id = get_tournament_id(t_name);
+		console.log("t_id: ", t_id);
 		if (!t_id) {
 			throw new Error('Could not find tournament');
 		}
 		const t_details = await getTournamentDetails(t_id);
-		const has_joined = (t_details.find(localStorage.getItem(nickname)) !== undefined);
-		const has_started = (t_details.find('status') === 0);
+		const has_started = (t_details.status === 0);
+		const players = t_details.players;
+		for (const playerKey in players) {
+			if (players[playerKey].nickname === nickname) {
+				has_joined = true;
+				break;
+			}
+		}
+
 		// const has_joined = true;
 		// const has_started = false;
+		// console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
 
-		console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
-
+		document.getElementById("single-t-modal-title").innerText = t_name;
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
 			const joinButton = document.getElementById('t-join');
@@ -72,6 +82,6 @@ export async function openSingleTournamentModal(e) {
 		t_modal.show();
 	}
 	catch (e) {
-		console.error("USER LOG: ", e.message);
+		console.log("USER LOG: ", e.message);
 	}
 }

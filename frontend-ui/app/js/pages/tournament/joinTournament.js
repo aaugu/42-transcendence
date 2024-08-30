@@ -29,15 +29,16 @@ async function joinTournament(nickname, tournament_id) {
 }
 
 export async function joinTournamentButton() {
+	const nickname = localStorage.getItem('nickname') || 'guest';
+	const tournament_name = document.getElementById("single-t-modal-title").innerText;
+	const tournament_id = get_tournament_id(tournament_name);
 	try {
-		const nickname = localStorage.getItem('nickname') || 'guest';
-		const tournament_name = document.getElementById('single-t-modal-text').innerText;
-		const tournament_id = get_tournament_id(tournament_name);
+		// console.log("nickname: ", nickname, "tournament_name:", tournament_name, "tournament_id: ", tournament_id);
 
 		await joinTournament(nickname, tournament_id);
 	}
 	catch (e) {
-		console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT, STATUS: ${e.message}`);
+		console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
 		errormsg(e.message, "single-t-modal-errormsg");
 	}
 }

@@ -3,7 +3,6 @@ import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
 import { gamePage } from "../pages/game/gamePage.js"
 import { profilePage } from "../pages/profile/profilePage.js"
-import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
@@ -102,11 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			content: profilePage,
 			eventListener: profileEvent,
 			description: "profile page"
-		},
-        "/stats" : {
-			content: statsPage,
-			eventListener: null,
-			description: "stats page"
 		},
 		"/chat" : {
 			content: chatPage,

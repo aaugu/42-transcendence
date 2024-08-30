@@ -16,7 +16,7 @@ function setUserID() {
 
 //change user state (log in or log out)
 // update profile view, store username & avatar in local storage
-export const updateProfile = async (nickname, isConnected, token) => {
+export const updateProfile = async (isConnected, token) => {
 	const navProfileElements = document.getElementById('nav-profile-elements');
 	const navLogoLink = document.getElementById('logo');
 
@@ -24,7 +24,6 @@ export const updateProfile = async (nickname, isConnected, token) => {
 		// navProfileElements.classList.remove('hidden');
 		navLogoLink.href = "/profile";
 		localStorage.setItem('userIsConnected', true);
-		localStorage.setItem('nickname', nickname);
 		// localStorage.setItem('avatar', user.avatar);
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // 1 week

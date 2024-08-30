@@ -54,7 +54,7 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.add("btn-outline-danger");
 			twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
 			console.log("USER LOG: 2FA ACTIVATION SUCCESSFUL");
-			updateProfile(null, false, null);
+			updateProfile(false, null);
 			console.log('USER LOG: LOGOUT');
 			hideModal('activate-2fa-modal');
 			urlRoute('/');

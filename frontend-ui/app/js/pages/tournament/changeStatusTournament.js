@@ -28,7 +28,7 @@ async function changeStatusTournament(tournament_id, game_status) {
 
 export async function startTournamentButton() {
 	try {
-		const tournament_name = document.getElementById('single-t-modal-text').innerText;
+		const tournament_name = document.getElementById('single-t-modal-title').innerText;
 		const tournament_id = get_tournament_id(tournament_name);
 
 		await changeStatusTournament(tournament_id, 'start');

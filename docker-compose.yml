@@ -10,10 +10,6 @@ volumes:
     # API Gateway
     aetheryte_postgres:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: aetheryte_api_gateway/docker/volumes/data
     # Tournament
     tournament_postgres_volume:
         driver: local
@@ -39,7 +35,6 @@ services:
             aetheryte-python:
                 condition: service_healthy
         ports:
-            # - "80:80"
             - "10444:443"
     aetheryte-postgres:
         extends:
