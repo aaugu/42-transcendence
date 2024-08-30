@@ -20,13 +20,13 @@ from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchVie
 urlpatterns = [
     path('tournament/remote/', TournamentView.as_view(), name='new_tournament'),
     path('tournament/local/', TournamentlocalView.as_view(), name='new_tournament_local'),
-    path('<int:tournament_id>/', ManageTournamentView.as_view(), name='manage_tournament'),  
-    path('<int:tournament_id>/players/', TournamentPlayersView.as_view(), name='tournament_players'),
-    path('<int:tournament_id>/start/', StartTournamentView.as_view(), name='start_tournament'),
-    path('<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
-    path('<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
-    path('<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
-    path('delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
+    path('tournament/<int:tournament_id>/', ManageTournamentView.as_view(), name='manage_tournament'),  
+    path('tournament/<int:tournament_id>/players/', TournamentPlayersView.as_view(), name='tournament_players'),
+    path('tournament/<int:tournament_id>/start/', StartTournamentView.as_view(), name='start_tournament'),
+    path('tournament/<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
+    path('tournament/<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
+    path('tournament/<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
+    path('tournament/delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
 ]
 
 # TournamentView:
