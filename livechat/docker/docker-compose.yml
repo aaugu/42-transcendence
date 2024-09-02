@@ -10,11 +10,11 @@ services:
             transcendence:
                 ipv4_address: 172.20.5.3
         environment:
-            POSTGRES_DB: ${LIVECHAT_POSTGRES_DB}
-            POSTGRES_USER: ${LIVECHAT_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${LIVECHAT_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${LIVECHAT_POSTGRES_NAME}
+            POSTGRES_USER: ${ROOT_USER}
+            POSTGRES_PASSWORD: ${ROOT_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${LIVECHAT_POSTGRES_USER} -d ${LIVECHAT_POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${ROOT_USER} -d ${LIVECHAT_POSTGRES_NAME}'"]
             interval: 10s
             timeout: 5s
             retries: 10

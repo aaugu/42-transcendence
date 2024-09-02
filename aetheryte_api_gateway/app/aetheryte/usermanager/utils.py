@@ -28,5 +28,6 @@ def check_autentication(request):
 	"username":"afavre",
 	"nickname":"arnaud",
 	"email":"arnaud.favree@gmail.com",
-	"password":"q"
+	"password":"q",
+    "avatar":"default avatar"
 }
