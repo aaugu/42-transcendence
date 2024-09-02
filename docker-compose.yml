@@ -10,17 +10,11 @@ volumes:
     # API Gateway
     aetheryte_postgres:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: aetheryte_api_gateway/docker/volumes/data
     # Tournament
     tournament_postgres_volume:
         driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: tournament/docker/volumes/data
+    pong_postgres_volume:
+        driver: local
 
 services:
     # Aetheryte API Gateway
@@ -61,6 +55,11 @@ services:
             service: pong-python
         ports:
             - "9000:9000"
+
+    pong-postgres:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-postgres
 
     # Tournament
     tournament-postgres:
