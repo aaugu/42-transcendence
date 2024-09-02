@@ -22,9 +22,11 @@ from microservice.models import Match, Player, Tournament
 # Create your views here.
 
 class MatchUtils:
+    @staticmethod
     def get_next_match_id(match_id: int, nb_matches: int) -> int:
         return nb_matches - int((nb_matches - match_id) / 2)
     
+    @staticmethod
     def matches_to_json(matches: list[Match]) -> dict[str, list[any]]:
         matches_data = [MatchUtils.match_to_json(match) for match in matches]
         data = {
@@ -33,7 +35,7 @@ class MatchUtils:
         }
 
         return data
-
+    @staticmethod
     def match_to_json(match: Match):
         return {
             'id': match.match_id,
@@ -53,7 +55,7 @@ class MatchUtils:
                 'nickname': match.winner.nickname
             } if match.winner is not None else None
         }
-    
+    @staticmethod
     def match_status_to_string(status: int):
         match_status_msg = ["Not played", "In progress", "Finished"]
 
@@ -80,6 +82,7 @@ class TournamentUtils:
         return status_string[status]
 
 class GenerateMatchesView(View):
+    @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             tournament = Tournament.objects.get(id=tournament_id)
@@ -91,6 +94,7 @@ class GenerateMatchesView(View):
 
         return JsonResponse(MatchUtils.matches_to_json(matches), status=200)
 
+    @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             tournament = Tournament.objects.get(id=tournament_id)
@@ -117,11 +121,13 @@ class GenerateMatchesView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse(MatchUtils.matches_to_json(matches), status=200)
-
+    
+    @staticmethod
     def sort_players(players: list[Player]) -> list[Player]:
         random.shuffle(players)
         return players
     
+    @staticmethod
     def generate_matches(players: list[Player], tournament: Tournament) -> list[Match]:
         nb_players = len(players)
         seed_order = GenerateMatchesView.get_seed_order(nb_players)
@@ -152,6 +158,7 @@ class GenerateMatchesView(View):
         GenerateMatchesView.manage_no_opponent(matches, nb_matches_first_round)
         return matches
     
+    @staticmethod
     def get_seed_order(nb_players: int) -> list[list[int]]:
         nb_players = int(2 ** math.ceil(math.log2(nb_players)))
         rounds = int(math.log2(nb_players) - 1)
@@ -166,6 +173,7 @@ class GenerateMatchesView(View):
 
         return matches
 
+    @staticmethod
     def next_seeding_layer(players):
         out = []
         length = len(players) * 2 + 1
@@ -176,6 +184,7 @@ class GenerateMatchesView(View):
 
         return out
     
+    @staticmethod
     def manage_no_opponent(matches: list[Match], nb_matches_first_round: int):
         for i in range(0, nb_matches_first_round):
             if matches[i].player_1 is None or matches[i].player_2 is None:
@@ -190,6 +199,7 @@ class GenerateMatchesView(View):
                     matches[next_match_id].player_2 = winner  
     
 class StartMatchView(View):
+    @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
 
         try:
@@ -245,6 +255,7 @@ class StartMatchView(View):
         )
 
 class EndMatchView(View):
+    @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             body = json.loads(request.body.decode('utf8'))
@@ -295,7 +306,7 @@ class EndMatchView(View):
                 status=Match.IN_PROGRESS
             )
         )
-    
+    @staticmethod
     def set_winner(match: Match, winner: int):
         if match.player_1.user_id == winner:
             match.winner = match.player_1
@@ -303,7 +314,7 @@ class EndMatchView(View):
             match.winner = match.player_2
         match.status = Match.FINISHED
         match.save()
-    
+    @staticmethod
     def update_tournament(match: Match, nb_matches: int):
         tournament = match.tournament
         nb_round = int(math.log2(nb_matches + 1))
@@ -324,6 +335,7 @@ class EndMatchView(View):
             next_match.save()
     
 class TournamentView(View):
+    @staticmethod
     def get(request: HttpRequest) -> JsonResponse:
         filter_params = TournamentView.get_filter_params(request)
         try:
@@ -341,6 +353,7 @@ class TournamentView(View):
 
         return JsonResponse(response_data, status=200)
 
+    @staticmethod
     def post(request: HttpRequest) -> JsonResponse:
         try:
             json_request = json.loads(request.body.decode('utf8'))
@@ -374,6 +387,7 @@ class TournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
     
+    @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
         try:
             json_request = json.loads(request.body.decode('utf8'))
@@ -398,6 +412,7 @@ class TournamentView(View):
             return JsonResponse({'message': 'No tournament created by this user'}, status=200)
         return JsonResponse({'message': 'Tournaments created by this user have been deleted'}, status=200)
 
+    @staticmethod
     def register_admin_as_player(json_request, tournament: Tournament, user_id: int) -> Optional[list[str]]:
         admin_nickname = json_request.get('nickname')
         if admin_nickname is not None:
@@ -411,6 +426,18 @@ class TournamentView(View):
             )
         return None
 
+    @staticmethod
+    def get_filter_params(request: HttpRequest) -> dict:
+        filter_params = {}
+
+        if 'display-private' not in request.GET:
+            filter_params['is_private'] = False
+        if 'display-completed' not in request.GET:
+            filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
+
+        return filter_params
+
+    @staticmethod
     def is_valid_tournament(json_request: dict[str, Any]) -> tuple[bool, Optional[list[str]]]:
         errors = []
         name = json_request.get('name') 
@@ -436,6 +463,7 @@ class TournamentView(View):
             return False, errors
         return True, None
 
+    @staticmethod
     def is_valid_name(name: Any) -> tuple[bool, Optional[list[str]]]:
         errors = []
 
@@ -451,7 +479,8 @@ class TournamentView(View):
         if errors:
             return False, errors
         return True, None
-
+    
+    @staticmethod
     def is_valid_max_players(max_players: Any) -> tuple[bool, Optional[str]]:
         if max_players is None:
             return True, None
@@ -462,7 +491,8 @@ class TournamentView(View):
         if max_players < settings.MIN_PLAYERS:
             return False, error.NOT_ENOUGH_SLOTS
         return True, None
-
+    
+    @staticmethod
     def is_valid_private(is_private: Any) -> tuple[bool, Optional[str]]:
         if is_private is None:
             return False, error.IS_PRIVATE_MISSING
@@ -470,6 +500,7 @@ class TournamentView(View):
             return False, error.IS_PRIVATE_NOT_BOOL
         return True, None
 
+    @staticmethod
     def is_valid_password(password: Any) -> tuple[bool, Optional[str]]:
         if password is None:
             return False, error.PASSWORD_MISSING
@@ -482,6 +513,7 @@ class TournamentView(View):
         return True, None
 
 class TournamentPlayersView(View):
+    @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             tournament = Tournament.objects.get(id=tournament_id)
@@ -505,6 +537,7 @@ class TournamentPlayersView(View):
 
         return JsonResponse(response_data, status=200)
 
+    @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
 
         try:
@@ -540,6 +573,7 @@ class TournamentPlayersView(View):
 
         return JsonResponse(model_to_dict(player), status=201)
     
+    @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         try:
             json_request = json.loads(request.body.decode('utf8'))
@@ -572,6 +606,7 @@ class TournamentPlayersView(View):
 
         return JsonResponse({'message': f'You left the tournament `{tournament.name}`'}, status=200)
 
+    @staticmethod
     def is_valid_nickname(nickname: str) -> tuple[bool, Optional[list[str]]]:
         errors = []
 
@@ -587,7 +622,8 @@ class TournamentPlayersView(View):
         if errors:
             return False, errors
         return True, None
-
+    
+    @staticmethod
     def player_can_join_tournament(new_player: Player, password: Optional[str], tournament: Tournament)\
             -> tuple[bool, Optional[list[str | int]]]:
         try:
@@ -626,6 +662,7 @@ class TournamentPlayersView(View):
         return True, None
 
 class TournamentlocalView(View):
+    @staticmethod
     def post(request: HttpRequest) -> JsonResponse:
         try:
             json_request = json.loads(request.body.decode('utf8'))
@@ -651,6 +688,7 @@ class TournamentlocalView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
     
+    @staticmethod
     def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
         player_names = json_request.get('player_names')
         for name in player_names:
@@ -679,6 +717,7 @@ class StartTournamentView(View):
         return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
 
 class ManageTournamentView(View):
+    @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             tournament = Tournament.objects.get(id=tournament_id)
@@ -708,6 +747,7 @@ class ManageTournamentView(View):
 
         return JsonResponse(tournament_data, status=200)
     
+    @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             body = json.loads(request.body.decode('utf8'))
@@ -740,6 +780,7 @@ class ManageTournamentView(View):
 
         return JsonResponse({'message': f'tournament `{tournament_name}` successfully deleted'}, status=200)
     
+    @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             body = json.loads(request.body.decode('utf8'))
@@ -870,6 +911,7 @@ class ManageTournamentView(View):
         return None
     
 class DeleteInactiveTournamentView(View):
+    @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
         limit_datetime = datetime.datetime.now(datetime.UTC) - datetime.timedelta(hours=1)
         try:
