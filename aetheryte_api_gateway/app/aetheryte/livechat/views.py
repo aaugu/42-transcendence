@@ -16,7 +16,7 @@ from login.models import CustomUser
 class ConversationView(APIView):
 	# GET: conversations involving current user
 	def get(self, request, pk):
-		if not user_valid(pk):
+		if not self.user_valid(pk):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		
 		request_url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/conversations/"
