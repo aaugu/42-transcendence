@@ -32,10 +32,5 @@ services:
             TOURNAMENT_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
         volumes:
             - ../app/:/app/
-        # healthcheck:
-        #     test: curl --fail https://172.20.2.2:8000/ || exit 1
-        #     interval: 10s
-        #     timeout: 5s
-        #     retries: 5
         restart: on-failure
         entrypoint: ["sleep", "infinity"]
