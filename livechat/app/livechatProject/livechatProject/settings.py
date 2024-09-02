@@ -66,6 +66,9 @@ CORS_ALLOWED_ORIGINS = [
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
+        'CONFIG': {
+            "hosts": [('172.20.4.4', 10443)],
+        },
     },
 }
 
@@ -99,8 +102,8 @@ DATABASES = {
         'NAME': os.getenv('LIVECHAT_POSTGRES_DB'),
         'USER': os.getenv('LIVECHAT_POSTGRES_USER'),
         'PASSWORD': os.getenv('LIVECHAT_POSTGRES_PASSWORD'),
-        'HOST': '172.20.5.3',
-        'PORT': '5432'
+        'HOST': os.getenv('LIVECHAT_POSTGRES_IP'),
+        'PORT': os.getenv('LIVECHAT_POSTGRES_PORT')
     }
 }
 
