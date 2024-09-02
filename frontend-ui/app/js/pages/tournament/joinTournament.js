@@ -39,6 +39,6 @@ export async function joinTournamentButton() {
 	}
 	catch (e) {
 		console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
-		errormsg(e.message, "single-t-modal-errormsg");
+		errormsg('Not possible, try again later', "single-t-modal-errormsg");
 	}
 }

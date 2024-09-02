@@ -58,12 +58,16 @@ services:
             - "9000:9000"
 
     # Tournament
+    tournament-postgres:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-postgres
     tournament-python:
         extends:
-            file: livechat/docker/docker-compose.yml
-            service: livechat-python
+            file: tournament/docker/docker-compose.yml
+            service: tournament-python
         ports:
-            - "8000:8000"
+            - "10000:10000"
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy

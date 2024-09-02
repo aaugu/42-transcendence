@@ -63,7 +63,7 @@ export async function createTournamentButton() {
 			playerNames = Array.from(inputs).map(input => input.value);
 			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
 
-			await createTournament(new_tournament, local);
+			await createTournament(new_tournament, 'local');
 			hideModal();
 			urlRoute('/tournament/game');
 		}
@@ -71,13 +71,13 @@ export async function createTournamentButton() {
 			playerNames = [username];
 			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
 
-			await createTournament(new_tournament, remote);
+			await createTournament(new_tournament, 'remote');
 			// refresh the join list
 			hideModal();
 		}
 	}
 	catch (e) {
 		console.log(`USER LOG: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.message}`);
-		errormsg (e.message, "t-modal-errormsg");
+		errormsg ('Creation failed, try again later', "t-modal-errormsg");
 	}
 }
