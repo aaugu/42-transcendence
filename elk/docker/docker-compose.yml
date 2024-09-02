@@ -30,7 +30,7 @@ services:
     environment:
       - ELASTIC_PASSWORD=${ROOT_PASSWORD}
       - ELASTICSEARCH_USERNAME=${ROOT_USER}
-    entrypoint: ["sh", "-c", "scripts/init.sh"]
+    entrypoint: ["sh", "-c", "scripts/init-elastic.sh && sh -c scripts/init-kibana.sh"]
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.10.2
@@ -49,18 +49,3 @@ services:
       - elasticsearch
       - init-elasticsearch
     entrypoint: ["sh", "-c", "while docker inspect -f '{{.State.Running}}' transcendence_init_script | grep true; do sleep 1; done; /usr/local/bin/kibana-docker"]
-
-  init-kibana:
-    build:
-      context: init-kibana
-      dockerfile: dockerfile
-    container_name: init_script_kibana
-    networks:
-      transcendence:
-        ipv4_address: 172.20.6.5
-    depends_on:
-      - kibana
-    environment:
-      - ELASTICSEARCH_USERNAME=${ROOT_USER}
-      - ELASTIC_PASSWORD=${ROOT_PASSWORD}
-    entrypoint: ["sh", "-c", "scripts/init.sh"]
