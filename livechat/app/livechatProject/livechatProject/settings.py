@@ -36,15 +36,17 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.20.5.2']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'livechat',
+    'channels',
+    'corsheaders',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'livechat',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+  "https://localhost:10443",
+]
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 ROOT_URLCONF = 'livechatProject.urls'
 
@@ -76,7 +88,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'livechatProject.wsgi.application'
-
+ASGI_APPLICATION = "livechatProject.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -145,5 +157,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
-
-APPEND_SLASH = False
