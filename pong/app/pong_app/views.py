@@ -4,7 +4,11 @@ from .consumers import PongConsumer
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import json
+<<<<<<< HEAD
 from .services import GameService
+=======
+import uuid
+>>>>>>> 35ef872 (Update Generate Unique Game ID)
 
 def generate_unique_id():
     return str(uuid.uuid4())

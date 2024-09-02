@@ -1,13 +1,6 @@
 export default function createWebSocketConnection() {
   // const socket = new WebSocket("ws://" + window.location.host + "/ws/pong/");
 
-  function generateUniqueId(mode) {
-    return `${mode}-xxxx-xxxx-xxxx-xxxx`.replace(/[x]/g, function () {
-      const r = (Math.random() * 16) | 0;
-      return r.toString(16);
-    });
-  }
-  
   // Generate a unique ID
   const currentUrl = window.location.href;
   console.log("Current URL: ", currentUrl);
