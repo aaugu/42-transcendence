@@ -1,0 +1,35 @@
+/* body {
+	height: 100vh;
+	background-color: #000;
+	color: #fff;
+	margin: 0;
+  } */
+  canvas {
+	justify-content: center;
+	align-items: center;
+	background-color: #000000;
+  }
+
+  .info-ctn {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 1rem;
+  }
+
+  .info-ctn > * {
+	margin: 0 1rem;
+  }
+
+  .canvas-ctn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	margin: 1rem;
+	margin-top: 0;
+  }
+
+  ul li button {
+	font-size: 10px !important;
+  }
