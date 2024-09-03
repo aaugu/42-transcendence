@@ -7,28 +7,9 @@ export function reset_all_tournaments() {
 }
 
 export async function get_all_tournaments() {
-	// all_tournaments = {
-    //     "first_tournament": {
-    //         "name": "first tournament",
-    //         "id": 1,
-	// 		"players" : {
-	// 			"player1": {
-	// 				"user-id": 1,
-	// 				"nickname": "player1"
-	// 			},
-	// 			"player2": {
-	// 				"user-id": 2,
-	// 				"nickname": "player2"
-	// 			}
-	// 		}
-    //     },
-    //     "second_tournament": {
-    //         "name": "second tournament",
-    //         "id": 2
-    //     }
-    // };
 	try {
-		all_tournaments = await getTournaments();
+		const response = await getTournaments();
+		all_tournaments = response.response.tournaments;
 		console.log("all_tournaments: ", all_tournaments);
 	}
 	catch (e) {

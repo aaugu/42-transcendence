@@ -5,7 +5,7 @@ export async function getContacts() {
 		throw new Error('Did not find user ID');
 	}
 
-	const response = await fetch('https://172.20.0.2:10444/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',

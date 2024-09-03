@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 import os
 
@@ -36,7 +37,7 @@ PASSWORD_MAX_LENGTH = 30
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u6cny-@3lg2o-f___hsk1j=5k$+5e*pt(&-d1d1!a-gbmgox8q'
+SECRET_KEY = os.environ.get('TOURNAMENT_DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

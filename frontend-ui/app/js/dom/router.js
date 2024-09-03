@@ -14,6 +14,7 @@ import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
+import { reset_all_contacts } from "../pages/livechat/contacts.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -34,6 +35,7 @@ function resetDataRouteChange() {
 		console.log('GAME LOG: Websocket connection closed');
 	}
 	reset_all_tournaments();
+	reset_all_contacts();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -120,12 +122,14 @@ document.addEventListener('DOMContentLoaded', () => {
         goToRoute();
     }
 
+	//add in the end: || ((currentRoute !== "/" && currentRoute !== "/login" && currentRoute !== "/signup") && userIsConnected === false)
     const goToRoute = async () => {
 		resetDataRouteChange();
-        const currentRoute = window.location.pathname;
-        if (currentRoute.length == 0)
+        var currentRoute = window.location.pathname;
+        if (currentRoute.length == 0 ) {
 			currentRoute = "/";
-
+			window.history.pushState({}, '', currentRoute);
+		}
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
 		updateEventListenerMainCont(currentRouteDetails.eventListener);

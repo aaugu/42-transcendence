@@ -11,7 +11,7 @@ export async function chatPage() {
     //     console.error("USER LOG: ", e.message);
     // }
     var html_contacts = ` <li class="list-group-item" style="background-color: #A9C1FF;">
-                             <span >Contact 1</span>
+                             <span >Fake contact</span>
                         </li>`;
 
     await get_all_contacts();
