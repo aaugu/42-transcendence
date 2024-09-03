@@ -1,4 +1,5 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from colorama import Fore, Style
 
 from login.models import *
 from login.serializers import *
