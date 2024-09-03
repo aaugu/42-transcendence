@@ -665,7 +665,9 @@ class TournamentlocalView(View):
     @staticmethod
     def post(request: HttpRequest) -> JsonResponse:
         try:
+            print(request.body)
             json_request = json.loads(request.body.decode('utf8'))
+            print(json_request)
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -674,23 +676,24 @@ class TournamentlocalView(View):
             name=json_request['name'],
             admin_id=user_id
         )
+        
 
-        max_players = json_request.get('nr_players')
+        max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
         try:
             tournament.save()
-            register_players_errors = TournamentlocalView.register_players_as_player(json_request, tournament)
-            if register_players_errors is not None:
-                tournament.delete()
-                return JsonResponse({'errors': register_players_errors}, status=400)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
+        register_players_errors = TournamentlocalView.register_players_as_player(json_request, tournament)
+        if register_players_errors is not None:
+            tournament.delete()
+            return JsonResponse({'errors': register_players_errors}, status=400)
         return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
     
     @staticmethod
     def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
-        player_names = json_request.get('player_names')
+        player_names = list(json_request.get('player_names'))
         for name in player_names:
             player = Player(nickname=player_names[name], user_id=name, tournament=tournament)
             try:

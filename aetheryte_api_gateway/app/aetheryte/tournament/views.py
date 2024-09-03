@@ -25,7 +25,7 @@ class GenerateMatchesView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -37,7 +37,7 @@ class StartMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/start/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -48,7 +48,7 @@ class EndMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/end/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -69,7 +69,7 @@ class TournamentView(APIView):
     @staticmethod
     def post(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/remote/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -90,7 +90,7 @@ class TournamentPlayersView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -100,7 +100,7 @@ class TournamentPlayersView(APIView):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
-        response = requests.get(url = request_url)
+        response = requests.delete(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -111,7 +111,7 @@ class TournamentlocalView(APIView):
     @staticmethod
     def post(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/local/"
-        response = requests.get(url = request_url)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -122,7 +122,7 @@ class StartTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/start/"
-        response = requests.get(url = request_url)
+        response = requests.patch(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -143,7 +143,7 @@ class ManageTournamentView(APIView):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
-        response = requests.get(url = request_url)
+        response = requests.delete(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -153,7 +153,7 @@ class ManageTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
-        response = requests.get(url = request_url)
+        response = requests.patch(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
@@ -164,7 +164,7 @@ class DeleteInactiveTournamentView(APIView):
     @staticmethod
     def delete(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/delete_inactive/"
-        response = requests.get(url = request_url)
+        response = requests.delete(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response({ "response": response_json}, status=response.status_code)
