@@ -43,6 +43,7 @@ def get_user_from_jwt(request):
     "username": "afavre",
     "email": "afavre@ffxiv.ch",
     "password": "q",
+    "avatar": "default avatar"
 }
 
 {

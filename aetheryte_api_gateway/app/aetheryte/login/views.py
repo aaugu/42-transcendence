@@ -1,23 +1,15 @@
-from rest_framework import status, generics, permissions
+from rest_framework import status
 from rest_framework.response import Response
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
 
 
 from .models import UserVerification, CustomUser
-from .utils import generate_verification_code, check_autentication, get_user_from_jwt
+from .utils import generate_verification_code, get_user_from_jwt
 from .serializers import *
-
-@api_view(['GET', 'POST'])
-def testFunction(request):
-    if request.method == 'GET':
-        return Response({"status": "valid request in GET header"}, status=status.HTTP_200_OK)
-    elif request.method == 'POST':
-        return Response({"status": "valid request in POST header"}, status=status.HTTP_200_OK)
 
 
 
