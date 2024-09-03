@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +35,7 @@ PASSWORD_MAX_LENGTH = 30
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u6cny-@3lg2o-f___hsk1j=5k$+5e*pt(&-d1d1!a-gbmgox8q'
+SECRET_KEY = os.environ.get('TOURNAMENT_DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -97,11 +98,11 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tournament',
-        'USER': 'aaa',
-        'PASSWORD': 'aaa',
-        'HOST': '172.20.2.3',
-        'PORT': '',
+        'NAME': os.environ.get('TOURNAMENT_POSTGRES_DB'),
+        'USER': os.environ.get('TOURNAMENT_POSTGRES_USER'),
+        'PASSWORD': os.environ.get('TOURNAMENT_POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('TOURNAMENT_POSTGRES_IP'),
+        'PORT': os.environ.get('TOURNAMENT_POSTGRES_PORT'),
     }
 }
 
