@@ -36,15 +36,14 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.20.5.2']
 # Application definition
 
 INSTALLED_APPS = [
+    'livechat',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'livechat',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +55,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#   "https://localhost:10443",
+# ]
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer",
+#         'CONFIG': {
+#             "hosts": [('172.20.4.4', 10443)],
+#         },
+#     },
+# }
 
 ROOT_URLCONF = 'livechatProject.urls'
 
@@ -76,7 +88,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'livechatProject.wsgi.application'
-
+# ASGI_APPLICATION = "livechatProject.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -87,8 +99,8 @@ DATABASES = {
         'NAME': os.getenv('LIVECHAT_POSTGRES_DB'),
         'USER': os.getenv('LIVECHAT_POSTGRES_USER'),
         'PASSWORD': os.getenv('LIVECHAT_POSTGRES_PASSWORD'),
-        'HOST': '172.20.5.3',
-        'PORT': '5432'
+        'HOST': os.getenv('LIVECHAT_POSTGRES_IP'),
+        'PORT': os.getenv('LIVECHAT_POSTGRES_PORT')
     }
 }
 
@@ -111,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -127,7 +138,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
 
 # STATICFILES_DIRS = [
@@ -145,5 +156,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
-
-APPEND_SLASH = False

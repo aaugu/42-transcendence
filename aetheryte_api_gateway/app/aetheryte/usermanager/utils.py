@@ -1,13 +1,11 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from colorama import Fore, Style
 
-def dprint(msg):
-    full_msg = "DEBUG ==> " + str(msg)
-    colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
-    print(colored_msg)
+from login.models import *
+from login.serializers import *
+from rest_framework.response import Response
 
 def check_autentication(request):
-    dprint(request)
     access_token = request.COOKIES.get('csrf_token')
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token

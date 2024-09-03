@@ -7,13 +7,6 @@ class User(models.Model):
 
     def __str__(self):
         return str(self.user_id)
-    
-class Blacklist(models.Model):
-    initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiator')
-    target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
-
-    def __str__(self):
-        return str(self.id)
 
 class Conversation(models.Model):
     user_1 = models.PositiveIntegerField(blank=False)
@@ -38,5 +31,12 @@ class Message(models.Model):
     def __str__(self):
         return str(self.author) + ": " + str(self.message)
 
+
+# class Blacklist(models.Model):
+#     initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiator')
+#     target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
+
+#     def __str__(self):
+#         return str(self.id)
 
 # timestamp = models.DateTimeField(auto_now_add=True)
