@@ -73,6 +73,8 @@ class Verify2FACodeView(APIView):
                     secure=False,
                     samesite='Lax',
                 )
+                user.online = True
+                user.save()
                 return response
             else:
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
