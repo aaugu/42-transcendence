@@ -1,20 +1,21 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from .game import (
-    GameState,
+    Game,
     checkCollisionWithEdgesBall,
     Ball,
     Paddle,
     checkCollisonWithEdgesPaddle,
-    GameState,
     PARAMS,
 )
 from .ai import * 
 import asyncio
+from services import GameService
 
 class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
-    game_states = {}
+    # game_states = {}
+    games = {}
 
     async def connect(self):
       self.game_id = self.scope['url_route']['kwargs']['game_id']
@@ -64,15 +65,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             PongConsumer.game_states[self.game_id].reset_score()
 
     async def game_loop(self):
-        # ai = AI(PongConsumer.game_state)
-
-        # asyncio.create_task(ai.play_2())
         while True:
-            # Update shared game state
-            # PongConsumer.game_state.update()
             PongConsumer.game_states[self.game_id].update()
 
-            # Broadcast the updated game state to all clients
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -88,15 +83,3 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Send the game state to the client
         await self.send(text_data=json.dumps({"game_state": game_state}))
-
-def extract_game_mode(path):
-  game_id = path.split("/")[-1]
-  
-  if "local-twoplayers" in path:
-    return "local-twoplayers"
-  elif "local-vs-ia" in path:
-    return "local-ai"
-  elif "online" in path:
-    return "online"
-  elif "tournament" in path:
-    return "tournament"

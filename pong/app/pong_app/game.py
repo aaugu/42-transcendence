@@ -1,5 +1,6 @@
 import math
 import time
+from enum import Enum
 
 PARAMS = {
     "canvas_width": 800,
@@ -117,6 +118,24 @@ def checkCollisonWithEdgesPaddle(paddle):
         paddle.position[1] = PARAMS["canvas_height"] - PARAMS["paddle_height"]
     if paddle.position[1] <= 0:
         paddle.position[1] = 0
+
+class GameMode(Enum):
+    LOCAL_TWO_PLAYERS = 1
+    LOCAL_VS_IA = 2
+    TOURNAMENT = 3
+    REMOTE = 4
+    
+
+class Game:
+    def __init__(self, mode):
+        self.GameState = GameState()
+        self.mode = mode
+
+    def to_dict(self):
+        return {
+            "game_state": self.GameState.to_dict(),
+            "mode": self.mode,
+        }
 
 
 class GameState:
