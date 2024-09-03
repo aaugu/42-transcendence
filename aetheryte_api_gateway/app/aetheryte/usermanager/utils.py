@@ -6,6 +6,10 @@ def dprint(msg):
     colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
     print(colored_msg)
 
+from login.models import *
+from login.serializers import *
+from rest_framework.response import Response
+
 def check_autentication(request):
     dprint(request)
     access_token = request.COOKIES.get('csrf_token')
