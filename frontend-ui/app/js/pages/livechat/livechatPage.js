@@ -36,8 +36,8 @@ export async function livechatPage() {
                 <div id="livechat-menu" class="w-100 rounded-end rounded-3 mt-2">
                     <div id="user-info w-100">${nickname}</div>
                     <form action="post" id="search-bar" class="w-75 text-small">
-                        <input class="form-control" type="search" placeholder="contacts..." aria-label="Search">
-                        <button class="btn btn-dark" type="submit" id="chat-search-convo">Search</button>
+                        <input id="chat-search-input" class="form-control" type="search" placeholder="contacts..." aria-label="Search">
+                        <button class="btn btn-dark" type="submit" id="chat-search-btn">Search</button>
                     </form>
                 </div>
                 <div id="contact" class="d-flex clearfix mb-2 w-100">
