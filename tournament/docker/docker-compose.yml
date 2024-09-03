@@ -30,6 +30,8 @@ services:
             TOURNAMENT_POSTGRES_DB: ${TOURNAMENT_POSTGRES_NAME}
             TOURNAMENT_POSTGRES_USER: ${ROOT_USER}
             TOURNAMENT_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+            TOURNAMENT_POSTGRES_IP: ${TOURNAMENT_POSTGRES_IP}
+            TOURNAMENT_POSTGRES_PORT: ${TOURNAMENT_POSTGRES_PORT}
         volumes:
             - ../app/:/app/
         # healthcheck:
@@ -38,4 +40,3 @@ services:
         #     timeout: 5s
         #     retries: 10
         restart: on-failure
-        entrypoint: ["sleep", "infinity"]

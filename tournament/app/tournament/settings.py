@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -97,11 +99,11 @@ WSGI_APPLICATION = 'tournament.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tournament',
-        'USER': 'aaa',
-        'PASSWORD': 'aaa',
-        'HOST': '172.20.2.3',
-        'PORT': '',
+        'NAME': os.environ.get('TOURNAMENT_POSTGRES_DB'),
+        'USER': os.environ.get('TOURNAMENT_POSTGRES_USER'),
+        'PASSWORD': os.environ.get('TOURNAMENT_POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('TOURNAMENT_POSTGRES_IP'),
+        'PORT': os.environ.get('TOURNAMENT_POSTGRES_PORT'),
     }
 }
 

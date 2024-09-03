@@ -4,12 +4,12 @@ import { getUsers } from "../user/getUsers.js";
 
 export async function chatPage() {
     const nickname = localStorage.getItem('nickname');
-    var all_users = {};
-    try {
-        all_users = await getUsers();
-    } catch (e) {
-        console.error("USER LOG: ", e.message);
-    }
+    // var all_users = {};
+    // try {
+    //     all_users = await getUsers();
+    // } catch (e) {
+    //     console.error("USER LOG: ", e.message);
+    // }
     var html_contacts = ` <li class="list-group-item" style="background-color: #A9C1FF;">
                              <span >Contact 1</span>
                         </li>`;
