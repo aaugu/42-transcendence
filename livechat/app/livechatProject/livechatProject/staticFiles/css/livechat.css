@@ -1,0 +1,42 @@
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
+
+
+#livechat-menu {
+    height: 200px;
+    min-height: 200px;
+    background-color: #6d96ff;
+    border-top-left-radius: .26rem;
+}
+
+#contact {
+    height: 80px;
+    min-height: 80px;
+    background-color: #A9C1FF;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+}
+
+/* Large devices (desktops, 992px and up) */
+/* @media (min-width: 992px) {
+    #contact-list {
+        width: 25%;
+    }
+    #conversation {
+        display: block;
+        width: 75%;
+    }
+} */
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}

@@ -12,6 +12,10 @@ export async function startLivechat (event) {
         }
     };
 
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
     // Message listener
     const messageSubmitBtn = document.getElementById("message-submit-btn");
     messageSubmitBtn.addEventListener("click", function (event) {
