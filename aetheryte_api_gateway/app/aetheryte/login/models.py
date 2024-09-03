@@ -2,12 +2,16 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from django.contrib.postgres.fields import ArrayField
+
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
 
     #User informations
-    nickname = models.CharField(max_length=30, blank=True)
+    nickname = models.CharField(unique=True, max_length=30, blank=True)
     avatar = models.CharField(blank=True)
+    friends_list = ArrayField( models.IntegerField(), blank=True, default=list )
+    online = models.BooleanField(default=False)
 
     # 2fa Informations
     is_2fa_enabled = models.BooleanField(default=False)

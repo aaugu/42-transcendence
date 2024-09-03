@@ -1,5 +1,5 @@
 import { userID } from '../user/updateProfile.js';
-import { newMsg } from './newMsgHtml.js';
+import { newMsg } from './newMsg.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -35,18 +35,18 @@ export async function newConvButton(e) {
 	e.preventDefault();
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
-		// const response = await newConv(conv_nickname);
+		const response = await newConv(conv_nickname);
 		// console.log(response);
 
 		var div_convo = document.getElementById('conversation');
 		div_convo.innerHTML = '';
-		
-		var html_convo = `<ul class="row list-unstyled custom-scrollbar text-white 
+
+		var html_convo = `<ul class="row list-unstyled custom-scrollbar text-white
 							w-100 mb-2" style="max-height: 500px; min-height: 300px;">`;
 
-		//add all messages here		
+		//add all messages here
 		// html_convo += newMsg('https://localhost:10444/img/avatar.png', '19:25', 'Hi there 👋', '');
-		
+
 		html_convo += `</ul>
 						<div class="d-flex align-items-center">
 								<div class="flex-grow-1 me-2">

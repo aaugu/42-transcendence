@@ -1,23 +1,15 @@
-from rest_framework import status, generics, permissions
+from rest_framework import status
 from rest_framework.response import Response
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
 
 
 from .models import UserVerification, CustomUser
-from .utils import generate_verification_code, check_autentication, get_user_from_jwt
+from .utils import generate_verification_code, get_user_from_jwt
 from .serializers import *
-
-@api_view(['GET', 'POST'])
-def testFunction(request):
-    if request.method == 'GET':
-        return Response({"status": "valid request in GET header"}, status=status.HTTP_200_OK)
-    elif request.method == 'POST':
-        return Response({"status": "valid request in POST header"}, status=status.HTTP_200_OK)
 
 
 
@@ -50,6 +42,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     key='csrf_token',
                     value=access_token,
                 )
+                user.online = True
+                user.save()
         return response
 
 class Verify2FACodeView(APIView):
@@ -72,6 +66,8 @@ class Verify2FACodeView(APIView):
                     key='csrf_token',
                     value=str(refresh.access_token),
                 )
+                user.online = True
+                user.save()
                 return response
             else:
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
@@ -89,4 +85,17 @@ class UpdateUser(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
+class logout_user(APIView):
+    def get_object(self, user_id):
+        return get_object_or_404(CustomUser, id=user_id)
+    
+    def post(self, request):
+        user_id = get_user_from_jwt(request)
+        if (user_id > 0):
+            user = self.get_object(user_id)
+            user.online = False
+            user.save()
+        else:
+            return Response({"Detail": "no user with this id"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Detail": "user successfully logout"}, status=status.HTTP_200_OK)

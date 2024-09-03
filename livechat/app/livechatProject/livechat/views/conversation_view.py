@@ -35,6 +35,9 @@ class ConversationView(APIView):
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
 		status_code = self.create_conversation(user_id, target_id)
+		if status_code == 201:
+			conversation_id = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))[0].id
+			return Response({ "conversation_id": conversation_id}, status=status_code)
 		return Response(status=status_code)
 	
 	# Create conversation
@@ -79,32 +82,3 @@ class ConversationView(APIView):
 
 		user_created = User.objects.filter(Q(user_id=user_id))
 		return user_created
-
-
-# @api_view(['GET', 'POST'])
-# def conversationViewSet(request, pk):
-# 	# GET: conversations involving current user
-# 	if request.method == 'GET':
-# 		if not user_exists(pk):
-# 			if not create_user(pk):
-# 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-
-# 		conversations = Conversation.objects.filter(Q(user_1=pk) | Q(user_2=pk))
-# 		serializer = ConversationSerializer(conversations, many=True)
-
-# 		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
-
-# 	# POST: create conversation with two users
-# 	elif request.method == 'POST':
-# 		body_unicode = request.body.decode('utf-8')
-# 		body = json.loads(body_unicode)
-# 		print(body)
-# 		serializer = ConversationSerializer(data=request.data)
-# 		if serializer.is_valid():
-# 			user_id = serializer.validated_data['user_1']
-# 			target_id = serializer.validated_data['user_2']
-# 		else:
-# 			return Response(status=status.HTTP_400_BAD_REQUEST)
-		
-# 		status_code = create_conversation(user_id, target_id)
-# 		return Response(status=status_code)

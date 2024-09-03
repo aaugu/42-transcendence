@@ -1,0 +1,51 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    container_name: transcendence-elasticsearch
+    environment:
+      - 'ES_JAVA_OPTS=-Xms500m -Xmx500m'
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=${ROOT_PASSWORD}
+      - ELASTICSEARCH_USERNAME=${ROOT_USER}
+    networks:
+      transcendence:
+        ipv4_address: 172.20.6.2
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic_data_volume:/usr/share/elasticsearch/data
+    entrypoint: ["/bin/bash", "-c", "/usr/local/bin/docker-entrypoint.sh eswrapper"]
+
+  init-elasticsearch:
+    build:
+      context: init-elasticsearch
+      dockerfile: Dockerfile
+    container_name: init_script_elasticsearch
+    networks:
+      transcendence:
+        ipv4_address: 172.20.6.4
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTIC_PASSWORD=${ROOT_PASSWORD}
+      - ELASTICSEARCH_USERNAME=${ROOT_USER}
+    entrypoint: ["sh", "-c", "scripts/init-elastic.sh && sh -c scripts/init-kibana.sh"]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.2
+    container_name: transcendence-kibana
+    networks:
+      transcendence:
+        ipv4_address: 172.20.6.3
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://172.20.6.2:9200
+      - ELASTICSEARCH_USERNAME=${ROOT_USER}
+      - ELASTICSEARCH_PASSWORD=${ROOT_PASSWORD}
+      - SERVER_SSL_ENABLED=false 
+    depends_on:
+      - elasticsearch
+      - init-elasticsearch
+    entrypoint: ["sh", "-c", "while docker inspect -f '{{.State.Running}}' transcendence_init_script | grep true; do sleep 1; done; /usr/local/bin/kibana-docker"]
