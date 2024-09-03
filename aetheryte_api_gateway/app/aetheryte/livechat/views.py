@@ -79,15 +79,10 @@ class ConversationView(APIView):
 				user_ids.append(conversation['user_2'])
 
 		sorted_ids = sorted(user_ids)
-		users = []
-		for id in sorted_ids:
-			user = CustomUser.objects.filter(id=id)
-			serializer = CustomUserSerializer(user, many=True)
-			users.append(serializer.data)
+		users = CustomUser.objects.filter(id__in=sorted_ids)
+		serializer = CustomUserSerializer(users, many=True)
 		
-		return users
-
-
+		return serializer.data
 
 # Messages : get all messages from a conversation
 class MessageView(APIView):
