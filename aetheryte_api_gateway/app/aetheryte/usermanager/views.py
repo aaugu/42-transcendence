@@ -76,7 +76,7 @@ class detailed_user(APIView):
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         
 class friends_list_user(APIView):
-    def get(self, request, pk, friend_id):
+    def get(self, request, pk):
         if check_autentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
@@ -86,7 +86,7 @@ class friends_list_user(APIView):
         else:
             return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         
-    def post(self, request, pk, friend_id):
+    def post(self, request, pk):
         if check_autentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
@@ -136,3 +136,21 @@ class friends_list_user(APIView):
             return Response({"status": "Friend removed successfully"}, status=status.HTTP_200_OK)
         else:
             return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+class get_friends_status(APIView):
+    def get(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            
+            ufl = user.friends_list
+            
+            online_statuses = CustomUser.objects.filter(id__in=ufl).values('id', 'nickname', 'online')
+
+            return Response({"status": "OK", "online_statuses": online_statuses}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "ERROR", "details": "Authentication failed"}, status=status.HTTP_403_FORBIDDEN)
+
+
