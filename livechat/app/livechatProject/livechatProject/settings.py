@@ -36,10 +36,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '172.20.5.2']
 # Application definition
 
 INSTALLED_APPS = [
-    # 'daphne',
     'livechat',
-    # 'channels',
-    # 'corsheaders',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -144,9 +141,9 @@ USE_TZ = True
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'livechatProject/staticFiles'
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'livechatProject/staticFiles'
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

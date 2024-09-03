@@ -9,7 +9,7 @@ from rest_framework import status
 
 import requests, json
 
-from livechat.models import Conversation, Message, Blacklist
+from livechat.models import Conversation, Message
 from livechat.serializers import ConversationSerializer, MessageSerializer
 
 # Messages : get all messages from a conversation

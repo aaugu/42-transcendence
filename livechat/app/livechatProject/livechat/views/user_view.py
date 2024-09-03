@@ -9,8 +9,8 @@ from rest_framework import status
 
 import requests, json
 
-from livechat.models import User, Conversation, Message, Blacklist
-from livechat.serializers import UserSerializer, ConversationSerializer, MessageSerializer
+from livechat.models import User
+from livechat.serializers import UserSerializer
 
 # Users
 class ListUsers(APIView):
