@@ -16,9 +16,9 @@ class GenerateMatchesView(APIView):
     def get(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -26,9 +26,9 @@ class GenerateMatchesView(APIView):
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
     
@@ -38,9 +38,9 @@ class StartMatchView(APIView):
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/start/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -49,9 +49,9 @@ class EndMatchView(APIView):
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/end/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -60,9 +60,9 @@ class TournamentView(APIView):
     def get(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/remote/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
     
@@ -70,9 +70,9 @@ class TournamentView(APIView):
     def post(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/remote/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -81,27 +81,29 @@ class TournamentPlayersView(APIView):
     def get(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
+        
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
+        
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -110,9 +112,9 @@ class TournamentlocalView(APIView):
     def post(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/local/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -121,9 +123,9 @@ class StartTournamentView(APIView):
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/start/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -132,27 +134,29 @@ class ManageTournamentView(APIView):
     def get(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
+        
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
+        
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -161,8 +165,8 @@ class DeleteInactiveTournamentView(APIView):
     def delete(request: HttpRequest) -> Response:
         request_url = "http://172.20.2.2:10000/tournament/delete_inactive/"
         response = requests.get(url = request_url)
-        if response.status_code == status.HTTP_200_OK:
+        if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=status.HTTP_200_OK)
+            return Response({ "response": response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
