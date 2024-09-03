@@ -10,9 +10,9 @@ volumes:
     # API Gateway
     aetheryte_postgres:
         driver: local
-    # # Tournament
-    # tournament_postgres_volume:
-    #     driver: local
+    # Tournament
+    tournament_postgres_volume:
+        driver: local
     # Live chat
     livechat_postgres_volume:
         driver: local
@@ -48,26 +48,26 @@ services:
         ports:
             - "10443:443"
 
-    # # Pong
-    # pong-python:
-    #     extends:
-    #         file: pong/docker/docker-compose.yml
-    #         service: pong-python
-    #     ports:
-    #         - "9000:9000"
+    # Pong
+    pong-python:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-python
+        ports:
+            - "9000:9000"
 
-    # # Tournament
-    # tournament-postgres:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-postgres
-    # tournament-python:
-    #     extends:
-    #         file: tournament/docker/docker-compose.yml
-    #         service: tournament-python
-    #     depends_on:
-    #         tournament-postgres:
-    #             condition: service_healthy
+    # Tournament
+    tournament-postgres:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-postgres
+    tournament-python:
+        extends:
+            file: tournament/docker/docker-compose.yml
+            service: tournament-python
+        depends_on:
+            tournament-postgres:
+                condition: service_healthy
 
     # Live chat
     livechat-postgres:
