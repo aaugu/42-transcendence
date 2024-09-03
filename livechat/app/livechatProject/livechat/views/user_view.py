@@ -18,11 +18,3 @@ class ListUsers(APIView):
 		users = User.objects.all()
 		serializer = UserSerializer(users, many=True)
 		return Response({"users": serializer.data }, status=status.HTTP_200_OK)
-
-# @api_view(['GET', 'POST'])
-# def userViewSet(request):
-# 	# GET users
-# 	if request.method == 'GET':
-# 		users = User.objects.all()
-# 		serializer = UserSerializer(users, many=True)
-# 		return Response({"users": serializer.data }, status=status.HTTP_200_OK)
