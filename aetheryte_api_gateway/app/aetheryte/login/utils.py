@@ -28,7 +28,7 @@ def check_autentication(request):
         return False
     
 def get_user_from_jwt(request):
-    access_token = request.COOKIES.get('access_token')
+    access_token = request.COOKIES.get('csrf_token')
     secret_key = 'je mange des pingouins saveur arc en ciel tout les matins'
     if access_token:
         dc = jwt.decode(access_token, secret_key, algorithms=['HS256'])
@@ -43,6 +43,7 @@ def get_user_from_jwt(request):
     "username": "afavre",
     "email": "afavre@ffxiv.ch",
     "password": "q",
+    "avatar": "default avatar"
 }
 
 {

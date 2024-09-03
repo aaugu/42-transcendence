@@ -12,17 +12,16 @@ from login.utils import dprint
 
 from .utils import *
 
-@api_view(['GET', 'POST'])
-def generalUser(request):
-    if request.method == 'GET':
+class general_user(APIView):
+    def get(self, request):
         if check_autentication(request):
             users = CustomUser.objects.all()
             serializer = CustomUserSerializer(users, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        
-    elif request.method == 'POST':
+    
+    def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             new_user = CustomUser(
@@ -38,28 +37,120 @@ def generalUser(request):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-@api_view(['GET', 'PATCH', 'DELETE'])
-def detailedUser(request, pk):
-    if check_autentication(request):
-        try:
-            user = CustomUser.objects.get(pk=pk)
-        except CustomUser.DoesNotExist:
-            return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
-        
-        if request.method == 'GET':
+class detailed_user(APIView):
+    def get(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
             serializer = CustomUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        elif request.method == 'PATCH':
+        else:
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+    def patch(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
             serializer = CustomUserSerializer(user, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
-        elif request.method == 'DELETE':
+        else:
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+    def delete(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
             user.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT) 
-    else:
-        return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        
+class friends_list_user(APIView):
+    def get(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"friends": user.friends_list}, status=status.HTTP_200_OK)
+        else:
+            return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+    def post(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            
+            fid = request.data.get("friend_id")
+            
+            if fid:
+                try:
+                    fid_int = int(fid)
+                    CustomUser.objects.get(pk=fid_int)
+                except (ValueError, CustomUser.DoesNotExist):
+                    return Response({"status": "ERROR", "details": "No user with this ID to add in friends list"}, status=status.HTTP_404_NOT_FOUND)
+                
+                if fid_int in user.friends_list:
+                    return Response({"status": "ERROR", "details": "already in the friend list"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if fid_int == user.id:
+                    return Response({"status": "ERROR", "details": "cannot add himself as a friend"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                user.friends_list.append(fid_int)
+                user.save()
+                return Response({"status": "done"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "ERROR", "details": "No friend_id provided in the body"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def delete(self, request, pk, friend_id):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            
+            try:
+                fid_int = int(friend_id)
+            except ValueError:
+                return Response({"status": "ERROR", "details": "Invalid friend ID"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if fid_int not in user.friends_list:
+                return Response({"status": "ERROR", "details": "Friend ID not in the friend list"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            user.friends_list.remove(fid_int)
+            user.save()
+            return Response({"status": "Friend removed successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+        
+class get_friends_status(APIView):
+    def get(self, request, pk):
+        if check_autentication(request):
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            
+            ufl = user.friends_list
+            
+            online_statuses = CustomUser.objects.filter(id__in=ufl).values('id', 'nickname', 'online')
+
+            return Response({"status": "OK", "online_statuses": online_statuses}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "ERROR", "details": "Authentication failed"}, status=status.HTTP_403_FORBIDDEN)
+
+
