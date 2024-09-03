@@ -45,6 +45,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     secure=False,
                     samesite='Lax',
                 )
+                user.online = True
+                user.save()
         return response
 
 class Verify2FACodeView(APIView):
@@ -88,4 +90,17 @@ class UpdateUser(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
+class logout_user(APIView):
+    def get_object(self, user_id):
+        return get_object_or_404(CustomUser, id=user_id)
+    
+    def post(self, request):
+        user_id = get_user_from_jwt(request)
+        if (user_id > 0):
+            user = self.get_object(user_id)
+            user.online = False
+            user.save()
+        else:
+            return Response({"Detail": "no user with this id"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Detail": "user successfully logout"}, status=status.HTTP_200_OK)
