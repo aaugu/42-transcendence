@@ -22,10 +22,11 @@ class ConversationView(APIView):
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/conversations/"
 		response = requests.get(url = request_url)
+		response_json = response.json()
+		users = self.get_users_from_conversations(response_json['conversations'])
 
 		if response.status_code == status.HTTP_200_OK:
-			response_json = response.json()
-			return Response({ "response": response_json, }, status=status.HTTP_200_OK)
+			return Response({ "response": response_json, "users": users }, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)
 	
@@ -67,6 +68,26 @@ class ConversationView(APIView):
 		if user:
 			return True
 		return False
+	
+	# Get users concerned by conversations
+	def get_users_from_conversations(self, conversations):
+		user_ids = []
+		for conversation in conversations:
+			if conversation['user_1'] not in user_ids:
+				user_ids.append(conversation['user_1'])
+			if conversation['user_2'] not in user_ids:
+				user_ids.append(conversation['user_2'])
+
+		sorted_ids = sorted(user_ids)
+		users = []
+		for id in sorted_ids:
+			user = CustomUser.objects.filter(id=id)
+			serializer = CustomUserSerializer(user, many=True)
+			users.append(serializer.data)
+		
+		return users
+
+
 
 # Messages : get all messages from a conversation
 class MessageView(APIView):
@@ -75,15 +96,15 @@ class MessageView(APIView):
 		request_url = "http://172.20.5.2:8000/livechat/conversation/" + str(pk) + "/messages/"
 		response = requests.get(url = request_url)
 		
-		# response_json = response.json()
-		# user_1_id = response_json.conversation.user_1
-		# user_2_id = response_json.conversation.user_2
-		
-		# users = CustomUser.objects.filter(Q(id=user_1_id) & Q(id=user_2_id))
-		# users_serializer = CustomUserSerializer(users, many=True)
-
 		if response.status_code == status.HTTP_200_OK:
 			response_json = response.json()
-			return Response({ "response": response_json}, status=status.HTTP_200_OK)
+			conversation = response_json['conversation'][0]
+			user_1_id = conversation['user_1']
+			user_2_id = conversation['user_2']
+			
+			users = CustomUser.objects.filter(Q(id=user_1_id) | Q(id=user_2_id))
+			users_serializer = CustomUserSerializer(users, many=True)
+
+			return Response({ "response": response_json, "users": users_serializer.data }, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)

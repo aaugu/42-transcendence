@@ -15,10 +15,13 @@ from livechat.serializers import ConversationSerializer, MessageSerializer
 # Messages : get all messages from a conversation
 class MessageView(APIView):
 	def get(self, request, pk):
-		if self.conversation_exists(pk):    
+		if self.conversation_exists(pk):
+			conversation = Conversation.objects.filter(Q(id=pk))
+			conv_serializer = ConversationSerializer(conversation, many=True)
+
 			messages = Message.objects.filter(Q(conversation_id=pk))
-			serializer = MessageSerializer(messages, many=True)
-			return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
+			msg_serializer = MessageSerializer(messages, many=True)
+			return Response({ "messages": msg_serializer.data, "conversation": conv_serializer.data }, status=status.HTTP_200_OK)
 		else:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -27,12 +30,3 @@ class MessageView(APIView):
 		if conversation:
 			return True
 		return False
-
-# @api_view(['GET'])
-# def messageViewSet(request, pk):
-# 	if conversation_exists(pk):    
-# 		messages = Message.objects.filter(Q(conversation_id=pk))
-# 		serializer = MessageSerializer(messages, many=True)
-# 		return Response({ "messages": serializer.data }, status=status.HTTP_200_OK)
-# 	else:
-# 		return Response(status=status.HTTP_404_NOT_FOUND)
