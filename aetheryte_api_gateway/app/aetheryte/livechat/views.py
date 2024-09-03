@@ -26,7 +26,7 @@ class ConversationView(APIView):
 		users = self.get_users_from_conversations(response_json['conversations'])
 
 		if response.status_code == status.HTTP_200_OK:
-			return Response({ "response": response_json, "users": users }, status=status.HTTP_200_OK)
+			return Response({ "conversations": response_json['conversations'], "users": users }, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)
 	
@@ -53,6 +53,10 @@ class ConversationView(APIView):
 			"user_2": target_id
 		}
 		response = requests.post( url, json = body)
+		if response.status_code == 201:
+			response_json = response.json()
+			return Response({"conversation_id": response_json['conversation_id']}, status=response.status_code)
+		
 		return Response(status=response.status_code)
 	
 	# Check if user is valid based on id
@@ -100,6 +104,6 @@ class MessageView(APIView):
 			users = CustomUser.objects.filter(Q(id=user_1_id) | Q(id=user_2_id))
 			users_serializer = CustomUserSerializer(users, many=True)
 
-			return Response({ "response": response_json, "users": users_serializer.data }, status=status.HTTP_200_OK)
+			return Response({ "messages": response_json['messages'], "users": users_serializer.data }, status=status.HTTP_200_OK)
 		else:
 			return Response(status=response.status_code)

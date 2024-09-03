@@ -35,6 +35,9 @@ class ConversationView(APIView):
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
 		status_code = self.create_conversation(user_id, target_id)
+		if status_code == 201:
+			conversation_id = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))[0].id
+			return Response({ "conversation_id": conversation_id}, status=status_code)
 		return Response(status=status_code)
 	
 	# Create conversation
