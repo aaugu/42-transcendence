@@ -41,7 +41,7 @@ class ConversationView(APIView):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		
 		user_id = pk
-		target_id = CustomUser.objects.filter(nickname=nickname)
+		target_id = CustomUser.objects.filter(nickname=nickname).first().id
 
 		if not self.user_valid(user_id) or not self.user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
@@ -56,14 +56,14 @@ class ConversationView(APIView):
 	
 	# Check if user is valid based on id
 	def user_valid(self, user_id):
-		user = CustomUser.objects.filter(Q(id=user_id))
+		user = CustomUser.objects.filter(id=user_id)
 		if user:
 			return True
 		return False
 	
 	# Check if user exists based on nickname
 	def user_exists(self, nickname):
-		user = CustomUser.objects.filter(Q(nickname=nickname))
+		user = CustomUser.objects.filter(nickname=nickname)
 		if user:
 			return True
 		return False
