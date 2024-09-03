@@ -4,4 +4,4 @@
 trash/
 **/__pycache__/
 **/init.sql/
-**/volumes/
+**/volumes/ 

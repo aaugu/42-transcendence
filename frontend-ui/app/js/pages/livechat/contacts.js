@@ -9,6 +9,7 @@ export function reset_all_contacts() {
 export async function get_all_contacts() {
 	try {
         const response = await getContacts();
+		const user_names = response.response.users;
 		all_contacts = response.response.conversations;
 		console.log("all_contacts: ", all_contacts);
 	}

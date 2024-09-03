@@ -19,9 +19,7 @@ export async function get_all_tournaments() {
 }
 
 export function get_tournament_id(t_name) {
-	console.log("t_name: ", t_name);
 	const t_values = Object.values(all_tournaments);
-	console.log("t_values: ", t_values);
 	var t_id = null;
 	t_values.forEach(tournament => {
         if (tournament.name === t_name) {

@@ -1,6 +1,8 @@
+import { convHistory } from "./livechatConvHistory.js";
+
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
-        //open conversation history (send e)
+        convHistory(e);
         return;
       }
 

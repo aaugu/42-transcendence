@@ -7,7 +7,6 @@ import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
-import { chatPage } from "../pages/livechat/livechatPage.js"
 import { userIsConnected } from "../pages/user/updateProfile.js"
 import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
@@ -15,6 +14,8 @@ import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_contacts } from "../pages/livechat/contacts.js"
+import { livechatPage } from "../pages/livechat/livechatPage.js"
+import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -104,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			eventListener: profileEvent,
 			description: "profile page"
 		},
-		"/chat" : {
-			content: chatPage,
-			eventListener: null,
+		"/livechat" : {
+			content: livechatPage,
+			eventListener: livechatEvent,
 			description: "stats page"
 		},
     }

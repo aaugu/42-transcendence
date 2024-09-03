@@ -1,8 +1,8 @@
 import { userID } from '../user/updateProfile.js';
 
-async function getConvHistory(conv_id) {
-    if (conv_id === null || conv_id === undefined) {
-		throw new Error('Did not find conversation ID');
+async function createConv(nickname) {
+    if (nickname === null || nickname === undefined || userID === null ) {
+		throw new Error('Did not find userID or nickname invalid');
 	}
 
 	const response = await fetch('https://localhost:10444/livechat/conversation/' + conv_id + '/messages/', {
@@ -25,18 +25,4 @@ async function getConvHistory(conv_id) {
 	} else {
 		throw new Error('No response from server');
 	}
-}
-
-export async function convHistory(e) {
-    try {
-        const conv_nickname = e.target.innerText;
-        const conv_id = e.target.dataset.convid;
-        
-        const response = await getConvHistory(conv_id);
-        console.log("response convHistory: ", response);
-        //add html with messages to div
-    }
-    catch (e) {
-        console.error("USER LOG: ", e.message);
-    }
 }

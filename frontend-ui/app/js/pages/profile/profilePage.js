@@ -142,7 +142,27 @@ export async function profilePage() {
                     <p>Total losses: 2</p>
                 </div>
                 <div>
-                <ul class="list-group overflow-auto m-2" style="max-height: 200px;">
+                <ul class="list-group custom-scrollbar m-2" style="max-height: 300px; min-height: 200px">
+                    <li class="list-group-item">
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
+                    </li>
                     <li class="list-group-item">
                         <span>Date</span>
                         <span>Opponent</span>
