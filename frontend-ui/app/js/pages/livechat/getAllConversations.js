@@ -1,6 +1,6 @@
 import { userID } from "../user/updateProfile.js";
 
-export async function getConversations() {
+export async function getAllConversations() {
 	if (userID === null) {
 		throw new Error('Did not find user ID');
 	}

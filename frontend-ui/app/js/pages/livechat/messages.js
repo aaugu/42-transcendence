@@ -37,11 +37,11 @@ function newMsg (avatar, time, msgText, placement) {
 
 }
 
-export function displayChatInterface (response) {
-    if (response === null || response === undefined)
+export function displayChatInterface (conversation) {
+    if (conversation === null || conversation === undefined)
         throw new Error('Messages cannot be displayed');
 
-    const userLookup = response.users.reduce((acc, user) => {
+    const userLookup = conversation.users.reduce((acc, user) => {
         acc[user.id] = {
             nickname: user.nickname,
             avatar: user.avatar
@@ -54,8 +54,8 @@ export function displayChatInterface (response) {
 
     var html_convo = '';
 
-    if (response.messages) {
-        response.messages.forEach(message => {
+    if (conversation.messages) {
+        conversation.messages.forEach(message => {
             let avatar, placement;
             if (message.author === userID) {
                 avatar = localStorage.getItem('avatar');

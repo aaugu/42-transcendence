@@ -85,6 +85,7 @@ export async function newConvButton(e) {
 		const response = await newConv(conv_nickname);
 		console.log("response newConvButton: ", response);
 		displayChatInterface(response);
+		
 		//add conversation to the list of conversations
 
 	} catch (e) {

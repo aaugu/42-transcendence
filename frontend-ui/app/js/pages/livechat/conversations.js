@@ -1,4 +1,4 @@
-import { getConversations } from "./getConversations.js";
+import { getAllConversations } from "./getAllConversations.js";
 
 export var all_conversations = {};
 
@@ -8,7 +8,7 @@ export function reset_all_conv() {
 
 export async function get_all_conv() {
 	try {
-        const response = await getConversations();
+        const response = await getAllConversations();
 		const userLookup = response.users.reduce((acc, user) => {
 			acc[user.id] = {
 				nickname: user.nickname,
