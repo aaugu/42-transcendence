@@ -37,7 +37,7 @@ function newMsg (avatar, time, msgText, placement) {
 
 }
 
-export function displayMessages (response) {
+export function displayChatInterface (response) {
     if (response === null || response === undefined)
         throw new Error('Messages cannot be displayed');
 
@@ -49,35 +49,27 @@ export function displayMessages (response) {
         return acc;
     }, {});
 
-    var div_convo = document.getElementById('conversation');
-    div_convo.innerHTML = '';
+    var ul_convo = document.getElementById('chat-msgs');
+    ul_convo.innerHTML = '';
 
-    var html_convo = `<ul class="row list-unstyled custom-scrollbar text-white
-                        w-100 mb-2" style="max-height: 500px; min-height: 300px;">`;
+    var html_convo = '';
 
-    response.messages.forEach(message => {
-        let avatar, placement;
-        if (message.author === userID) {
-            avatar = localStorage.getItem('avatar');
-            placement = 'right';
-        } else {
-            avatar = userLookup[message.author].avatar;
-            placement = 'left';
-        }
-        html_convo += newMsg(avatar, message.time, message.message, placement);
-    });
-
-    html_convo += `</ul>
-                    <div class="d-flex align-items-center">
-                            <div class="flex-grow-1 me-2">
-                                <div data-mdb-input-init class="form-outline form-white">
-                                    <textarea class="form-control" id="textAreaExample3"></textarea>
-                                    <label class="form-label" for="textAreaExample3"></label>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-light btn-sm btn-rounded">Send</button>
-                        </div>`;
-    div_convo.innerHTML = html_convo;
+    if (response.messages) {
+        response.messages.forEach(message => {
+            let avatar, placement;
+            if (message.author === userID) {
+                avatar = localStorage.getItem('avatar');
+                placement = 'right';
+            } else {
+                avatar = userLookup[message.author].avatar;
+                placement = 'left';
+            }
+            html_convo += newMsg(avatar, message.time, message.message, placement);
+        });
+    }
+    ul_convo.innerHTML = html_convo;
+    document.getElementById('chat-div-textarea').classList.remove('hidden');
+    document.getElementById('chat-send').classList.remove('hidden');
     //scroll to bottom
     const chatContainer = document.querySelector('.custom-scrollbar');
     chatContainer.scrollTop = chatContainer.scrollHeight;

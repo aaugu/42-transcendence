@@ -1,6 +1,7 @@
-import { displayMessages } from "./messages.js";
+import { displayChatInterface } from "./messages.js";
 
 async function getConvHistory(conv_id) {
+	console.log("conv_id: ", conv_id);
     if (conv_id === null || conv_id === undefined)
 		throw new Error('Did not find conversation ID');
 
@@ -33,7 +34,7 @@ export async function convHistory(e) {
 
         const response = await getConvHistory(conv_id);
         console.log("response convHistory: ", response);
-		displayMessages(response);
+		displayChatInterface(response);
     }
     catch (e) {
         console.error("USER LOG: ", e.message);
