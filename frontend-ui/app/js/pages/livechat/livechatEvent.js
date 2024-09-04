@@ -1,5 +1,5 @@
 import { convHistory } from "./convHistory.js";
-import { newConvButton }	from "./newConv.js";
+import { newConvButton }	from "./newConversation.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {

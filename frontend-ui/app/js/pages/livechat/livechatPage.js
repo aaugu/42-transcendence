@@ -1,31 +1,23 @@
-import { all_contacts, get_all_contacts } from "./contacts.js";
+import { all_conversations, get_all_conv } from "./conversations.js";
 import { userID } from "../user/updateProfile.js";
-import { getUsers } from "../user/getUsers.js"; 
 import { defaultAvatar } from "../user/avatar.js";
 
 export async function livechatPage() {
     const nickname = localStorage.getItem('nickname');
-    // var all_users = {};
-    // try {
-    //     all_users = await getUsers();
-    // } catch (e) {
-    //     console.error("USER LOG: ", e.message);
-    // }
-    var html_contacts = ` <li class="list-group-item" style="background-color: #A9C1FF;">
-                             <span data-convid="1">Fake contact</span>
-                        </li>`;
+    var html_contacts = '';
 
-    await get_all_contacts();
-    const contacts = Object.values(all_contacts);
-    var contact_name;
-    contacts.forEach(contact => {
-        if (contact.user_1 === userID)
-            contact_name = contact.user_2;
-        else
-            contact_name = contact.user_1;
+    await get_all_conv();
+    var contact_nickname;
+    all_conversations.forEach(contact => {
+        if (contact.user_1.id === userID) {
+            contact_nickname = contact.user_2.nickname;
+        }
+        else {
+            contact_nickname = contact.user_1.nickname;
+        }
         html_contacts += `
             <li class="list-group-item" style="background-color: #A9C1FF;">
-                <span data-convid=${contact.id}>${contact_name}</span>
+                <span data-convid=${contact.id}>${contact_nickname}</span>
             </li>`;
     });
 
@@ -145,7 +137,7 @@ export async function livechatPage() {
                         </div>
                     </div>
                     <button type="button" class="btn btn-light btn-sm btn-rounded">Send</button>
-                </div>     
+                </div>
              </div>
         </div>
     </div>
