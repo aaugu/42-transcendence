@@ -127,15 +127,15 @@ class GameMode(Enum):
     
 
 class Game:
-    def __init__(self, mode):
+    def __init__(self, game_id, mode):
         self.GameState = GameState()
-        self.mode = mode
         self.game_id = game_id
+        self.mode = mode
 
     def to_dict(self):
         return {
             "game_state": self.GameState.to_dict(),
-            "mode": self.mode,
+            "mode": self.mode.name,
             "game_id": self.game_id,
         }
 

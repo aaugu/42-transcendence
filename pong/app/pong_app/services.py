@@ -18,27 +18,30 @@ class GameService:
         game_id = str(uuid.uuid4())
         
         if mode == GameMode.REMOTE:
-            game = Games.objects.create(
+            Games.objects.create(
                 game_id=game_id,
                 creator_id=creator_id,
-                status='WAITING'
+                status='WAITING',
+                mode="REMOTE"
             )
 
         else:
-            game = Games.objects.create(
+            Games.objects.create(
                 game_id=game_id,
                 creator_id=creator_id,
-                status='IN_PROGRESS'
+                status='IN_PROGRESS',
+                mode="NOT REMOTE"
             )
 
         game_instance = Game(mode=mode, game_id=game_id)
 
         from .consumers import PongConsumer
-        PongConsumer.Game.game_state[game_id] = GameState()
+        PongConsumer.games[game_id]= game_instance
+        PongConsumer.games[game_id].game_state = GameState()
 
-        print(game.to_dict())
+        print(game_instance.to_dict())
         
-        return game
+        return game_instance
 
     @staticmethod
     def join_game(game_id, joiner_id):

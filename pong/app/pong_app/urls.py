@@ -15,7 +15,8 @@ from .views import (
 
 urlpatterns = [
     path("pong/", pong_view, name="pong"),
-    path("create-game/<str_creator_id>/<str_mode>/", create_game, name='create_game'),
+    # path("create-game/<str_creator_id>/<str_mode>/", create_game, name='create_game'),
+    path("create-game/", create_game, name='create_game'),
     # API ENDPOINTS
     # path("api/game_state", game_state),
     # path("api/game_points", game_points),

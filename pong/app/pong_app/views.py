@@ -32,11 +32,11 @@ def pong_view(request):
 
     return render(request, "pong_app/pong.html", context)
 
-def create_game(request, creator_id, mode):
+def create_game(request):
     print(f'Received request to create game with creator_id: {request.GET.get("str_creator_id")} and mode: {request.GET.get("str_mode")}')
 
-    creator_id = request.GET.get("str_creator_id")
-    mode = request.GET.get("str_mode")
+    creator_id = request.GET.get("creator_id")
+    mode = request.GET.get("mode")
     
     if not creator_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)

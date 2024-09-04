@@ -8,29 +8,33 @@ from .game import (
     checkCollisonWithEdgesPaddle,
     PARAMS,
 )
-from .ai import * 
+from .ai import *
 import asyncio
+
 # from .services import GameService
+
 
 class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
     games = {}
 
     async def connect(self):
-      self.game_id = self.scope['url_route']['kwargs']['game_id']
-      self.room_group_name = f"pong_{self.game_id}"
-      print("Connected")
+        self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
+        self.room_group_name = f"pong_{self.game_id}"
+        print("Connected")
 
-      await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        if self.game_id not in PongConsumer.games:
+            print(f"This should never happends problem somewhere")
 
-      await self.accept()
+            asyncio.create_task(self.game_loop())
 
-      if self.game_id not in PongConsumer.game_loops:
-          PongConsumer.game_states[self.game_id] = GameState()
-          PongConsumer.game_loops[self.game_id] = True
-          
-          asyncio.create_task(self.game_loop())
+        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
+        await self.accept()
+
+        if self.game_id not in PongConsumer.game_loops:
+            PongConsumer.game_loops[self.game_id] = True
+            asyncio.create_task(self.game_loop())
 
     async def disconnect(self, close_code):
         # Leave the room group
@@ -43,16 +47,19 @@ class PongConsumer(AsyncWebsocketConsumer):
         direction_left_paddle = text_data_json.get("direction_left_paddle")
         start_stop_reset = text_data_json.get("action")
 
-        if not PongConsumer.game_states[self.game_id].paused and not PongConsumer.game_states[self.game_id].finished:
+        if (
+            not PongConsumer.game_states[self.game_id].paused
+            and not PongConsumer.game_states[self.game_id].finished
+        ):
             if direction_right_paddle == "up":
-              PongConsumer.game_states[self.game_id].paddles[1].move("up")
+                PongConsumer.game_states[self.game_id].paddles[1].move("up")
             elif direction_right_paddle == "down":
-              PongConsumer.game_states[self.game_id].paddles[1].move("down")
+                PongConsumer.game_states[self.game_id].paddles[1].move("down")
 
             if direction_left_paddle == "up":
-              PongConsumer.game_states[self.game_id].paddles[0].move("up")
+                PongConsumer.game_states[self.game_id].paddles[0].move("up")
             elif direction_left_paddle == "down":
-              PongConsumer.game_states[self.game_id].paddles[0].move("down")
+                PongConsumer.game_states[self.game_id].paddles[0].move("down")
 
         if start_stop_reset == "start":
             print(f"Start Triggered")
