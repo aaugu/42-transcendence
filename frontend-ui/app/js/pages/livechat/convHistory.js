@@ -1,4 +1,4 @@
-import { displayChatInterface } from "./messages.js";
+import { displayChatInterface, displayMessages } from "./messages.js";
 
 async function getConvHistory(conv_id) {
 	console.log("conv_id: ", conv_id);
@@ -29,12 +29,12 @@ async function getConvHistory(conv_id) {
 
 export async function convHistory(e) {
     try {
-        const conv_nickname = e.target.innerText;
         const conv_id = e.target.dataset.convid;
 
         const response = await getConvHistory(conv_id);
         console.log("response convHistory: ", response);
-		displayChatInterface(response);
+		displayChatInterface();
+		displayMessages(response);
     }
     catch (e) {
         console.error("USER LOG: ", e.message);

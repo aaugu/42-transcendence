@@ -37,10 +37,10 @@ function newMsg (avatar, time, msgText, placement) {
 
 }
 
-export function displayChatInterface (conversation) {
-    if (conversation === null || conversation === undefined)
+export function displayMessages(conversation) {
+    if (conversation === null || conversation === undefined) {
         throw new Error('Messages cannot be displayed');
-
+    }
     const userLookup = conversation.users.reduce((acc, user) => {
         acc[user.id] = {
             nickname: user.nickname,
@@ -68,11 +68,17 @@ export function displayChatInterface (conversation) {
         });
     }
     ul_convo.innerHTML = html_convo;
-    document.getElementById('chat-div-textarea').classList.remove('hidden');
-    document.getElementById('chat-send').classList.remove('hidden');
-    //scroll to bottom
+
     const chatContainer = document.querySelector('.custom-scrollbar');
     chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+export function displayChatInterface () {
+    const welcomeMessages = document.getElementById('chat-welcome');
+    welcomeMessages.innerHTML = ''; 
+
+    document.getElementById('chat-div-textarea').classList.remove('hidden');
+    document.getElementById('chat-send').classList.remove('hidden');
 }
 
 

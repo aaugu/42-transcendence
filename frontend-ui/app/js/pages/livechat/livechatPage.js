@@ -23,22 +23,24 @@ export async function livechatPage() {
     return `
     <div class="content-box d-flex">
         <div id="livechat" class="row m-2 rounded-end rounded-3" style="min-height: 75%;">
-            <div id="contact-list" class="col-lg-4 d-flex flex-column justify-content-start clearfix">
-                <div id="livechat-menu" class="w-100 rounded-end rounded-3 mt-2">
-                    <form action="post" id="search-bar" class="w-75 text-small">
-                        <input id="chat-search-input" class="form-control text-sm" type="search" placeholder="contacts..." aria-label="Search">
-                        <button class="btn btn-dark text-sm" type="button" id="chat-search-btn">Search</button>
-                    </form>
+            <div id="contact-list" class="col-lg-4 d-flex flex-column">
+                <div id="livechat-menu" class="w-100 rounded-end rounded-3">
+                    <div class="input-group m-2 justify-content-center">
+                        <input id="chat-search-input" type="text" class="form-control rounded-end" placeholder="New contact" aria-label="Search" style="font-size: 10px;">
+                        <div class="input-group-append">
+                            <button id="chat-search-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Search</button>
+                        </div>
+                    </div>
                 </div>
-                <div id="contact" class="d-flex clearfix mb-2 w-100">
-                    <ul class="list-group justify-content-center d-flex custom-scrollbar flex-grow-1 w-100 m-2">
-                     ${html_contacts}
+                    <ul id="contact-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
+                        ${html_contacts}
                     </ul>
-                </div>
             </div>
             <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto bg-lightgrey">
-                <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
-                <div class="h6 text-center">Select a contact to start a conversation</div>
+                <div id="chat-welcome">
+                    <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
+                    <div class="h6 text-center">Select a contact to start a conversation</div>
+                </div>
                 <ul id="chat-msgs"class="row list-unstyled custom-scrollbar flex-grow-1 text-white
                         w-100 mb-2"></ul>
                 <div class="d-flex align-items-center">

@@ -1,4 +1,5 @@
 import { displayChatInterface } from './messages.js';
+import { userID } from '../user/updateProfile.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -28,55 +29,6 @@ async function newConv(conv_nickname) {
 	} else {
 		throw new Error('No response from server');
 	}
-	// const response = {
-	// 	"messages": [
-	// 		{
-	// 			"author": 1,
-	// 			"message": "angela",
-	// 			"date": "2024-08-22",
-	// 			"time": "13:02"
-	// 		},
-	// 		{
-	// 			"author": 1,
-	// 			"message": "breaks I somehow don't know what to write just writ ea lot of test ahsdfkhaslkdjfhalskdjfhalskdjfalsjfalsjfasjfasfsjdfsajflks",
-	// 			"date": "2024-08-22",
-	// 			"time": "13:03"
-	// 		},
-	// 		{
-	// 			"author": 4,
-	// 			"message": "not",
-	// 			"date": "2024-08-22",
-	// 			"time": "13:04"
-	// 		},
-	// 		{
-	// 			"author": 4,
-	// 			"message": "neo",
-	// 			"date": "2024-08-22",
-	// 			"time": "13:10"
-	// 		}
-	// 	],
-	// 	"users": [
-	// 		{
-	// 			"id": 2,
-	// 			"username": "bli",
-	// 			"nickname": "bli",
-	// 			"email": "bli@gmail.com",
-	// 			"is_2fa_enabled": false,
-	// 			"avatar": "images/default_avatar.png",
-	// 			"online": false
-	// 		},
-	// 		{
-	// 			"id": 4,
-	// 			"username": "blo",
-	// 			"nickname": "blo",
-	// 			"email": "blo@gmail.com",
-	// 			"is_2fa_enabled": false,
-	// 			"avatar": "images/default_avatar.png",
-	// 			"online": false
-	// 		}
-	// 	]
-	// };
-	// return response;
 }
 
 export async function newConvButton(e) {
@@ -84,8 +36,8 @@ export async function newConvButton(e) {
 	try {
 		const response = await newConv(conv_nickname);
 		console.log("response newConvButton: ", response);
-		displayChatInterface(response);
-		
+		displayChatInterface();
+
 		//add conversation to the list of conversations
 
 	} catch (e) {
