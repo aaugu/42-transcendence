@@ -150,7 +150,7 @@ DATABASES = {
         'NAME': os.getenv('PONG_POSTGRES_DB'),
         'USER': os.getenv('PONG_POSTGRES_USER'),
         'PASSWORD': os.getenv('PONG_POSTGRES_PASSWORD'),
-        'HOST': '172.20.5.3',
+        'HOST': '172.20.3.3',
         'PORT': '5432'
     }
 }

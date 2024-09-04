@@ -130,11 +130,13 @@ class Game:
     def __init__(self, mode):
         self.GameState = GameState()
         self.mode = mode
+        self.game_id = game_id
 
     def to_dict(self):
         return {
             "game_state": self.GameState.to_dict(),
             "mode": self.mode,
+            "game_id": self.game_id,
         }
 
 

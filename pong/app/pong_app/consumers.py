@@ -10,11 +10,10 @@ from .game import (
 )
 from .ai import * 
 import asyncio
-from services import GameService
+# from .services import GameService
 
 class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
-    # game_states = {}
     games = {}
 
     async def connect(self):
