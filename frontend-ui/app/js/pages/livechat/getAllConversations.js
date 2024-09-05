@@ -1,11 +1,11 @@
-import { userID } from '../user/updateProfile.js';
+import { userID } from "../user/updateProfile.js";
 
-async function createConv(nickname) {
-    if (nickname === null || nickname === undefined || userID === null ) {
-		throw new Error('Did not find userID or nickname invalid');
+export async function getAllConversations() {
+	if (userID === null) {
+		throw new Error('Did not find user ID');
 	}
 
-	const response = await fetch('https://localhost:10444/livechat/conversation/' + conv_id + '/messages/', {
+	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -20,7 +20,7 @@ async function createConv(nickname) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');

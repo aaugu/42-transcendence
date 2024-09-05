@@ -1,5 +1,4 @@
 import { getUserInfo } from "../user/getUserInfo.js"
-import { getUsers } from "../user/getUsers.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -8,16 +7,13 @@ export async function profilePage() {
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
 
-     try {
+    try {
         const userinfo = await getUserInfo();
         username = userinfo.username;
         nickname = userinfo.nickname;
         email = userinfo.email;
         avatar = userinfo.avatar;
         is_2fa_enabled = userinfo.is_2fa_enabled;
-
-        // const users = await getUsers();
-
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
@@ -135,49 +131,13 @@ export async function profilePage() {
             </div>
         </div>
         <div class="column-right">
-            <div id="personal-stats" class="content-box clearfix">
+            <div id="personal-stats" class="content-box">
                 <h5 class="m-2">Match history</h5>
                 <div class="profile-details centered">
                     <p>Total wins: 3</p>
                     <p>Total losses: 2</p>
                 </div>
-                <div>
-                <ul class="list-group custom-scrollbar m-2" style="max-height: 300px; min-height: 200px">
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
+                <ul class="list-group custom-scrollbar m-2 flex-grow-1">
                     <li class="list-group-item">
                         <span>Date</span>
                         <span>Opponent</span>
@@ -189,7 +149,6 @@ export async function profilePage() {
                         <span>WON/LOST</span>
                     </li>
                 </ul>
-                </div>
             </div>
             <div id="friends" class="content-box">
                 <h5 class="m-2">User list</h5>

@@ -13,7 +13,7 @@ import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
-import { reset_all_contacts } from "../pages/livechat/contacts.js"
+import { reset_all_conv } from "../pages/livechat/conversations.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 
@@ -36,7 +36,7 @@ function resetDataRouteChange() {
 		console.log('GAME LOG: Websocket connection closed');
 	}
 	reset_all_tournaments();
-	reset_all_contacts();
+	reset_all_conv();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
