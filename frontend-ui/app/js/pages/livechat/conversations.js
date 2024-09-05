@@ -39,7 +39,6 @@ export async function get_all_conv() {
 			};
 		}).filter(conversation => conversation !== null);
 		all_conversations = conversationsWithUserDetails;
-		console.log("all_conversations: ", all_conversations);
 	}
 	catch (e) {
 		console.error("USER LOG: ", e.message);

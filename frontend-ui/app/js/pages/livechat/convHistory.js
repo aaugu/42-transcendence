@@ -28,10 +28,10 @@ async function getConvHistory(conv_id) {
 
 export async function convHistory(e) {
     try {
-        const conv_id = e.target.dataset.convid;
+		const targetElement = e.target.closest('.list-group-item').querySelector('[data-convid]');
+        const conv_id = targetElement ? targetElement.dataset.convid : null;
 
-        const response = await getConvHistory(conv_id);
-        // console.log("response convHistory: ", response);
+		const response = await getConvHistory(conv_id);
 		displayChatInterface();
 		displayMessages(response);
     }
