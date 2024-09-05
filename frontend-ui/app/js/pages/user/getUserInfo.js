@@ -1,7 +1,6 @@
 import { userID } from "./updateProfile.js";
 
 export async function getUserInfo() {
-    console.log("get UserInfo userID: ", userID);
     if (userID === null)
         throw new Error ("Could not identify user");
 	const url = 'https://localhost:10444/api/user/';

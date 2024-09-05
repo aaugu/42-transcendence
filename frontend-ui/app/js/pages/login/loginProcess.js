@@ -9,7 +9,6 @@ export async function loginProcess() {
     const password = document.getElementById('password').value;
 
     if (userIsConnected === true){
-        console.log("loginProcess userID: ", userID);
         errormsg("You are already logged in, redirecting to profile page...", "homepage-errormsg");
         console.log("USER LOG: ALREADY LOGGED IN");
         setTimeout(() => {

@@ -1,9 +1,8 @@
-import { userID, setUserID } from './user/updateProfile.js';
+import { setUserID } from './user/updateProfile.js';
 
 export function homePage() {
 
     setUserID();
-    console.log("homepage userID: ", userID);
 
     return `
     <div class="content-box">

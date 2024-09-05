@@ -9,7 +9,6 @@ export async function profilePage() {
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
 
-    console.log("profile page userID: ", userID);
      try {
         const userinfo = await getUserInfo();
         username = userinfo.username;
