@@ -1,6 +1,10 @@
-import { userIsConnected } from "./user/updateProfile.js";
+import { userID, setUserID } from './user/updateProfile.js';
 
 export function homePage() {
+
+    setUserID();
+    console.log("homepage userID: ", userID);
+
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Come play pong</h1>

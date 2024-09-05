@@ -4,7 +4,7 @@ import { getCookie } from './cookie.js';
 export var userIsConnected = (localStorage.getItem("userIsConnected") === "true");
 export var userID = null;
 
-function setUserID() {
+export function setUserID() {
 	const token = getCookie('csrf_token');
     if (token === null)
         userID = null;
