@@ -37,7 +37,7 @@ export async function getTournamentDetails(tournament_id) {
 		throw new Error('GET TOURNAMENT DETAILS FAILED');
 	}
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');

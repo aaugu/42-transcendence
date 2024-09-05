@@ -20,7 +20,7 @@ async function changeStatusTournament(tournament_id, game_status) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: CHANGE TOURNAMENT STATUS SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}

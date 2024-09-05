@@ -28,7 +28,7 @@ async function createTournament(new_tournament, mode) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: CREATE TOURNAMENT SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}
