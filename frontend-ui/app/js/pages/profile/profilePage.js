@@ -136,49 +136,13 @@ export async function profilePage() {
             </div>
         </div>
         <div class="column-right">
-            <div id="personal-stats" class="content-box clearfix">
+            <div id="personal-stats" class="content-box">
                 <h5 class="m-2">Match history</h5>
                 <div class="profile-details centered">
                     <p>Total wins: 3</p>
                     <p>Total losses: 2</p>
                 </div>
-                <div>
-                <ul class="list-group custom-scrollbar m-2" style="max-height: 300px; min-height: 200px">
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
+                <ul class="list-group custom-scrollbar m-2 flex-grow-1">
                     <li class="list-group-item">
                         <span>Date</span>
                         <span>Opponent</span>
@@ -190,7 +154,6 @@ export async function profilePage() {
                         <span>WON/LOST</span>
                     </li>
                 </ul>
-                </div>
             </div>
             <div id="friends" class="content-box">
                 <h5 class="m-2">User list</h5>

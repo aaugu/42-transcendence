@@ -79,6 +79,7 @@ export function displayChatInterface () {
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
+    document.getElementById('chat-play-pong').classList.remove('hidden');
 }
 
 

@@ -64,8 +64,6 @@ export async function createTournamentButton() {
 			playerNames = Array.from(inputs).map(input => input.value);
 			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
-			console.log("new_tournament: ", new_tournament);
-
 			await createTournament(new_tournament, 'local');
 			hideModal();
 			urlRoute('/tournament/game');

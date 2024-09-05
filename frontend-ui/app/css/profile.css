@@ -126,10 +126,24 @@
 .list-group-item span {
     align-content: center;
     font-size: 13px;
+    z-index: 2;
 }
 
-.list-group-item:hover {
-    background-color: #e4e4e4 !important;
+.list-group-item::before {
+    content: ''; /* Required for pseudo-element */
+    position: absolute; /* Position it over the list item */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+    opacity: 0; /* Initially invisible */
+    transition: opacity 0.2s ease; /* Smooth transition */
+    z-index: 1; /* Ensure it's above the background color */
+}
+
+.list-group-item:hover::before {
+    opacity: 1; /* Show overlay on hover */
 }
 
 .form-control::placeholder {

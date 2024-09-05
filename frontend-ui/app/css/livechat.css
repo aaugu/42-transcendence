@@ -13,12 +13,6 @@
     align-items: center;
 }
 
-/* #contact {
-    height: 80px;
-    min-height: 80px;
-    background-color: #A9C1FF;
-} */
-
 .custom-scrollbar {
     height: 300px;
     overflow-y: auto;
@@ -40,18 +34,39 @@
     background-color: #acacac; /* color of the scrollbar thumb */
     border-radius: 10px; /* roundness of the scrollbar thumb */
     border: 2px solid #878787; /* adds space around the scrollbar thumb */
+
 }
 
-.gradient-custom {
-    /* fallback for old browsers */
-    background: #fbc2eb;
+button:hover i {
+    color: #fcfcfc !important;
+}
 
-    /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(251,194,235,0.55), rgba(166,193,238,0.55));
+button i {
+    transition: color 0.2s ease; /* Smooth transition for the icon color */
+}
 
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right, rgba(251,194,235,0.55), rgba(166,193,238,0.55))
-  }
+.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a {
+    z-index: 2;
+}
+
+/* .list-group-item {
+    background-color: #f1a100bf;
+} */
+
+#chat-send {
+    flex: 0 0 auto; /* Prevent the send button from shrinking */
+}
+
+#chat-play-pong {
+    flex: 0 0 auto; /* Prevent the play button from shrinking */
+}
+
+#chat-textarea {
+    width: 100%; /* Make the textarea take up full width */
+    min-width: 75%; /* Ensure the textarea takes up at least 75% of available space */
+    resize: none; /* Disable resizing if you don't want it to be resizable */
+    min-height: 80px;
+}
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
