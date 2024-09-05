@@ -54,8 +54,8 @@ export async function livechatPage() {
                         </div>
                     </div>
                     <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
-                    <button id="chat-play-pong" type="button" class="btn btn-outline-dark btn-sm btn-rounded hidden">
-                        <i class="bi bi-controller"></i>
+                    <button id="chat-play-pong" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
+                        <i class="bi bi-controller text-white"></i>
                     </button>
                 </div>
              </div>
