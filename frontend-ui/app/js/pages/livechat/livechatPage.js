@@ -17,6 +17,7 @@ export async function livechatPage() {
         html_contacts += `
             <li class="list-group-item" style="background-color: #A9C1FF;">
                 <span data-convid="${contact.id}">${contact_nickname}</span>
+                <button id="block-btn" class="btn btn-danger btn-sm" title="Block user" type="button"><i class="bi bi-slash-circle-fill"></i></button>
             </li>`;
     });
 
