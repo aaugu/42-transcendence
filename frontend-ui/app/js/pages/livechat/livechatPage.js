@@ -16,14 +16,14 @@ export async function livechatPage() {
         }
         html_contacts += `
             <li class="list-group-item" style="background-color: #A9C1FF;">
-                <span data-convid=${contact.id}>${contact_nickname}</span>
+                <span data-convid="${contact.id}">${contact_nickname}</span>
             </li>`;
     });
 
     return `
     <div class="content-box d-flex">
         <div id="livechat" class="row m-2 rounded-end rounded-3" style="min-height: 75%;">
-            <div id="contact-list" class="col-lg-4 d-flex flex-column">
+            <div class="col-lg-4 d-flex flex-column">
                 <div id="livechat-menu" class="w-100 rounded-end rounded-3">
                     <div class="input-group m-2 justify-content-center">
                         <input id="chat-search-input" type="text" class="form-control rounded-end" placeholder="New contact" aria-label="Search" style="font-size: 10px;">
@@ -32,7 +32,7 @@ export async function livechatPage() {
                         </div>
                     </div>
                 </div>
-                    <ul id="contact-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
+                    <ul id="chat-contact-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
                         ${html_contacts}
                     </ul>
             </div>

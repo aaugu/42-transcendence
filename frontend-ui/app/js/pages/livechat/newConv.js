@@ -3,7 +3,7 @@ import { userID } from '../user/updateProfile.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('Did not find userID or nickname invalid');
+		throw new Error('USER LOG: Did not find userID or nickname invalid');
 	}
 
 	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
@@ -24,10 +24,10 @@ async function newConv(conv_nickname) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: FETCH NEW CONV SUCCESSFUL');
 		return responseData;
 	} else {
-		throw new Error('No response from server');
+		throw new Error('USER LOG: No response from server');
 	}
 }
 
@@ -35,10 +35,16 @@ export async function newConvButton(e) {
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
 		const response = await newConv(conv_nickname);
-		console.log("response newConvButton: ", response);
+		// console.log("response newConvButton: ", response);
 		displayChatInterface();
 
-		//add conversation to the list of conversations
+		const conv_id = response.conversation_id;
+		const contact_list = document.getElementById('chat-contact-list');
+		const new_list_item = document.createElement('li');
+		new_list_item.classList.add('list-group-item');
+		new_list_item.style.backgroundColor = '#A9C1FF';
+		new_list_item.innerHTML = `<span data-convid="${conv_id}">${conv_nickname}</span>`;
+		contact_list.appendChild(new_list_item);
 
 	} catch (e) {
 		console.error(`USER LOG: ${e.message}`);

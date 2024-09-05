@@ -6,7 +6,7 @@ function newMsg (avatar, time, msgText, placement) {
         return `<li class="d-flex mb-4 justify-content-end">
         <div class="card">
         <div class="card-body">
-            <p class="mb-0 small">
+            <p class="mb-0 small" style="font-size: 10px;">
             ${msgText}
             </p>
         </div>
@@ -24,7 +24,7 @@ function newMsg (avatar, time, msgText, placement) {
         class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
         <div class="card">
         <div class="card-body">
-            <p class="mb-0 small">
+            <p class="mb-0 small" style="font-size: 10px;">
             ${msgText}
             </p>
         </div>
@@ -69,13 +69,13 @@ export function displayMessages(conversation) {
     }
     ul_convo.innerHTML = html_convo;
 
-    const chatContainer = document.querySelector('.custom-scrollbar');
+    const chatContainer = document.getElementById('chat-msgs');
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 export function displayChatInterface () {
     const welcomeMessages = document.getElementById('chat-welcome');
-    welcomeMessages.innerHTML = ''; 
+    welcomeMessages.innerHTML = '';
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
