@@ -20,7 +20,7 @@ class GenerateMatchesView(APIView):
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -31,7 +31,7 @@ class GenerateMatchesView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -44,7 +44,7 @@ class StartMatchView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -57,7 +57,7 @@ class EndMatchView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -69,7 +69,7 @@ class TournamentView(APIView):
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
     
@@ -80,7 +80,7 @@ class TournamentView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -92,7 +92,7 @@ class TournamentPlayersView(APIView):
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
         
@@ -103,7 +103,7 @@ class TournamentPlayersView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
         
@@ -114,7 +114,7 @@ class TournamentPlayersView(APIView):
         response = requests.delete(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -127,7 +127,7 @@ class TournamentlocalView(APIView):
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
 
             return Response(status=response.status_code)
@@ -141,7 +141,7 @@ class StartTournamentView(APIView):
         response = requests.patch(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -153,7 +153,7 @@ class ManageTournamentView(APIView):
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
         
@@ -164,7 +164,7 @@ class ManageTournamentView(APIView):
         response = requests.delete(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
         
@@ -175,7 +175,7 @@ class ManageTournamentView(APIView):
         response = requests.patch(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
@@ -188,6 +188,6 @@ class DeleteInactiveTournamentView(APIView):
         response = requests.delete(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({ "response": response_json}, status=response.status_code)
+            return Response({response_json}, status=response.status_code)
         else:
             return Response(status=response.status_code)
