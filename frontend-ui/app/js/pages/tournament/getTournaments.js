@@ -7,14 +7,14 @@ export async function getTournaments() {
 		},
 		credentials: 'include'
 	});
+	const responseData = await response.json();
 	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
 		throw new Error(`${response.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');
@@ -42,18 +42,4 @@ export async function getTournamentDetails(tournament_id) {
 	} else {
 		throw new Error('No response from server');
 	}
-	// return {
-	// 	"name": "first tournament",
-	// 	"id": 1,
-	// 	"players" : {
-	// 		"player1": {
-	// 			"user-id": 1,
-	// 			"nickname": "player1"
-	// 		},
-	// 		"player2": {
-	// 			"user-id": 2,
-	// 			"nickname": "player2"
-	// 		}
-	// 	}
-	// }
 }

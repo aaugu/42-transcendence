@@ -65,7 +65,7 @@ export async function createTournamentButton() {
 			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
 			await createTournament(new_tournament, 'local');
-			hideModal();
+			hideModal('create-t-modal');
 			urlRoute('/tournament/game');
 		}
 		else {
@@ -74,7 +74,7 @@ export async function createTournamentButton() {
 
 			await createTournament(new_tournament, 'remote');
 			// refresh the join list
-			hideModal();
+			hideModal('create-t-modal');
 		}
 	}
 	catch (e) {
