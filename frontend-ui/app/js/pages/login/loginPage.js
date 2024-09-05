@@ -12,7 +12,7 @@ export function loginPage() {
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="login-submit">Log in</button>
         </row>
-		<!-- 2FA Modals -->
+		<!-- 2FA Modal -->
 		<div class="modal fade" id="login-2fa-modal" tabindex="-1" aria-labelledby="login-2fa" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">

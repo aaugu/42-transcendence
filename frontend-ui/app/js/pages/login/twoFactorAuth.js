@@ -27,6 +27,7 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	// const responseData = await response.json();
 	if (responseData !== null) {
 		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
+		return responseData;
 	} else {
 		throw new Error('USER LOG: No response from server');
 	}
@@ -79,10 +80,11 @@ export async function twoFactorAuthLoginButton() {
 			errormsg('Please enter a code', 'login-twoFA-errormsg');
 			return ;
 		}
-		await verifyTwoFactorAuth(twoFaAuthCode);
+		const response = await verifyTwoFactorAuth(twoFaAuthCode);
 
-		localStorage.setItem('token', response.data.access);
 		console.log("USER LOG: LOGIN SUCCESSFUL");
+		hideModal('login-2fa-modal');
+		updateProfile(true, response.access);
 		urlRoute('/profile');
 	}
 	catch (e) {
