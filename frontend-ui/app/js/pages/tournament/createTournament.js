@@ -72,7 +72,7 @@ export async function createTournamentButton() {
 		}
 		else {
 			playerNames = [username];
-			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
+			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
 			await createTournament(new_tournament, 'remote');
 			// refresh the join list
