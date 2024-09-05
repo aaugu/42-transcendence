@@ -5,6 +5,7 @@ FROM nginx:1.27.0-bookworm
 RUN mkdir -p /etc/nginx/ssl
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get install -y openssl
+RUN apt install -y dos2unix
 
 # Generate SSL certificate (req for request / -x509 for self-signed / -nodes for non encrypted private key)
 RUN openssl req -x509 -nodes \
@@ -29,6 +30,8 @@ RUN mkdir /etc/logstash/pattern
 
 COPY config/logNginx.conf /etc/logstash/conf.d 
 COPY /config/launchLogstash.sh /docker-entrypoint.d/
+
+RUN dos2unix /docker-entrypoint.d/launchLogstash.sh
 RUN chmod +x /docker-entrypoint.d/launchLogstash.sh
 
 # Exposes port 443 and makes it available only for inter-container communication (required for SSL protocol)
