@@ -1,15 +1,11 @@
 from django.shortcuts import render, redirect
-from .game import *
-from .consumers import PongConsumer
+from ..game.game import *
+from ..consumers.consumers import PongConsumer
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import json
 from .services import GameService
 # from .consumers import PongConsumer
-
-# def generate_unique_id():
-#     return str(uuid.uuid4())
-
 
 # Create your views here.
 def pong_view(request):
@@ -49,6 +45,11 @@ def create_game(request):
     game = GameService.create_game(creator_id, game_mode)
 
     return JsonResponse(game.to_dict())
+
+def retrieve_last_games(request):
+
+
+def retrieve_all_games(request, nb_games):
 
 
 # def game_state(request):
