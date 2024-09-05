@@ -88,6 +88,11 @@ services:
         depends_on:
             livechat-postgres:
                 condition: service_healthy
+    # ssl generation
+    ssl-generation:
+        extends:
+            file: sslgen/docker/docker-compose.yml
+            service: generate_ssl
     # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:
