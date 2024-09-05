@@ -1,5 +1,6 @@
 import { getUserInfo } from "../user/getUserInfo.js"
 import { getUsers } from "../user/getUsers.js"
+import { userID } from "../user/updateProfile.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -20,7 +21,7 @@ export async function profilePage() {
 
     }
     catch (e) {
-        console.log("USER LOG: ", e.message);
+        console.log("USER LOG (profile page): ", e.message);
     }
 
     localStorage.setItem('avatar', avatar);
