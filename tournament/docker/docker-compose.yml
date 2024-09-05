@@ -30,7 +30,9 @@ services:
             TOURNAMENT_POSTGRES_DB: ${TOURNAMENT_POSTGRES_NAME}
             TOURNAMENT_POSTGRES_USER: ${ROOT_USER}
             TOURNAMENT_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+            TOURNAMENT_POSTGRES_IP: ${TOURNAMENT_POSTGRES_IP}
+            TOURNAMENT_POSTGRES_PORT: ${TOURNAMENT_POSTGRES_PORT}
+            TOURNAMENT_DJANGO_SECRET_KEY: ${TOURNAMENT_DJANGO_SECRET_KEY}
         volumes:
             - ../app/:/app/
         restart: on-failure
-        entrypoint: ["sleep", "infinity"]

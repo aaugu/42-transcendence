@@ -6,4 +6,4 @@ trash/
 **/__pycache__/
 *.pyc
 **/init.sql/
-**/volumes/
+**/volumes/ 

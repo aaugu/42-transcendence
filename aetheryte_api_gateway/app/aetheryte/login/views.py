@@ -41,9 +41,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 response.set_cookie(
                     key='csrf_token',
                     value=access_token,
-                    httponly=True,
-                    secure=False,
-                    samesite='Lax',
                 )
                 user.online = True
                 user.save()
@@ -65,13 +62,9 @@ class Verify2FACodeView(APIView):
                 }
                 response = Response(response_data, status=status.HTTP_200_OK)
                 request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + str(refresh.access_token)
-                print(request.META['HTTP_AUTHORIZATION'])
                 response.set_cookie(
                     key='csrf_token',
                     value=str(refresh.access_token),
-                    httponly=True,
-                    secure=False,
-                    samesite='Lax',
                 )
                 user.online = True
                 user.save()

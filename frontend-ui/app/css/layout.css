@@ -7,6 +7,8 @@
 	padding: 0;
 	color: black;
 	font-family: 'Press Start 2P';
+	/* font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; */
+	font-size: max(10px, min(calc(1vw + 1vh), 15px));
 }
 
 html, body {
@@ -17,12 +19,28 @@ body {
 	max-height: 100vh;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+	background-image: linear-gradient(
+		#A9C1FF 0%,
+		#A9C1FF 40%,
+		#f6e01a 40%,
+		#f6e01a 46.66%,
+		#f19f00 46.66%,
+		#f19f00 53.33%,
+		#f17400 53.33%,
+		#f17400 60%,
+		#A9C1FF 60%,
+		#A9C1FF 100%);
+		height: 100vh;
+		justify-content: center;
+		align-items: center;
+		display: flex;
+		backdrop-filter: blur(6px);
 }
 
-img, picture, video, canvas, svg {
+/* img, picture, video, svg {
     display: block;
     max-width: 100%;
-}
+} */
 
 input, button, textarea, select, label {
     font: inherit;
@@ -37,36 +55,53 @@ a {
 	text-decoration: none;
 }
 
-.background-rainbow-container {
-	background-image: linear-gradient(
-	#A9C1FF 0%,
-	#A9C1FF 40%,
-	#f6e01a 40%,
-	#f6e01a 46.66%,
-	#f19f00 46.66%,
-	#f19f00 53.33%,
-	#f17400 53.33%,
-	#f17400 60%,
-	#A9C1FF 60%,
-	#A9C1FF 100%);
-	height : 92vh;
+.error-container {
+	display: flex;
+	justify-content: center;
+	width: 75%;
+	margin: 0 auto;
+	padding: 20px;
+	border: 2px solid red;
+	color: black;
+	background-color: #f8d7da;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	position: absolute;
+	top: 8vh;
+}
+
+.hidden {
+	display: none;
+}
+
+.centered {
+	align-self: center;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 #main-content {
 	width: 85%;
+	padding-top: 100px;
+	/* margin-top: 8vh; */
 }
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
 	#main-content {
 		width: 75%;
+		padding-top: 100px;
 	}
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
 	#main-content {
-		width: 50%;
+		width: 75%;
+		padding-top: 100px;
 	}
 }

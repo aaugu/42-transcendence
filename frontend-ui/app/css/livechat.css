@@ -1,0 +1,95 @@
+/* Extra small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
+
+
+#livechat-menu {
+    /* height: 200px;
+    min-height: 200px; */
+    /* background-color: #6d96ff; */
+    /* border-top-left-radius: .26rem; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.custom-scrollbar {
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #acacac #878787; /* Firefox */
+}
+
+/* WebKit scrollbar customization */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #878787; /* background of the scrollbar track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #acacac; /* color of the scrollbar thumb */
+    border-radius: 10px; /* roundness of the scrollbar thumb */
+    border: 2px solid #878787; /* adds space around the scrollbar thumb */
+
+}
+
+button:hover i {
+    color: #fcfcfc !important;
+}
+
+button i {
+    transition: color 0.2s ease; /* Smooth transition for the icon color */
+}
+
+.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a {
+    z-index: 2;
+}
+
+/* .list-group-item {
+    background-color: #f1a100bf;
+} */
+
+#chat-send {
+    flex: 0 0 auto; /* Prevent the send button from shrinking */
+}
+
+#chat-play-pong {
+    flex: 0 0 auto; /* Prevent the play button from shrinking */
+}
+
+#chat-textarea {
+    width: 100%; /* Make the textarea take up full width */
+    min-width: 75%; /* Ensure the textarea takes up at least 75% of available space */
+    resize: none; /* Disable resizing if you don't want it to be resizable */
+    min-height: 80px;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+}
+
+/* Large devices (desktops, 992px and up) */
+/* @media (min-width: 992px) {
+    #contact-list {
+        width: 25%;
+    }
+    #conversation {
+        display: block;
+        width: 75%;
+    }
+} */
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+}
