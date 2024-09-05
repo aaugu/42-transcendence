@@ -14,6 +14,9 @@ from django.db.models import Q
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from tournament import settings
 from microservice import error_message as error
 from microservice.models import Match, Player, Tournament
@@ -48,8 +51,6 @@ class MatchUtils:
                 'user_id': match.player_2.user_id,
                 'nickname': match.player_2.nickname
             } if match.player_2 is not None else None,
-            'player_1_score': match.player_1_score,
-            'player_2_score': match.player_2_score,
             'winner': {
                 'user_id': match.winner.user_id,
                 'nickname': match.winner.nickname
@@ -81,6 +82,7 @@ class TournamentUtils:
         status_string = ['Created', 'In progress', 'Finished']
         return status_string[status]
 
+@method_decorator(csrf_exempt, name='dispatch')
 class GenerateMatchesView(View):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
@@ -104,7 +106,7 @@ class GenerateMatchesView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         try:
-            body = json.loads(request.body.decode('utf8'))
+            body = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -197,13 +199,14 @@ class GenerateMatchesView(View):
                     matches[next_match_id].player_1 = winner
                 else:
                     matches[next_match_id].player_2 = winner  
-    
+
+@method_decorator(csrf_exempt, name='dispatch')    
 class StartMatchView(View):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
 
         try:
-            body = json.loads(request.body.decode('utf8'))
+            body = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -235,8 +238,6 @@ class StartMatchView(View):
             return JsonResponse({'errors': [error.TOURNAMENT_NOT_STARTED]}, status=400)
 
         match.status = Match.IN_PROGRESS
-        match.player_1_score = 0
-        match.player_2_score = 0
 
         try:
             match.save()
@@ -254,11 +255,12 @@ class StartMatchView(View):
             status=Match.NOT_PLAYED
         )
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EndMatchView(View):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
-            body = json.loads(request.body.decode('utf8'))
+            body = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -333,7 +335,8 @@ class EndMatchView(View):
             else:
                 next_match.player_2 = match.winner
             next_match.save()
-    
+
+@method_decorator(csrf_exempt, name='dispatch')    
 class TournamentView(View):
     @staticmethod
     def get(request: HttpRequest) -> JsonResponse:
@@ -356,15 +359,15 @@ class TournamentView(View):
     @staticmethod
     def post(request: HttpRequest) -> JsonResponse:
         try:
-            json_request = json.loads(request.body.decode('utf8'))
+            json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
         valid_tournament, errors = TournamentView.is_valid_tournament(json_request)
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
-        is_private = json_request.get('is-private')
-        user_id = json_request.get('user_id')
+        is_private = json_request['is-private']
+        user_id = json_request.get['user_id']
         tournament = Tournament(
             name=json_request['name'],
             is_private=is_private,
@@ -374,7 +377,7 @@ class TournamentView(View):
         if is_private:
             tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
 
-        max_players = json_request.get('max-players')
+        max_players = json_request['max-players']
         if max_players is not None:
             tournament.max_players = max_players
         try:
@@ -390,7 +393,7 @@ class TournamentView(View):
     @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
         try:
-            json_request = json.loads(request.body.decode('utf8'))
+            json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -512,6 +515,7 @@ class TournamentView(View):
             return False, error.PASSWORD_TOO_LONG
         return True, None
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TournamentPlayersView(View):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
@@ -541,7 +545,7 @@ class TournamentPlayersView(View):
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
 
         try:
-            json_request = json.loads(request.body.decode('utf8'))
+            json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -576,7 +580,7 @@ class TournamentPlayersView(View):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         try:
-            json_request = json.loads(request.body.decode('utf8'))
+            json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
         
@@ -661,11 +665,12 @@ class TournamentPlayersView(View):
 
         return True, None
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TournamentlocalView(View):
     @staticmethod
     def post(request: HttpRequest) -> JsonResponse:
         try:
-            json_request = json.loads(request.body.decode('utf8'))
+            json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -673,13 +678,13 @@ class TournamentlocalView(View):
         tournament = Tournament(
             name=json_request['name'],
             admin_id=user_id
-        )
+        )        
 
-        max_players = json_request.get('nr_players')
+        max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
         try:
-            tournament.save()
+            test=tournament.save()
             register_players_errors = TournamentlocalView.register_players_as_player(json_request, tournament)
             if register_players_errors is not None:
                 tournament.delete()
@@ -690,15 +695,19 @@ class TournamentlocalView(View):
     
     @staticmethod
     def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
-        player_names = json_request.get('player_names')
+        player_names = list(json_request.get('player_names'))
+        i=0
         for name in player_names:
-            player = Player(nickname=player_names[name], user_id=name, tournament=tournament)
+            print(i)
+            player = Player(nickname=name, user_id=i, tournament=tournament)
+            i=+1
             try:
                 player.save()
             except Exception as e:
                 return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
         return None
 
+@method_decorator(csrf_exempt, name='dispatch')
 class StartTournamentView(View):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
@@ -716,6 +725,7 @@ class StartTournamentView(View):
 
         return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ManageTournamentView(View):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
@@ -750,7 +760,7 @@ class ManageTournamentView(View):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
-            body = json.loads(request.body.decode('utf8'))
+            body = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -783,7 +793,7 @@ class ManageTournamentView(View):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
-            body = json.loads(request.body.decode('utf8'))
+            body = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
@@ -909,7 +919,8 @@ class ManageTournamentView(View):
             else:
                 tournament.password = make_password(new_password)
         return None
-    
+
+@method_decorator(csrf_exempt, name='dispatch')    
 class DeleteInactiveTournamentView(View):
     @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
