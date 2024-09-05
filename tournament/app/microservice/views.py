@@ -677,7 +677,7 @@ class TournamentlocalView(View):
         user_id = json_request.get('user_id')
         tournament = Tournament(
             name=json_request['name'],
-            admin_id=0     #user_id
+            admin_id=user_id
         )        
 
         max_players = json_request.get('max_players')
@@ -696,8 +696,11 @@ class TournamentlocalView(View):
     @staticmethod
     def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
         player_names = list(json_request.get('player_names'))
+        i=0
         for name in player_names:
-            player = Player(nickname=player_names[name], user_id=name, tournament=tournament)
+            print(i)
+            player = Player(nickname=name, user_id=i, tournament=tournament)
+            i=+1
             try:
                 player.save()
             except Exception as e:
