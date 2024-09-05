@@ -1,9 +1,17 @@
 FROM debian:bookworm
 
 RUN apt update -y && apt upgrade -y
+RUN apt install -y dos2unix
+
 
 RUN apt install -y curl
 
 COPY config/init-elastic.sh /scripts/init-elastic.sh
 COPY config/init-kibana.sh /scripts/init-kibana.sh
+
+RUN dos2unix /scripts/init-elastic.sh
+RUN chmod +x /scripts/init-elastic.sh
+
+RUN dos2unix /scripts/init-kibana.sh
+RUN chmod +x /scripts/init-kibana.sh
 
