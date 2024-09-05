@@ -2,7 +2,7 @@ import { displayChatInterface, displayMessages } from "./messages.js";
 
 async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined)
-		throw new Error('USER LOG: Did not find conversation ID');
+		throw new Error('Did not find conversation ID');
 
 	const response = await fetch('https://localhost:10444/livechat/conversation/' + conv_id + '/messages/', {
 		method: 'GET',
@@ -22,7 +22,7 @@ async function getConvHistory(conv_id) {
 		console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
 		return responseData;
 	} else {
-		throw new Error('USER LOG: No response from server');
+		throw new Error('No response from server');
 	}
 }
 

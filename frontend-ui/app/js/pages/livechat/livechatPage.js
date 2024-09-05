@@ -7,21 +7,23 @@ export async function livechatPage() {
 
     await get_all_conv();
     var contact_nickname;
-    all_conversations.forEach(contact => {
-        if (contact.user_1.id === userID) {
-            contact_nickname = contact.user_2.nickname;
-        }
-        else {
-            contact_nickname = contact.user_1.nickname;
-        }
-        html_contacts += `
-            <li class="list-group-item" style="background-color: #A9C1FF;">
-                <span data-convid="${contact.id}">${contact_nickname}</span>
-                <button id="block-btn" class="btn btn-outline-danger btn-sm m-0 p-1" title="Block user" type="button" data-nickname="${contact_nickname}">
-                    <i class="bi text-danger bi-ban m-0 p-0"></i>
-                </button>
-            </li>`;
-    });
+    if (Object.keys(all_conversations).length !== 0) {
+        all_conversations.forEach(contact => {
+            if (contact.user_1.id === userID) {
+                contact_nickname = contact.user_2.nickname;
+            }
+            else {
+                contact_nickname = contact.user_1.nickname;
+            }
+            html_contacts += `
+                <li class="list-group-item" style="background-color: #A9C1FF;">
+                    <span data-convid="${contact.id}">${contact_nickname}</span>
+                    <button id="block-btn" class="btn btn-outline-danger btn-sm m-0 p-1" title="Block user" type="button" data-nickname="${contact_nickname}">
+                        <i class="bi text-danger bi-ban m-0 p-0"></i>
+                    </button>
+                </li>`;
+        });
+    }
 
     return `
     <div class="content-box d-flex">

@@ -2,7 +2,7 @@ import { userID } from "../user/updateProfile.js";
 
 export async function getAllConversations() {
 	if (userID === null) {
-		throw new Error('USER LOG: Did not find user ID');
+		throw new Error('Did not find user ID');
 	}
 
 	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
@@ -23,6 +23,6 @@ export async function getAllConversations() {
 		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
 	} else {
-		throw new Error('USER LOG: No response from server');
+		throw new Error('No response from server');
 	}
 }

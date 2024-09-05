@@ -1,6 +1,4 @@
 import { getUserInfo } from "../user/getUserInfo.js"
-import { getUsers } from "../user/getUsers.js"
-import { userID } from "../user/updateProfile.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -9,19 +7,16 @@ export async function profilePage() {
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
 
-     try {
+    try {
         const userinfo = await getUserInfo();
         username = userinfo.username;
         nickname = userinfo.nickname;
         email = userinfo.email;
         avatar = userinfo.avatar;
         is_2fa_enabled = userinfo.is_2fa_enabled;
-
-        // const users = await getUsers();
-
     }
     catch (e) {
-        console.log("USER LOG (profile page): ", e.message);
+        console.log("USER LOG: ", e.message);
     }
 
     localStorage.setItem('avatar', avatar);

@@ -3,7 +3,7 @@ import { userID } from '../user/updateProfile.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('USER LOG: Did not find userID or nickname invalid');
+		throw new Error('Did not find userID or nickname invalid');
 	}
 
 	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
@@ -27,7 +27,7 @@ async function newConv(conv_nickname) {
 		console.log('USER LOG: FETCH NEW CONV SUCCESSFUL');
 		return responseData;
 	} else {
-		throw new Error('USER LOG: No response from server');
+		throw new Error('No response from server');
 	}
 }
 
