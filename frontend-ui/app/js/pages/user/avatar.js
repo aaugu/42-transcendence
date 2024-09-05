@@ -19,16 +19,14 @@ export async function editAvatar(input) {
 	var avatarFile = input.files[0];
 	var avatar;
 	var response;
-	try {
+	// try {
 		avatar = await readAvatarFile(avatarFile);
 		response = await editUserInfo('avatar', avatar);
 
-		if (response.success == true) {
-			document.getElementById('profile-avatar').src = avatar;
-			localStorage.setItem('avatar', avatar);
-		}
-	} catch (error) {
-		console.error("USER LOG: ERROR READING FILE,", error);
-		throw new Error("Error reading new file");
-	}
+		document.getElementById('profile-avatar').src = avatar;
+		localStorage.setItem('avatar', avatar);
+	// } catch (error) {
+	// 	console.error("USER LOG: ERROR READING FILE,", error);
+	// 	throw new Error("Error reading new file");
+	// }
 }
