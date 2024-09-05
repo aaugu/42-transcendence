@@ -40,7 +40,6 @@ export async function openSingleTournamentModal(e) {
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
 		const t_id = get_tournament_id(t_name);
-		console.log("t_id: ", t_id);
 		if (!t_id) {
 			throw new Error('Could not find tournament');
 		}

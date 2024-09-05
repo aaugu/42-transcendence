@@ -2,7 +2,7 @@ import { get_all_tournaments, all_tournaments } from "./tournament.js";
 
 export async function tournamentPage() {
     var html_tournaments = ` <li class="list-group-item">
-                                <span >Some tournament</span>
+                                <span >Fake tournament</span>
                             </li>`;
 
     await get_all_tournaments();
