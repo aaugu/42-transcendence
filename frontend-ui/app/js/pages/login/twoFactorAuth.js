@@ -5,50 +5,39 @@ import { updateProfile } from "../user/updateProfile.js";
 import { hideModal } from "../../dom/modal.js";
 
 export async function verifyTwoFactorAuth(twoFactorAuthCode) {
-    try {
-        const response = await fetch('https://localhost:10444/api/login/token/verify-2fa/', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "verification_code": twoFactorAuthCode,
-            }),
-			credentials: 'include'
-        });
+	const response = await fetch('https://localhost:10444/api/login/token/verify-2fa/', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"verification_code": twoFactorAuthCode,
+		}),
+		credentials: 'include'
+	});
+	const responseData = await response.json();
+	if (!response.ok) {
+		if (responseData.detail)
+		    throw new Error(`${responseData.detail}`);
+		console.log("response in 2fa: ", response);
+		throw new Error(`${response.status}`);
+	}
 
-        if (!response.ok) {
-            const error = await response.json();
-            // if (error.status === 400) {
-            //     if (error.detail) {
-            //         if (typeof(error.detail) === 'string')
-            //             errormsg(error.detail, "homepage-errormsg");
-            //         else
-            //             errormsg(error.detail[0], "homepage-errormsg");
-            //     }
-            // }
-            throw new Error(error.detail);
-        }
-
-        const responseData = await response.json();
-        if (responseData !== null) {
-            console.log(JSON.stringify(responseData));
-            console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
-        } else {
-            throw new Error('No response from server');
-        }
-    } catch (e) {
-        console.error('USER LOG: TWO FACTOR AUTHENTICATION FETCH FAILURE, ' + e.message);
-        throw new Error(e.message);
-    }
+	// const responseData = await response.json();
+	if (responseData !== null) {
+		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
+		return responseData;
+	} else {
+		throw new Error('USER LOG: No response from server');
+	}
 }
 
 export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 	const twoFAbtn = document.getElementById("2fa-profile-btn");
 	if (user_2fa_enabled === false) {
-		const response = await editUserInfo("is_2fa_enabled", true);
-		if (response.success == true) {
+		try {
+			await editUserInfo("is_2fa_enabled", true);
 			twoFAbtn.innerHTML = "Deactivate";
 			twoFAbtn.classList.remove("btn-outline-success");
 			twoFAbtn.classList.add("btn-outline-danger");
@@ -59,10 +48,11 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			hideModal('activate-2fa-modal');
 			urlRoute('/');
 		}
-		else {
+		catch (e) {
+			console.log(`USER LOG: ${e.message}`);
 			errormsg("Unable to change 2FA", "activate2fa-errormsg");
-			hideModal('activate-2fa-modal');
 		}
+		hideModal('activate-2fa-modal');
 
 	} else {
 		try {
@@ -74,8 +64,8 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
-			errormsg(e.message, "deactivate2fa-errormsg");
-			console.log("USER LOG: 2FA DE-ACTIVATION FAILED");
+			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
+			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');
 	}
@@ -90,13 +80,15 @@ export async function twoFactorAuthLoginButton() {
 			errormsg('Please enter a code', 'login-twoFA-errormsg');
 			return ;
 		}
-		await verifyTwoFactorAuth(twoFaAuthCode);
+		const response = await verifyTwoFactorAuth(twoFaAuthCode);
 
-		localStorage.setItem('token', response.data.access);
 		console.log("USER LOG: LOGIN SUCCESSFUL");
+		hideModal('login-2fa-modal');
+		updateProfile(true, response.access);
 		urlRoute('/profile');
 	}
 	catch (e) {
-		errormsg(e.message, 'login-twoFA-errormsg');
+		errormsg('Invalid verification code', 'login-twoFA-errormsg');
+		console.log(`USER LOG: ${e.message}`);
 	}
 }

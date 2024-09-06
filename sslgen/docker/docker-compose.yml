@@ -1,0 +1,12 @@
+services:
+    generate_ssl:
+        build:
+            context: generator
+            dockerfile: Dockerfile
+        networks:
+            transcendence:
+                ipv4_address: 172.20.99.1
+        volumes:
+            - ../../ssl-certificate:/certificate
+        restart: on-failure
+        entrypoint: ["sh", "-c", "/config/gen-certificate.sh"]

@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
-		if (currentRoute ==="/local-twoplayer" || currentRoute === "/local-ai" || currentRoute === "/remote-twoplayer") {
+		if (currentRoute ==="/local-twoplayer" || currentRoute === "/local-ai" || currentRoute === "/remote-twoplayer" || currentRoute === "/tournament/game") {
 			currentRouteDetails.startFunction();
 		}
 	}

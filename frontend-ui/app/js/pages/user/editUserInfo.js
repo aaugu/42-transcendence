@@ -108,7 +108,7 @@ export function editUserInfoModal(e) {
             hideModal('edit-modal');
         } catch (e) {
             errormsg(e.message, 'editmodal-errormsg');
-            return;
+            console.log(`USER LOG: ${e.message}`);
         }
 
 	};

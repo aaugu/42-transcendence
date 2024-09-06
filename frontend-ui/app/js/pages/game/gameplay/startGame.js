@@ -16,7 +16,7 @@ export async function startGame (event) {
 	infoCtn.innerHTML = `<div>
 							<button class="btn btn-dark" id="start-button">Start</button>
 							<button class="btn btn-dark" id="stop-button">Stop</button>
-							<button class="btn btn-dark" id="reset-button">Reset</button>
+							<button class="btn btn-light" id="reset-button">Reset</button>
 						</div>
 						<div>
 							<span id="score-p-1">0</span>

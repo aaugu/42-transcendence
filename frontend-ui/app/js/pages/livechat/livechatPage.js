@@ -7,19 +7,23 @@ export async function livechatPage() {
 
     await get_all_conv();
     var contact_nickname;
-    all_conversations.forEach(contact => {
-        if (contact.user_1.id === userID) {
-            contact_nickname = contact.user_2.nickname;
-        }
-        else {
-            contact_nickname = contact.user_1.nickname;
-        }
-        html_contacts += `
-            <li class="list-group-item" style="background-color: #A9C1FF;">
-                <span data-convid="${contact.id}">${contact_nickname}</span>
-                <button id="block-btn" class="btn btn-danger btn-sm" title="Block user" type="button"><i class="bi bi-slash-circle-fill"></i></button>
-            </li>`;
-    });
+    if (Object.keys(all_conversations).length !== 0) {
+        all_conversations.forEach(contact => {
+            if (contact.user_1.id === userID) {
+                contact_nickname = contact.user_2.nickname;
+            }
+            else {
+                contact_nickname = contact.user_1.nickname;
+            }
+            html_contacts += `
+                <li class="list-group-item" style="background-color: #A9C1FF;">
+                    <span data-convid="${contact.id}">${contact_nickname}</span>
+                    <button id="block-btn" class="btn btn-outline-danger btn-sm m-0 p-1" title="Block user" type="button" data-nickname="${contact_nickname}">
+                        <i class="bi text-danger bi-ban m-0 p-0"></i>
+                    </button>
+                </li>`;
+        });
+    }
 
     return `
     <div class="content-box d-flex">
@@ -37,7 +41,7 @@ export async function livechatPage() {
                         ${html_contacts}
                     </ul>
             </div>
-            <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto bg-lightgrey">
+            <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto">
                 <div id="chat-welcome">
                     <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
                     <div class="h6 text-center">Select a contact to start a conversation</div>
@@ -47,11 +51,14 @@ export async function livechatPage() {
                 <div class="d-flex align-items-center">
                     <div id="chat-div-textarea" class="flex-grow-1 me-2 hidden">
                         <div data-mdb-input-init class="form-outline form-white">
-                            <textarea class="form-control" id="chat-textarea"></textarea>
+                            <textarea class="form-control" id="chat-textarea" rows="1" style="resize: none; font-size=10px;"></textarea>
                             <label class="form-label" for="textArea"></label>
                         </div>
                     </div>
-                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded hidden">Send</button>
+                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
+                    <button id="chat-play-pong" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
+                        <i class="bi bi-controller text-white"></i>
+                    </button>
                 </div>
              </div>
         </div>

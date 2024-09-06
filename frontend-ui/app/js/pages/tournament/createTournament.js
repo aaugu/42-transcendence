@@ -21,14 +21,14 @@ async function createTournament(new_tournament, mode) {
 		}),
 		credentials: 'include'
 	});
+	const responseData = await response.json();
 	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
 		throw new Error(`${response.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: CREATE TOURNAMENT SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}
@@ -64,10 +64,8 @@ export async function createTournamentButton() {
 			playerNames = Array.from(inputs).map(input => input.value);
 			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
-			console.log("new_tournament: ", new_tournament);
-
 			await createTournament(new_tournament, 'local');
-			hideModal();
+			hideModal('create-t-modal');
 			urlRoute('/tournament/game');
 		}
 		else {
@@ -76,7 +74,7 @@ export async function createTournamentButton() {
 
 			await createTournament(new_tournament, 'remote');
 			// refresh the join list
-			hideModal();
+			hideModal('create-t-modal');
 		}
 	}
 	catch (e) {

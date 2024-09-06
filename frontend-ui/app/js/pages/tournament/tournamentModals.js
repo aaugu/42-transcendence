@@ -39,8 +39,9 @@ export async function openSingleTournamentModal(e) {
 		const nickname = localStorage.getItem('nickname');
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
-		const t_id = get_tournament_id(t_name);
-		if (!t_id) {
+		const targetElement = e.target.closest('.list-group-item').querySelector('[data-tournid]');
+        const t_id = targetElement ? targetElement.dataset.tournid : null;
+		if (t_id === null) {
 			throw new Error('Could not find tournament');
 		}
 		const t_details = await getTournamentDetails(t_id);

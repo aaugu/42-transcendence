@@ -15,14 +15,14 @@ async function joinTournament(nickname, tournament_id) {
 		}),
 		credentials: 'include'
 	});
+	const responseData = await response.json();
 	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
 		throw new Error(`${response.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log('USER LOG: JOIN TOURNAMENT SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}
