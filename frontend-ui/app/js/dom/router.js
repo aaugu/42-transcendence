@@ -7,7 +7,7 @@ import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
-import { userIsConnected } from "../pages/user/updateProfile.js"
+import { setUserID } from "../pages/user/updateProfile.js"
 import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
@@ -126,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	//add in the end: || ((currentRoute !== "/" && currentRoute !== "/login" && currentRoute !== "/signup") && userIsConnected === false)
     const goToRoute = async () => {
 		resetDataRouteChange();
+		setUserID();
         var currentRoute = window.location.pathname;
         if (currentRoute.length == 0 ) {
 			currentRoute = "/";
