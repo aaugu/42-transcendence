@@ -3,7 +3,7 @@ import { errormsg } from "../../dom/errormsg.js"
 import { updateProfile } from "../user/updateProfile.js"
 import { defaultAvatar } from "../user/avatar.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
-import { userIsConnected } from "../user/updateProfile.js";
+import { userIsConnected, userID } from "../user/updateProfile.js";
 import { readAvatarFile } from "../user/avatar.js";
 import { loginProcess } from "../login/loginProcess.js";
 
@@ -16,7 +16,7 @@ export async function signupProcess() {
     const repeatPassword = userData[4].value;
     var avatar;
 
-    if (userIsConnected === true){
+    if (userID !== null){
         errormsg("Please log out first before signing up as a new user...", "homepage-errormsg");
         console.log("USER LOG: ALREADY LOGGED IN");
         setTimeout(() => {
