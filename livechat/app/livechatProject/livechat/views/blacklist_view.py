@@ -1,65 +1,84 @@
-# from django.db.models import Q
-# from django.http import HttpResponse
+from django.db.models import Q
+from django.http import HttpResponse
 
-# from rest_framework import permissions, viewsets
-# from rest_framework.response import Response
-# from rest_framework.decorators import api_view
-# from rest_framework.views import APIView
-# from rest_framework import status
+from rest_framework import permissions, viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 
-# import requests
+import requests
 
-# from livechat.models import User, Blacklist
-# from livechat.serializers import UserSerializer, BlacklistSerializer
+from livechat.models import User, Blacklist
+from livechat.serializers import UserSerializer, BlacklistSerializer
 
-# # Blacklist
-# @api_view(['POST', 'DELETE'])
-# def blacklistViewSet(request):
-# 	serializer = BlacklistSerializer(data=request.data)
-# 	if serializer.is_valid():
-# 		initiator_id = serializer.validated_data['initiator']
-# 		blacklisted = serializer.validated_data['target']
-# 	else:
-# 		return Response(status=status.HTTP_400_BAD_REQUEST)
+class BlacklistView(APIView):
+	# POST:
+	def post(self, request, pk):
+		serializer = BlacklistSerializer(data=request.data)
+		if serializer.is_valid():
+			initiator_id = serializer.validated_data['initiator']
+			target_id = serializer.validated_data['target']
+		else:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-# 	initiator = User.objects.filter(Q(user_id=request.user_id))
-# 	if not initiator:
-# 		return Response(status=status.HTTP_404_NOT_FOUND)
-# 	target = User.objects.filter(Q(user_id=request.target_id))
-# 	if not target:
-# 		return Response(status=status.HTTP_404_NOT_FOUND)
+		initiator = User.objects.filter(user_id=initiator_id)
+		target = User.objects.filter(user_id=target_id)
+		if not initiator or not target:
+			return Response(status=status.HTTP_404_NOT_FOUND)
 
-# 	# POST: Blacklist a user
-# 	if request.method == 'POST':
-# 		if not blacklist_user(initiator, target):
-# 			return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-# 		else:
-# 			return Response( status=status.HTTP_204_NO_CONTENT )
-# 	# DELETE: Remove an other user from current user blacklist
-# 	elif request.method == 'DELETE':
-# 		return remove_user_from_blacklist(initiator, target)
+		status_code = self.create_blacklist(initiator, target)
+		if status_code == status.HTTP_201_CREATED:
+			return Response({ "blacklisted_id": target_id}, status=status_code)
 
-# # ------------------------------ Utils ------------------------------
-	
-# # Blacklist
-# def blacklist_user(initiator, target):
+		return Response( status=status_code )
 
-# 	blacklist = Blacklist(initiator=initiator, target=target)
-# 	blacklist.save()
+	# DELETE :
+	def delete(self, request, pk):
+		serializer = BlacklistSerializer(data=request.data)
+		if serializer.is_valid():
+			initiator_id = serializer.validated_data['initiator']
+			target_id = serializer.validated_data['target']
+		else:
+			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-# 	new_blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
-# 	return new_blacklist
+		initiator = User.objects.filter(user_id=initiator_id)
+		target = User.objects.filter(user_id=target_id)
+		if not initiator or not target:
+			return Response(status=status.HTTP_404_NOT_FOUND)
 
-# def blacklist_exists(initiator, target):
-# 	return
+		status_code = self.delete_blacklist(initiator, target)
+		if status_code == status.HTTP_204_NO_CONTENT:
+			return Response({ "blacklisted_id": target_id}, status=status_code)
+		
+		return Response( status=status_code )
 
-# def remove_user_from_blacklist(initiator, target):
-# 	blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
-# 	if not blacklist:
-# 		return Response(status=status.HTTP_410_GONE)
-# 	blacklist.delete()
-# 	deleted_blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
+	def create_blacklist(self, initiator, target):
 
-# 	if not deleted_blacklist:
-# 		return Response(status=status.HTTP_200_OK)
-# 	return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+		if self.blacklist_exists(initiator, target):
+			return status.HTTP_409_CONFLICT
+
+		blacklist = Blacklist(initiator=initiator, target=target)
+		blacklist.save()
+
+		new_blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
+		if new_blacklist:
+			return status.HTTP_201_CREATED
+		return status.HTTP_422_UNPROCESSABLE_ENTITY
+
+	def blacklist_exists(self, initiator, target):
+		blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
+
+		if blacklist:
+			return True
+		return False
+
+	def delete_blacklist(self, initiator, target):
+		blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
+		if not blacklist:
+			return Response(status=status.HTTP_410_GONE)
+		blacklist.delete()
+		deleted_blacklist = Blacklist.objects.filter(Q(initiator=initiator) & Q(target=target))
+
+		if not deleted_blacklist:
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
