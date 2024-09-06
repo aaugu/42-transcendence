@@ -71,6 +71,7 @@ class TournamentUtils:
             'max_players': tournament.max_players,
             'nb_players': tournament.players.count(),
             'is_private': tournament.is_private,
+            'type': TournamentUtils.status_to_string(tournament.type),
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
         } for tournament in tournaments]
@@ -79,7 +80,7 @@ class TournamentUtils:
 
     @staticmethod
     def status_to_string(status: int) -> str:
-        status_string = ['Created', 'In progress', 'Finished']
+        status_string = ['Created', 'In progress', 'Finished', 'Local', 'Remote']
         return status_string[status]
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -353,7 +354,6 @@ class TournamentView(View):
             'nb_tournaments': nb_tournaments,
             'tournaments': tournaments_data
         }
-
         return JsonResponse(response_data, status=200)
 
     @staticmethod
@@ -437,10 +437,9 @@ class TournamentView(View):
         if 'display_private' not in request.GET:
             filter_params['is_private'] = False
         if 'display_completed' not in request.GET:
-            filter_params['status'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
-        # A TESTER
-        # if 'display_all_type' not in request.GET:
-        #     filter_params['type'] = [Tournament.REMOTE]
+            filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
+        if 'display_only_remote' not in request.GET:
+            filter_params['type__in'] = [Tournament.LOCAL, Tournament.REMOTE]
 
         return filter_params
 
@@ -703,7 +702,6 @@ class TournamentlocalView(View):
         player_names = list(json_request.get('player_names'))
         i=0
         for name in player_names:
-            print(i)
             player = Player(nickname=name, user_id=i, tournament=tournament)
             i=+1
             try:
