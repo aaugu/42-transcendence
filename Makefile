@@ -46,7 +46,6 @@ clean: down
 fclean: clean
 	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
 	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
-	@(if [ -e ./.env ]; then rm $(ENV_PATH); fi)
 
 re: fclean all
 

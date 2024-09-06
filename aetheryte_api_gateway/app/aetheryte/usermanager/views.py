@@ -154,12 +154,15 @@ class get_friends_status(APIView):
 
 
 class ChangePasswordView(APIView):
-    
+
     def post(self, request, user_id, *args, **kwargs):
-        data = request.data.copy()
-        data['user_id'] = user_id  # Ajoute l'ID de l'utilisateur au data pour le serializer
-        serializer = ChangePasswordSerializer(data=data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"detail": "Mot de passe mis à jour avec succès."}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if check_autentication(request):
+            data = request.data.copy()
+            data['user_id'] = user_id  # Ajoute l'ID de l'utilisateur au data pour le serializer
+            serializer = ChangePasswordSerializer(data=data, context={'request': request})
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"detail": "Mot de passe mis à jour avec succès."}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"status": "ERROR", "details": "Authentication failed"}, status=status.HTTP_403_FORBIDDEN)

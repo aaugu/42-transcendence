@@ -2,9 +2,8 @@
 .DS_Store
 .vscode/
 trash/
-*.pyc
 **/__pycache__/
 *.pyc
-**/init.sql/
+**/init.sql
 **/volumes/ 
 /ssl-certificate/*
