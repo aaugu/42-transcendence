@@ -31,7 +31,7 @@ urlpatterns = [
 
 # TournamentView:
 #     -get    : optention de la liste des tournois avec les inforamations ralatives 
-#                 'id', 'name', 'max-players', 'nb-players', 'is-private', 'status','admin-id'
+#                 'id', 'name', 'max_players', 'nb_players', 'is_private', 'status','admin-id'
 #     -post   : creer un tounoi et enregistre l'admin en joueur
 #     -delete : suprime tout les tournois(CREATED) d'un utilisateur
 
@@ -41,12 +41,12 @@ urlpatterns = [
 
 # ManageTournamentView:
 #     -get    : optention des informations relative a un tournoi avec la liste de joueur 
-#                 'id', 'name', 'max-players', 'nb-players', 'is-private', 'status','admin-id' + 'players'('nickname','user-id')
+#                 'id', 'name', 'max_players', 'nb_players', 'is_private', 'status','admin-id' + 'players'('nickname','user_id')
 #     -delete : suprime un tournoi si l'admin est le demandeur et qu'il n'est pas IN_PROGRESS
 #     -patch  : modifie des informations de creation de tournois (name, player, private, password)
 
 # TournamentPlayersView:
-#     -get    : optention de la liste des joueurs 'players'('nickname','user-id') avec 'max-players' et 'nb-players'
+#     -get    : optention de la liste des joueurs 'players'('nickname','user_id') avec 'max_players' et 'nb_players'
 #     -post   : ajoute un joueur a un tournois
 #     -delete : suprime un joueur d'un tournois (cas d'un joueur quitant le tournois par lui-meme)
 

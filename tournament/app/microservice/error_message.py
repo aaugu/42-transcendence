@@ -5,8 +5,8 @@ NAME_TOO_SHORT = f'Tournament name must contain at least {settings.MIN_TOURNAMEN
 NAME_TOO_LONG = f'Tournament name must contain less than {settings.MAX_TOURNAMENT_NAME_LENGTH} characters'
 NAME_INVALID_CHAR = 'Tournament name may only contain letters, numbers and spaces'
 
-IS_PRIVATE_MISSING = 'Missing is-private field'
-IS_PRIVATE_NOT_BOOL = 'Is-private must be a boolean'
+IS_PRIVATE_MISSING = 'Missing is_private field'
+IS_PRIVATE_NOT_BOOL = 'Is_private must be a boolean'
 
 PASSWORD_MISSING = 'Missing password field'
 PASSWORD_NOT_STRING = 'Password must be a string'

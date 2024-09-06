@@ -10,12 +10,16 @@ class Tournament(models.Model):
     IN_PROGRESS = 1
     FINISHED = 2
 
+    LOCAL = 3
+    REMOTE = 4
+
     name = models.CharField(max_length=settings.MAX_TOURNAMENT_NAME_LENGTH)
     admin_id = models.IntegerField(default=0)
     max_players = models.IntegerField(default=16, blank=True)
     is_private = models.BooleanField(default=False)
     password = models.CharField(max_length=settings.HASH_PASSWORD_MAX_LENGTH, blank=True, null=True)
     status = models.IntegerField(default=CREATED)
+    type = models.IntegerField(default=LOCAL)
     start_datetime = models.DateTimeField(null=True)
 
 

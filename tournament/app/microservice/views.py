@@ -30,7 +30,7 @@ class MatchUtils:
     def matches_to_json(matches: list[Match]) -> dict[str, list[any]]:
         matches_data = [MatchUtils.match_to_json(match) for match in matches]
         data = {
-            'nb-matches': len(matches),
+            'nb_matches': len(matches),
             'matches': matches_data
         }
 
@@ -67,9 +67,9 @@ class TournamentUtils:
         tournaments_data = [{
             'id': tournament.id,
             'name': tournament.name,
-            'max-players': tournament.max_players,
-            'nb-players': tournament.players.count(),
-            'is-private': tournament.is_private,
+            'max_players': tournament.max_players,
+            'nb_players': tournament.players.count(),
+            'is_private': tournament.is_private,
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
         } for tournament in tournaments]
@@ -347,7 +347,7 @@ class TournamentView(View):
         tournaments_data = TournamentUtils.tournament_to_json(tournaments)
 
         response_data = {
-            'nb-tournaments': nb_tournaments,
+            'nb_tournaments': nb_tournaments,
             'tournaments': tournaments_data
         }
 
@@ -363,7 +363,7 @@ class TournamentView(View):
         valid_tournament, errors = TournamentView.is_valid_tournament(json_request)
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
-        is_private = json_request.get('is-private')
+        is_private = json_request.get('is_private')
         user_id = json_request.get('user_id')
         tournament = Tournament(
             name=json_request['name'],
@@ -374,7 +374,8 @@ class TournamentView(View):
         if is_private:
             tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
 
-        max_players = json_request.get('max-players')
+        Tournament.type = Tournament.REMOTE
+        max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
         try:
@@ -430,10 +431,13 @@ class TournamentView(View):
     def get_filter_params(request: HttpRequest) -> dict:
         filter_params = {}
 
-        if 'display-private' not in request.GET:
+        if 'display_private' not in request.GET:
             filter_params['is_private'] = False
-        if 'display-completed' not in request.GET:
-            filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
+        if 'display_completed' not in request.GET:
+            filter_params['status'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
+        # A TESTER
+        # if 'display_all_type' not in request.GET:
+        #     filter_params['type'] = [Tournament.LOCAL, Tournament.REMOTE]
 
         return filter_params
 
@@ -441,8 +445,8 @@ class TournamentView(View):
     def is_valid_tournament(json_request: dict[str, Any]) -> tuple[bool, Optional[list[str]]]:
         errors = []
         name = json_request.get('name') 
-        max_players = json_request.get('max-players')
-        is_private = json_request.get('is-private')
+        max_players = json_request.get('max_players')
+        is_private = json_request.get('is_private')
         password = json_request.get('password')
 
         valid_name, name_errors = TournamentView.is_valid_name(name)
@@ -530,8 +534,8 @@ class TournamentPlayersView(View):
         } for player in players]
 
         response_data = {
-            'max-players': tournament.max_players,
-            'nb-players': len(players),
+            'max_players': tournament.max_players,
+            'nb_players': len(players),
             'players': players_data
         }
 
@@ -677,7 +681,7 @@ class TournamentlocalView(View):
             admin_id=user_id
         )
         
-
+        Tournament.type = Tournament.LOCAL
         max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
@@ -737,13 +741,13 @@ class ManageTournamentView(View):
         tournament_data = {
             'id': tournament.id,
             'name': tournament.name,
-            'max-players': tournament.max_players,
-            'nb-players': len(tournament_players),
+            'max_players': tournament.max_players,
+            'nb_players': len(tournament_players),
             'players': [{
                 'nickname': player.nickname,
-                'user-id': player.user_id,
+                'user_id': player.user_id,
             } for player in tournament_players],
-            'is-private': tournament.is_private,
+            'is_private': tournament.is_private,
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
         }
@@ -820,8 +824,8 @@ class ManageTournamentView(View):
         tournament_data = {
             'id': tournament.id,
             'name': tournament.name,
-            'max-players': tournament.max_players,
-            'is-private': tournament.is_private,
+            'max_players': tournament.max_players,
+            'is_private': tournament.is_private,
             'status': TournamentUtils.status_to_string(tournament.status),
         }
         return tournament_data
@@ -869,7 +873,7 @@ class ManageTournamentView(View):
 
     @staticmethod
     def update_max_players(body: dict, tournament: Tournament, tournament_players) -> Optional[str]:
-        new_max_players = body.get('max-players')
+        new_max_players = body.get('max_players')
         if new_max_players is not None:
             valid_new_max_players, new_max_players_error = ManageTournamentView.is_valid_max_players(
                 new_max_players, tournament_players)
@@ -883,7 +887,7 @@ class ManageTournamentView(View):
     
     @staticmethod
     def update_is_private(body: dict, tournament: Tournament) -> Optional[str]:
-        new_is_private = body.get('is-private')
+        new_is_private = body.get('is_private')
         if new_is_private is not None:
             valid_is_private, is_private_error = TournamentView.is_valid_private(new_is_private)
             if not valid_is_private:
