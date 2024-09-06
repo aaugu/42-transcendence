@@ -34,7 +34,7 @@ export async function editUserInfo(infoType, newInfo) {
         }
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("USER LOG: USER PATCH SUCCESSFUL");
+            console.log("USER LOG: USER EDIT SUCCESSFUL");
         } else {
             throw new Error('No response from server');
         }
@@ -60,6 +60,10 @@ export function editUserInfoModal(e) {
             </div>`;
     } else if (currentField === 'Password') {
         editForm.innerHTML = `
+            <div class="mb-3">
+                <label for="edit-input-old-pass" class="form-label">Old Password</label>
+                <input type="password" class="form-control" id="edit-input-old-pass">
+            </div>
             <div class="mb-3">
                 <label for="edit-input" class="form-label">New Password</label>
                 <input type="password" class="form-control" id="edit-input">
@@ -99,12 +103,13 @@ export function editUserInfoModal(e) {
                     userInfoID.innerText = newValue;
                     break;
                 case 'Password':
-                    await editPassword(newValue, document.getElementById('edit-input-repeat').value);
+                    await editPassword(newValue, document.getElementById('edit-input-repeat').value,
+                        document.getElementById('edit-input-old-pass').value);
                     break;
                 default:
 				break;
             }
-            console.log(`USER LOG: CHANGED ${currentField} TO ${newValue}`);
+            console.log(`USER LOG: SUCCESSFULLY CHANGED ${currentField}`);
             hideModal('edit-modal');
         } catch (e) {
             errormsg(e.message, 'editmodal-errormsg');
