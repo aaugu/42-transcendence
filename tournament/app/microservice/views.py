@@ -440,7 +440,7 @@ class TournamentView(View):
             filter_params['status'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
         # A TESTER
         # if 'display_all_type' not in request.GET:
-        #     filter_params['type'] = [Tournament.LOCAL, Tournament.REMOTE]
+        #     filter_params['type'] = [Tournament.REMOTE]
 
         return filter_params
 
