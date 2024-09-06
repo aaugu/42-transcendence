@@ -1,6 +1,7 @@
 import { errormsg } from '../../dom/errormsg.js';
 import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
+import { userID } from '../user/updateProfile.js';
 
 //mode can  be local or remote
 async function createTournament(new_tournament, mode) {
@@ -33,10 +34,10 @@ async function createTournament(new_tournament, mode) {
 	}
 }
 
-function newTournamentData(tournamentName, username, playerNames, is_private, password) {
+function newTournamentData(tournamentName, playerNames, is_private, password) {
 	const new_tournament = {
 		"name": tournamentName,
-		"user_id": username,
+		"user_id": userID,
 		"max_players": playerNames.length,
 		"player_names": playerNames,
 		"is_private": is_private,
@@ -61,7 +62,9 @@ export async function createTournamentButton() {
 				}
 			});
 			playerNames = Array.from(inputs).map(input => input.value);
-			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
+			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
+
+			console.log("new_tournament: ", new_tournament);
 
 			await createTournament(new_tournament, 'local');
 			hideModal();
@@ -69,7 +72,7 @@ export async function createTournamentButton() {
 		}
 		else {
 			playerNames = [username];
-			new_tournament = newTournamentData(tournamentName, username, playerNames, false, "");
+			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
 			await createTournament(new_tournament, 'remote');
 			// refresh the join list
