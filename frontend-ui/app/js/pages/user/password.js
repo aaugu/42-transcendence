@@ -1,4 +1,3 @@
-import { errormsg } from '../../dom/errormsg.js';
 import { userID } from './updateProfile.js';
 
 export function passwordValidity (password) {
@@ -11,7 +10,10 @@ export function passwordValidity (password) {
     return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough;
 }
 
-export async function editPassword(newPassword, repeatNewPassword) {
+export async function editPassword(newPassword, repeatNewPassword, oldPassword) {
+	if (oldPassword === null || oldPassword === undefined || oldPassword === "") {
+		throw new Error("Field cannot be empty");
+	}
 	if (newPassword !== repeatNewPassword) {
 		throw new Error("Passwords do not match");
 	}
@@ -21,26 +23,27 @@ export async function editPassword(newPassword, repeatNewPassword) {
 	if (userID === null)
 		throw new Error("Could not identify user");
 
-	const url = 'https://localhost:10444/api/user/changepass/';
-	const response = await fetch(url + userID + '/', {
-		method: 'PATCH',
+	const url = 'https://localhost:10444/api/user/';
+	const response = await fetch(url + userID + '/changepass/', {
+		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
-			"password": newPassword,
+			"old_password": oldPassword,
+			"new_password": newPassword,
 		}),
 		credentials: 'include',
 	});
 	const responseData = await response.json();
 	if (!response.ok) {
-		if (responseData.password)
-			throw new Error(responseData.password);
-		throw new Error("USER LOG: Could not edit user password");
+		if (responseData.old_password)
+			throw new Error(responseData.old_password[0]);
+		throw new Error("Could not edit user password");
 	}
 	if (responseData !== null) {
-		console.log("USER LOG: USER PATCH SUCCESSFUL");
+		console.log("USER LOG: USER EDIT SUCCESSFUL");
 	} else {
 		throw new Error('No response from server');
 	}
