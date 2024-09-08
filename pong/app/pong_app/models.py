@@ -17,3 +17,15 @@ class Games(models.Model):
     ]
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='WAITING')
+
+    def to_dict(self):
+      return {
+        'game_id': str(self.game_id),
+        'creator_id': self.creator_id,
+        'joiner_id': self.joiner_id,
+        'winner_id': self.winner_id,
+        'loser_id': self.looser_id,
+        'created_at': str(self.created_at),
+        'mode': self.mode,
+        'status': self.status,
+      }

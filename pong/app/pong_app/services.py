@@ -1,6 +1,7 @@
 import uuid
-from ..game.game import Game, GameMode, GameState
+from .game.game import Game, GameMode, GameState
 from .models import Games
+from django.db.models import Q
 
 
 class GameService:
@@ -32,7 +33,7 @@ class GameService:
 
         game_instance = Game(mode=mode, game_id=game_id)
 
-        from ..consumers.consumers import PongConsumer
+        from .consumers.consumers import PongConsumer
 
         PongConsumer.games[game_id] = game_instance
         PongConsumer.games[game_id].game_state = GameState()
@@ -46,8 +47,9 @@ class GameService:
         game = Games.objects.get(game_id=game_id)
         game.joiner_id = joiner_id
         game.status = "IN_PROGRESS"
-        from ..consumers.consumers import PongConsumer
-        PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
+        from .consumers.consumers import PongConsumer
+
+        # PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
 
         game.save()
 
@@ -63,3 +65,24 @@ class GameService:
             game.save()
 
         return game
+
+    @staticmethod
+    def get_game(game_id):
+        game = Games.objects.get(game_id=game_id)
+
+        return game
+
+    @staticmethod
+    def get_all_games():
+        games = Games.objects.all()
+
+        return games
+
+
+    @staticmethod
+    def get_user_games(user_id, x):
+        games = Games.objects.filter(Q(creator_id=user_id) | Q(joiner_id=user_id)).order_by(
+            "-created_at"
+        )[:x]
+
+        return games

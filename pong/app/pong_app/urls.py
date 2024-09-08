@@ -2,6 +2,8 @@ from django.urls import path
 from .views import (
     pong_view,
     create_game,
+    join_game,
+    retrieve_last_games
     # game_state,
     # game_points,
     # game_start,
@@ -15,8 +17,10 @@ from .views import (
 
 urlpatterns = [
     path("pong/", pong_view, name="pong"),
-    # path("create-game/<str_creator_id>/<str_mode>/", create_game, name='create_game'),
-    path("create-game/", create_game, name='create_game'),
+    path("create-game/<creator_id>/<mode>/", create_game, name='create_game'),
+    # path("create-game/", create_game, name='create_game'),
+    path("join-game/<joiner_id>/<game_id>/", join_game, name='join_game'),
+    path("retrieve_last_games/<user_id>/<nb_of_games>", retrieve_last_games, name='retrieve_last_games')
     # API ENDPOINTS
     # path("api/game_state", game_state),
     # path("api/game_points", game_points),
