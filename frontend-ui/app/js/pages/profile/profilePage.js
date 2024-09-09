@@ -144,11 +144,11 @@ export async function profilePage() {
                 <div class="input-group m-2 justify-content-center">
                     <input id="friend-input" type="text" class="form-control rounded-end" placeholder="Type a nickname here" aria-label="Search" style="font-size: 10px;">
                     <div class="input-group-append m-2">
-                        <button id="add-friend-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Add friend</button>
+                        <button id="add-friend-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Add as friend</button>
                     </div>
                 </div>
                 <p class="hidden m-2 text-danger" id="friendlist-errormsg"></p>
-                <ul id="friend-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
+                <ul id="friend-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 m-2">
                  ${friends_html}
                 </ul>
             </div>
