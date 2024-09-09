@@ -44,7 +44,6 @@ class BlacklistView(APIView):
 		return Response( status=status_code )
 
 	def create_blacklist(self, initiator, target):
-
 		if self.blacklist_exists(initiator, target):
 			return status.HTTP_409_CONFLICT
 
