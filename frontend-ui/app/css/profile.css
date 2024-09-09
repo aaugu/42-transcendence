@@ -29,10 +29,11 @@
     width: 100%;
     margin: 1rem;
     color: rgb(0, 0, 0);
-	background-color: rgb(255, 255, 255, 0.8);
+	background-color: rgb(255, 255, 255, 0.6);
     border: 3px solid;
     border-color: white;
     border-radius: 10px;
+    /* backdrop-filter: blur(10px); */
 }
 
 .profile-details {
@@ -136,7 +137,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(170, 170, 170, 0.5); /* Semi-transparent white */
+    background-color: rgba(193, 193, 193, 0.5); /* Semi-transparent white */
     opacity: 0; /* Initially invisible */
     transition: opacity 0.2s ease; /* Smooth transition */
     z-index: 1; /* Ensure it's above the background color */
@@ -148,4 +149,11 @@
 
 .form-control::placeholder {
     color: #c6c6c6 !important;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-left: 8px;
 }

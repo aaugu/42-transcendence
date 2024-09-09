@@ -35,18 +35,14 @@ export async function newConvButton(e) {
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
 		const response = await newConv(conv_nickname);
-		// console.log("response newConvButton: ", response);
-		displayChatInterface();
+		displayChatInterface(conv_nickname);
 
 		const conv_id = response.conversation_id;
 		const contact_list = document.getElementById('chat-contact-list');
 		const new_list_item = document.createElement('li');
 		new_list_item.classList.add('list-group-item');
 		new_list_item.style.backgroundColor = '#A9C1FF';
-		new_list_item.innerHTML = `<span data-convid="${conv_id}">${conv_nickname}</span>
-									<button id="block-btn" class="btn btn-outline-danger btn-sm m-0 p-1" title="Block user" type="button" data-nickname="${conv_nickname}">
-                    					<i class="bi text-danger bi-ban m-0 p-0"></i>
-									</button>`;
+		new_list_item.innerHTML = `<span data-convid="${conv_id}">${conv_nickname}</span>`;
 		contact_list.appendChild(new_list_item);
 
 	} catch (e) {

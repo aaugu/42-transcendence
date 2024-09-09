@@ -45,7 +45,7 @@ button i {
     transition: color 0.2s ease; /* Smooth transition for the icon color */
 }
 
-.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a {
+.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a, .list-group-item div {
     z-index: 2;
 }
 

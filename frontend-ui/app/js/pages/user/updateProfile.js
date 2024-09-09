@@ -1,5 +1,6 @@
 import { defaultAvatar } from './avatar.js';
 import { getCookie } from './cookie.js';
+import { logout } from './logout.js';
 
 export var userIsConnected = (localStorage.getItem("userIsConnected") === "true");
 export var userID = null;
@@ -33,14 +34,20 @@ export const updateProfile = async (isConnected, token) => {
 	}
 	else {
 		// navProfileElements.classList.add('hidden');
-		navLogoLink.href = "/";
-		localStorage.setItem('userIsConnected', false);
-		localStorage.setItem('nickname', 'guest');
-		localStorage.setItem('avatar', defaultAvatar);
-		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-		userIsConnected = null;
-		userID = null;
+		try {
+			await logout();
+			navLogoLink.href = "/";
+			localStorage.setItem('userIsConnected', false);
+			localStorage.setItem('nickname', 'guest');
+			localStorage.setItem('avatar', defaultAvatar);
+			document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+			document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+			document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+			userIsConnected = null;
+			userID = null;
+		}
+		catch (e) {
+			console.log(`USER LOG: ${e.message}`);
+		}
 	}
 }
