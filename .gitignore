@@ -6,4 +6,4 @@ trash/
 *.pyc
 **/init.sql
 **/volumes/ 
-ssl-certificate/*
+/ssl-certificate/*
