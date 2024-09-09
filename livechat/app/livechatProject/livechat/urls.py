@@ -7,5 +7,5 @@ urlpatterns = [
     path('<int:pk>/conversations/', ConversationView.as_view()),
     path('conversation/<int:pk>/messages/', MessageView.as_view()),
     path('<int:pk>/blacklist/', BlacklistView.as_view()),
-    path('<int:pk>/blacklist/<int:target>', BlacklistView.as_view())
+    path('<int:pk>/blacklist/<int:target_id>', BlacklistView.as_view())
 ]

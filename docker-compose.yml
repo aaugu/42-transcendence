@@ -16,7 +16,7 @@ volumes:
     # Live chat
     livechat_postgres_volume:
         driver: local
-    #elk volumes
+    # # elk volumes
     # elastic_data_volume:
     #     driver: local
 
@@ -93,7 +93,7 @@ services:
         extends:
             file: sslgen/docker/docker-compose.yml
             service: generate_ssl
-    # Elasticsearch / Kibana
+    # # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:
     #         file: elk/docker/docker-compose.yml
