@@ -438,8 +438,8 @@ class TournamentView(View):
             filter_params['is_private'] = False
         if 'display_completed' not in request.GET:
             filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
-        if 'display_only_remote' not in request.GET:
-            filter_params['type__in'] = [Tournament.LOCAL, Tournament.REMOTE]
+        if 'display_all' not in request.GET:
+            filter_params['type__in'] = [Tournament.REMOTE]
 
         return filter_params
 
