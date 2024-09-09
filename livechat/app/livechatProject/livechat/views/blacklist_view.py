@@ -28,7 +28,7 @@ class BlacklistView(APIView):
 		return Response( status=status_code )
 
 	# DELETE :
-	def delete(self, user_id, target_id):
+	def delete(self, request, user_id, target_id):
 		initiator = User.objects.get(user_id=user_id)
 		target = User.objects.get(user_id=target_id)
 		if not initiator or not target:
@@ -53,7 +53,7 @@ class BlacklistView(APIView):
 		if not self.blacklist_exists(initiator, target):
 			return status.HTTP_410_GONE
 			
-		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
+		blacklist = Blacklist.objects.get(initiator=initiator, target=target)
 		blacklist.delete()
 
 		if not self.blacklist_exists(initiator, target):
