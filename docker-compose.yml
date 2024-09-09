@@ -13,17 +13,14 @@ volumes:
     # Tournament
     tournament_postgres_volume:
         driver: local
-<<<<<<< HEAD
     pong_postgres_volume:
         driver: local
-=======
     # Live chat
     livechat_postgres_volume:
         driver: local
     #elk volumes
     # elastic_data_volume:
     #     driver: local
->>>>>>> master
 
 services:
     # Aetheryte API Gateway
