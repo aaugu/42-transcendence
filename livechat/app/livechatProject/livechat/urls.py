@@ -4,8 +4,8 @@ from livechat.views.message_view import MessageView
 from livechat.views.blacklist_view import BlacklistView
 
 urlpatterns = [
-    path('<int:pk>/conversations/', ConversationView.as_view()),
-    path('conversation/<int:pk>/messages/', MessageView.as_view()),
-    path('<int:pk>/blacklist/', BlacklistView.as_view()),
-    path('<int:pk>/blacklist/<int:target_id>', BlacklistView.as_view())
+    path('<int:user_id>/conversations/', ConversationView.as_view()),
+    path('<int:user_id>/conversation/<int:conversation_id>/messages/', MessageView.as_view()),
+    path('<int:user_id>/blacklist/', BlacklistView.as_view()),
+    path('<int:user_id>/blacklist/<int:target_id>', BlacklistView.as_view())
 ]

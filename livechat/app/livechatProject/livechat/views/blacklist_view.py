@@ -12,14 +12,14 @@ from livechat.serializers import BlacklistSerializer
 
 class BlacklistView(APIView):
 	# POST:
-	def post(self, request, pk):
+	def post(self, request, user_id):
 		serializer = BlacklistSerializer(data=request.data)
 		if serializer.is_valid():
 			blacklisted_id = serializer.validated_data['blacklisted_id']
 		else:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-		initiator = User.objects.get(user_id=pk)
+		initiator = User.objects.get(user_id=user_id)
 		target = User.objects.get(user_id=blacklisted_id)
 		if not initiator or not target:
 			return Response(status=status.HTTP_404_NOT_FOUND)
@@ -28,8 +28,8 @@ class BlacklistView(APIView):
 		return Response( status=status_code )
 
 	# DELETE :
-	def delete(self, request, pk, target_id):
-		initiator = User.objects.get(user_id=pk)
+	def delete(self, user_id, target_id):
+		initiator = User.objects.get(user_id=user_id)
 		target = User.objects.get(user_id=target_id)
 		if not initiator or not target:
 			return Response(status=status.HTTP_404_NOT_FOUND)

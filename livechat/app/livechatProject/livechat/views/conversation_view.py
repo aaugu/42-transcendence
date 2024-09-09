@@ -15,18 +15,18 @@ from livechat.views.utils import user_exists
 # Conversations  
 class ConversationView(APIView):
 	# GET: conversations involving current user
-	def get(self, request, pk):
-		if not user_exists(pk):
-			if not self.create_user(pk):
+	def get(self, request, user_id):
+		if not user_exists(user_id):
+			if not self.create_user(user_id):
 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-		conversations = Conversation.objects.filter(Q(user_1=pk) | Q(user_2=pk))
+		conversations = Conversation.objects.filter(Q(user_1=user_id) | Q(user_2=user_id))
 		serializer = ConversationSerializer(conversations, many=True)
 
 		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
 	
 	# POST: create conversation with two users
-	def post(self, request, pk):	
+	def post(self, request, user_id):	
 		serializer = ConversationSerializer(data=request.data)
 		if serializer.is_valid():
 			user_id = serializer.validated_data['user_1']
