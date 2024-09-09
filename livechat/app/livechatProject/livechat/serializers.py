@@ -19,4 +19,4 @@ class MessageSerializer(serializers.ModelSerializer):
 class BlacklistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blacklist
-        fields = ['target']
+        fields = ['blacklisted_id']

@@ -35,6 +35,7 @@ class Message(models.Model):
 class Blacklist(models.Model):
     initiator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='initiator')
     target = models.ForeignKey(User, on_delete=models.CASCADE, related_name='target')
+    blacklisted_id = models.PositiveIntegerField(blank=False)
 
     def __str__(self):
         return str(self.initiator) + " -> " + str(self.target)

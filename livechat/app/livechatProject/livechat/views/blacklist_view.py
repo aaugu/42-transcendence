@@ -15,25 +15,24 @@ class BlacklistView(APIView):
 	def post(self, request, pk):
 		serializer = BlacklistSerializer(data=request.data)
 		if serializer.is_valid():
-			target_id = serializer.validated_data['target'].user_id
+			blacklisted_id = serializer.validated_data['blacklisted_id']
 		else:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-		initiator = User.objects.filter(user_id=pk)[0]
-		target = User.objects.filter(user_id=target_id)[0]
+		initiator = User.objects.get(user_id=pk)
+		target = User.objects.get(user_id=blacklisted_id)
 		if not initiator or not target:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
 		status_code = self.create_blacklist(initiator, target)
 		if status_code == status.HTTP_201_CREATED:
-			return Response({ "blacklisted_id": target.user_id}, status=status_code)
-
+			return Response({ "blacklisted_id": blacklisted_id}, status=status_code)
 		return Response( status=status_code )
 
 	# DELETE :
 	def delete(self, request, pk, target_id):
-		initiator = User.objects.filter(user_id=pk)[0]
-		target = User.objects.filter(user_id=target_id)[0]
+		initiator = User.objects.get(user_id=pk)
+		target = User.objects.get(user_id=target_id)
 		if not initiator or not target:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -48,7 +47,7 @@ class BlacklistView(APIView):
 		if self.blacklist_exists(initiator, target):
 			return status.HTTP_409_CONFLICT
 
-		blacklist = Blacklist(initiator=initiator, target=target)
+		blacklist = Blacklist(initiator=initiator, target=target, blacklisted_id=target.user_id)
 		blacklist.save()
 
 		if self.blacklist_exists(initiator, target):

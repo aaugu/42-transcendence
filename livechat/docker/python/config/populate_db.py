@@ -19,11 +19,11 @@ import random
 from random import randrange
 import requests
 
-for i in range(1, nb_user):
+for i in range(nb_user):
     user = User(user_id=i)
     user.save()
 
-for i in range(1, nb_conversations):
+for i in range(nb_conversations):
     conversation = Conversation(user_1=last_user, user_2=i)
     conversation.save()
 
@@ -32,7 +32,7 @@ response = requests.get(word_site)
 WORDS = response.content.splitlines()
 conversations = list(Conversation.objects.all())
 
-for i in range(1, 59):
+for i in range(59):
     conversation = random.choice(conversations)
     if randrange(2) == 0:
         author = conversation.user_1
