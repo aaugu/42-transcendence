@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^d7ouzku=r@(7xd(^@#q+jie8(*lwlu_iznln-b_qlcbj8v1u0'
+SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
+# SECRET_KEY = 'django-insecure-^d7ouzku=r@(7xd(^@#q+jie8(*lwlu_iznln-b_qlcbj8v1u0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,7 +35,8 @@ INSTALLED_APPS = [
 
     'corsheaders',
 
-    'login'
+    'login',
+	'usermanager'
 ]
 
 MIDDLEWARE = [
@@ -75,11 +79,11 @@ WSGI_APPLICATION = 'aetheryte.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'aetheryte',
-        'USER': 'afavre',
-        'PASSWORD': 'afavretra',
-        'HOST': '172.20.0.3',
-        'PORT': '',
+        'NAME': os.environ.get('AETHERYTE_POSTGRES_DB'),
+        'USER': os.environ.get('AETHERYTE_POSTGRES_USER'),
+        'PASSWORD': os.environ.get('AETHERYTE_POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('AETHERYTE_POSTGRES_IP'),
+        'PORT': os.environ.get('AETHERYTE_POSTGRES_PORT'),
     }
 }
 
@@ -127,7 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # JWT Paramaeters
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'SIGNING_KEY': "je mange des pingouins saveur arc en ciel tout les matins",
 }
@@ -144,7 +148,11 @@ EMAIL_HOST_PASSWORD = 'cnnc bmsc zrip yvbn'
 
 # Cors parameters
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:10443",
+    "https://localhost:10443"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = False

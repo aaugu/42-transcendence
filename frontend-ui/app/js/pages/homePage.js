@@ -1,5 +1,3 @@
-import { userIsConnected } from "./user/updateProfile.js";
-
 export function homePage() {
     return `
     <div class="content-box">

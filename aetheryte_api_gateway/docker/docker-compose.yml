@@ -6,8 +6,11 @@ services:
         networks:
             transcendence :
                 ipv4_address: 172.20.0.4
-        env_file:
-            - ../../.env
+        volumes:
+            - ../../ssl-certificate:/etc/nginx/ssl
+        environment:
+            ELASTIC_USER: ${ROOT_USER}
+            ELASTIC_PASSWORD: ${ROOT_PASSWORD}
         restart: on-failure
 
     aetheryte-postgres:
@@ -20,11 +23,11 @@ services:
             transcendence:
                 ipv4_address: 172.20.0.3
         environment:
-            POSTGRES_DB: ${AETHERYTE_POSTGRES_DB}
-            POSTGRES_USER: ${AETHERYTE_POSTGRES_USER}
-            POSTGRES_PASSWORD: ${AETHERYTE_POSTGRES_PASSWORD}
+            POSTGRES_DB: ${AETHERYTE_POSTGRES_NAME}
+            POSTGRES_USER: ${ROOT_USER}
+            POSTGRES_PASSWORD: ${ROOT_PASSWORD}
         healthcheck:
-            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${AETHERYTE_POSTGRES_USER} -d ${AETHERYTE_POSTGRES_DB}'"]
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${ROOT_USER} -d ${AETHERYTE_POSTGRES_NAME}'"]
             interval: 10s
             timeout: 5s
             retries: 10
@@ -39,8 +42,14 @@ services:
         networks:
             transcendence :
                 ipv4_address: 172.20.0.2
-        env_file:
-            - ../../.env
+        environment:
+            AETHERYTE_POSTGRES_DB: ${AETHERYTE_POSTGRES_NAME}
+            AETHERYTE_POSTGRES_USER: ${ROOT_USER}
+            AETHERYTE_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+            AETHERYTE_POSTGRES_IP: ${AETHERYTE_POSTGRES_IP}
+            AETHERYTE_POSTGRES_PORT: ${AETHERYTE_POSTGRES_PORT}
+            AETHERYTE_DJANGO_SECRET_KEY: ${AETHERYTE_DJANGO_SECRET_KEY}
+
         healthcheck:
             test: curl --fail http://localhost:8000/api/user || exit 1
             interval: 10s

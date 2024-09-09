@@ -1,4 +1,4 @@
-import { errormsg } from '../../dom/errormsg.js';
+import { userID } from './updateProfile.js';
 
 export function passwordValidity (password) {
     const hasUpperCase = /[A-Z]/.test(password);
@@ -10,15 +10,41 @@ export function passwordValidity (password) {
     return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough;
 }
 
-export function editPassword(newPassword, repeatNewPassword) {
+export async function editPassword(newPassword, repeatNewPassword, oldPassword) {
+	if (oldPassword === null || oldPassword === undefined || oldPassword === "") {
+		throw new Error("Field cannot be empty");
+	}
 	if (newPassword !== repeatNewPassword) {
-		errormsg("Passwords do not match", "editmodal-errormsg");
-		return;
+		throw new Error("Passwords do not match");
 	}
 	else if (!passwordValidity(newPassword)) {
-		errormsg("Your password must be 8 - 25 characters long and include at least 1 special, 1 uppercase and 1 digit", "editmodal-errormsg");
-		return;
+		throw new Error("Your password must be 8 - 25 characters long and include at least 1 special, 1 uppercase and 1 digit");
 	}
-	// else
-	// editUserInfo('password', newPassword);
+	if (userID === null)
+		throw new Error("Could not identify user");
+
+	const url = 'https://localhost:10444/api/user/';
+	const response = await fetch(url + userID + '/changepass/', {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			"old_password": oldPassword,
+			"new_password": newPassword,
+		}),
+		credentials: 'include',
+	});
+	const responseData = await response.json();
+	if (!response.ok) {
+		if (responseData.old_password)
+			throw new Error(responseData.old_password[0]);
+		throw new Error("Could not edit user password");
+	}
+	if (responseData !== null) {
+		console.log("USER LOG: USER EDIT SUCCESSFUL");
+	} else {
+		throw new Error('No response from server');
+	}
 }

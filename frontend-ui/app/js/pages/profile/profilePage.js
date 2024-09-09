@@ -1,16 +1,32 @@
-import { twoFactorAuth } from "../login/twoFactorAuth.js";
+import { getUserInfo } from "../user/getUserInfo.js"
 
 export async function profilePage() {
-    const username = localStorage.getItem("username") || "Guest";
-    const nickname = localStorage.getItem("nickname") || "Guest-nickname";
-    const email = localStorage.getItem("email") || "Guest-email";
-    const avatar = localStorage.getItem("avatar") || "images/default_avatar.png";
+    var username = "Guest";
+    var nickname = "Guest-nickname";
+    var email = "Guest-email";
+    var avatar = "images/default_avatar.png";
+    var is_2fa_enabled = false;
+
+    try {
+        const userinfo = await getUserInfo();
+        username = userinfo.username;
+        nickname = userinfo.nickname;
+        email = userinfo.email;
+        avatar = userinfo.avatar;
+        is_2fa_enabled = userinfo.is_2fa_enabled;
+    }
+    catch (e) {
+        console.log("USER LOG: ", e.message);
+    }
+
+    localStorage.setItem('avatar', avatar);
+    localStorage.setItem('nickname', nickname);
 
 	var twoFAbtnText;
 	var twoFAbtnColor;
     var twoFAtargetModal;
 
-	if (twoFactorAuth == true) {
+	if (is_2fa_enabled == true) {
 		twoFAbtnText = "Deactivate";
 		twoFAbtnColor = "btn-outline-danger";
         twoFAtargetModal = "#deactivate-2fa-modal"
@@ -21,11 +37,10 @@ export async function profilePage() {
         twoFAtargetModal = "#activate-2fa-modal"
 	}
 
-
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="two-column-container">
-        <div class="profile-column-left">
+        <div class="column-left">
             <div id="user-management" class="content-box clearfix">
                 <h5 class="m-2">User management</h5>
                 <div class="profile-details">
@@ -35,7 +50,6 @@ export async function profilePage() {
                     </div>
                     <div class="usermanagement-item">
                         <p id="profile-username">${username}</p>
-                        <button id="edit-username" class="edit-btn" data-field="Username"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="usermanagement-item">
                         <p id="profile-nickname">${nickname}</p>
@@ -116,45 +130,28 @@ export async function profilePage() {
 				</div>
             </div>
         </div>
-        <div class="profile-column-right">
-            <div id="personal-stats" class="content-box clearfix">
-                <h5 class="m-2">Personal stats</h5>
-                <div class="profile-details">
+        <div class="column-right">
+            <div id="personal-stats" class="content-box">
+                <h5 class="m-2">Match history</h5>
+                <div class="profile-details centered">
                     <p>Total wins: 3</p>
                     <p>Total losses: 2</p>
                 </div>
-                <div>
-                <ul class="list-group overflow-auto m-2" style="max-height: 100px;">
+                <ul class="list-group custom-scrollbar m-2 flex-grow-1">
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                     <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
-                    </li>
-                    <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
-                    </li>
-                    <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
-                    </li>
-                    <li class="list-group-item">
-                        <text>Date</text>
-                        <text>Opponent</text>
-                        <text>WON/LOST</text>
+                        <span>Date</span>
+                        <span>Opponent</span>
+                        <span>WON/LOST</span>
                     </li>
                 </ul>
-                </div>
             </div>
             <div id="friends" class="content-box">
-                <h5 class="m-2">Friend list</h5>
+                <h5 class="m-2">User list</h5>
             </div>
         </div>
     </div>

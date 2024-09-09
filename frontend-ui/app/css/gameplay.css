@@ -5,17 +5,16 @@
 	margin: 0;
   } */
   canvas {
-	border: 1px solid #020202;
 	justify-content: center;
 	align-items: center;
-	background-color: #ff4400;
+	background-color: #000000;
   }
 
   .info-ctn {
 	display: flex;
-	/* background-color: red; */
-	background-color: blue;
+	flex-direction: column;
 	justify-content: center;
+	margin: 1rem;
   }
 
   .info-ctn > * {
@@ -26,20 +25,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border: 1px solid #020202;
 	width: 100%;
+	margin: 1rem;
+	margin-top: 0;
   }
 
-  .tournament-column-left, .tournament-column-right {
-    display: flex;
-    flex-direction: column;
-	/* gap: 1rem; */
-}
-
-.tournament-column-left {
-    flex: 1 1 50%;
-}
-
-.tournament-column-right {
-    flex: 1 1 50%;
-}
+  ul li button {
+	font-size: 10px !important;
+  }

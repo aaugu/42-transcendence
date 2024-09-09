@@ -1,0 +1,44 @@
+services:
+    livechat-postgres:
+        build:
+            context: postgres
+            dockerfile: Dockerfile
+        volumes:
+            - livechat_postgres_volume:/var/lib/postgresql/data/
+            - ../app/:/app/
+        networks:
+            transcendence:
+                ipv4_address: 172.20.5.3
+        environment:
+            POSTGRES_DB: ${LIVECHAT_POSTGRES_NAME}
+            POSTGRES_USER: ${ROOT_USER}
+            POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+        healthcheck:
+            test: ["CMD-SHELL", "sh -c 'pg_isready -U ${ROOT_USER} -d ${LIVECHAT_POSTGRES_NAME}'"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+        restart: unless-stopped
+
+    livechat-python:
+        build:
+            context: python
+            dockerfile: Dockerfile
+        networks:
+            transcendence:
+                ipv4_address: 172.20.5.2
+        volumes:
+            - ../app/:/app/
+        environment:
+            LIVECHAT_POSTGRES_DB: ${LIVECHAT_POSTGRES_NAME}
+            LIVECHAT_POSTGRES_USER: ${ROOT_USER}
+            LIVECHAT_POSTGRES_PASSWORD: ${ROOT_PASSWORD}
+            LIVECHAT_POSTGRES_IP: ${LIVECHAT_POSTGRES_IP}
+            LIVECHAT_POSTGRES_PORT: ${LIVECHAT_POSTGRES_PORT}
+            LIVECHAT_DJANGO_SECRET_KEY: ${LIVECHAT_DJANGO_SECRET_KEY}
+        # healthcheck:
+        #     test: curl --fail https://172.20.5.2:8000/ || exit 1
+        #     interval: 10s
+        #     timeout: 5s
+        #     retries: 10
+        restart: on-failure

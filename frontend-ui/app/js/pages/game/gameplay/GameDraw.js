@@ -51,7 +51,7 @@ export default function updateGameState(gameState, canvas) {
     0,
     2 * Math.PI
   );
-  context.fillStyle = "black";
+  context.fillStyle = "white";
   context.fill();
   context.closePath();
 
@@ -63,7 +63,7 @@ export default function updateGameState(gameState, canvas) {
       parseInt(paddleWidth),
       parseInt(paddleHeight)
     );
-    context.fillStyle = "black";
+    context.fillStyle = "white";
     context.fill();
     context.closePath();
   });

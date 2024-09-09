@@ -1,11 +1,11 @@
 // const infoCtnHeight = document.querySelector('.info-ctn').offsetHeight;
 
-console.log("window.innerHeight: ", window.innerHeight);
-console.log("window.innerWidth: ", window.innerWidth);
+// console.log("window.innerHeight: ", window.innerHeight);
+// console.log("window.innerWidth: ", window.innerWidth);
 
 export const canvasHeight = '400';
 export const canvasWidth = '800';
-console.log("canvasHeight, canvasWidth: ", canvasHeight, canvasWidth);
+// console.log("canvasHeight, canvasWidth: ", canvasHeight, canvasWidth);
 export const ballRadius = 5;
 export const paddleWidth = 5;
 export const paddleHeight = 70;

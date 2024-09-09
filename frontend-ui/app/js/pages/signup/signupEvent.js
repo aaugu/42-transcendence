@@ -6,10 +6,10 @@ export async function signupEvent(e) {
 			signupProcess();
 			break;
 		case "uploadAvatar":
-			document.getElementById('avatarUpload').style.display = "block";
+			document.getElementById('avatar-upload-file').style.display = "block";
 			break;
 		case "defaultAvatar":
-			document.getElementById('avatarUpload').style.display = "none";
+			document.getElementById('avatar-upload-file').style.display = "none";
 			break;
 		default:
 			break;

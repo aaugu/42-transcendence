@@ -1,19 +1,21 @@
 import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
-import { localTwoPlayerGamePage } from "../pages/game/localTwoPlayerGamePage.js"
-import { remoteTwoPlayerGamePage } from "../pages/game/remoteTwoPlayerGamePage.js"
-import { localAIgamePage } from "../pages/game/localAIgamePage.js"
+import { gamePage } from "../pages/game/gamePage.js"
 import { profilePage } from "../pages/profile/profilePage.js"
-import { statsPage } from "../pages/stats/statsPage.js"
 import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
-import { chatPage } from "../pages/chat/chatPage.js"
-import { userIsConnected } from "../pages/user/updateProfile.js"
-import { mainGame } from "../pages/game/gameplay/mainGame.js"
+import { setUserID } from "../pages/user/updateProfile.js"
+import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
+import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
+import { socket } from "../pages/game/gameplay/startGame.js"
+import { reset_all_tournaments } from "../pages/tournament/tournament.js"
+import { reset_all_conv } from "../pages/livechat/conversations.js"
+import { livechatPage } from "../pages/livechat/livechatPage.js"
+import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -21,10 +23,20 @@ let currentEventListener = null;
 function updateEventListenerMainCont(newEventListener) {
 	const mainCont = document.getElementById('main-content');
 	if (currentEventListener !== null)
-			mainCont.removeEventListener('click', currentEventListener);
+		mainCont.removeEventListener('click', currentEventListener);
 	currentEventListener = newEventListener;
-	if (currentEventListener !== null)
+	if (currentEventListener !== null) {
 		mainCont.addEventListener('click', currentEventListener);
+	}
+}
+
+function resetDataRouteChange() {
+	if (socket) {
+		socket.close();
+		console.log('GAME LOG: Websocket connection closed');
+	}
+	reset_all_tournaments();
+	reset_all_conv();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -59,38 +71,43 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "signup page"
 		},
         "/local-twoplayer" : {
-			content: localTwoPlayerGamePage,
-			eventListener: mainGame,
+			content: gamePage,
+			eventListener: null,
+			startFunction: startGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
-			content: localAIgamePage,
-			eventListener: mainGame,
+			content: gamePage,
+			eventListener: null,
+			startFunction: startGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
-			content: remoteTwoPlayerGamePage,
-			eventListener: mainGame,
+			content: gamePage,
+			eventListener: null,
+			startFunction: startGame,
 			description: "remote two player game page"
 		},
 		"/tournament" : {
 			content: tournamentPage,
+			eventListener: tournamentEvent,
+			startFunction: startGame,
+			description: "create or join tournament page"
+		},
+		"/tournament/game" : {
+			content: gamePage,
 			eventListener: null,
-			description: "new tournament page"
+			startFunction: startGame,
+			description: "tournament game page"
 		},
         "/profile" : {
 			content: profilePage,
 			eventListener: profileEvent,
 			description: "profile page"
 		},
-        "/stats" : {
-			content: statsPage,
-			eventListener: null,
-			description: "stats page"
-		},
-		"/chat" : {
-			content: chatPage,
-			eventListener: null,
+		"/livechat" : {
+			content: livechatPage,
+			eventListener: livechatEvent,
 			description: "stats page"
 		},
     }
@@ -106,17 +123,24 @@ document.addEventListener('DOMContentLoaded', () => {
         goToRoute();
     }
 
+	//add in the end: || ((currentRoute !== "/" && currentRoute !== "/login" && currentRoute !== "/signup") && userIsConnected === false)
     const goToRoute = async () => {
-        const currentRoute = window.location.pathname;
-        if (currentRoute.length == 0)
+		resetDataRouteChange();
+		setUserID();
+        var currentRoute = window.location.pathname;
+        if (currentRoute.length == 0 ) {
 			currentRoute = "/";
-
+			window.history.pushState({}, '', currentRoute);
+		}
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
 		updateEventListenerMainCont(currentRouteDetails.eventListener);
 
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
+		if (currentRoute ==="/local-twoplayer" || currentRoute === "/local-ai" || currentRoute === "/remote-twoplayer" || currentRoute === "/tournament/game") {
+			currentRouteDetails.startFunction();
+		}
 	}
 
     window.onpopstate = goToRoute;

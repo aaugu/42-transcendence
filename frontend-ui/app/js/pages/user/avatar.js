@@ -1,3 +1,7 @@
+import { editUserInfo } from './editUserInfo.js';
+
+export const defaultAvatar = "images/default_avatar.png"
+
 export function readAvatarFile(file) {
     return new Promise((resolve, reject) => {
         var reader = new FileReader();
@@ -13,16 +17,9 @@ export function readAvatarFile(file) {
 
 export async function editAvatar(input) {
 	var avatarFile = input.files[0];
-	var avatar;
-	console.log("avatarFile: ", avatarFile);
-	try {
-		avatar = await readAvatarFile(avatarFile);
-	} catch (error) {
-		console.error("User log: Error reading avatar file,", error);
-		avatar = defaultAvatar;
-	}
-	localStorage.setItem('avatar', avatar);
-	document.getElementById('profile-avatar').src = avatar;
+	const avatar = await readAvatarFile(avatarFile);
+	await editUserInfo('avatar', avatar);
 
-	// editUserInfo('avatar', avatar);
+	document.getElementById('profile-avatar').src = avatar;
+	localStorage.setItem('avatar', avatar);
 }
