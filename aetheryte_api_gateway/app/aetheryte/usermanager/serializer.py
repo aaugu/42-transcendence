@@ -11,13 +11,13 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         if attrs['old_password'] == attrs['new_password']:
-            raise serializers.ValidationError("Le nouveau mot de passe doit être différent de l'ancien.")
+            raise serializers.ValidationError("the new password cannot be the same as the old one")
         return attrs
 
     def validate_old_password(self, value):
         user = get_object_or_404(CustomUser, id=self.initial_data['user_id'])
         if not user.check_password(value):
-            raise serializers.ValidationError("L'ancien mot de passe est incorrect.")
+            raise serializers.ValidationError("Invalid old password")
         return value
 
     def save(self, **kwargs):
