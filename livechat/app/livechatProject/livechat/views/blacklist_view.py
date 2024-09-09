@@ -25,8 +25,6 @@ class BlacklistView(APIView):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
 		status_code = self.create_blacklist(initiator, target)
-		if status_code == status.HTTP_201_CREATED:
-			return Response({ "blacklisted_id": blacklisted_id}, status=status_code)
 		return Response( status=status_code )
 
 	# DELETE :
@@ -36,10 +34,7 @@ class BlacklistView(APIView):
 		if not initiator or not target:
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		status_code = self.delete_blacklist(initiator, target)
-		if status_code == status.HTTP_204_NO_CONTENT:
-			return Response({ "blacklisted_id": target.user_id }, status=status_code)
-		
+		status_code = self.delete_blacklist(initiator, target)	
 		return Response( status=status_code )
 
 	# UTILS

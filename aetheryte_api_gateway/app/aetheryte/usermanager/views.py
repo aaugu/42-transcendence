@@ -13,12 +13,12 @@ from .serializer import *
 
 class general_user(APIView):
     def get(self, request):
-        if check_autentication(request):
+        # if check_autentication(request):
             users = CustomUser.objects.all()
             serializer = CustomUserSerializer(users, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        # else:
+        #     return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
     
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
@@ -38,18 +38,18 @@ class general_user(APIView):
         
 class detailed_user(APIView):
     def get(self, request, pk):
-        if check_autentication(request):
+        # if check_autentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
                 return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
             serializer = CustomUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        # else:
+        #     return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     def patch(self, request, pk):
-        if check_autentication(request):
+        # if check_autentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -60,8 +60,8 @@ class detailed_user(APIView):
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        # else:
+        #     return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     def delete(self, request, pk):
         if check_autentication(request):

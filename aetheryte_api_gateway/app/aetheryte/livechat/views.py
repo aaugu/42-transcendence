@@ -12,13 +12,13 @@ import requests, json
 
 from login.models import CustomUser
 from login.serializers import *
-from livechat.utils import *
+from .utils import user_valid, user_exists
 
 # Conversations  
 class ConversationView(APIView):
 	# GET: conversations involving current user
 	def get(self, request, pk):
-		if not self.user_valid(pk):
+		if not user_valid(pk):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/conversations/"
@@ -100,25 +100,19 @@ class BlacklistView(APIView):
 	def post(self, request, pk):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
-		if not body['target']:
+		if not body['target_id']:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
-		user_id = pk
-		target_id = body['target']
-
-		if not user_valid(user_id) or not user_valid(target_id):
+		target_id = body['target_id']
+		if not user_valid(pk) or not user_valid(target_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
-		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/"
+		url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/blacklist/"
 		body = {
-			"initiator": user_id,
-			"target": target_id
+			"blacklisted_id": target_id
 		}
 		response = requests.post( url, json = body)
-		if response.status_code == status.HTTP_201_CREATED:
-			response_json = response.json()
-			return Response({"blacklisted_id": response_json['blacklisted_id']}, status=response.status_code)
-		
+
 		return Response(status=response.status_code)
 
 	# DELETE: unblacklist a user
@@ -127,10 +121,6 @@ class BlacklistView(APIView):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		
 		url = "http://172.20.5.2:8000/livechat/" + str(pk) + "/blacklist/" + str(target)
-
 		response = requests.delete(url)
-		if response.status_code == status.HTTP_204_NO_CONTENT:
-			response_json = response.json()
-			return Response({"blacklisted_id": response_json['blacklisted_id']}, status=response.status_code)
-		
+
 		return Response(status=response.status_code)
