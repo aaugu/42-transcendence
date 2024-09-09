@@ -1,9 +1,9 @@
 import { userID } from '../user/updateProfile.js';
 
 //placement values: right, left
-function newMsg (avatar, time, msgText, placement) {
-    if (placement === "right") {
-        return `<li class="d-flex mb-4 justify-content-end">
+function newMsg (avatar, time, msgText, id) {
+    if (id === userID) {
+        return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
@@ -19,7 +19,7 @@ function newMsg (avatar, time, msgText, placement) {
     </li>`;
     }
     else {
-        return `<li class="d-flex mb-4">
+        return `<li data-msgid="${id}" class="d-flex mb-4">
         <img src=${avatar} alt="avatar"
         class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
         <div class="card">
@@ -56,15 +56,15 @@ export function displayMessages(conversation) {
 
     if (conversation.messages) {
         conversation.messages.forEach(message => {
-            let avatar, placement;
+            let avatar, id;
             if (message.author === userID) {
                 avatar = localStorage.getItem('avatar');
-                placement = 'right';
+                id = userID;
             } else {
                 avatar = userLookup[message.author].avatar;
-                placement = 'left';
+                id = message.author;
             }
-            html_convo += newMsg(avatar, message.time, message.message, placement);
+            html_convo += newMsg(avatar, message.time, message.message, id);
         });
     }
     ul_convo.innerHTML = html_convo;
@@ -73,48 +73,15 @@ export function displayMessages(conversation) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-export function displayChatInterface () {
+export function displayChatInterface (conv_nickname) {
     const welcomeMessages = document.getElementById('chat-welcome');
     welcomeMessages.innerHTML = '';
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
     document.getElementById('chat-play-pong').classList.remove('hidden');
+    const block_button = document.getElementById('chat-block-btn');
+    block_button.classList.remove('hidden');
+    block_button.setAttribute('data-nickname', conv_nickname);
+
 }
-
-
-/* template for messages:
-
-LEFT ALIGNED:
-<li class="d-flex mb-4">
-	<img src=${defaultAvatar} alt="avatar"
-	class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
-	<div class="card">
-	<div class="card-body">
-		<p class="mb-0">
-		Hi there 👋
-		</p>
-	</div>
-	<div class="card-footer d-flex justify-content-end">
-		<p class="small mb-0" style="font-size: 7px;">19:25</p>
-	</div>
-	</div>
-</li>
-
-RIGHT ALIGNED:
-<li class="d-flex mb-4 justify-content-end">
-	<div class="card">
-		<div class="card-body">
-			<p class="mb-0">
-			huhu
-			</p>
-		</div>
-		<div class="card-footer d-flex justify-content-end">
-			<p class="small mb-0" style="font-size: 7px;">19:25</p>
-		</div>
-	</div>
-	<img src=${defaultAvatar} alt="avatar"
-	class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="30">
-</li>
-
-*/

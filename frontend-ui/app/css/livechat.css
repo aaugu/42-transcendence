@@ -14,7 +14,7 @@
 }
 
 .custom-scrollbar {
-    height: 300px;
+    max-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin; /* Firefox */
@@ -45,7 +45,7 @@ button i {
     transition: color 0.2s ease; /* Smooth transition for the icon color */
 }
 
-.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a {
+.list-group-item i, .list-group-item span, .list-group-item button, .list-group-item a, .list-group-item div {
     z-index: 2;
 }
 

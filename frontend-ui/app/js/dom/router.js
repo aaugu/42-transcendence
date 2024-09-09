@@ -14,6 +14,8 @@ import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
+import { updateConvList } from "../pages/livechat/updateConvList.js"
+import { startFriendListRefresh, clearFriendList } from "../pages/profile/friends.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 
@@ -37,6 +39,7 @@ function resetDataRouteChange() {
 	}
 	reset_all_tournaments();
 	reset_all_conv();
+	clearFriendList();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,12 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlRoutes = {
         404 : {
 			content: error404Page,
-			eventListener: null,
 			description: "error 404"
 		},
         "/" : {
 			content: homePage,
-			eventListener: null,
 			description: "Homepage"
 		},
 		"/login" : {
@@ -72,19 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
         "/local-twoplayer" : {
 			content: gamePage,
-			eventListener: null,
 			startFunction: startGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
 			content: gamePage,
-			eventListener: null,
 			startFunction: startGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
 			content: gamePage,
-			eventListener: null,
 			startFunction: startGame,
 			description: "remote two player game page"
 		},
@@ -96,18 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/tournament/game" : {
 			content: gamePage,
-			eventListener: null,
 			startFunction: startGame,
 			description: "tournament game page"
 		},
         "/profile" : {
 			content: profilePage,
 			eventListener: profileEvent,
+			startFunction: startFriendListRefresh,
 			description: "profile page"
 		},
 		"/livechat" : {
 			content: livechatPage,
 			eventListener: livechatEvent,
+			startFunction: updateConvList,
 			description: "stats page"
 		},
     }
@@ -134,11 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
         const currentRouteDetails = urlRoutes[currentRoute] || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
-		updateEventListenerMainCont(currentRouteDetails.eventListener);
-
+		if (currentRouteDetails.eventListener) {
+			updateEventListenerMainCont(currentRouteDetails.eventListener);
+		}
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
-		if (currentRoute ==="/local-twoplayer" || currentRoute === "/local-ai" || currentRoute === "/remote-twoplayer" || currentRoute === "/tournament/game") {
+		if (currentRouteDetails.startFunction) {
 			currentRouteDetails.startFunction();
 		}
 	}

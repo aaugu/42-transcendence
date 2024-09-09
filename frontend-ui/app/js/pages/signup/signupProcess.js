@@ -3,7 +3,7 @@ import { errormsg } from "../../dom/errormsg.js"
 import { updateProfile } from "../user/updateProfile.js"
 import { defaultAvatar } from "../user/avatar.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
-import { userIsConnected, userID } from "../user/updateProfile.js";
+import { userID } from "../user/updateProfile.js";
 import { readAvatarFile } from "../user/avatar.js";
 import { loginProcess } from "../login/loginProcess.js";
 
@@ -43,7 +43,7 @@ export async function signupProcess() {
     else
         avatar = defaultAvatar;
 
-    console.log("SIGNUP avatar: ", avatar);
+    // console.log("SIGNUP avatar: ", avatar);
 
     var userdata = {
         "username": username,
@@ -53,7 +53,7 @@ export async function signupProcess() {
         "avatar": avatar
     };
 
-    console.log("USER LOG: SIGNUP DATA: ", userdata);
+    // console.log("USER LOG: SIGNUP DATA: ", userdata);
 
     const sendSignupDataToAPI = async (userdata) => {
         await fetch('https://localhost:10444/api/user/', {
@@ -63,7 +63,6 @@ export async function signupProcess() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(userdata),
-                // credentials: 'include' //include cookies
         })
         .then(async response => {
             if (!response.ok) {
@@ -73,6 +72,9 @@ export async function signupProcess() {
                 }
                 else if (error.email) {
                     errormsg(error.email), "homepage-errormsg";
+                }
+                else if (error.nickname) {
+                    errormsg(error.nickname), "homepage-errormsg";
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }
@@ -88,39 +90,4 @@ export async function signupProcess() {
     }
 
 	await sendSignupDataToAPI(userdata);
-
-	// const getCookie = (name) => {
-	// 	const value = "; " + document.cookie;
-	// 	const parts = value.split("; " + name + "=");
-	// 	if (parts.length === 2)
-	// 		return parts.pop().split(";").shift();
-	// 	else
-	// 		return null;
-	// }
-    // const csrf_token = getCookie('csrftoken');
-	// if (csrf_token !== null)
-    // 	console.log("csrf_token: ", csrf_token);
-	// else
-	// 	console.log("csrf_token is null");
 }
-
-
-/*
-	fetch process:
-	try/catch is used to get errors when the promise gets rejected (network or CORS issues)
-	response.ok is used to handle server errors (404 or 500, for example) when the promise gets resolved
-
-	JSON format user signup:
-    https://172.20.0.2/api/user/
-    {
-        "username": "",
-        "nickname": "",
-        "email": "",
-        "password": ""
-    }
-    JSON format 2fa verification:
-    https://172.20.0.2/api/token/verify-2fa/
-    {
-        "verification_code": ""
-    }
-*/

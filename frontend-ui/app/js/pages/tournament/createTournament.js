@@ -72,8 +72,14 @@ export async function createTournamentButton() {
 			playerNames = [username];
 			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
 
-			await createTournament(new_tournament, 'remote');
+			const response = await createTournament(new_tournament, 'remote');
 			// refresh the join list
+			const tourn_list = document.getElementById('tournament-list');
+			const new_tourn = document.createElement('li');
+			new_tourn.classList.add('list-group-item');
+			// new_tourn.innerHTML = `<span data-tournid="${response.id}">${response.name}</span>`;
+			new_tourn.innerHTML = `<span data-tournid="100">${tournamentName}</span>`;
+			tourn_list.appendChild(new_tourn);
 			hideModal('create-t-modal');
 		}
 	}
