@@ -8,10 +8,14 @@ import requests, json
 from login.models import CustomUser
 from login.serializers import *
 from livechat.views.utils import user_valid
+from usermanager.utils import check_authentication
 
 class BlacklistView(APIView):
 	# POST: add target user to blacklist
 	def post(self, request, user_id):
+		if not check_authentication(request):
+			return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['target_id']:
@@ -31,6 +35,9 @@ class BlacklistView(APIView):
 
 	# DELETE: unblacklist a user
 	def delete(self, request, user_id, target):
+		if not check_authentication(request):
+			return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 		if not user_valid(user_id) or not user_valid(target):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 		

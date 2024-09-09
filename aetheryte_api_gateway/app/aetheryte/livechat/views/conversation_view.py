@@ -8,11 +8,15 @@ import requests, json
 from login.models import CustomUser
 from login.serializers import *
 from livechat.views.utils import user_valid, user_exists
+from usermanager.utils import check_authentication
 
 # Conversations  
 class ConversationView(APIView):
 	# GET: conversations involving current user
 	def get(self, request, user_id):
+		if not check_authentication(request):
+			return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 		if not user_valid(user_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -28,6 +32,9 @@ class ConversationView(APIView):
 	
 	# POST: create conversation with two users
 	def post(self, request, user_id):
+		if not check_authentication(request):
+			return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['nickname']:

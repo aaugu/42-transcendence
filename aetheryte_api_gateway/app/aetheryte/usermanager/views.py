@@ -13,7 +13,7 @@ from .serializer import *
 
 class general_user(APIView):
     def get(self, request):
-        if check_autentication(request):
+        if check_authentication(request):
             users = CustomUser.objects.all()
             serializer = CustomUserSerializer(users, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -38,7 +38,7 @@ class general_user(APIView):
         
 class detailed_user(APIView):
     def get(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -49,7 +49,7 @@ class detailed_user(APIView):
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     def patch(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -64,7 +64,7 @@ class detailed_user(APIView):
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
 
     def delete(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -76,7 +76,7 @@ class detailed_user(APIView):
         
 class friends_list_user(APIView):
     def get(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -86,7 +86,7 @@ class friends_list_user(APIView):
             return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         
     def post(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -116,7 +116,7 @@ class friends_list_user(APIView):
         
 class friends_list_user_delete(APIView):
     def delete(self, request, pk, friend_id):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -138,7 +138,7 @@ class friends_list_user_delete(APIView):
         
 class get_friends_status(APIView):
     def get(self, request, pk):
-        if check_autentication(request):
+        if check_authentication(request):
             try:
                 user = CustomUser.objects.get(pk=pk)
             except CustomUser.DoesNotExist:
@@ -156,7 +156,7 @@ class get_friends_status(APIView):
 class ChangePasswordView(APIView):
 
     def post(self, request, user_id, *args, **kwargs):
-        if check_autentication(request):
+        if check_authentication(request):
             data = request.data.copy()
             data['user_id'] = user_id  # Ajoute l'ID de l'utilisateur au data pour le serializer
             serializer = ChangePasswordSerializer(data=data, context={'request': request})
