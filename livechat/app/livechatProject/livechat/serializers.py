@@ -1,4 +1,4 @@
-from livechat.models import User, Conversation, Message
+from livechat.models import User, Conversation, Message, Blacklist
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ['author', 'message', 'date', 'time']
 
-# class BlacklistSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Blacklist
-#         fields = ['initiator', 'target']
+class BlacklistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blacklist
+        fields = ['blacklisted_id']
