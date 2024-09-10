@@ -50,6 +50,8 @@ export async function blockUser(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
+		if (response.status === 409)
+			throw new Error('User already blocked');
 		throw new Error(`${response.status}`);
 	}
 	console.log('USER LOG: BLOCK USER SUCCESSFUL');
@@ -70,6 +72,8 @@ export async function unblockUser(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
+		if (response.status === 409)
+			throw new Error('User already unblocked');
 		throw new Error(`${response.status}`);
 	}
 	console.log('USER LOG: UNBLOCK USER SUCCESSFUL');

@@ -1,6 +1,7 @@
 import { convHistory } from "./convHistory.js";
 import { newConvButton }	from "./newConv.js";
 import { blockUser, colorBlockButton, is_blacklisted, set_is_blacklisted, unblockUser } from "./blacklist.js";
+import { errormsg } from "../../dom/errormsg.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -15,7 +16,7 @@ export async function livechatEvent(e) {
 
 	switch (target.id) {
 		case "chat-search-btn":
-			newConvButton(e);
+			newConvButton();
 			break;
 		case "chat-block-btn":
 			try {
@@ -33,6 +34,7 @@ export async function livechatEvent(e) {
 			}
 			catch (e) {
 				console.log(`USER LOG: ${e.message}`);
+				errormsg(e.message, 'livechat-errormsg');
 			}
 			break;
 		default:

@@ -14,9 +14,10 @@ async function getConvHistory(conv_id) {
 		},
 		credentials: 'include'
 	});
+
 	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
+		if (response.status === 404)
+			throw new Error('Conversation could not be found');
 		throw new Error(`${response.status}`);
 	}
 	const responseData = await response.json();
@@ -42,5 +43,6 @@ export async function convHistory(e) {
     }
     catch (e) {
         console.error("USER LOG: ", e.message);
+		errormsg(e.message, 'livechat-errormsg');
     }
 }

@@ -1,6 +1,6 @@
 import { userID } from "../user/updateProfile.js";
 
-let friendListRefreshInterval; 
+let friendListRefreshInterval;
 
 export async function getFriendList() {
     if (userID === null) {
@@ -94,12 +94,12 @@ export async function updateFriendList() {
             <li class="list-group-item">
                 <span>${friend.nickname}</span>
                 <div class="align-content-end">
-                    <button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">Unfriend</button>
+                    <button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">unfriend</button>
                     <span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
-                </div>    
+                </div>
             </li>
             `;
-        });  
+        });
     }
     catch (e) {
         console.log("USER LOG: ", e.message);

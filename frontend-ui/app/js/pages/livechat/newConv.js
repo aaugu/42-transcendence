@@ -1,8 +1,8 @@
-import { displayChatInterface } from './messages.js';
 import { userID } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
 import { set_is_blacklisted } from './blacklist.js';
-import { all_conversations } from './conversations.js';
+import { errormsg } from '../../dom/errormsg.js'
+import { undisplayChatInterface } from './messages.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -20,12 +20,14 @@ async function newConv(conv_nickname) {
 		}),
 		credentials: 'include'
 	});
-	const responseData = await response.json();
 	if (!response.ok) {
-		if (responseData.errors)
-			throw new Error(`${responseData.errors}`);
+		if (response.status === 404)
+			throw new Error('User does not exist');
+		else if (response.status === 409)
+			throw new Error('User already added to contact list');
 		throw new Error(`${response.status}`);
 	}
+	const responseData = await response.json();
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
@@ -34,14 +36,17 @@ async function newConv(conv_nickname) {
 	}
 }
 
-export async function newConvButton(e) {
+export async function newConvButton() {
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
 		await newConv(conv_nickname);
 		updateConvList();
 		set_is_blacklisted(false);
+		undisplayChatInterface();
+
 	} catch (e) {
 		console.error(`USER LOG: ${e.message}`);
+		errormsg(e.message, 'livechat-errormsg');
 	}
 	finally {
         document.getElementById('chat-search-input').value = '';
