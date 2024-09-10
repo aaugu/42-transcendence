@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv("PONG_DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "10.13.2.1", "10.13.1.5", "172.20.3.2"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
