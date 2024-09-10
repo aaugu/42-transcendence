@@ -1,6 +1,6 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
-import { userIsConnected, userID } from "../user/updateProfile.js";
+import { userID } from "../user/updateProfile.js";
 import { updateProfile } from "../user/updateProfile.js";
 
 export async function loginProcess() {
