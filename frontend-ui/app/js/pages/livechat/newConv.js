@@ -1,5 +1,8 @@
 import { displayChatInterface } from './messages.js';
 import { userID } from '../user/updateProfile.js';
+import { updateConvList } from './updateConvList.js';
+import { set_is_blacklisted } from './blacklist.js';
+import { all_conversations } from './conversations.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -24,7 +27,7 @@ async function newConv(conv_nickname) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: FETCH NEW CONV SUCCESSFUL');
+		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');
@@ -34,17 +37,9 @@ async function newConv(conv_nickname) {
 export async function newConvButton(e) {
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
-		const response = await newConv(conv_nickname);
-		displayChatInterface(conv_nickname);
-
-		const conv_id = response.conversation_id;
-		const contact_list = document.getElementById('chat-contact-list');
-		const new_list_item = document.createElement('li');
-		new_list_item.classList.add('list-group-item');
-		new_list_item.style.backgroundColor = '#A9C1FF';
-		new_list_item.innerHTML = `<span data-convid="${conv_id}">${conv_nickname}</span>`;
-		contact_list.appendChild(new_list_item);
-
+		await newConv(conv_nickname);
+		updateConvList();
+		set_is_blacklisted(false);
 	} catch (e) {
 		console.error(`USER LOG: ${e.message}`);
 	}

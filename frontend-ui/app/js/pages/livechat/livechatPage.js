@@ -58,7 +58,7 @@ export async function livechatPage() {
                             <textarea class="form-control" id="chat-textarea" rows="1" style="resize: none; font-size=10px;"></textarea>
                         </div>
                     </div>
-                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>    
+                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
                 </div>
              </div>
         </div>
