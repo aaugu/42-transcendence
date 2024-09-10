@@ -12,6 +12,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
+        print(f"Game ID: {self.game_id}")
         self.room_group_name = f"pong_{self.game_id}"
         print("Connected")
 
@@ -40,47 +41,48 @@ class PongConsumer(AsyncWebsocketConsumer):
         start_stop_reset = text_data_json.get("action")
 
         if (
-            not PongConsumer.game_states[self.game_id].paused
-            and not PongConsumer.game_states[self.game_id].finished
+            not PongConsumer.games[self.game_id].game_state.paused
+            and not PongConsumer.games[self.game_id].game_state.finished
         ):
             if direction_right_paddle == "up":
-                PongConsumer.game_states[self.game_id].paddles[1].move("up")
+              PongConsumer.games[self.game_id].game_state.paddles[1].move("up")
             elif direction_right_paddle == "down":
-                PongConsumer.game_states[self.game_id].paddles[1].move("down")
+              PongConsumer.games[self.game_id].game_state.paddles[1].move("down")
 
             if direction_left_paddle == "up":
-                PongConsumer.game_states[self.game_id].paddles[0].move("up")
+              PongConsumer.games[self.game_id].game_state.paddles[0].move("up")
             elif direction_left_paddle == "down":
-                PongConsumer.game_states[self.game_id].paddles[0].move("down")
+              PongConsumer.games[self.game_id].game_state.paddles[0].move("down")
 
         if start_stop_reset == "start":
             print(f"Start Triggered")
-            PongConsumer.game_states[self.game_id].start()
+            PongConsumer.games[self.game_id].game_state.start()
         elif start_stop_reset == "pause":
             print(f"Stop Triggered")
-            PongConsumer.game_states[self.game_id].pause()
+            PongConsumer.games[self.game_id].game_state.pause()
         elif start_stop_reset == "reset":
-            PongConsumer.game_states[self.game_id].reset_score()
+            PongConsumer.games[self.game_id].game_state.reset_score()
 
     async def game_loop(self):
         while True:
-            # Update de the GameState
-            PongConsumer.games[self.game_id].GameState.update()
+            # Update de the game_state
+            PongConsumer.games[self.game_id].game_state.update()
 
-            if PongConsumer.games[self.game_id].GameState.finished:
+            if PongConsumer.games[self.game_id].game_state.finished:
                 print(f"Game {self.game_id} finished")
+
 
                 winner_id, loser_id = self.determine_winner_loser()
 
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        "type": "game_finished",
+                        # "type": "game_finished",
                         "winner_id": winner_id,
                         "loser_id": loser_id,
                         "game_state": PongConsumer.games[
                             self.game_id
-                        ].GameState.to_dict(),
+                        ].game_state.to_dict(),
                     },
                 )
 
@@ -105,12 +107,12 @@ class PongConsumer(AsyncWebsocketConsumer):
     def determine_winner_loser(self):
         # Determine the winner and loser based on the final score
         if (
-            PongConsumer.games[self.game_id].GameState.score[0]
-            > PongConsumer.games[self.game_id].GameState.score[1]
+            PongConsumer.games[self.game_id].game_state.score[0]
+            > PongConsumer.games[self.game_id].game_state.score[1]
         ):
-            winner_id = PongConsumer.games[self.game_id].GameState.paddles[0].player_id
-            loser_id = PongConsumer.games[self.game_id].GameState.paddles[1].player_id
+            winner_id = PongConsumer.games[self.game_id].game_state.paddles[0].player_id
+            loser_id = PongConsumer.games[self.game_id].game_state.paddles[1].player_id
         else:
-            winner_id = PongConsumer.games[self.game_id].GameState.paddles[1].player_id
-            loser_id = PongConsumer.games[self.game_id].GameState.paddles[0].player_id
+            winner_id = PongConsumer.games[self.game_id].game_state.paddles[1].player_id
+            loser_id = PongConsumer.games[self.game_id].game_state.paddles[0].player_id
         return winner_id, loser_id

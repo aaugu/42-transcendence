@@ -52,7 +52,9 @@ export default async function createWebSocketConnection() {
 
   const gameData = await createGame(userID, mode);
 
-  const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameData.game_id}/`);
+  history.pushState({}, '', `${currentUrl}/${gameData.game_id}`);
+
+  const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameData.game_id}`);
 
   return socket;
 }
