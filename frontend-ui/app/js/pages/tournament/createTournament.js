@@ -51,7 +51,7 @@ export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
 	var playerNames;
 	var new_tournament;
-	const username = localStorage.getItem('nickname') || 'guest';
+	const nickname = localStorage.getItem('nickname') || 'guest';
 	const tournamentName = document.getElementById('tournament-name').value;
 
 	try {
@@ -70,7 +70,7 @@ export async function createTournamentButton() {
 			urlRoute('/tournament/game');
 		}
 		else {
-			playerNames = [username];
+			playerNames = [nickname];
 			const max_players = document.getElementById('t-nr-players').value;
 			new_tournament = newTournamentData(tournamentName, playerNames, parseInt(max_players), false, "");
 

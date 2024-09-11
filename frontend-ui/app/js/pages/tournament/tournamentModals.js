@@ -63,16 +63,19 @@ export async function openSingleTournamentModal(e) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
 			const joinButton = document.getElementById('t-join');
 			joinButton.classList.remove('hidden');
+			joinButton.dataset.tournid = t_id;
 		}
 		else if (has_started === false && has_joined === true){
 			t_modalText.innerText = 'You are already a participant of this tournament. Wanna start it?';
 			const startButton = document.getElementById('t-start');
 			startButton.classList.remove('hidden');
+			startButton.dataset.tournid = t_id;
 		}
 		else if (has_started === true && has_joined === true){
 			t_modalText.innerText = 'The tournament has already started. Go play!';
 			const playButton = document.getElementById('t-play');
 			playButton.classList.remove('hidden');
+			playButton.dataset.tournid = t_id;
 		}
 		else {
 			t_modalText.innerText = 'Sorry, this tournament has already started without you!';

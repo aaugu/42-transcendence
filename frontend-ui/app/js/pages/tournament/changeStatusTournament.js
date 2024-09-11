@@ -1,5 +1,4 @@
 import { errormsg } from '../../dom/errormsg.js';
-import { get_tournament_id } from './tournament.js';
 
 //status: start, end
 async function changeStatusTournament(tournament_id, game_status) {
@@ -29,7 +28,7 @@ async function changeStatusTournament(tournament_id, game_status) {
 export async function startTournamentButton() {
 	try {
 		const tournament_name = document.getElementById('single-t-modal-title').innerText;
-		const tournament_id = get_tournament_id(tournament_name);
+		const tourn_id = document.getElementById('t-start').dataset.tournid;
 
 		await changeStatusTournament(tournament_id, 'start');
 
