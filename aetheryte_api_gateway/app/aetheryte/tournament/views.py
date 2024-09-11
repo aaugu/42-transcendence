@@ -18,7 +18,7 @@ class GenerateMatchesView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
@@ -32,7 +32,7 @@ class GenerateMatchesView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
@@ -48,7 +48,7 @@ class StartMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/start/"
@@ -64,7 +64,7 @@ class EndMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/end/"
@@ -80,7 +80,7 @@ class TournamentView(APIView):
     @staticmethod
     def get(request: HttpRequest) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/remote/"
@@ -94,7 +94,7 @@ class TournamentView(APIView):
     @staticmethod
     def post(request: HttpRequest) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/remote/"
@@ -110,7 +110,7 @@ class TournamentPlayersView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
@@ -124,7 +124,7 @@ class TournamentPlayersView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
@@ -139,7 +139,7 @@ class TournamentPlayersView(APIView):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
@@ -155,7 +155,7 @@ class TournamentlocalView(APIView):
     @staticmethod
     def post(request: HttpRequest) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/local/"
@@ -172,7 +172,7 @@ class StartTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/start/"
@@ -188,7 +188,7 @@ class ManageTournamentView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
@@ -202,7 +202,7 @@ class ManageTournamentView(APIView):
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
@@ -217,7 +217,7 @@ class ManageTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
@@ -233,7 +233,7 @@ class DeleteInactiveTournamentView(APIView):
     @staticmethod
     def delete(request: HttpRequest) -> Response:
         try:
-            utils.check_autentication(request) == True
+            utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/delete_inactive/"

@@ -9,7 +9,8 @@ export function reset_all_tournaments() {
 export async function get_all_tournaments() {
 	try {
 		const response = await getTournaments();
-		all_tournaments = response.response.tournaments;
+		console.log('response: ', response);
+		all_tournaments = response.tournaments;
 		console.log("all_tournaments: ", all_tournaments);
 	}
 	catch (e) {

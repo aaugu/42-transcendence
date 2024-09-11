@@ -34,11 +34,11 @@ async function createTournament(new_tournament, mode) {
 	}
 }
 
-function newTournamentData(tournamentName, playerNames, is_private, password) {
+function newTournamentData(tournamentName, playerNames, max_players, is_private, password) {
 	const new_tournament = {
 		"name": tournamentName,
 		"user_id": userID,
-		"max_players": playerNames.length,
+		"max_players": max_players,
 		"player_names": playerNames,
 		"is_private": is_private,
 		"password": password
@@ -50,7 +50,7 @@ export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
 	var playerNames;
 	var new_tournament;
-	const username = localStorage.getItem('username') || 'guest';
+	const username = localStorage.getItem('nickname') || 'guest';
 	const tournamentName = document.getElementById('tournament-name').value;
 
 	try {
@@ -62,7 +62,7 @@ export async function createTournamentButton() {
 				}
 			});
 			playerNames = Array.from(inputs).map(input => input.value);
-			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
+			new_tournament = newTournamentData(tournamentName, playerNames, playerNames.length, false, "");
 
 			await createTournament(new_tournament, 'local');
 			hideModal('create-t-modal');
@@ -70,8 +70,10 @@ export async function createTournamentButton() {
 		}
 		else {
 			playerNames = [username];
-			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
+			const max_players = document.getElementById('t-nr-players').value;
+			new_tournament = newTournamentData(tournamentName, playerNames, parseInt(max_players), false, "");
 
+			console.log("new tournament data: ", new_tournament);
 			const response = await createTournament(new_tournament, 'remote');
 			// refresh the join list
 			const tourn_list = document.getElementById('tournament-list');
