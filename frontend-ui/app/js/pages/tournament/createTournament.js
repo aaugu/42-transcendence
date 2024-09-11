@@ -30,6 +30,7 @@ async function createTournament(new_tournament, mode) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE TOURNAMENT SUCCESSFUL');
+		return responseData;
 	} else {
 		throw new Error('No response from server');
 	}
@@ -65,9 +66,10 @@ export async function createTournamentButton() {
 			playerNames = Array.from(inputs).map(input => input.value);
 			new_tournament = newTournamentData(tournamentName, playerNames, playerNames.length, false, "");
 
-			await createTournament(new_tournament, 'local');
+			const response = await createTournament(new_tournament, 'local');
 			hideModal('create-t-modal');
-			urlRoute('/tournament/game');
+			localStorage.setItem('tourn_id', response.id);
+			urlRoute('/tournament/local');
 		}
 		else {
 			playerNames = [nickname];

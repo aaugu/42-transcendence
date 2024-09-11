@@ -20,8 +20,8 @@ export async function updateTournLists() {
     try {
         var html_my_tournaments = '';
         
-        const my_tournaments = await getMyTournaments();
-        console.log("my_tournaments: ", my_tournaments);
+        const response = await getMyTournaments();
+        const my_tournaments = response['active-tournaments'];
         if (Object.keys(my_tournaments).length !== 0) {
             my_tournaments.forEach(tournament => {
                 html_my_tournaments += `

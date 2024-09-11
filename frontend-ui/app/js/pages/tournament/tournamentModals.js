@@ -23,11 +23,13 @@ export function openCreateTournamentModal() {
 	else {
 		t_modalText.innerHTML = `
 			<p>Players can join your tournament from their profile.
-			Anyone can start it once at least 2 players have joined.</p>
+			You can start it once at least 2 players have joined.</p>
 		`;
 	}
 	const t_modal = new bootstrap.Modal(document.getElementById('create-t-modal'));
 	t_modal.show();
+	document.getElementById("t-nr-players").value = 2;
+	document.getElementById('tournament-name').value = "";
 }
 
 //tournament status 0 = created, 1 = in_progress, 2 = finished

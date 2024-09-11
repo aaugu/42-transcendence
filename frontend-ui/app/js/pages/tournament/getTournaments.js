@@ -63,10 +63,10 @@ export async function getMyTournaments() {
 	if (!response.ok) {
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
-		throw new Error('GET MY TOURNAMENT FAILED');
+		throw new Error('GET MY TOURNAMENTS FAILED');
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET MY TOURNAMENT SUCCESSFUL');
+		console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');

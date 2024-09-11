@@ -10,7 +10,6 @@ export async function get_all_tournaments() {
 	try {
 		const response = await getTournaments();
 		all_tournaments = response.tournaments;
-		console.log("all_tournaments: ", all_tournaments);
 	}
 	catch (e) {
 		console.error("USER LOG: ", e.message);
