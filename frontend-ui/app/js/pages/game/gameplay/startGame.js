@@ -7,12 +7,11 @@ import { canvasWidth, canvasHeight } from './GameConstants.js';
 
 export var socket;
 
-export async function startGame (event) {
-  
+export async function startGame(event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 	socket = await createWebSocketConnection();
-  console.log("FUNCTION START GAME");
+	console.log("FUNCTION START GAME");
 
 	infoCtn.innerHTML = "";
 	infoCtn.innerHTML = `<div>
@@ -29,10 +28,37 @@ export async function startGame (event) {
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
 
+	socket.onopen = function(event) {
+		console.log("WebSocket connection opened:", event);
+	};
+	
+	socket.onclose = function(event) {
+		console.log("WebSocket connection closed:", event);
+	};
+	
+	socket.onerror = function(error) {
+		console.error("WebSocket error:", error);
+	};
+
 	socket.onmessage = function (event) {
-		const data = JSON.parse(event.data);
-		if (data.game_state) {
-		updateGameState(data.game_state, canvas);
+		// console.log("Raw message received:", event.data);
+		try {
+			const data = JSON.parse(event.data);
+			// console.log("Parsed data:", data);
+			
+			if (data.game_state) {
+				// console.log("Game State", data.game_state);
+				updateGameState(data.game_state, canvas);
+			}
+	
+			if (data.game_finished) {
+				console.log("Game Finished", data.game_finished);
+				console.log("WinnerID", data.winner_id);
+				console.log("LoserID", data.loser_id);
+			}
+		} catch (error) {
+			console.error("Error parsing message:", error);
+			console.log("Raw message that caused error:", event.data);
 		}
 	};
 
@@ -45,17 +71,15 @@ export async function startGame (event) {
 	let keysPressed = {}
 
 	document.addEventListener("keydown", function (event) {
-    console.log("KEYDOWN", socket);
 		keysPressed[event.key] = true;
 		handleKeyPress(keysPressed, socket);
 	});
 
 	document.addEventListener("keyup", function (event) {
-    console.log("KEYUP", socket);
 		keysPressed[event.key] = false;
 		handleKeyPress(keysPressed, socket);
 	});
 
 
-  // start = true
+	// start = true
 }

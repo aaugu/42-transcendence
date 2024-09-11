@@ -104,6 +104,24 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Send the game state to the client
         await self.send(text_data=json.dumps({"game_state": game_state}))
 
+    async def game_finished(self, event):
+        print("Game Finished Method Called")
+        game_state = event["game_state"]
+        winner_id = event["winner_id"]
+        loser_id = event["loser_id"]
+
+        # Send the game state to the client
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "game_state": game_state,
+                    "winner_id": winner_id,
+                    "loser_id": loser_id,
+                    "game_finished": True,
+                }
+            )
+        )
+
     def determine_winner_loser(self):
         # Determine the winner and loser based on the final score
         if (

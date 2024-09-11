@@ -40,9 +40,9 @@ export default async function createWebSocketConnection() {
     // case "local-oneplayer":
     //   mode = "LOCAL_ONE_PLAYER";
     //   break;
-    // case "online-twoplayer":
-    //   mode = "ONLINE_TWO_PLAYERS";
-    //   break;
+    case "online-twoplayer":
+      mode = "ONLINE_TWO_PLAYERS";
+      break;
     // case "online-oneplayer":
     //   mode = "ONLINE_ONE_PLAYER";
     //   break;
@@ -52,7 +52,8 @@ export default async function createWebSocketConnection() {
 
   const gameData = await createGame(userID, mode);
 
-  history.replaceState({}, '', `${currentUrl}/${gameData.game_id}`);
+  // history.replaceState({}, '', `${currentUrl}/${gameData.game_id}`);
+  history.pushState({}, '', `${currentUrl}/${gameData.game_id}`);
 
   const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameData.game_id}`);
 
