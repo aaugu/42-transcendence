@@ -377,7 +377,7 @@ class TournamentView(View):
         if is_private:
             tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
 
-        Tournament.type = Tournament.REMOTE
+        tournament.type = Tournament.REMOTE
         max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
