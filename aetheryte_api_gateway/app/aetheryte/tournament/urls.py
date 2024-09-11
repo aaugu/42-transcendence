@@ -1,5 +1,5 @@
 from django.urls import path
-from tournament.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, TournamentlocalView, DeleteInactiveTournamentView)
+from tournament.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, TournamentlocalView, DeleteInactiveTournamentView, MyTournamentAsPlayerView, MyTournamentAsAdminView)
 
 urlpatterns = [
     path('remote/', TournamentView.as_view(), name='new_tournament'),
@@ -10,6 +10,8 @@ urlpatterns = [
     path('<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
     path('<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
     path('<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
+    path('<int:user_id>/mytournament/player', MyTournamentAsPlayerView.as_view(), name='tournament_as_player'),
+    path('<int:user_id>/mytournament/admin', MyTournamentAsAdminView.as_view(), name='tournament_as_admin'),
     path('delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
 ]
 

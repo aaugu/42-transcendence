@@ -244,3 +244,33 @@ class DeleteInactiveTournamentView(APIView):
             return Response(response_json, status=response.status_code)
         else:
             return Response(status=response.status_code)
+
+class MyTournamentAsPlayerView(APIView):
+    @staticmethod
+    def get(request: HttpRequest, user_id: int) -> Response:
+        try:
+            utils.check_authentication(request) == True
+        except Exception:
+            return Response('errors: access denied', status=403)
+        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/player"
+        response = requests.get(url = request_url)
+        if response.json() is not None:
+            response_json = response.json()
+            return Response(response_json, status=response.status_code)
+        else:
+            return Response(status=response.status_code)
+        
+class MyTournamentAsAdminView(APIView):
+    @staticmethod
+    def get(request: HttpRequest, user_id: int) -> Response:
+        try:
+            utils.check_authentication(request) == True
+        except Exception:
+            return Response('errors: access denied', status=403)
+        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/admin"
+        response = requests.get(url = request_url)
+        if response.json() is not None:
+            response_json = response.json()
+            return Response(response_json, status=response.status_code)
+        else:
+            return Response(status=response.status_code)

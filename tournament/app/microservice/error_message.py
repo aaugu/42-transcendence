@@ -31,3 +31,6 @@ TOURNAMENT_NOT_STARTED = 'Tournament has not started'
 MATCH_PLAYER_NOT_EXIST = 'Player does not exist'
 MATCH_NOT_FOUND = 'Match not found'
 BAD_JSON_FORMAT = 'Invalid JSON format in request body'
+
+NOT_ENOUGH_PLAYERS = 'Not enough players to start tournament'
+MATCHES_NOT_GENERATED = 'Matches have not been generated yet'
