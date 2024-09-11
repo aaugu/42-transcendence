@@ -77,7 +77,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
-                        # "type": "game_finished",
+                        "type": "game_finished",
                         "winner_id": winner_id,
                         "loser_id": loser_id,
                         "game_state": PongConsumer.games[
@@ -116,3 +116,5 @@ class PongConsumer(AsyncWebsocketConsumer):
             winner_id = PongConsumer.games[self.game_id].game_state.paddles[1].player_id
             loser_id = PongConsumer.games[self.game_id].game_state.paddles[0].player_id
         return winner_id, loser_id
+
+    
