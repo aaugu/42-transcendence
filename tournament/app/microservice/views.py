@@ -965,7 +965,6 @@ class DeleteInactiveTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse({'message': 'Tournament deleted'}, status=200)
 
-
 @method_decorator(csrf_exempt, name='dispatch')    
 class MyTournamentAsPlayerView(View):
     @staticmethod
