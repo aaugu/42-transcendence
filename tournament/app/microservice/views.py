@@ -107,11 +107,6 @@ class GenerateMatchesView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         try:
-            body = json.loads(request.body.decode('utf-8'))
-        except Exception:
-            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
-        try:
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
