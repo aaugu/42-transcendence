@@ -10,8 +10,8 @@ urlpatterns = [
     path('<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
     path('<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
     path('<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
-    path('<int:user_id>/mytournament/player', MyTournamentAsPlayerView.as_view(), name='tournament_as_player'),
-    path('<int:user_id>/mytournament/admin', MyTournamentAsAdminView.as_view(), name='tournament_as_admin'),
+    path('<int:user_id>/mytournament/player/', MyTournamentAsPlayerView.as_view(), name='tournament_as_player'),
+    path('<int:user_id>/mytournament/admin/', MyTournamentAsAdminView.as_view(), name='tournament_as_admin'),
     path('delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
 ]
 

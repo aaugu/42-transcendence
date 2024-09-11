@@ -252,7 +252,7 @@ class MyTournamentAsPlayerView(APIView):
             utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/player"
+        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/player/"
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
@@ -267,7 +267,7 @@ class MyTournamentAsAdminView(APIView):
             utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/admin"
+        request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/admin/"
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
