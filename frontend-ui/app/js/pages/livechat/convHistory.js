@@ -1,8 +1,8 @@
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { userID } from '../user/updateProfile.js';
-import { is_blacklisted, set_is_blacklisted } from "./blacklist.js";
+import { set_is_blacklisted } from "./blacklist.js";
 
-async function getConvHistory(conv_id) {
+export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
 		throw new Error('Did not find conversation ID');
 
