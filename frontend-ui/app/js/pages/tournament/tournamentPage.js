@@ -1,16 +1,4 @@
-import { get_all_tournaments, all_tournaments } from "./tournament.js";
-
 export async function tournamentPage() {
-    var html_tournaments = '';
-
-    await get_all_tournaments();
-    const tournaments = Object.values(all_tournaments);
-    tournaments.forEach(tournament => {
-        html_tournaments += `
-            <li class="list-group-item">
-                <span data-tournid="${tournament.id}">${tournament.name}</span>
-            </li>`;
-    });
 
 	return `
     <div class="two-column-container">
@@ -73,7 +61,6 @@ export async function tournamentPage() {
             <div class="content-box clearfix">
                 <h5 class="m-2">Join a tournament</h5>
                 <ul id="tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
-                    ${html_tournaments}
                 </ul>
             </div>
         </div>
