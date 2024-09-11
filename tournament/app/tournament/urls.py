@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, TournamentlocalView, DeleteInactiveTournamentView)
+from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, TournamentlocalView, DeleteInactiveTournamentView, MyTournamentAsPlayerView, MyTournamentAsAdminView)
 
 urlpatterns = [
     path('tournament/remote/', TournamentView.as_view(), name='new_tournament'),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('tournament/<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
     path('tournament/<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
     path('tournament/<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
+    path('tournament/<int:user_id>/mytournament/player', MyTournamentAsPlayerView.as_view(), name='tournament_as_player'),
+    path('tournament/<int:user_id>/mytournament/admin', MyTournamentAsAdminView.as_view(), name='tournament_as_admin'),
     path('tournament/delete_inactive/', DeleteInactiveTournamentView.as_view(), name='delete_inactive_tournament')
 ]
 

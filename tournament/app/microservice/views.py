@@ -708,7 +708,13 @@ class TournamentlocalView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class StartTournamentView(View):
     @staticmethod
-    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
+    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:    
+        try:
+            json_request = json.loads(request.body.decode('utf-8'))
+        except Exception:
+            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
+
+        user_id = json_request.get('user_id')
         try:
             tournament = Tournament.objects.get(id=tournament_id)
             players = tournament.players.all()
@@ -718,10 +724,35 @@ class StartTournamentView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
+        start_error = StartTournamentView.check_permissions(user_id, tournament, players, matches)
+        if start_error is not None:
+            return JsonResponse(data={'errors': [start_error]}, status=403)
+                                
         tournament.status = Tournament.IN_PROGRESS
         tournament.start_datetime = datetime.datetime.now(datetime.UTC)
 
+        try:
+            tournament.save()
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=500)
+
         return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
+    
+    @staticmethod
+    def check_permissions(user_id: int, tournament: Tournament, players, matches) -> Optional[str]:
+        if tournament.status != Tournament.CREATED:
+            return 'The tournament has already started'
+
+        if tournament.admin_id != user_id:
+            return 'You are not the owner of the tournament, so you cannot start it'
+
+        if len(players) < settings.MIN_PLAYERS:
+            return error.NOT_ENOUGH_PLAYERS
+
+        if len(matches) != int(2 ** math.ceil(math.log2(len(players))) - 1):
+            return error.MATCHES_NOT_GENERATED
+
+        return None
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ManageTournamentView(View):
@@ -934,7 +965,7 @@ class DeleteInactiveTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse({'message': 'Tournament deleted'}, status=200)
 
-""" Test a voir
+
 @method_decorator(csrf_exempt, name='dispatch')    
 class MyTournamentAsPlayerView(View):
     @staticmethod
@@ -995,4 +1026,3 @@ class MyTournamentAsAdminView(View):
             },
             status=200
         )
-     """
