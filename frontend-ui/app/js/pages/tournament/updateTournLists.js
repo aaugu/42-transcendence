@@ -1,4 +1,5 @@
 import { get_all_tournaments, all_tournaments } from './tournament.js';
+import { getMyTournaments } from './getTournaments.js';
 
 export async function updateTournLists() {
     var html_tournaments = '';
@@ -16,10 +17,24 @@ export async function updateTournLists() {
     const tourn_list = document.getElementById('tournament-list');
     tourn_list.innerHTML = html_tournaments;
 
-    // try {
-    //     var html_my_tournaments = '';
-    //     //
-    // catch (e) {
-
-    // }
+    try {
+        var html_my_tournaments = '';
+        
+        const my_tournaments = await getMyTournaments();
+        console.log("my_tournaments: ", my_tournaments);
+        if (Object.keys(my_tournaments).length !== 0) {
+            my_tournaments.forEach(tournament => {
+                html_my_tournaments += `
+                <li class="list-group-item">
+                    <span data-tournid="${tournament.id}">${tournament.name}</span>
+                </li>`;
+            });
+        }
+        const my_tourn_list = document.getElementById('my-tournament-list');
+        my_tourn_list.innerHTML = html_my_tournaments;
+    }
+    catch (e) {
+        console.error('USER LOG: ', e.message);
+        html_my_tournaments = '';
+    }
 }
