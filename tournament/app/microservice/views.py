@@ -922,8 +922,8 @@ class ManageTournamentView(View):
             else:
                 tournament.password = make_password(new_password)
         return None
-
-@method_decorator(csrf_exempt, name='dispatch')    
+    
+@method_decorator(csrf_exempt, name='dispatch')
 class DeleteInactiveTournamentView(View):
     @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
@@ -938,3 +938,66 @@ class DeleteInactiveTournamentView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse({'message': 'Tournament deleted'}, status=200)
+
+""" Test a voir
+@method_decorator(csrf_exempt, name='dispatch')    
+class MyTournamentAsPlayerView(View):
+    @staticmethod
+    def get(request: HttpRequest, user_id: int) -> JsonResponse:
+        active_tournaments = []
+
+        try:
+            my_tournaments = Tournament.objects.filter(
+                status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
+                type__in=[Tournament.REMOTE],
+                players__user_id=user_id
+            )
+        except ObjectDoesNotExist:
+            my_tournaments = []
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=500)
+
+        if len(my_tournaments) > 0:
+            active_tournaments.extend(my_tournaments)
+
+        tournaments_data = TournamentUtils.tournament_to_json(active_tournaments)
+
+        return JsonResponse(
+            {
+                'nb-active-tournaments': len(tournaments_data),
+                'active-tournaments': tournaments_data
+            },
+            status=200
+        )
+
+@method_decorator(csrf_exempt, name='dispatch')    
+class MyTournamentAsAdminView(View):
+    @staticmethod
+    def get(request: HttpRequest, user_id: int) -> JsonResponse:
+        user_id = #get_user_id(request)
+        active_tournaments = []
+
+        try:
+            my_tournaments = Tournament.objects.filter(
+                status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
+                type__in=[Tournament.REMOTE],
+                admin_id=user_id
+            )
+        except ObjectDoesNotExist:
+            my_tournaments = []
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=500)
+
+        if len(my_tournaments) > 0:
+            active_tournaments.extend(my_tournaments)
+
+        tournaments_data = TournamentUtils.tournament_to_json(active_tournaments)
+
+        return JsonResponse(
+            {
+                'nb-active-tournaments': len(tournaments_data),
+                'active-tournaments': tournaments_data
+            },
+            status=200
+        )
+     """
