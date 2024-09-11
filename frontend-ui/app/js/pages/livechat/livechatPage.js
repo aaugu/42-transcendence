@@ -1,27 +1,4 @@
-import { all_conversations, get_all_conv } from "./conversations.js";
-import { userID } from "../user/updateProfile.js";
-
 export async function livechatPage() {
-    var html_contacts = '';
-
-    await get_all_conv();
-    var contact_nickname, contact_id;
-    if (Object.keys(all_conversations).length !== 0) {
-        all_conversations.forEach(contact => {
-            if (contact.user_1.id === userID) {
-                contact_nickname = contact.user_2.nickname;
-                contact_id = contact.user_2.id;
-            }
-            else {
-                contact_nickname = contact.user_1.nickname;
-                contact_id = contact.user_1.id;
-            }
-            html_contacts += `
-                <li class="list-group-item" style="background-color: #A9C1FF;">
-                    <span data-convid="${contact.id}" data-ctcid="${contact_id}">${contact_nickname}</span>
-                </li>`;
-        });
-    }
 
     return `
     <div class="content-box d-flex">
@@ -33,10 +10,10 @@ export async function livechatPage() {
                         <div class="input-group-append">
                             <button id="chat-search-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Search</button>
                         </div>
+                        <span class="hidden mt-1 text-danger" id="livechat-errormsg" style="font-size: 10px;"></span>
                     </div>
                 </div>
                     <ul id="chat-contact-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
-                        ${html_contacts}
                     </ul>
             </div>
             <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto">
@@ -58,7 +35,7 @@ export async function livechatPage() {
                             <textarea class="form-control" id="chat-textarea" rows="1" style="resize: none; font-size=10px;"></textarea>
                         </div>
                     </div>
-                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>    
+                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
                 </div>
              </div>
         </div>
