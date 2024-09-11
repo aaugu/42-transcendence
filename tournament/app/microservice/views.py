@@ -218,8 +218,8 @@ class StartMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
-        player1 = body.get('player1')
-        player2 = body.get('player2')
+        player1 = body.get('player_1')
+        player2 = body.get('player_2')
 
         try:
             player1 = Player.objects.get(tournament_id=tournament_id, user_id=player1)
