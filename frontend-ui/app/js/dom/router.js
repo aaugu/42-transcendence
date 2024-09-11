@@ -18,7 +18,7 @@ import { updateConvList } from "../pages/livechat/updateConvList.js"
 import { startFriendListRefresh, clearFriendList } from "../pages/profile/friends.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
-import { updateTournList } from "../pages/tournament/updateTournList.js"
+import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		"/tournament" : {
 			content: tournamentPage,
 			eventListener: tournamentEvent,
-			startFunction: updateTournList,
+			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
 		"/tournament/game" : {

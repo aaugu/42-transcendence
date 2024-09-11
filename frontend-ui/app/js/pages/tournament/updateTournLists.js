@@ -1,6 +1,6 @@
 import { get_all_tournaments, all_tournaments } from './tournament.js';
 
-export async function updateTournList() {
+export async function updateTournLists() {
     var html_tournaments = '';
 
 	await get_all_tournaments();
@@ -15,4 +15,11 @@ export async function updateTournList() {
     
     const tourn_list = document.getElementById('tournament-list');
     tourn_list.innerHTML = html_tournaments;
+
+    // try {
+    //     var html_my_tournaments = '';
+    //     //
+    // catch (e) {
+
+    // }
 }

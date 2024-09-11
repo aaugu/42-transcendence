@@ -1,7 +1,5 @@
 import { errormsg } from "../../dom/errormsg.js";
-import { get_tournament_id } from "./tournament.js";
 import { getTournamentDetails } from "./getTournaments.js";
-import { userID } from "../user/updateProfile.js";
 
 export function openCreateTournamentModal() {
 	if (document.getElementById('tournament-name').value == "") {
@@ -54,10 +52,6 @@ export async function openSingleTournamentModal(e) {
 			}
 		}
 
-		// const has_joined = true;
-		// const has_started = false;
-		// console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
-
 		document.getElementById("single-t-modal-title").innerText = t_name;
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
@@ -66,10 +60,7 @@ export async function openSingleTournamentModal(e) {
 			joinButton.dataset.tournid = t_id;
 		}
 		else if (has_started === false && has_joined === true){
-			t_modalText.innerText = 'You are already a participant of this tournament. Wanna start it?';
-			const startButton = document.getElementById('t-start');
-			startButton.classList.remove('hidden');
-			startButton.dataset.tournid = t_id;
+			t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
 		}
 		else if (has_started === true && has_joined === true){
 			t_modalText.innerText = 'The tournament has already started. Go play!';

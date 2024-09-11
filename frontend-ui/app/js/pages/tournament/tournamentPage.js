@@ -63,6 +63,11 @@ export async function tournamentPage() {
                 <ul id="tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
                 </ul>
             </div>
+            <div class="content-box clearfix">
+                <h5 class="m-2">My tournaments</h5>
+                <ul id="my-tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
+                </ul>
+            </div>
         </div>
         <!-- Join/start/play tournament modal -->
         <div class="modal fade" id="single-t-modal" tabindex="-1" aria-labelledby="single-t-modal" aria-hidden="true">

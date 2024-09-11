@@ -2,7 +2,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
-import { updateTournList } from './updateTournList.js';
+import { updateTournLists } from './updateTournLists.js';
 
 //mode can  be local or remote
 async function createTournament(new_tournament, mode) {
@@ -76,7 +76,7 @@ export async function createTournamentButton() {
 
 			console.log("new tournament data: ", new_tournament);
 			await createTournament(new_tournament, 'remote');
-			updateTournList();
+			updateTournLists();
 			hideModal('create-t-modal');
 		}
 	}
