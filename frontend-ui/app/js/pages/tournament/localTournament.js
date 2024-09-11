@@ -11,15 +11,14 @@ export async function startLocalTournament() {
     try {
         const response = await generateMatches(tourn_id, 'POST');
         console.log("matches: ", response);
+
+        //startTournamentView (patch), give tourn_id
+        //startMatchView (post), give tourn_id, body: player1, player2
+        startGame();
     }
     catch (e) {
         console.error(`USER LOG: ${e.message}`);
         // urlRoute('/tournament');
     }
-    //generateMatchView returns match list
-    // generateMatches
-    //startTournamentView (patch), give tourn_id
-    //startMatchView (post), give tourn_id, body: player1, player2
-
-    startGame();
+ 
 }
