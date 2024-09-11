@@ -333,7 +333,7 @@ class EndMatchView(View):
             next_match.save()
 
 @method_decorator(csrf_exempt, name='dispatch')    
-class TournamentView(View):
+class TournamentView(View): 
     @staticmethod
     def get(request: HttpRequest) -> JsonResponse:
         filter_params = TournamentView.get_filter_params(request)
