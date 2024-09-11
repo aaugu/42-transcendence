@@ -999,7 +999,6 @@ class MyTournamentAsPlayerView(View):
 class MyTournamentAsAdminView(View):
     @staticmethod
     def get(request: HttpRequest, user_id: int) -> JsonResponse:
-        user_id = #get_user_id(request)
         active_tournaments = []
 
         try:
