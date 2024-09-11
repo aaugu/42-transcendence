@@ -1,14 +1,13 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
-import { userIsConnected } from "../user/updateProfile.js";
-import { updateProfile } from "../user/updateProfile.js";
 import { userID } from "../user/updateProfile.js";
+import { updateProfile } from "../user/updateProfile.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
-    if (userIsConnected === true){
+    if (userID !== null){
         errormsg("You are already logged in, redirecting to profile page...", "homepage-errormsg");
         console.log("USER LOG: ALREADY LOGGED IN");
         setTimeout(() => {

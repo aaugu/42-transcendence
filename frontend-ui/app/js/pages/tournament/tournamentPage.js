@@ -72,7 +72,7 @@ export async function tournamentPage() {
         <div class="column-right" style="flex: 1 1 40%;">
             <div class="content-box clearfix">
                 <h5 class="m-2">Join a tournament</h5>
-                <ul class="list-group d-flex custom-scrollbar m-2" style="max-height: 300px;">
+                <ul id="tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
                     ${html_tournaments}
                 </ul>
             </div>
