@@ -90,6 +90,7 @@ export function displayChatInterface (ctc_id) {
 export function undisplayChatInterface() {
     // const welcomeMessages = document.getElementById('chat-welcome');
     // welcomeMessages.innerHTML = `<div class="h6 text-center">${msg}</div>`;
+    document.getElementById('chat-msgs').innerHTML = '';
     document.getElementById('chat-div-textarea').classList.add('hidden');
     document.getElementById('chat-send').classList.add('hidden');
     document.getElementById('chat-play-pong').classList.add('hidden');

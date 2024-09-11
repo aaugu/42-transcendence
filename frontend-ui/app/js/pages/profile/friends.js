@@ -34,6 +34,9 @@ export async function addFriend(friend_nickname) {
     if (userID === null) {
         throw new Error('Could not find user ID');
     }
+	else if (friend_nickname === localStorage.getItem('nickname')) {
+		throw new Error('Cannot add yourself to contact list');
+	}
 
     const response = await fetch('https://localhost:10444/api/user/' + userID + '/friends/', {
 		method: 'POST',

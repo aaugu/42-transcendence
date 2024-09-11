@@ -2,11 +2,15 @@ import { userID } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
 import { set_is_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
-import { undisplayChatInterface } from './messages.js';
+import { displayChatInterface, displayMessages } from './messages.js';
+import { getConvHistory } from './convHistory.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
 		throw new Error('Did not find userID or nickname invalid');
+	}
+	else if (conv_nickname === localStorage.getItem('nickname')) {
+		throw new Error('Cannot add yourself to contact list');
 	}
 
 	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
@@ -39,10 +43,21 @@ async function newConv(conv_nickname) {
 export async function newConvButton() {
 	const conv_nickname = document.getElementById('chat-search-input').value;
 	try {
-		await newConv(conv_nickname);
+		const response = await newConv(conv_nickname);
+		const conv_id = response.conversation_id;
+		
+		const history = await getConvHistory(conv_id);
+		set_is_blacklisted(history.is_blacklisted);
+		// console.log("history", history);
 		updateConvList();
-		set_is_blacklisted(false);
-		undisplayChatInterface();
+		const users = history.users;
+		if (users[0].id === userID) {
+			displayChatInterface(users[1].id);
+		}
+		else {
+			displayChatInterface(users[0].id);
+		}
+		displayMessages(history);
 
 	} catch (e) {
 		console.error(`USER LOG: ${e.message}`);
