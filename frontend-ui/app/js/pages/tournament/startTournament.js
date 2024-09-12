@@ -20,7 +20,7 @@ export async function startTournament(tournament_id) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log(`USER LOG: ${responseData.message}`);
+		console.log(`TOURNAMENT LOG: ${responseData.message}`);
 	} else {
 		throw new Error('No response from server');
 	}
