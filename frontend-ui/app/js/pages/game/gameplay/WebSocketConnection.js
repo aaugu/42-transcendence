@@ -21,20 +21,19 @@ export async function createGame(userID, mode) {
   return data;
 }
 
-export default async function createWebSocketConnection() {
-  // const socket = new WebSocket("ws://" + window.location.host + "/ws/pong/");
-
-  // Generate a unique ID
-
+export default async function createWebSocketConnection(gameId = null) {
   const currentUrl = window.location.href;
 
   var mode = currentUrl.split("/")[3];
-
-  console.log(`MODE: ${mode}, USER ID: ${userID}`);
-
+  // if (!gameId) {
+  //   console.log(`MODE: ${mode}, USER ID: ${userID}`);
+  // }
 
   switch (mode) {
     case "local-twoplayer":
+      mode = "LOCAL_TWO_PLAYERS";
+      break;
+    case "join-game":
       mode = "LOCAL_TWO_PLAYERS";
       break;
     // case "local-oneplayer":
@@ -50,12 +49,47 @@ export default async function createWebSocketConnection() {
       console.log("Invalid mode");
   }
 
-  const gameData = await createGame(userID, mode);
+  let gameData;
 
-  // history.replaceState({}, '', `${currentUrl}/${gameData.game_id}`);
-  history.pushState({}, '', `${currentUrl}/${gameData.game_id}`);
-
-  const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameData.game_id}`);
-
-  return socket;
+  if (!gameId) {
+    gameData = await createGame(userID, mode);
+    history.pushState({}, "", `${currentUrl}/${gameData.game_id}`);
+    console.log("Location", window.location.href);
+    const socket = new WebSocket(
+      `ws://localhost:9000/ws/pong/${gameData.game_id}`
+    );
+    return socket;
+  } else {
+    let url = window.location.href.split("/");
+    console.log(url);
+    if (url.length > 4) {
+      // Get the old gameId from the URL
+      let oldGameId = url[url.length - 1];
+      // Check if the new gameId is different from the old one
+      if (oldGameId !== gameId) {
+        // Replace the old gameId with the new one
+        url[url.length - 1] = gameId;
+        // Join the URL segments back together
+        let newUrl = url.join("/");
+        history.pushState({}, "", newUrl);
+        console.log("Location Join Game", newUrl);
+        const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
+        return socket;
+      } else {
+        console.log(
+          "The new gameId is the same as the old one. No need to establish a new WebSocket connection."
+        );
+        return null;
+      }
+    } else {
+      // Append the new gameId to the URL
+      url.push(gameId);
+      // Join the URL segments back together
+      let newUrl = url.join("/");
+      history.pushState({}, "", newUrl);
+      console.log("Location Join Game", newUrl);
+      const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
+      return socket;
+    }
+  }
 }
