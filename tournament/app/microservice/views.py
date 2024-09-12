@@ -418,7 +418,6 @@ class TournamentView(View):
             valid_nickname, nickname_errors = TournamentPlayersView.is_valid_nickname(admin_nickname[0])
             if not valid_nickname:
                 return nickname_errors
-            print(admin_nickname[0])
             Player.objects.create(
                 nickname=admin_nickname[0],
                 user_id=user_id,
