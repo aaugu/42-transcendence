@@ -2,6 +2,10 @@ import { signupPage } from "../pages/signup/signupPage.js"
 import { signupEvent } from "../pages/signup/signupEvent.js"
 import { error404Page } from "../pages/errorpage/error404Page.js"
 import { gamePage } from "../pages/game/gamePage.js"
+/* Added by nate for remote game */
+import { joinGamePage } from "../pages/game/joinGamePage.js"
+import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js"
+/* */
 import { profilePage } from "../pages/profile/profilePage.js"
 import { loginPage } from "../pages/login/loginPage.js"
 import { loginEvent } from "../pages/login/loginEvent.js"
@@ -110,6 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			eventListener: livechatEvent,
 			description: "stats page"
 		},
+		/* Added by nate for remote game */
+		"/join-game" : {
+			content: joinGamePage,
+			eventListener: joinGameEvent,
+			description: "join an existing game",
+		}
     }
 
     urlRoute = (url) => {
