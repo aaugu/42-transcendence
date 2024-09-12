@@ -1,7 +1,5 @@
 import { errormsg } from "../../dom/errormsg.js";
-import { get_tournament_id } from "./tournament.js";
 import { getTournamentDetails } from "./getTournaments.js";
-import { userID } from "../user/updateProfile.js";
 
 export function openCreateTournamentModal() {
 	if (document.getElementById('tournament-name').value == "") {
@@ -25,11 +23,13 @@ export function openCreateTournamentModal() {
 	else {
 		t_modalText.innerHTML = `
 			<p>Players can join your tournament from their profile.
-			Anyone can start it once at least 2 players have joined.</p>
+			You can start it once at least 2 players have joined.</p>
 		`;
 	}
 	const t_modal = new bootstrap.Modal(document.getElementById('create-t-modal'));
 	t_modal.show();
+	document.getElementById("t-nr-players").value = 2;
+	document.getElementById('tournament-name').value = "";
 }
 
 //tournament status 0 = created, 1 = in_progress, 2 = finished
@@ -54,25 +54,21 @@ export async function openSingleTournamentModal(e) {
 			}
 		}
 
-		// const has_joined = true;
-		// const has_started = false;
-		// console.log("user has_joined: ", has_joined, "user has_started: ", has_started);
-
 		document.getElementById("single-t-modal-title").innerText = t_name;
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
 			const joinButton = document.getElementById('t-join');
 			joinButton.classList.remove('hidden');
+			joinButton.dataset.tournid = t_id;
 		}
 		else if (has_started === false && has_joined === true){
-			t_modalText.innerText = 'You are already a participant of this tournament. Wanna start it?';
-			const startButton = document.getElementById('t-start');
-			startButton.classList.remove('hidden');
+			t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
 		}
 		else if (has_started === true && has_joined === true){
 			t_modalText.innerText = 'The tournament has already started. Go play!';
 			const playButton = document.getElementById('t-play');
 			playButton.classList.remove('hidden');
+			playButton.dataset.tournid = t_id;
 		}
 		else {
 			t_modalText.innerText = 'Sorry, this tournament has already started without you!';

@@ -2,6 +2,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
+import { updateTournLists } from './updateTournLists.js';
 
 //mode can  be local or remote
 async function createTournament(new_tournament, mode) {
@@ -29,6 +30,7 @@ async function createTournament(new_tournament, mode) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE TOURNAMENT SUCCESSFUL');
+		return responseData;
 	} else {
 		throw new Error('No response from server');
 	}
@@ -50,7 +52,7 @@ export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
 	var playerNames;
 	var new_tournament;
-	const username = localStorage.getItem('nickname') || 'guest';
+	const nickname = localStorage.getItem('nickname') || 'guest';
 	const tournamentName = document.getElementById('tournament-name').value;
 
 	try {
@@ -64,24 +66,19 @@ export async function createTournamentButton() {
 			playerNames = Array.from(inputs).map(input => input.value);
 			new_tournament = newTournamentData(tournamentName, playerNames, playerNames.length, false, "");
 
-			await createTournament(new_tournament, 'local');
+			const response = await createTournament(new_tournament, 'local');
 			hideModal('create-t-modal');
-			urlRoute('/tournament/game');
+			localStorage.setItem('tourn_id', response.id);
+			urlRoute('/tournament/local');
 		}
 		else {
-			playerNames = [username];
+			playerNames = [nickname];
 			const max_players = document.getElementById('t-nr-players').value;
 			new_tournament = newTournamentData(tournamentName, playerNames, parseInt(max_players), false, "");
 
 			console.log("new tournament data: ", new_tournament);
-			const response = await createTournament(new_tournament, 'remote');
-			// refresh the join list
-			const tourn_list = document.getElementById('tournament-list');
-			const new_tourn = document.createElement('li');
-			new_tourn.classList.add('list-group-item');
-			// new_tourn.innerHTML = `<span data-tournid="${response.id}">${response.name}</span>`;
-			new_tourn.innerHTML = `<span data-tournid="100">${tournamentName}</span>`;
-			tourn_list.appendChild(new_tourn);
+			await createTournament(new_tournament, 'remote');
+			updateTournLists();
 			hideModal('create-t-modal');
 		}
 	}

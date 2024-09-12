@@ -1,6 +1,6 @@
 import { userID } from '../user/updateProfile.js';
-import { get_tournament_id } from './tournament.js';
 import { errormsg } from '../../dom/errormsg.js';
+import { hideModal } from '../../dom/modal.js';
 
 async function joinTournament(nickname, tournament_id) {
 	const response = await fetch('https://localhost:10444/api/tournament/' + tournament_id + '/players/', {
@@ -31,14 +31,20 @@ async function joinTournament(nickname, tournament_id) {
 export async function joinTournamentButton() {
 	const nickname = localStorage.getItem('nickname') || 'guest';
 	const tournament_name = document.getElementById("single-t-modal-title").innerText;
-	const tournament_id = get_tournament_id(tournament_name);
+	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
 		// console.log("nickname: ", nickname, "tournament_name:", tournament_name, "tournament_id: ", tournament_id);
 
-		await joinTournament(nickname, tournament_id);
+		await joinTournament(nickname, tourn_id);
+		document.getElementById('t-join').classList.add('hidden');
+		hideModal('single-t-modal');
 	}
 	catch (e) {
 		console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
-		errormsg('Not possible, try again later', "single-t-modal-errormsg");
+		errormsg(e.message, "single-t-modal-errormsg");
+		setTimeout(() => {
+			hideModal('single-t-modal');
+			document.getElementById('t-join').classList.add('hidden');
+		}, 1000);
 	}
 }
