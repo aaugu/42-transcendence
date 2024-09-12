@@ -72,7 +72,7 @@ export async function createTournamentButton() {
 			urlRoute('/tournament/local');
 		}
 		else {
-			playerNames = [nickname];
+			playerNames = nickname;
 			const max_players = document.getElementById('t-nr-players').value;
 			new_tournament = newTournamentData(tournamentName, playerNames, parseInt(max_players), false, "");
 
@@ -81,9 +81,11 @@ export async function createTournamentButton() {
 			updateTournLists();
 			hideModal('create-t-modal');
 		}
+		document.getElementById("t-nr-players").value = 2;
+		document.getElementById('tournament-name').value = "";
 	}
 	catch (e) {
 		console.log(`USER LOG: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.message}`);
-		errormsg ('Creation failed, try again later', "t-modal-errormsg");
+		errormsg (e.message, "t-modal-errormsg");
 	}
 }

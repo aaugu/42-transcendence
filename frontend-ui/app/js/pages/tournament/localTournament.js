@@ -24,8 +24,14 @@ export async function startLocalTournament() {
 
     }
     catch (e) {
-        console.error(`USER LOG: ${e.message}`);
+        const tournament_name = document.getElementById('single-t-modal-title').innerText;
+		console.error(`USER LOG: ERROR STARTING ${tournament_name}: ${e.message}`);
+		errormsg(e.message, "single-t-modal-errormsg");
+		setTimeout(() => {
+			hideModal('single-t-modal');
+			document.getElementById('t-start').classList.add('hidden');
+		}, 1000);
+	}
         // urlRoute('/tournament');
-    }
- 
+
 }

@@ -52,7 +52,7 @@ export async function startMatch(tournament_id, player1, player2) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: CHANGE TOURNAMENT STATUS SUCCESSFUL');
+		console.log('USER LOG: START TOURNAMENT SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');
