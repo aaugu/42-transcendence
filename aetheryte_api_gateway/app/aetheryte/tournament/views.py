@@ -36,8 +36,7 @@ class GenerateMatchesView(APIView):
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
-        json_request = json.loads(request.body.decode('utf-8'))
-        response = requests.post(url = request_url, json = json_request)
+        response = requests.post(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response(response_json, status=response.status_code)
