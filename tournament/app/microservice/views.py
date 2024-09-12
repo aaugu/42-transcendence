@@ -974,7 +974,7 @@ class MyTournamentAsPlayerView(View):
         try:
             my_tournaments = Tournament.objects.filter(
                 status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
-                type__in=[Tournament.REMOTE],
+                type__in=[Tournament.REMOTE, Tournament.LOCAL],
                 players__user_id=user_id
             )
         except ObjectDoesNotExist:
@@ -1004,7 +1004,7 @@ class MyTournamentAsAdminView(View):
         try:
             my_tournaments = Tournament.objects.filter(
                 status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
-                type__in=[Tournament.REMOTE],
+                type__in=[Tournament.REMOTE, Tournament.LOCAL],
                 admin_id=user_id
             )
         except ObjectDoesNotExist:
