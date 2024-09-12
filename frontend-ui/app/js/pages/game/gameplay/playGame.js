@@ -7,7 +7,7 @@ import { canvasWidth, canvasHeight } from './GameConstants.js';
 
 export var socket;
 
-export async function startGame(event) {
+export async function playGame(event) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 	socket = await createWebSocketConnection();

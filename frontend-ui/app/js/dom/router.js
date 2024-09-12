@@ -21,7 +21,7 @@ import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { startLocalTournament } from "../pages/tournament/localTournament.js"
 import { startRemoteTournament } from "../pages/tournament/remoteTournament.js"
-import { playTournamentGame } from "../pages/game/gameplay/playTournamentGame.js"
+import { playTournament } from "../pages/game/gameplay/playTournament.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -96,14 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament/local" : {
+		"/tournament-local" : {
 			content: gamePage,
-			startFunction: playTournamentGame,
+			startFunction: playTournament,
 			description: "local tournament game page"
 		},
-		"/tournament/remote" : {
+		"/tournament-remote" : {
 			content: gamePage,
-			startFunction: playTournamentGame,
+			startFunction: playTournament,
 			description: "remote tournament game page"
 		},
         "/profile" : {

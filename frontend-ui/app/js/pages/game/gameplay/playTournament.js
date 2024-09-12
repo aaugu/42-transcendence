@@ -10,30 +10,21 @@ import { startTournament } from '../../tournament/startTournament.js';
 export var socket;
 
 function getNextMatch(matches) {
-	matches.forEach(match => {
-		if (match.status === "Not played") {
-			return match;
-		}
-	});
-	return null;
+
+	if (matches === null)
+		return null;
+	return matches.find(match => match.status === "Not played") || null;
 }
 
-async function launchTournament() {
-	const tourn_id = localStorage.getItem('tourn_id');
-    localStorage.removeItem('tourn_id');
-    if (tourn_id === null || tourn_id === undefined) {
-        console.log("TOURNAMENT LOG: Tournament ID not found");
-	}
+async function launchTournament(tourn_id) {
 	try {
 		const response = await generateMatches(tourn_id, 'POST');
-        console.log("matches: ", response);
         await startTournament(tourn_id);
-		const next_match = getNextMatch(response.matches);
-		return next_match;
+		return response.matches;
 	}
 	catch (e) {
 		console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
-		// errormsg(e.message, "single-t-modal-errormsg");
+		return null;
 	}
 }
 
@@ -48,14 +39,26 @@ function sendPlayerDataToGame(match) {
 	socket.send(message);
 }
 
-async function updateMatches(winner) {
+async function updateMatches(tourn_id, winner) {
+	try {
+		await endMatch(tourn_id, winner);
+		const upd_matches = await generateMatches(tourn_id, 'GET');
 
+		return upd_matches;
+	}
+	catch (e) {
+		console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
+		return null;
+	}
 }
 
-export async function playTournamentGame() {
+export async function playTournament() {
+	const tourn_id = localStorage.getItem('tourn_id');
+    localStorage.removeItem('tourn_id');
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
-	const first_match = await launchTournament();
+	const all_matches = await launchTournament(tourn_id);
+	const first_match = getNextMatch(all_matches);
 	if (first_match === null) {
 		console.log("TOURNAMENT LOG: No match to start");
 		return;
@@ -108,10 +111,10 @@ export async function playTournamentGame() {
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
 
-				//end match
-				//get next match
-				//send next match to game
-
+				const upd_matches = updateMatches(tourn_id, data.winner_id);
+				const next_match = getNextMatch(upd_matches);
+				if (next_match !== null)
+					sendPlayerDataToGame(next_match);
 			}
 		} catch (error) {
 			console.error("Error parsing message:", error);

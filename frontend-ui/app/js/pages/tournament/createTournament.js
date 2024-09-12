@@ -69,7 +69,7 @@ export async function createTournamentButton() {
 			const response = await createTournament(new_tournament, 'local');
 			hideModal('create-t-modal');
 			localStorage.setItem('tourn_id', response.id);
-			urlRoute('/tournament/local');
+			urlRoute('/tournament-local');
 		}
 		else {
 			playerNames = nickname;
