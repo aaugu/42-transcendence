@@ -413,13 +413,14 @@ class TournamentView(View):
 
     @staticmethod
     def register_admin_as_player(json_request, tournament: Tournament, user_id: int) -> Optional[list[str]]:
-        admin_nickname = json_request.get('player_names')
+        admin_nickname = list(json_request.get('player_names'))
         if admin_nickname is not None:
             valid_nickname, nickname_errors = TournamentPlayersView.is_valid_nickname(admin_nickname[0])
             if not valid_nickname:
                 return nickname_errors
+            print(admin_nickname[0])
             Player.objects.create(
-                nickname=admin_nickname,
+                nickname=admin_nickname[0],
                 user_id=user_id,
                 tournament=tournament
             )
