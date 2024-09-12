@@ -24,8 +24,8 @@ export async function tournamentEvent(e) {
 			break;
 		case "t-play":
 			break;
-		default:
-			break;
+		// default:
+		// 	break;
 	}
 
 }
