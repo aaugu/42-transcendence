@@ -242,9 +242,10 @@ class StartMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         
+
         # if player1 is not None and player2 is not None:
         #     StartMatchView.send_match_start_notif(match.tournament, player1, player2)
-
+          
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
     @staticmethod
@@ -254,11 +255,11 @@ class StartMatchView(View):
             'player_1_or_sender': {
                 'user_id': player1.user_id,
                 'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
-            } if player1 is not None else None,
+            },
             'player_2_or_receiver': {
                 'user_id': player2.user_id,
-                'nickname': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
-            } if player2 is not None else None,
+                'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+            },
         }
         return requests.post(url = request_url, json = json_request)
 
