@@ -10,7 +10,10 @@ export async function displayGame(socket) {
 	const infoCtn = document.querySelector(".info-ctn");
 	console.log("FUNCTION START GAME");
 
-	infoCtn.innerHTML = "";
+
+
+  canvas.classList.remove("hidden");
+	infoCtn.innerHTML = '';
 	infoCtn.innerHTML = `<div>
 							<button class="btn btn-dark" id="start-button">Start</button>
 							<button class="btn btn-dark" id="stop-button">Stop</button>

@@ -29,22 +29,20 @@ export default async function createWebSocketConnection(gameId = null) {
   //   console.log(`MODE: ${mode}, USER ID: ${userID}`);
   // }
 
+  console.log("MODE", mode);
   switch (mode) {
     case "local-twoplayer":
       mode = "LOCAL_TWO_PLAYERS";
       break;
-    case "join-game":
-      mode = "LOCAL_TWO_PLAYERS";
+    case "local-ia":
+      mode = "LOCAL_VS_IA";
       break;
-    // case "local-oneplayer":
-    //   mode = "LOCAL_ONE_PLAYER";
-    //   break;
-    case "online-twoplayer":
-      mode = "ONLINE_TWO_PLAYERS";
+    case "remote-twoplayer":
+      mode = "REMOTE";
       break;
-    // case "online-oneplayer":
-    //   mode = "ONLINE_ONE_PLAYER";
-    //   break;
+    case "tournament":
+      mode = "TOURNAMENT";
+      break;
     default:
       console.log("Invalid mode");
   }

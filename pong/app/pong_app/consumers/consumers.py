@@ -9,6 +9,7 @@ import asyncio
 class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
     games = {}
+    user_per_room = {}
 
     async def connect(self):
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
@@ -18,10 +19,18 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         if self.game_id not in PongConsumer.games:
             print(f"This should never happends problem somewhere")
-
             asyncio.create_task(self.game_loop())
 
+        # Check the number of users in the room based on the game_mode
+        # if self.game_mode == "LOCAL_VS_IA" or self.game_mode == "LOCAL_TWO_PLAYERS" and PongConsumer.user_per_room.get(self.game_id, 0) >= 2:
+
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+
+        # Increment user count for the game
+        if self.game_id in PongConsumer.user_per_room:
+          PongConsumer.user_per_room[self.game_id] += 1
+        else:
+          PongConsumer.user_per_room[self.game_id] = 1
 
         await self.accept()
 
@@ -30,6 +39,10 @@ class PongConsumer(AsyncWebsocketConsumer):
             asyncio.create_task(self.game_loop())
 
     async def disconnect(self, close_code):
+        print("Consumer disconnected")
+        # Decrement user count for the room
+        if self.game_id in PongConsumer.user_per_room:
+          PongConsumer.user_per_room[self.game_id] -= 1
         # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 

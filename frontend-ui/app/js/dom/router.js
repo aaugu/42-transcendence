@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startFunction: startGame,
       description: "local two player game page",
     },
-    "/local-ai": {
+    "/local-ia": {
       content: gamePage,
       eventListener: null,
       startFunction: startGame,
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     mainCont.innerHTML = html;
     if (
       currentRoute === "/local-twoplayer" ||
-      currentRoute === "/local-ai" ||
+      currentRoute === "/local-ia" ||
       currentRoute === "/remote-twoplayer" ||
       currentRoute === "/tournament/game"
     ) {

@@ -6,7 +6,7 @@ export async function joinGamePage() {
             <input type="text" id="game-id-input" placeholder="Enter Game ID">
             <button class="btn btn-dark" id="join-button">Join Game</button>
         </div>
-        <canvas id="pongCanvas"></canvas>
+        <canvas id="pongCanvas" class="hidden"</canvas>
 
     `;
 }
