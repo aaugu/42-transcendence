@@ -82,7 +82,7 @@ class TournamentView(APIView):
             utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/remote/"
+        request_url = "http://172.20.2.2:10000/tournament/"
         response = requests.get(url = request_url)
         if response.json() is not None:
             response_json = response.json()
@@ -96,7 +96,7 @@ class TournamentView(APIView):
             utils.check_authentication(request) == True
         except Exception:
             return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/remote/"
+        request_url = "http://172.20.2.2:10000/tournament/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
@@ -150,6 +150,7 @@ class TournamentPlayersView(APIView):
         else:
             return Response(status=response.status_code)
 
+"""  TournamentlocalView
 class TournamentlocalView(APIView):
     @staticmethod
     def post(request: HttpRequest) -> Response:
@@ -165,7 +166,8 @@ class TournamentlocalView(APIView):
             return Response(response_json, status=response.status_code)
         else:
 
-            return Response(status=response.status_code)
+            return Response(status=response.status_code) 
+"""
 
 class StartTournamentView(APIView):
     @staticmethod
@@ -236,8 +238,7 @@ class DeleteInactiveTournamentView(APIView):
         except Exception:
             return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/delete_inactive/"
-        json_request = json.loads(request.body.decode('utf-8'))
-        response = requests.delete(url = request_url, json = json_request)
+        response = requests.delete(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response(response_json, status=response.status_code)

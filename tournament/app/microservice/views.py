@@ -2,6 +2,7 @@ import json
 import math
 import random
 import datetime
+import requests
 
 from typing import Any, Optional
 
@@ -42,6 +43,7 @@ class MatchUtils:
     def match_to_json(match: Match):
         return {
             'id': match.match_id,
+            'type': TournamentUtils.status_to_string(match.tournament.type),
             'status': MatchUtils.match_status_to_string(match.status),
             'player_1': {
                 'user_id': match.player_1.user_id,
@@ -239,8 +241,27 @@ class StartMatchView(View):
             match.save()
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
+        
 
+        # if player1 is not None and player2 is not None:
+        #     StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+          
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
+
+    @staticmethod
+    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
+        request_url = "http://localhost:8000/livechat/notification/"
+        json_request = {
+            'player_1_or_sender': {
+                'user_id': player1.user_id,
+                'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+            },
+            'player_2_or_receiver': {
+                'user_id': player2.user_id,
+                'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+            },
+        }
+        return requests.post(url = request_url, json = json_request)
 
     @staticmethod
     def get_match(tournament_id: int, player1: Player, player2: Player):
@@ -361,6 +382,7 @@ class TournamentView(View):
         valid_tournament, errors = TournamentView.is_valid_tournament(json_request)
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
+        type = json_request.get('type')
         is_private = json_request.get('is_private')
         user_id = json_request.get('user_id')
         tournament = Tournament(
@@ -371,8 +393,11 @@ class TournamentView(View):
 
         if is_private:
             tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
+        if type == "remote":
+            tournament.type = Tournament.REMOTE
+        elif type == "local":
+            tournament.type = Tournament.LOCAL
 
-        tournament.type = Tournament.REMOTE
         max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
@@ -413,13 +438,13 @@ class TournamentView(View):
 
     @staticmethod
     def register_admin_as_player(json_request, tournament: Tournament, user_id: int) -> Optional[list[str]]:
-        admin_nickname = json_request.get('player_names')
+        admin_nickname = list(json_request.get('player_names'))
         if admin_nickname is not None:
             valid_nickname, nickname_errors = TournamentPlayersView.is_valid_nickname(admin_nickname[0])
             if not valid_nickname:
                 return nickname_errors
             Player.objects.create(
-                nickname=admin_nickname,
+                nickname=admin_nickname[0],
                 user_id=user_id,
                 tournament=tournament
             )
@@ -433,8 +458,8 @@ class TournamentView(View):
             filter_params['is_private'] = False
         if 'display_completed' not in request.GET:
             filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
-        if 'display_all' not in request.GET:
-            filter_params['type__in'] = [Tournament.REMOTE]
+        # if 'display_all' not in request.GET:
+        #     filter_params['type__in'] = [Tournament.REMOTE]
 
         return filter_params
 
@@ -663,6 +688,7 @@ class TournamentPlayersView(View):
 
         return True, None
 
+""" TournamentlocalView 
 @method_decorator(csrf_exempt, name='dispatch')
 class TournamentlocalView(View):
     @staticmethod
@@ -678,7 +704,6 @@ class TournamentlocalView(View):
             admin_id=user_id
         )
         
-
         max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
@@ -703,7 +728,7 @@ class TournamentlocalView(View):
                 player.save()
             except Exception as e:
                 return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
-        return None
+        return None """
 
 @method_decorator(csrf_exempt, name='dispatch')
 class StartTournamentView(View):
@@ -974,7 +999,7 @@ class MyTournamentAsPlayerView(View):
         try:
             my_tournaments = Tournament.objects.filter(
                 status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
-                type__in=[Tournament.REMOTE],
+                type__in=[Tournament.REMOTE, Tournament.LOCAL],
                 players__user_id=user_id
             )
         except ObjectDoesNotExist:
@@ -1004,7 +1029,7 @@ class MyTournamentAsAdminView(View):
         try:
             my_tournaments = Tournament.objects.filter(
                 status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
-                type__in=[Tournament.REMOTE],
+                type__in=[Tournament.REMOTE, Tournament.LOCAL],
                 admin_id=user_id
             )
         except ObjectDoesNotExist:
