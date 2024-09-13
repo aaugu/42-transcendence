@@ -2,6 +2,7 @@ import json
 import math
 import random
 import datetime
+import requests
 
 from typing import Any, Optional
 
@@ -239,8 +240,26 @@ class StartMatchView(View):
             match.save()
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
+        
+        # StartMatchView.send_match_start_notif(match.tournament, player1, player2)
 
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
+
+    # @staticmethod
+    # def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
+    #     request_url = "http://localhost:8000/livechat/notification/"
+    #     json_request = {
+    #         'tounament_name': tournament.name,
+    #         'player_1': {
+    #             'user_id': player1.user_id,
+    #             'nickname': player1.nickname
+    #         } if player1 is not None else None,
+    #         'player_2': {
+    #             'user_id': player2.user_id,
+    #             'nickname': player2.nickname
+    #         } if player2 is not None else None,
+    #     }
+    #     return requests.post(url = request_url, json = json_request)
 
     @staticmethod
     def get_match(tournament_id: int, player1: Player, player2: Player):
