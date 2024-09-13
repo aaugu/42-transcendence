@@ -18,8 +18,8 @@ from django.urls import path
 from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, TournamentlocalView, DeleteInactiveTournamentView, MyTournamentAsPlayerView, MyTournamentAsAdminView)
 
 urlpatterns = [
-    path('tournament/remote/', TournamentView.as_view(), name='new_tournament'),
-    path('tournament/local/', TournamentlocalView.as_view(), name='new_tournament_local'),
+    path('tournament/', TournamentView.as_view(), name='new_tournament'),
+    # path('tournament/local/', TournamentlocalView.as_view(), name='new_tournament_local'),
     path('tournament/<int:tournament_id>/', ManageTournamentView.as_view(), name='manage_tournament'),  
     path('tournament/<int:tournament_id>/players/', TournamentPlayersView.as_view(), name='tournament_players'),
     path('tournament/<int:tournament_id>/start/', StartTournamentView.as_view(), name='start_tournament'),
