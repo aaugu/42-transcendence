@@ -44,6 +44,7 @@ class GameService:
 
     @staticmethod
     def join_game(game_id, joiner_id):
+        print(f"Joining game {game_id} with user {joiner_id}")
         game = Games.objects.get(game_id=game_id)
         game.joiner_id = joiner_id
         game.status = "IN_PROGRESS"
