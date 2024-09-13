@@ -1,15 +1,15 @@
 services:
-    ui-nginx:
-        build:
-            context: nginx
-            dockerfile: Dockerfile
-        networks:
-            transcendence:
-                ipv4_address: 172.20.4.4
-        volumes:
-            - ../app/:/var/www/html/
-            - ../../ssl-certificate:/etc/nginx/ssl
-        environment:
-            NGINX_HOST: ${UI_NGINX_HOST}
-            NGINX_PORT: ${UI_NGINX_PORT}
-        restart: on-failure
+    # ui-nginx:
+    #     build:
+    #         context: nginx
+    #         dockerfile: Dockerfile
+    #     networks:
+    #         transcendence:
+    #             ipv4_address: 172.20.4.4
+    #     volumes:
+    #         - ../app/:/var/www/html/
+    #         - ../../ssl-certificate:/etc/nginx/ssl
+    #     environment:
+    #         NGINX_HOST: ${UI_NGINX_HOST}
+    #         NGINX_PORT: ${UI_NGINX_PORT}
+    #     restart: on-failure

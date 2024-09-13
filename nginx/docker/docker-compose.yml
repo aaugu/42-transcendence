@@ -1,0 +1,13 @@
+services:
+  nginx:
+    build: 
+      context: nginx
+      dockerfile: Dockerfile
+    networks:
+      transcendence:
+        ipv4_address: 172.20.99.1
+    volumes:
+      - ../../ssl-certificate:/etc/nginx/ssl
+      - ../../frontend-ui/app:/var/www/html/
+    restart: on-failure
+    
