@@ -115,6 +115,7 @@ export async function playTournament() {
 				const next_match = getNextMatch(upd_matches);
 				if (next_match !== null)
 					sendPlayerDataToGame(next_match);
+				//si c'est null == fin du tournament
 			}
 		} catch (error) {
 			console.error("Error parsing message:", error);
