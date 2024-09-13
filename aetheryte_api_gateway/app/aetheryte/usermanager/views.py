@@ -13,12 +13,12 @@ from .serializer import *
 
 class general_user(APIView):
     def get(self, request):
-        if check_authentication(request):
+        # if check_authentication(request):
             users = CustomUser.objects.all()
             serializer = CustomUserSerializer(users, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+        # else:
+        #     return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
     
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
