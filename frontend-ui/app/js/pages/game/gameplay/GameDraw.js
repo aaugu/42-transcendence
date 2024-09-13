@@ -5,8 +5,6 @@ export default function updateGameState(gameState, canvas) {
   const ball = gameState.ball;
   const context = canvas.getContext("2d");
 
-  // console.log(ball);
-
   const score = gameState.scores;
   document.getElementById("score-p-1").textContent = score[0];
   document.getElementById("score-p-2").textContent = score[1];

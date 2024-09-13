@@ -16,6 +16,8 @@ volumes:
     # Live chat
     livechat_postgres_volume:
         driver: local
+    pong_postgres_volume:
+        driver: local
     #elk volumes
     # elastic_data_volume:
     #     driver: local
@@ -58,6 +60,11 @@ services:
             service: pong-python
         ports:
             - "9000:9000"
+
+    pong-postgres:
+        extends:
+            file: pong/docker/docker-compose.yml
+            service: pong-postgres
 
     # Tournament
     tournament-postgres:

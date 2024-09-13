@@ -18,6 +18,8 @@ import { updateConvList } from "../pages/livechat/updateConvList.js"
 import { startFriendListRefresh, clearFriendList } from "../pages/profile/friends.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
+import { joinGamePage } from "../pages/game/joinGamePage.js";
+import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js";
 
 let urlRoute;
 let currentEventListener = null;
@@ -109,6 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: updateConvList,
 			description: "stats page"
 		},
+    "/join-game": {
+      content: joinGamePage,
+      eventListener: joinGameEvent,
+      description: "join an existing game",
+    },
     }
 
     urlRoute = (url) => {
