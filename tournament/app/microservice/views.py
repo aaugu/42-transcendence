@@ -241,7 +241,9 @@ class StartMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         
-        # StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+        # if match.tournament.type == Tournament.REMOTE:
+        #     if player1 is not None and player2 is not None:
+        #         StartMatchView.send_match_start_notif(match.tournament, player1, player2)
 
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
