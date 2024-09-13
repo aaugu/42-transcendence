@@ -243,8 +243,8 @@ class StartMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         
 
-        # if player1 is not None and player2 is not None:
-        #     StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+        if player1 is not None and player2 is not None:
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
           
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
@@ -438,13 +438,13 @@ class TournamentView(View):
 
     @staticmethod
     def register_admin_as_player(json_request, tournament: Tournament, user_id: int) -> Optional[list[str]]:
-        admin_nickname = list(json_request.get('player_names'))
+        admin_nickname = json_request.get('player_names')
         if admin_nickname is not None:
-            valid_nickname, nickname_errors = TournamentPlayersView.is_valid_nickname(admin_nickname[0])
+            valid_nickname, nickname_errors = TournamentPlayersView.is_valid_nickname(admin_nickname)
             if not valid_nickname:
                 return nickname_errors
             Player.objects.create(
-                nickname=admin_nickname[0],
+                nickname=admin_nickname,
                 user_id=user_id,
                 tournament=tournament
             )
@@ -805,6 +805,7 @@ class ManageTournamentView(View):
                 'user_id': player.user_id,
             } for player in tournament_players],
             'is_private': tournament.is_private,
+            'type': TournamentUtils.status_to_string(tournament.type),
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
         }
