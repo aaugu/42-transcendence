@@ -28,8 +28,6 @@ export function openCreateTournamentModal() {
 	}
 	const t_modal = new bootstrap.Modal(document.getElementById('create-t-modal'));
 	t_modal.show();
-	document.getElementById("t-nr-players").value = 2;
-	document.getElementById('tournament-name').value = "";
 }
 
 //tournament status 0 = created, 1 = in_progress, 2 = finished
@@ -45,6 +43,7 @@ export async function openSingleTournamentModal(e) {
 			throw new Error('Could not find tournament');
 		}
 		const t_details = await getTournamentDetails(t_id);
+		console.log("t_details: ", t_details);
 		const has_started = (t_details.status === 0);
 		const players = t_details.players;
 		for (const playerKey in players) {

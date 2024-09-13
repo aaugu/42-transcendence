@@ -1,4 +1,7 @@
 export default function handleButtons(startButton, stopButton, resetButton, socket) {
+
+  console.log("handle buttons")
+
   if (startButton) {
     startButton.addEventListener("click", () => {
       console.log("GAME LOG: Start button clicked");

@@ -8,10 +8,10 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
-import { startGame } from "../pages/game/gameplay/startGame.js"
+import { playGame } from "../pages/game/gameplay/playGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
-import { socket } from "../pages/game/gameplay/startGame.js"
+import { socket } from "../pages/game/gameplay/playGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
 import { updateConvList } from "../pages/livechat/updateConvList.js"
@@ -21,6 +21,7 @@ import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { startLocalTournament } from "../pages/tournament/localTournament.js"
 import { startRemoteTournament } from "../pages/tournament/remoteTournament.js"
+import { playTournament } from "../pages/game/gameplay/playTournament.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -76,17 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
         "/local-twoplayer" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: playGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: playGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: playGame,
 			description: "remote two player game page"
 		},
 		"/tournament" : {
@@ -95,14 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament/local" : {
+		"/tournament-local" : {
 			content: gamePage,
-			startFunction: startLocalTournament,
+			startFunction: playTournament,
 			description: "local tournament game page"
 		},
-		"/tournament/remote" : {
+		"/tournament-remote" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: playTournament,
 			description: "remote tournament game page"
 		},
         "/profile" : {

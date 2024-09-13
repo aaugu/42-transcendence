@@ -5,5 +5,6 @@ urlpatterns = [
 	path('api/login/', include('login.urls')),
 	path('api/user/', include('usermanager.urls')),
 	path('livechat/', include('livechat.urls')),
+ 	path('pong/', include('pong.urls')),
     path('api/tournament/', include('tournament.urls'))
 ]

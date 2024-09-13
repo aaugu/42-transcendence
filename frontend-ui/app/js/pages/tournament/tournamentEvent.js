@@ -1,7 +1,6 @@
 import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
 import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
-import { startTournamentButton } from "./startTournament.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -20,7 +19,9 @@ export async function tournamentEvent(e) {
 			joinTournamentButton();
 			break;
 		case "t-start":
-			startTournamentButton();
+			const tourn_id = document.getElementById('t-start').dataset.tournid;
+			localStorage.setItem('tourn_id', tourn_id);
+			urlRoute('/tournament-remote');
 			break;
 		case "t-play":
 			break;

@@ -19,7 +19,7 @@ export async function generateMatches(tournament_id, fetch_method) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: CHANGE TOURNAMENT STATUS SUCCESSFUL');
+		console.log('TOURNAMENT LOG: GENERATE MATCHES SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');
@@ -52,12 +52,39 @@ export async function startMatch(tournament_id, player1, player2) {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: CHANGE TOURNAMENT STATUS SUCCESSFUL');
-		return responseData;
+		console.log('TOURNAMENT LOG: START TOURNAMENT SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}
 }
 
 //endMatch
+export async function endMatch(tournament_id, winner) {
+    if (tournament_id === undefined || winner === undefined) {
+        throw new Error('Invalid parameters to start match');
+    }
 
+    const url = 'https://localhost:10444/api/tournament/' + tournament_id + '/match/end/';
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+        body: JSON.stringify({
+            "winner": winner
+        }),
+		credentials: 'include'
+	});
+	const responseData = await response.json();
+	if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${response.status}`);
+	}
+	if (responseData !== null) {
+		console.log('TOURNAMENT LOG: END MATCH SUCCESSFUL');
+	} else {
+		throw new Error('No response from server');
+	}
+}
