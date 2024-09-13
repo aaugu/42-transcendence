@@ -12,7 +12,7 @@ def dprint(msg):
     colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
     print(colored_msg)
 
-def check_autentication(request):
+def check_authentication(request):
     access_token = request.COOKIES.get('csrf_token')
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token

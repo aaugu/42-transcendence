@@ -5,7 +5,7 @@ from login.models import *
 from login.serializers import *
 from rest_framework.response import Response
 
-def check_autentication(request):
+def check_authentication(request):
     access_token = request.COOKIES.get('csrf_token')
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token

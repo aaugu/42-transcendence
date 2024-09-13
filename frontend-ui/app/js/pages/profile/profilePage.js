@@ -1,4 +1,5 @@
 import { getUserInfo } from "../user/getUserInfo.js"
+import { getFriendList, updateFriendList } from "./friends.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -6,6 +7,7 @@ export async function profilePage() {
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
+    var friends_html = '';
 
     try {
         const userinfo = await getUserInfo();
@@ -14,6 +16,8 @@ export async function profilePage() {
         email = userinfo.email;
         avatar = userinfo.avatar;
         is_2fa_enabled = userinfo.is_2fa_enabled;
+
+        friends_html = await updateFriendList();
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
@@ -21,21 +25,6 @@ export async function profilePage() {
 
     localStorage.setItem('avatar', avatar);
     localStorage.setItem('nickname', nickname);
-
-	var twoFAbtnText;
-	var twoFAbtnColor;
-    var twoFAtargetModal;
-
-	if (is_2fa_enabled == true) {
-		twoFAbtnText = "Deactivate";
-		twoFAbtnColor = "btn-outline-danger";
-        twoFAtargetModal = "#deactivate-2fa-modal"
-	}
-	else {
-		twoFAbtnText = "Activate";
-		twoFAbtnColor = "btn-outline-success";
-        twoFAtargetModal = "#activate-2fa-modal"
-	}
 
     return `
     <h2 class="text-bold display-6"></h2>
@@ -88,8 +77,8 @@ export async function profilePage() {
 
             <div id="2fa" class="content-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
-				<button type="button" class="btn ${twoFAbtnColor}" data-bs-toggle="modal"
-				data-bs-target=${twoFAtargetModal} id="2fa-profile-btn">${twoFAbtnText}</button>
+				<button type="button" class="btn ${is_2fa_enabled ? "btn-outline-danger" : "btn-outline-success"}" data-bs-toggle="modal"
+				data-bs-target=${is_2fa_enabled ? "#deactivate-2fa-modal" : "#activate-2fa-modal"} id="2fa-profile-btn">${is_2fa_enabled ? "Deactivate" : "Activate"}</button>
 
 				<!-- 2FA Modals -->
 				<div class="modal fade" id="activate-2fa-modal" tabindex="-1" aria-labelledby="activate-2fa" aria-hidden="true">
@@ -150,8 +139,18 @@ export async function profilePage() {
                     </li>
                 </ul>
             </div>
-            <div id="friends" class="content-box">
-                <h5 class="m-2">User list</h5>
+            <div class="content-box">
+                <h5 class="m-2">Friends</h5>
+                <div class="input-group m-2 justify-content-center">
+                    <input id="friend-input" type="text" class="form-control rounded-end" placeholder="Type a nickname here" aria-label="Search" style="font-size: 10px;">
+                    <div class="input-group-append m-2">
+                        <button id="add-friend-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Add as friend</button>
+                    </div>
+                </div>
+                <p class="hidden m-2 text-danger" id="friendlist-errormsg"></p>
+                <ul id="friend-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 m-2">
+                 ${friends_html}
+                </ul>
             </div>
         </div>
     </div>

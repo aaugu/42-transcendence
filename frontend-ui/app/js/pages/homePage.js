@@ -1,9 +1,4 @@
-import { setUserID } from './user/updateProfile.js';
-
 export function homePage() {
-
-    setUserID();
-
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Come play pong</h1>

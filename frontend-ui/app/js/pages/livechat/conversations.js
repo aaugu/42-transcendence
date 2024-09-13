@@ -1,4 +1,4 @@
-import { getAllConversations } from "./getAllConversations.js";
+import { userID } from "../user/updateProfile.js";
 
 export var all_conversations = {};
 
@@ -6,9 +6,36 @@ export function reset_all_conv() {
     all_conversations = {};
 }
 
+async function allConversations() {
+	if (userID === null) {
+		throw new Error('Did not find user ID');
+	}
+
+	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
+		method: 'GET',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	});
+	if (!response.ok) {
+		if (response.errors)
+			throw new Error(`${response.errors}`);
+		throw new Error(`${response.status}`);
+	}
+	const responseData = await response.json();
+	if (responseData !== null) {
+		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
+		return responseData;
+	} else {
+		throw new Error('No response from server');
+	}
+}
+
 export async function get_all_conv() {
 	try {
-        const response = await getAllConversations();
+        const response = await allConversations();
 		const userLookup = response.users.reduce((acc, user) => {
 			acc[user.id] = {
 				nickname: user.nickname,
