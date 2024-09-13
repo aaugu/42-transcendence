@@ -29,12 +29,11 @@ async function joinTournament(nickname, tournament_id) {
 }
 
 export async function joinTournamentButton() {
-	const nickname = localStorage.getItem('nickname') || 'guest';
+	const nicknameTarget = document.getElementById('t-player-name');
+	const nickname = nicknameTarget.value.trim() !== '' ? nicknameTarget.value : localStorage.getItem('nickname');
 	const tournament_name = document.getElementById("single-t-modal-title").innerText;
 	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
-		// console.log("nickname: ", nickname, "tournament_name:", tournament_name, "tournament_id: ", tournament_id);
-
 		await joinTournament(nickname, tourn_id);
 		document.getElementById('t-join').classList.add('hidden');
 		hideModal('single-t-modal');

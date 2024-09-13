@@ -6,26 +6,13 @@ export function openCreateTournamentModal() {
 		errormsg('Name cannot be empty', 't-create-errormsg');
 		return;
 	}
-	const local = document.getElementById("t-local").checked;
 	const t_modalText = document.getElementById("create-t-modal-text");
-	const nr_players = document.getElementById("t-nr-players").value;
-	if (local) {
-		let playerInputs = `<p>Enter the player names</p>`;
-		for (let i = 1; i <= nr_players; i++) {
-			playerInputs += `
-				<div class="mb-1 d-flex align-items-center">
-					<label for="player-input-${i}" class="form-label me-2" style="flex: 0 0 150px;">Player ${i}:</label>
-					<input type="text" class="form-control t-player-input">
-				</div>`;
-		}
-        t_modalText.innerHTML = playerInputs;
-	}
-	else {
-		t_modalText.innerHTML = `
-			<p>Players can join your tournament from their profile.
-			You can start it once at least 2 players have joined.</p>
-		`;
-	}
+	t_modalText.innerHTML = `
+		<p>Players can join your tournament from their profile.
+		You can start it once at least 2 players have joined.</p>
+		<label class="form-label" for="t-admin-nickname">Choose a player name or go with your nickname</label>
+		<input type="text" class="form-control" id="t-admin-nickname" placeholder="">
+	`;
 	const t_modal = new bootstrap.Modal(document.getElementById('create-t-modal'));
 	t_modal.show();
 }
@@ -56,6 +43,8 @@ export async function openSingleTournamentModal(e) {
 		document.getElementById("single-t-modal-title").innerText = t_name;
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
+			document.getElementById('t-player-name-label').classList.remove('hidden');
+			document.getElementById('t-player-name').classList.remove('hidden');
 			const joinButton = document.getElementById('t-join');
 			joinButton.classList.remove('hidden');
 			joinButton.dataset.tournid = t_id;

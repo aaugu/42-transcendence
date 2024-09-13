@@ -19,8 +19,6 @@ import { startFriendListRefresh, clearFriendList } from "../pages/profile/friend
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
-import { startLocalTournament } from "../pages/tournament/localTournament.js"
-import { startRemoteTournament } from "../pages/tournament/remoteTournament.js"
 import { playTournament } from "../pages/game/gameplay/playTournament.js"
 
 let urlRoute;

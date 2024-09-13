@@ -1,7 +1,7 @@
 import { userID } from '../user/updateProfile.js';
 
 export async function getTournaments() {
-	const response = await fetch('https://localhost:10444/api/tournament/remote/', {
+	const response = await fetch('https://localhost:10444/api/tournament/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
