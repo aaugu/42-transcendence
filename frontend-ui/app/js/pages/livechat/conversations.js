@@ -11,7 +11,7 @@ async function allConversations() {
 		throw new Error('Did not find user ID');
 	}
 
-	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://localhost:10444/api/livechat' + userID + '/conversations/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',

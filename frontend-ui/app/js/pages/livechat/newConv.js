@@ -13,7 +13,7 @@ async function newConv(conv_nickname) {
 		throw new Error('Cannot add yourself to contact list');
 	}
 
-	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://localhost:10444/api/livechat' + userID + '/conversations/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

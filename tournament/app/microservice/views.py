@@ -250,7 +250,7 @@ class StartMatchView(View):
 
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
-        request_url = "http://localhost:8000/livechat/notification/"
+        request_url = "http://localhost:8000/api/livechatnotification/"
         json_request = {
             'player_1_or_sender': {
                 'user_id': player1.user_id,
