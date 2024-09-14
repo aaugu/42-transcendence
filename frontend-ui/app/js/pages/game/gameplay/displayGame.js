@@ -4,6 +4,7 @@ import handleKeyPress from "./HandleKeyPress.js";
 import updateGameState from "./GameDraw.js";
 import throttle from "./Throttle.js";
 import { canvasWidth, canvasHeight } from "./GameConstants.js";
+import { getCookie } from "../../user/cookie.js";
 
 export async function displayGame(socket) {
   const canvas = document.getElementById("pongCanvas");
@@ -60,6 +61,7 @@ export async function displayGame(socket) {
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
         let url = "https://localhost:10444/pong/end-game/";
+        const token = getCookie("csrf_token");
         fetch(url, {
           method: "POST",
           headers: {

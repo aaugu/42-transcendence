@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+# from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from .game.game import *
 from django.http import JsonResponse
 from .services import GameService
@@ -56,6 +56,7 @@ def join_game(request, joiner_id, game_id):
 
     return JsonResponse(curr_game)
 
+# @csrf_exempt
 def end_game(request):
     print(f'Received request to end game')
 

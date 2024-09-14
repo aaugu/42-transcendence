@@ -2,6 +2,7 @@ import uuid
 from .game.game import Game, GameMode, GameState
 from .models import Games
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 
 class GameService:
@@ -60,6 +61,7 @@ class GameService:
 
     @staticmethod
     def end_game(request):
+      print(f"Received request to end game")
       game_id = request.POST.get('game_id')
       winner_id = request.POST.get('winner_id')
       looser_id = request.POST.get('looser_id')
