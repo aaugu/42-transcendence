@@ -21,7 +21,7 @@ export async function tournamentEvent(e) {
 		case "t-start":
 			const tourn_id = document.getElementById('t-start').dataset.tournid;
 			localStorage.setItem('tourn_id', tourn_id);
-
+			
 			//define route to change to
 			// urlRoute('/tournament-remote');
 			break;

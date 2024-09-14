@@ -10,7 +10,7 @@ export async function displayGame(socket) {
 	const infoCtn = document.querySelector(".info-ctn");
 	console.log("FUNCTION START GAME");
 
-  canvas.classList.remove("hidden");
+	canvas.classList.remove("hidden");
 	infoCtn.innerHTML = '';
 	infoCtn.innerHTML = `<div>
 							<button class="btn btn-dark" id="start-button">Start</button>
@@ -77,7 +77,5 @@ export async function displayGame(socket) {
 		keysPressed[event.key] = false;
 		handleKeyPress(keysPressed, socket);
 	});
-
-
 	// start = true
 }
