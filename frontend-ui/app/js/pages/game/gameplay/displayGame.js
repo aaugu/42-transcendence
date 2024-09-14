@@ -5,15 +5,13 @@ import updateGameState from './GameDraw.js';
 import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 
-export var socket;
-
-export async function playGame(event) {
+export async function displayGame(socket) {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
-	socket = await createWebSocketConnection();
 	console.log("FUNCTION START GAME");
 
-	infoCtn.innerHTML = "";
+  canvas.classList.remove("hidden");
+	infoCtn.innerHTML = '';
 	infoCtn.innerHTML = `<div>
 							<button class="btn btn-dark" id="start-button">Start</button>
 							<button class="btn btn-dark" id="stop-button">Stop</button>

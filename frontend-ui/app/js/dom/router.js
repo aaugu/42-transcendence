@@ -8,10 +8,10 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
-import { playGame } from "../pages/game/gameplay/playGame.js"
+import { startGame } from "../pages/game/gameplay/startGame.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
-import { socket } from "../pages/game/gameplay/playGame.js"
+import { socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
 import { updateConvList } from "../pages/livechat/updateConvList.js"
@@ -20,6 +20,8 @@ import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { playTournament } from "../pages/game/gameplay/playTournament.js"
+import { joinGamePage } from "../pages/game/joinGamePage.js";
+import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js";
 
 let urlRoute;
 let currentEventListener = null;
@@ -75,17 +77,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
         "/local-twoplayer" : {
 			content: gamePage,
-			startFunction: playGame,
+			startFunction: startGame,
 			description: "local two player game page"
 		},
 		"/local-ai" : {
 			content: gamePage,
-			startFunction: playGame,
+			startFunction: startGame,
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
 			content: gamePage,
-			startFunction: playGame,
+			startFunction: startGame,
 			description: "remote two player game page"
 		},
 		"/tournament" : {
@@ -115,6 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			eventListener: livechatEvent,
 			startFunction: updateConvList,
 			description: "stats page"
+		},
+		"/join-game": {
+		content: joinGamePage,
+		eventListener: joinGameEvent,
+		description: "join an existing game",
 		},
     }
 

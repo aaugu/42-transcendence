@@ -54,8 +54,11 @@ export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
 	const tournamentName = document.getElementById('tournament-name').value;
 	const max_players = document.getElementById('t-nr-players').value;
-	const adminElement = document.getElementById('t-admin-nickname');
-	const adminNickname = (adminElement.value.trim() !== '') ? adminElement.value : localStorage.getItem('nickname');
+	var adminNickname;
+	if (document.getElementById('t-admin-nickname').value === '')
+		adminNickname = localStorage.getItem('nickname');
+	else
+		adminNickname = document.getElementById('t-admin-nickname').value;
 	try {
 		var mode;
 		if (local) {
@@ -64,7 +67,8 @@ export async function createTournamentButton() {
 		else {
 			mode = 'remote';
 		}
-		const new_tournament = newTournamentData(tournamentName, max_players, adminNickname, false, "", mode);
+		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, false, "", mode);
+		console.log("new-tournament: ", new_tournament);
 		await createTournament(new_tournament);
 		updateTournLists();
 		hideModal('create-t-modal');
@@ -72,7 +76,7 @@ export async function createTournamentButton() {
 		document.getElementById('tournament-name').value = "";
 	}
 	catch (e) {
-		console.log(`USER LOG: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.message}`);
+		console.log(`USER LOG: CREATE TOURNAMENT FAILED, STATUS: ${e.message}`);
 		errormsg (e.message, "t-modal-errormsg");
 	}
 }
