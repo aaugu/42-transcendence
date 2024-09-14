@@ -80,11 +80,13 @@ export function displayChatInterface (ctc_id) {
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
-    document.getElementById('chat-play-pong').classList.remove('hidden');
+    const play_button = document.getElementById('chat-play-pong');
     const block_button = document.getElementById('chat-block-btn');
+    play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');
     colorBlockButton();
     block_button.setAttribute('data-ctcid', ctc_id);
+    play_button.setAttribute('data-ctcid', ctc_id);
 }
 
 export function undisplayChatInterface() {

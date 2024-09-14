@@ -35,7 +35,6 @@ export async function joinTournamentButton() {
 	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
 		await joinTournament(nickname, tourn_id);
-		document.getElementById('t-join').classList.add('hidden');
 		hideModal('single-t-modal');
 	}
 	catch (e) {
@@ -43,7 +42,11 @@ export async function joinTournamentButton() {
 		errormsg(e.message, "single-t-modal-errormsg");
 		setTimeout(() => {
 			hideModal('single-t-modal');
-			document.getElementById('t-join').classList.add('hidden');
 		}, 1000);
+	}
+	finally {
+		document.getElementById('t-join').classList.add('hidden');
+		document.getElementById('t-player-name-label').classList.add('hidden');
+		document.getElementById('t-player-name').classList.add('hidden');
 	}
 }

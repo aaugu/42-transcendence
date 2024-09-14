@@ -2,6 +2,7 @@ import { convHistory } from "./convHistory.js";
 import { newConvButton }	from "./newConv.js";
 import { blockUser, colorBlockButton, is_blacklisted, set_is_blacklisted, unblockUser } from "./blacklist.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { inviteGameButton } from "./inviteGameButton.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -37,6 +38,9 @@ export async function livechatEvent(e) {
 				errormsg(e.message, 'livechat-errormsg');
 			}
 			break;
+		case "chat-invite-game":
+			const ctc_id = target.dataset.ctcid;
+			inviteGameButton(ctc_id);
 		default:
 			break;
 	}

@@ -1,5 +1,6 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { getTournamentDetails } from "./getTournaments.js";
+import { userID } from "../user/updateProfile.js";
 
 export function openCreateTournamentModal() {
 	if (document.getElementById('tournament-name').value == "") {
@@ -21,7 +22,6 @@ export function openCreateTournamentModal() {
 export async function openSingleTournamentModal(e) {
 	try {
 		let has_joined = false;
-		const nickname = localStorage.getItem('nickname');
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
 		const targetElement = e.target.closest('.list-group-item').querySelector('[data-tournid]');
@@ -32,15 +32,16 @@ export async function openSingleTournamentModal(e) {
 		const t_details = await getTournamentDetails(t_id);
 		console.log("t_details: ", t_details);
 		const has_started = (t_details.status === 0);
+		const is_admin = (t_details['admin-id'] === userID);
 		const players = t_details.players;
 		for (const playerKey in players) {
-			if (players[playerKey].nickname === nickname) {
+			if (players[playerKey].user_id === userID) {
 				has_joined = true;
 				break;
 			}
 		}
-
 		document.getElementById("single-t-modal-title").innerText = t_name;
+
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
 			document.getElementById('t-player-name-label').classList.remove('hidden');
@@ -50,7 +51,14 @@ export async function openSingleTournamentModal(e) {
 			joinButton.dataset.tournid = t_id;
 		}
 		else if (has_started === false && has_joined === true){
-			t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
+			if (is_admin === true) {
+				t_modalText.innerText = 'You are the admin. Wanna start this tournament?';
+				const startButton = document.getElementById('t-start');
+				startButton.classList.remove('hidden');
+				startButton.dataset.tournid = t_id;
+			}
+			else
+				t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
 		}
 		else if (has_started === true && has_joined === true){
 			t_modalText.innerText = 'The tournament has already started. Go play!';

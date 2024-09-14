@@ -9,6 +9,7 @@ import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
 import { startGame } from "../pages/game/gameplay/startGame.js"
+import { startGameTournament } from "../pages/game/gameplay-tournament/startGameTournament.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { socket } from "../pages/game/gameplay/startGame.js"
@@ -19,7 +20,6 @@ import { startFriendListRefresh, clearFriendList } from "../pages/profile/friend
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
-import { playTournament } from "../pages/game/gameplay/playTournament.js"
 import { joinGamePage } from "../pages/game/joinGamePage.js";
 import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js";
 
@@ -90,20 +90,20 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: startGame,
 			description: "remote two player game page"
 		},
-		"/tournament" : {
+		"/tournament-creation" : {
 			content: tournamentPage,
 			eventListener: tournamentEvent,
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament-local" : {
+		"/tournament" : {
 			content: gamePage,
-			startFunction: playTournament,
+			startFunction: startGameTournament,
 			description: "local tournament game page"
 		},
 		"/tournament-remote" : {
 			content: gamePage,
-			startFunction: playTournament,
+			startFunction: startGameTournament,
 			description: "remote tournament game page"
 		},
         "/profile" : {
