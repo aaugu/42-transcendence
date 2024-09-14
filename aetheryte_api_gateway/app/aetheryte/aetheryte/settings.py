@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'login',
-	'usermanager'
+	'usermanager',
+    'livechat'
 ]
 
 MIDDLEWARE = [

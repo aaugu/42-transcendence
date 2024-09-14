@@ -6,8 +6,8 @@ from rest_framework import status
 import requests, json, pytz
 from datetime import datetime
 
-from django.db.models import Q
 from livechat.models import Conversation, Message
+from livechat.views.utils import create_user, user_exists
 
 class NotificationView(APIView):
 	timezone = 'Europe/Zurich'
@@ -22,7 +22,6 @@ class NotificationView(APIView):
 		status_code = self.create_notification(body['user_1']['user_id'], body['user_1']['message'])
 		if status_code != status.HTTP_201_CREATED:
 			return Response(status=status_code)
-		return Response(status=status.HTTP_201_CREATED)
 
 		status_code = self.create_notification(body['user_2']['user_id'], body['user_2']['message'])
 		if status_code != status.HTTP_201_CREATED:
@@ -31,13 +30,13 @@ class NotificationView(APIView):
 		return Response(status=status.HTTP_201_CREATED)
 
 	def create_notification(self, user_id, message):
-		conv = Conversation.objects.get(user_1=user_id, user_2=user_id)
+		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id)
 		if not conv:
 			status_code = self.create_self_conversation(user_id)
 			if status_code != status.HTTP_201_CREATED:
 				return status_code
 		
-		conv = Conversation.objects.get(user_1=user_id, user_2=user_id)
+		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id).first()
 		if not conv:
 			return status.HTTP_422_UNPROCESSABLE_ENTITY
 		
@@ -56,13 +55,17 @@ class NotificationView(APIView):
 		return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 	def create_self_conversation(self, user_id):
+		if not user_exists(user_id):
+			if not create_user(user_id):
+				return status.HTTP_422_UNPROCESSABLE_ENTITY
+
 		conversation = Conversation(
 			user_1 = user_id,
 			user_2 = user_id,
 		)
 		conversation.save()
 
-		conv = Conversation.objects.get(user_1=user_id, user_2=user_id)
+		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id)
 		if conv:
 			return status.HTTP_201_CREATED
 		return status.HTTP_422_UNPROCESSABLE_ENTITY
