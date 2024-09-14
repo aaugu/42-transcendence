@@ -9,9 +9,9 @@ async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
 		throw new Error('Did not find userID or nickname invalid');
 	}
-	else if (conv_nickname === localStorage.getItem('nickname')) {
-		throw new Error('Cannot add yourself to contact list');
-	}
+	// else if (conv_nickname === localStorage.getItem('nickname')) {
+	// 	throw new Error('Cannot add yourself to contact list');
+	// }
 
 	const response = await fetch('https://localhost:10444/livechat/' + userID + '/conversations/', {
 		method: 'POST',
@@ -45,7 +45,7 @@ export async function newConvButton() {
 	try {
 		const response = await newConv(conv_nickname);
 		const conv_id = response.conversation_id;
-		
+
 		const history = await getConvHistory(conv_id);
 		set_is_blacklisted(history.is_blacklisted);
 		// console.log("history", history);

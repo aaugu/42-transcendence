@@ -6,19 +6,23 @@ export async function createGame(userID, mode) {
   const response = await fetch(
     `${gatewayEndpoint}/create-game/${userID}/${mode}/`,
     {
-      method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
-    }
-  );
+      credentials: 'include'
+    });
+  if (!response.ok) {
+		throw new Error(`${response.status}`);
+	}
 
-  const data = await response.json();
-
-  console.log(JSON.stringify(data));
-
-  return data;
+	const responseData = await response.json();
+	if (responseData !== null) {
+		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
+		return responseData;
+	} else {
+		throw new Error('No response from server');
+	}
 }
 
 export default async function createWebSocketConnection(gameId = null) {
@@ -50,7 +54,13 @@ export default async function createWebSocketConnection(gameId = null) {
   let gameData;
 
   if (!gameId) {
-    gameData = await createGame(userID, mode);
+    try {
+      gameData = await createGame(userID, mode);
+    }
+    catch (e) {
+      console.error(`USER LOG: ${e.message}`);
+      return ;
+    }
     history.pushState({}, "", `${currentUrl}/${gameData.game_id}`);
     console.log("Location", window.location.href);
     const socket = new WebSocket(

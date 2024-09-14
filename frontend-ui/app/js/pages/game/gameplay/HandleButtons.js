@@ -1,4 +1,7 @@
-export default function handleButtons(startButton, stopButton, resetButton, socket) {
+export default function handleButtons(socket) {
+  const startButton = document.getElementById("start-button");
+	const stopButton = document.getElementById("stop-button");
+	const resetButton = document.getElementById("reset-button");
 
   console.log("handle buttons")
 

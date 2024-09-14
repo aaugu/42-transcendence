@@ -1,4 +1,4 @@
-import { userID } from '../user/updateProfile.js'
+import { userID } from '../../user/updateProfile.js'
 
 export class Tournament {
 
@@ -41,7 +41,7 @@ export class Tournament {
 	// Launch the tournament and initialize the matches
     async launchTournament() {
         try {
-            const response = await this.generateMatches('POST'); // Create and fetch initial matches
+            const response = await this.#generateMatches('POST'); // Create and fetch initial matches
             await this.#startTournament(); // Mark tournament as started
 			this.all_matches = response.matches; // Set the match list
             this.#startNextMatch();

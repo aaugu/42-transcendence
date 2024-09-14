@@ -40,8 +40,8 @@ export async function openSingleTournamentModal(e) {
 				break;
 			}
 		}
-
 		document.getElementById("single-t-modal-title").innerText = t_name;
+
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
 			document.getElementById('t-player-name-label').classList.remove('hidden');
