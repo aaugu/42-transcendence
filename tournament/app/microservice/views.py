@@ -39,6 +39,17 @@ class MatchUtils:
         }
 
         return data
+    
+    @staticmethod
+    def match_notif_to_json(match: Match, notif: bool):
+        match_data = MatchUtils.match_to_json(match)
+        data = {
+            'message_sent_to_livechat': notif,
+            'match': match_data
+        }
+
+        return data
+    
     @staticmethod
     def match_to_json(match: Match):
         return {
@@ -58,6 +69,7 @@ class MatchUtils:
                 'nickname': match.winner.nickname
             } if match.winner is not None else None
         }
+    
     @staticmethod
     def match_status_to_string(status: int):
         match_status_msg = ["Not played", "In progress", "Finished"]
@@ -241,12 +253,12 @@ class StartMatchView(View):
             match.save()
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
-        
 
         if player1 is not None and player2 is not None:
             response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
-          
-        return JsonResponse(MatchUtils.match_to_json(match), status=200)
+        if response.status_code != 201:
+            return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
+        return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
