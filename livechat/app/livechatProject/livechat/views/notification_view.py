@@ -15,18 +15,16 @@ class NotificationView(APIView):
 	def post(self, request):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
-		if 	not body['player_1_or_sender']['user_id'] or \
-			not body['player_1_or_sender']['message'] or \
-			not body['player_2_or_receiver']['user_id'] or \
-			not body['player_2_or_receiver']['message']:
+		if 	not body['user_1']['user_id'] or not body['user_1']['message'] or \
+			not body['user_2']['user_id'] or not body['user_2']['message']:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 
-		status_code = self.create_notification(body['player_1_or_sender']['user_id'], body['player_1_or_sender']['message'])
+		status_code = self.create_notification(body['user_1']['user_id'], body['user_1']['message'])
 		if status_code != status.HTTP_201_CREATED:
 			return Response(status=status_code)
 		return Response(status=status.HTTP_201_CREATED)
 
-		status_code = self.create_notification(body['player_2_or_receiver']['user_id'], body['player_2_or_receiver']['message'])
+		status_code = self.create_notification(body['user_2']['user_id'], body['user_2']['message'])
 		if status_code != status.HTTP_201_CREATED:
 			return Response(status=status_code)
 
@@ -76,11 +74,11 @@ class NotificationView(APIView):
 		return False
 
 # {
-#     "player_1_or_sender": {
+#     "user_1": {
 #         "user_id": 1,
 #         "message": "bouh"
 #     },
-#     "player_2_or_receiver": {
+#     "user_2": {
 #         "user_id": 2,
 #         "message": "coucou"
 #     }

@@ -252,11 +252,11 @@ class StartMatchView(View):
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
         request_url = "http://localhost:8000/api/livechatnotification/"
         json_request = {
-            'player_1_or_sender': {
+            'user_1': {
                 'user_id': player1.user_id,
                 'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
             },
-            'player_2_or_receiver': {
+            'user_2': {
                 'user_id': player2.user_id,
                 'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
             },
