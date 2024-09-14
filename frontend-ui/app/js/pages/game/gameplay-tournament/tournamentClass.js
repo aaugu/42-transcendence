@@ -19,6 +19,7 @@ export class Tournament {
         try {
             await this.#endMatch(winner_id); // End the match with winner_id
             const response = await this.#generateMatches('GET'); // Fetch updated matches
+			console.log("response after this.#generateMatches('GET')", response);
 			this.all_matches = response.matches; // Update the match list
 			this.#startNextMatch();
         } catch (e) {
@@ -29,10 +30,12 @@ export class Tournament {
 
 	async #startNextMatch() {
 		try {
+			console.log("this.all_matches", this.all_matches);
 			if (!this.all_matches)
 				throw new Error('No matches available');
-			this.#nextMatch(all_matches);
-			await this.#startMatch(this.current_match.id);
+			this.current_match = this.#nextMatch();
+			console.log("this.current_match", this.current_match);
+			await this.#startMatch();
 		} catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
 		}
@@ -117,8 +120,8 @@ export class Tournament {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				"player1": this.current_match.player1.id,
-				"player2": this.current_match.player2.id
+				"player1": this.current_match.player_1.user_id,
+				"player2": this.current_match.player_2.user_id
 			}),
 			credentials: 'include'
 		});
