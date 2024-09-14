@@ -56,6 +56,18 @@ def join_game(request, joiner_id, game_id):
 
     return JsonResponse(curr_game)
 
+def end_game(request):
+    print(f'Received request to end game')
+
+    # Vérification des paramètres
+    if not request.POST:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    # Fin du jeu via un service (hypothétique)
+    data = GameService.end_game(request)
+
+    return JsonResponse({"message": "Game ended", "data": data})
+
 def retrieve_last_games(request, user_id, nb_of_games):
   print(f'Received request to get the last: {nb_of_games} of {user_id}')
 

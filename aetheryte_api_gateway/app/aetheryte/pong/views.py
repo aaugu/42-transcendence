@@ -13,6 +13,10 @@ def join_game(request, joiner_id, game_id):
     response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
     return JsonResponse(response.json(), status=response.status_code)
 
+def end_game(request):
+    response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
+    return JsonResponse(response.json(), status=response.status_code)
+
 def retrieve_last_games(request, user_id, nb_of_games):
     response = requests.get(f"{PONG_SERVICE_URL}/retrieve_last_games/{user_id}/{nb_of_games}")
     return JsonResponse(response.json(), safe=False, status=response.status_code)

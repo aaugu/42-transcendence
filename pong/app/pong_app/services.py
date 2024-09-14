@@ -32,6 +32,7 @@ class GameService:
             )
 
         game_instance = Game(mode=mode, game_id=game_id)
+        game_instance.game_state.paddles[0].player_id = creator_id
 
         from .consumers.consumers import PongConsumer
 
@@ -50,6 +51,7 @@ class GameService:
         game.status = "IN_PROGRESS"
         from .consumers.consumers import PongConsumer
 
+        PongConsumer.games[game_id].game_state.paddles[1].player_id = joiner_id
         # PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
 
         game.save()
@@ -57,15 +59,19 @@ class GameService:
         return game
 
     @staticmethod
-    def end_game(game_id, winner_id, looser_id):
-        game = Games.objects.get(game_id=game_id)
-        game.status = "FINISHED"
-        game.winner_id = winner_id
-        game.looser_id = looser_id
-        if game.mode == "REMOTE":
-            game.save()
+    def end_game(request):
+      game_id = request.POST.get('game_id')
+      winner_id = request.POST.get('winner_id')
+      looser_id = request.POST.get('looser_id')
 
-        return game
+      game = Games.objects.get(game_id=game_id)
+      game.status = "FINISHED"
+      game.winner_id = winner_id
+      game.looser_id = looser_id
+      if game.mode == "REMOTE":
+        game.save()
+
+      return game
 
     @staticmethod
     def get_game(game_id):
@@ -79,11 +85,10 @@ class GameService:
 
         return games
 
-
     @staticmethod
     def get_user_games(user_id, x):
-        games = Games.objects.filter(Q(creator_id=user_id) | Q(joiner_id=user_id)).order_by(
-            "-created_at"
-        )[:x]
+        games = Games.objects.filter(
+            Q(creator_id=user_id) | Q(joiner_id=user_id)
+        ).order_by("-created_at")[:x]
 
         return games

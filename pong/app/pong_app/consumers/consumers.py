@@ -40,6 +40,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         print("Consumer disconnected")
+        
         # Decrement user count for the room
         if self.game_id in PongConsumer.user_per_room:
           PongConsumer.user_per_room[self.game_id] -= 1
