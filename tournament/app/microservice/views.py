@@ -41,11 +41,11 @@ class MatchUtils:
         return data
     
     @staticmethod
-    def match_notif_to_json(match: Match, notif: bool) -> dict[str, list[any]]:
-        matche_data = MatchUtils.match_to_json(match)
+    def match_notif_to_json(match: Match, notif: bool):
+        match_data = MatchUtils.match_to_json(match)
         data = {
             'message_sent_to_livechat': notif,
-            'matche': matche_data
+            'match': match_data
         }
 
         return data
