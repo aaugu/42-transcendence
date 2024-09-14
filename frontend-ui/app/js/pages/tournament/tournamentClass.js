@@ -10,29 +10,29 @@ export class Tournament {
 		this.userID = userID;
     }
 
-	nextMatch() {
+	#nextMatch() {
 		this.current_match = this.all_matches.find(match => match.status === "Not played");
 	}
 
     // Update match list after a match has been completed
     async updateMatchCycle(winner_id) {
         try {
-            await this.endMatch(winner_id); // End the match with winner_id
-            const response = await this.generateMatches('GET'); // Fetch updated matches
+            await this.#endMatch(winner_id); // End the match with winner_id
+            const response = await this.#generateMatches('GET'); // Fetch updated matches
 			this.all_matches = response.matches; // Update the match list
-			this.startNextMatch();
+			this.#startNextMatch();
         } catch (e) {
             console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
             this.all_matches = null;
         }
     }
 
-	async startNextMatch() {
+	async #startNextMatch() {
 		try {
 			if (!this.all_matches)
 				throw new Error('No matches available');
-			this.nextMatch(all_matches);
-			await this.startMatch(this.current_match.id);
+			this.#nextMatch(all_matches);
+			await this.#startMatch(this.current_match.id);
 		} catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
 		}
@@ -42,9 +42,9 @@ export class Tournament {
     async launchTournament() {
         try {
             const response = await this.generateMatches('POST'); // Create and fetch initial matches
-            await this.startTournament(); // Mark tournament as started
+            await this.#startTournament(); // Mark tournament as started
 			this.all_matches = response.matches; // Set the match list
-            this.startNextMatch();
+            this.#startNextMatch();
 			this.game_status = 1;
     	}
 		catch (e) {
@@ -54,7 +54,7 @@ export class Tournament {
 	}
 
     // Backend fetch for starting the tournament
-    async startTournament() {
+    async #startTournament() {
 		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {
 			method: 'PATCH',
@@ -80,7 +80,7 @@ export class Tournament {
 		}
 	}
 
-	async generateMatches(fetch_method) {
+	async #generateMatches(fetch_method) {
 		if (fetch_method === undefined || (fetch_method !== 'GET' && fetch_method !== 'POST')) {
 			throw new Error('Invalid fetch method');
 		}
@@ -108,7 +108,7 @@ export class Tournament {
 		}
 	}
 
-	async startMatch() {
+	async #startMatch() {
 		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/match/start/';
 		const response = await fetch(url, {
 			method: 'POST',
@@ -135,7 +135,7 @@ export class Tournament {
 		}
 	}
 
-	async endMatch(winner_id) {
+	async #endMatch(winner_id) {
 		if (this.tourn_id === undefined || winner_id === undefined) {
 			throw new Error('Invalid parameters to end match');
 		}
