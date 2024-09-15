@@ -10,25 +10,17 @@ import { handleWebsocketGame } from './handleWebsocket.js';
 export var g_socket;
 
 export async function startGame() {
-	g_socket = await createWebSocketConnection();
 
-	displayGame();
+	const gameId = window.location.href.split("/")[4];
+	console.log("game Id: ", gameId);
+	//split window path for gameId
 
-	handleWebsocketGame(g_socket);
+	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
 
-	handleButtons(g_socket);
+	displayGame(g_socket);
 
+	// handleWebsocketGame(g_socket, canvas);
 
-  let keysPressed = {};
-
-	document.addEventListener("keydown", function (event) {
-		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, g_socket);
-	});
-
-	document.addEventListener("keyup", function (event) {
-		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, g_socket);
-	});
+	
 	// start = true
 }

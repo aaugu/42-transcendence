@@ -1,4 +1,4 @@
-import { createGame } from '../game/gameplay/WebSocketConnection.js';
+import { createGame } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 
 async function sendGameInvite(game_id, ctc_id) {

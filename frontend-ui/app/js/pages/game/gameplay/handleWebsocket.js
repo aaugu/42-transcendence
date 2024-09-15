@@ -1,7 +1,8 @@
 import  updateGameState  from "./GameDraw.js";
 import { Tournament } from "../gameplay-tournament/tournamentClass.js";
 
-export function handleWebsocketGame(socket) {
+export function handleWebsocketGame(socket, canvas) {
+
 	socket.onopen = function(event) {
 		console.log("WebSocket connection opened:", event);
 	};
