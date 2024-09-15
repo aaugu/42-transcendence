@@ -1,6 +1,8 @@
 import throttle from "./Throttle.js";
 import { controllerRightUp, controllerRightDown, controllerLeftUp, controllerLeftDown } from "./GameConstants.js";
 
+
+
 export default function handleKeyPress(keysPressed, socket) {
   const throttleSend = throttle((direction) => {
     socket.send(JSON.stringify(direction));

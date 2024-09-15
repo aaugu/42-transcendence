@@ -11,11 +11,11 @@ async function sendGameInvite(game_id, ctc_id) {
 		body: JSON.stringify({
 			"player_1_or_sender": {
 				"user_id": userID,
-				"message": `Let's play Pong! Connect with game ID: ${game_id} under this link`
+				"message": `<a href='' onclick=joinGameandRedirect(${game_id}, ${userID})>Go play</a>`
 			},
 			"player_2_or_receiver": {
 				"user_id": ctc_id,
-				"message": `Let's play Pong! Connect with game ID: ${game_id} under this link`
+				"message": `<a href='' onclick=joinGameandRedirect(${game_id}, ${userID})>Let's play Pong</a>`
 			}
 		}),
 		credentials: 'include'

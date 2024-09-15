@@ -22,7 +22,7 @@ import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         "/local-twoplayer" : {
 			content: newgamePage,
 			eventListener: newlocalgameEvent,
-			// startFunction: getGameID,
 			description: "local two player game page"
 		},
 		"/local-twoplayer/:gameId" : {
@@ -118,6 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "local IA game page"
 		},
 		"/remote-twoplayer" : {
+			content: newgamePage,
+			eventListener: newremotegameEvent,
+			description: "remote two player game page"
+		},
+		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,
 			description: "remote two player game page"
@@ -181,7 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		let matchedRoute = null;
         let routeParams = {};
 
-        // Match the current route with the defined routes (including dynamic ones)
         for (let route in urlRoutes) {
             const match = matchRoute(route, currentRoute);
             if (match) {
@@ -193,7 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const currentRouteDetails = matchedRoute || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
+
 		updateEventListenerMainCont(currentRouteDetails.eventListener);
+
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;
 		if (currentRouteDetails.startFunction) {

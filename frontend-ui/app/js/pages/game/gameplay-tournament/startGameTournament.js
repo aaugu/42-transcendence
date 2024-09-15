@@ -17,18 +17,19 @@ export async function startGameTournament() {
 	const tournament = new Tournament(tourn_id);
 	await tournament.launchTournament();
 
-	t_socket = await createWebSocketConnection();
+	//get gameId from url
+	// const gameId = window.location.href.split("/")[4];
+	// console.log("game Id in tournament: ", gameId);
+
+	// t_socket = await createWebSocketConnection();
+	t_socket = new WebSocket(`ws://localhost:9000/ws/pong/tournament/${tourn_id}`);
 	if (!t_socket)
 		return; //error handling if game id cannot be created
 
 	console.log("FUNCTION START TOURNAMENT GAME");
 
-	displayGame();
-
-	//socket events
-	handleWebsocketTournament(t_socket, tournament);
-
-
+	const canvas = displayGame();
+	handleWebsocketTournament(t_socket, tournament, canvas);
 	handleButtons(t_socket);
 
 	let keysPressed = {}
