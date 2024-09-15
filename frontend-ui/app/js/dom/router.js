@@ -9,10 +9,10 @@ import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
 import { startGame } from "../pages/game/gameplay/startGame.js"
-import { startGameTournament } from "../pages/game/gameplay-tournament/startGameTournament.js"
+import { startGameTournament, t_socket } from "../pages/game/gameplay-tournament/startGameTournament.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
-import { socket } from "../pages/game/gameplay/startGame.js"
+import { g_socket } from "../pages/game/gameplay/startGame.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
 import { updateConvList } from "../pages/livechat/updateConvList.js"
@@ -37,8 +37,12 @@ function updateEventListenerMainCont(newEventListener) {
 }
 
 function resetDataRouteChange() {
-	if (socket) {
-		socket.close();
+	if (g_socket) {
+		g_socket.close();
+		console.log('GAME LOG: Websocket connection closed');
+	}
+	if (t_socket) {
+		t_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}
 	reset_all_tournaments();

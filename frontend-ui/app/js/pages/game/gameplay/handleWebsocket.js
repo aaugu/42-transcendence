@@ -1,5 +1,5 @@
-import { updateGameState } from "./updateGameState.js";
-import { Tournament } from "./tournamentClass.js";
+import  updateGameState  from "./GameDraw.js";
+import { Tournament } from "../gameplay-tournament/tournamentClass.js";
 
 export function handleWebsocketGame(socket) {
 	socket.onopen = function(event) {
@@ -68,12 +68,12 @@ export function handleWebsocketTournament(socket, tournament) {
 				console.log("Game Finished", data.game_finished);
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
-				const winner = (data.winner_id === 1) ? current_match.player1 : current_match.player2
+				const winner = (data.winner_id === 1) ? current_match.player_1 : current_match.player_2
 
 				tournament.updateMatchCycle(winner.id);
 				if (tournament.game_status === 1) {
 					const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
-					document.getElementById("t-match-text").innerText = `The winner is: ${winner.nickname}. Next match: ${tournament.current_match.player1.nickname} vs ${tournament.current_match.player2.nickname}`;
+					document.getElementById("t-match-text").innerText = `The winner is: ${winner.nickname}. Next match: ${tournament.current_match.player_1.nickname} vs ${tournament.current_match.player_2.nickname}`;
 					document.getElementById("t-match-go").onclick = async function() {
 						//reset game state and start next match
 						//hide modal

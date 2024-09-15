@@ -7,28 +7,28 @@ import { canvasWidth, canvasHeight } from './GameConstants.js';
 import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
 
-export var socket;
+export var g_socket;
 
 export async function startGame() {
-	socket = await createWebSocketConnection();
+	g_socket = await createWebSocketConnection();
 
 	displayGame();
 
-	handleWebsocketGame(socket);
+	handleWebsocketGame(g_socket);
 
-	handleButtons(socket);
+	handleButtons(g_socket);
 
 
   let keysPressed = {};
 
 	document.addEventListener("keydown", function (event) {
 		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, socket);
+		handleKeyPress(keysPressed, g_socket);
 	});
 
 	document.addEventListener("keyup", function (event) {
 		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, socket);
+		handleKeyPress(keysPressed, g_socket);
 	});
 	// start = true
 }
