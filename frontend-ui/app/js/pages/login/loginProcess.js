@@ -17,7 +17,7 @@ export async function loginProcess() {
     }
 
     const sendLoginDataToAPI = async (username, password) => {
-        await fetch('https://localhost:10444/api/login/token/', {
+        await fetch('https://localhost:10443/api/login/token/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

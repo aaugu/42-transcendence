@@ -56,7 +56,7 @@ export async function signupProcess() {
     // console.log("USER LOG: SIGNUP DATA: ", userdata);
 
     const sendSignupDataToAPI = async (userdata) => {
-        await fetch('https://localhost:10444/api/user/', {
+        await fetch('https://localhost:10443/api/user/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

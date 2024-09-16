@@ -3,7 +3,7 @@ import { get_tournament_id } from './tournament.js';
 
 //status: start, end
 async function changeStatusTournament(tournament_id, game_status) {
-	const url = 'https://localhost:10444/api/tournament/' + tournament_id + '/' + game_status + '/';
+	const url = 'https://localhost:10443/api/tournament/' + tournament_id + '/' + game_status + '/';
 	const response = await fetch(url, {
 		method: 'PATCH',
 		headers: {
