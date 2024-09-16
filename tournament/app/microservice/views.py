@@ -124,6 +124,11 @@ class GenerateMatchesView(View):
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
+        try:
+            len(players) < settings.MIN_PLAYERS
+        except Exception:
+            return JsonResponse(data={'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
+        
         matches = GenerateMatchesView.generate_matches(players, tournament)
         
         try:
@@ -345,7 +350,7 @@ class EndMatchView(View):
             match.winner = match.player_2
         match.status = Match.FINISHED
         match.save()
-        
+
     @staticmethod
     def update_tournament(match: Match, nb_matches: int):
         tournament = match.tournament
@@ -391,7 +396,6 @@ class TournamentView(View):
             json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
         valid_tournament, errors = TournamentView.is_valid_tournament(json_request)
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
