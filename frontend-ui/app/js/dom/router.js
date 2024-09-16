@@ -21,7 +21,7 @@ import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent, newremotegameEvent, newtournamentgameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent, newremotegameEvent, newAIgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications } from "../pages/livechat/notifications.js"
 
 let urlRoute;
@@ -112,6 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "local two player game page"
 		},
 		"/local-ai" : {
+			content: newgamePage,
+			startFunction: newAIgameEvent,
+			description: "local IA game page"
+		},
+		"/local-ai/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,
 			description: "local IA game page"
