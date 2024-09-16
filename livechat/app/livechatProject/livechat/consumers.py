@@ -33,7 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		message_content = text_data_json['message']
-		author_id = self.scope['user'].id  # ID de l'utilisateur connecté
+		author_id = text_data_json['author']
+		# author_id = self.scope['user'].id  # ID de l'utilisateur connecté
 		current_date = datetime.now().strftime("%Y-%m-%d")
 		current_time = datetime.now().strftime("%H:%M:%S")
 
@@ -67,7 +68,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	# Recevoir un message du groupe de chat
 	async def chat_message(self, event):
 		message = event['message']
-		author = event['user']
+		author = event['author']
 		date = datetime.now().strftime("%Y-%m-%d")
 		time = datetime.now().strftime("%H:%M:%S")
 

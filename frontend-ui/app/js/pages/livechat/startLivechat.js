@@ -2,7 +2,7 @@ export var chatSocket
 
 export async function startLivechat (conv_id) {
     console.log("ici");
-    chatSocket = new WebSocket(`wss://172.20.5.2:8000/ws/chat/${conv_id}`);
+    chatSocket = new WebSocket(`ws://localhost:8000/ws/chat/${conv_id}`);
     console.log(chatSocket.readyState);
     chatSocket.onopen = function () {
         console.log("LIVECHAT LOG: Websocket connection established");
