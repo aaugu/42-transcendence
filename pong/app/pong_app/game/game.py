@@ -125,14 +125,14 @@ class GameState:
 
         self.paddles = [
             Paddle(
-                player_id=1,
+                player_id=None,
                 position=[0, 50],
                 velocity=[PARAMS["paddle_velocity_x"], PARAMS["paddle_velocity_y"]],
                 width=PARAMS["paddle_width"],
                 height=PARAMS["paddle_height"],
             ),
             Paddle(
-                player_id=2,
+                player_id=None,
                 position=[PARAMS["canvas_width"] - 5, 50],
                 velocity=[PARAMS["paddle_velocity_x"], PARAMS["paddle_velocity_y"]],
                 width=PARAMS["paddle_width"],

@@ -27,6 +27,8 @@ export async function displayGame(socket) {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
+  let currentGameState = null;
+
   socket.onopen = function (event) {
     console.log("WebSocket connection opened:", event);
   };
@@ -47,6 +49,7 @@ export async function displayGame(socket) {
 
       if (data.game_state) {
         // console.log("Game State", data.game_state);
+        currentGameState = data.game_state;
         updateGameState(data.game_state, canvas);
       }
 
@@ -60,18 +63,17 @@ export async function displayGame(socket) {
         // );
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
+        console.log("GameID", data.game.game_id);
         let url = "https://localhost:10444/pong/end-game/";
-        const token = getCookie("csrf_token");
+
+        let formData = new FormData();
+        formData.append("winner_id", data.winner_id);
+        formData.append("loser_id", data.loser_id);
+        formData.append("game_id", data.game.game_id);
+
         fetch(url, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            winner_id: data.winner_id,
-            loser_id: data.loser_id,
-            game_id: data.game_state.game_id,
-          }),
+          body: formData,
           credentials: "include",
         })
           .then((response) => {
@@ -82,7 +84,10 @@ export async function displayGame(socket) {
                 );
               });
             }
-            // Handle successful response here
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Game Ended", data);
           })
           .catch((error) => {
             console.error("Error during fetch:", error);
@@ -104,12 +109,12 @@ export async function displayGame(socket) {
 
   document.addEventListener("keydown", function (event) {
     keysPressed[event.key] = true;
-    handleKeyPress(keysPressed, socket);
+    handleKeyPress(keysPressed, socket, currentGameState);
   });
 
   document.addEventListener("keyup", function (event) {
     keysPressed[event.key] = false;
-    handleKeyPress(keysPressed, socket);
+    handleKeyPress(keysPressed, socket, currentGameState);
   });
 
   // start = true

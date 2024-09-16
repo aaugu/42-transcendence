@@ -6,7 +6,7 @@ class Games(models.Model):
     creator_id = models.IntegerField()
     joiner_id = models.IntegerField(null=True, blank=True)
     winner_id = models.IntegerField(null=True, blank=True)
-    looser_id = models.IntegerField(null=True, blank=True)
+    loser_id = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     mode = models.CharField(max_length=50, null=True, blank=True)
     
@@ -24,7 +24,7 @@ class Games(models.Model):
         'creator_id': self.creator_id,
         'joiner_id': self.joiner_id,
         'winner_id': self.winner_id,
-        'loser_id': self.looser_id,
+        'loser_id': self.loser_id,
         'created_at': str(self.created_at),
         'mode': self.mode,
         'status': self.status,

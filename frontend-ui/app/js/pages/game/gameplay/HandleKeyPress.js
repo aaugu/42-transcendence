@@ -1,22 +1,62 @@
 import throttle from "./Throttle.js";
-import { controllerRightUp, controllerRightDown, controllerLeftUp, controllerLeftDown } from "./GameConstants.js";
+import {
+  controllerRightUp,
+  controllerRightDown,
+  controllerLeftUp,
+  controllerLeftDown,
+} from "./GameConstants.js";
+import { userID } from "../../user/updateProfile.js";
 
-export default function handleKeyPress(keysPressed, socket) {
+export default function handleKeyPress(keysPressed, socket, currentGameState) {
   const throttleSend = throttle((direction) => {
     socket.send(JSON.stringify(direction));
   }, 50);
 
-  if (keysPressed[controllerRightUp]) {
-    throttleSend({ direction_right_paddle: "up" });
-    return;
-  } else if (keysPressed[controllerRightDown]) {
-    throttleSend({ direction_right_paddle: "down" });
-    return;
-  } else if (keysPressed[controllerLeftUp]) {
-    throttleSend({ direction_left_paddle: "up" });
-    return;
-  } else if (keysPressed[controllerLeftDown]) {
-    throttleSend({ direction_left_paddle: "down" });
-    return;
+  const gameMode = window.location.pathname.split("/")[1];
+  console.log("GAME MODE", gameMode);
+  const isRemoteGame =
+    gameMode === "remote-twoplayer" || gameMode === "join-game";
+  console.log("IS REMOTE GAME", isRemoteGame);
+
+  const keyActionMap = {
+    [controllerLeftUp]: { direction_left_paddle: "up" },
+    [controllerLeftDown]: { direction_left_paddle: "down" },
+    [controllerRightUp]: { direction_right_paddle: "up" },
+    [controllerRightDown]: { direction_right_paddle: "down" },
+  };
+
+  if (isRemoteGame) {
+    console.log(`UserID ${userID}, Left paddle: ${currentGameState.paddles[0].player_id} Right paddle: ${currentGameState.paddles[1].player_id}`);
+
+    let playerIndex = null;
+    if (userID == currentGameState.paddles[0].player_id) {
+      console.log("CREATOR DETECTED", playerIndex);
+      playerIndex = 0;
+    } else if (userID == currentGameState.paddles[1].player_id) {
+      playerIndex = 1;
+      console.log("JOINER DETECTED", playerIndex);
+    }
+
+    if (playerIndex != null) {
+      console.log("PLAYER INDEX", playerIndex);
+      const controller =
+        playerIndex == 0
+          ? [controllerLeftUp, controllerLeftDown]
+          : [controllerRightUp, controllerRightDown];
+
+      for (const key of controller) {
+        if (keysPressed[key]) {
+          throttleSend(keyActionMap[key]);
+          return;
+        }
+      }
+    }
+  } else {
+    for (const key in keyActionMap) {
+      if (keysPressed[key]) {
+        throttleSend(keyActionMap[key]);
+        return;
+      }
+    }
   }
 }

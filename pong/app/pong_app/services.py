@@ -34,11 +34,11 @@ class GameService:
 
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
+        print(f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}")
 
         from .consumers.consumers import PongConsumer
 
         PongConsumer.games[game_id] = game_instance
-        PongConsumer.games[game_id].game_state = GameState()
 
         print(game_instance.to_dict())
 
@@ -53,27 +53,36 @@ class GameService:
         from .consumers.consumers import PongConsumer
 
         PongConsumer.games[game_id].game_state.paddles[1].player_id = joiner_id
+        print(f"Joined game {game_id} with user {joiner_id} Left Paddle ID = {PongConsumer.games[game_id].game_state.paddles[0].player_id} and Right Paddle ID = {PongConsumer.games[game_id].game_state.paddles[1].player_id}")
         # PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
 
         game.save()
 
         return game
 
+
     @staticmethod
     def end_game(request):
-      print(f"Received request to end game")
-      game_id = request.POST.get('game_id')
-      winner_id = request.POST.get('winner_id')
-      looser_id = request.POST.get('looser_id')
+        print(f"Received request to end game")
+        game_id = request.POST.get("game_id")
+        winner_id = request.POST.get("winner_id")
+        loser_id = request.POST.get("loser_id")
 
-      game = Games.objects.get(game_id=game_id)
-      game.status = "FINISHED"
-      game.winner_id = winner_id
-      game.looser_id = looser_id
-      if game.mode == "REMOTE":
-        game.save()
+        game = Games.objects.get(game_id=game_id)
+        game.status = "FINISHED"
+        game.winner_id = winner_id
+        game.loser_id = loser_id
+        if game.mode == "REMOTE":
+            game.save()
 
-      return game
+        # Return a dictionary that can be converted to JSON
+        return {
+            "game_id": game.game_id,
+            "status": game.status,
+            "winner_id": game.winner_id,
+            "loser_id": game.loser_id,
+            "mode": game.mode,
+        }
 
     @staticmethod
     def get_game(game_id):

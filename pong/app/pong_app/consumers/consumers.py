@@ -10,6 +10,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     game_loops = {}
     games = {}
     user_per_room = {}
+    user_id = {}
 
     async def connect(self):
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
@@ -28,9 +29,9 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Increment user count for the game
         if self.game_id in PongConsumer.user_per_room:
-          PongConsumer.user_per_room[self.game_id] += 1
+            PongConsumer.user_per_room[self.game_id] += 1
         else:
-          PongConsumer.user_per_room[self.game_id] = 1
+            PongConsumer.user_per_room[self.game_id] = 1
 
         await self.accept()
 
@@ -40,10 +41,10 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         print("Consumer disconnected")
-        
+
         # Decrement user count for the room
         if self.game_id in PongConsumer.user_per_room:
-          PongConsumer.user_per_room[self.game_id] -= 1
+            PongConsumer.user_per_room[self.game_id] -= 1
         # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
@@ -59,14 +60,14 @@ class PongConsumer(AsyncWebsocketConsumer):
             and not PongConsumer.games[self.game_id].game_state.finished
         ):
             if direction_right_paddle == "up":
-              PongConsumer.games[self.game_id].game_state.paddles[1].move("up")
+                PongConsumer.games[self.game_id].game_state.paddles[1].move("up")
             elif direction_right_paddle == "down":
-              PongConsumer.games[self.game_id].game_state.paddles[1].move("down")
+                PongConsumer.games[self.game_id].game_state.paddles[1].move("down")
 
             if direction_left_paddle == "up":
-              PongConsumer.games[self.game_id].game_state.paddles[0].move("up")
+                PongConsumer.games[self.game_id].game_state.paddles[0].move("up")
             elif direction_left_paddle == "down":
-              PongConsumer.games[self.game_id].game_state.paddles[0].move("down")
+                PongConsumer.games[self.game_id].game_state.paddles[0].move("down")
 
         if start_stop_reset == "start":
             print(f"Start Triggered")
@@ -79,12 +80,14 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def game_loop(self):
         while True:
+            if PongConsumer.games[self.game_id].mode == "REMOTE":
+              PongConsumer.games[self.game_id].game_state.start()
+              
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()
 
             if PongConsumer.games[self.game_id].game_state.finished:
                 print(f"Game {self.game_id} finished")
-
 
                 winner_id, loser_id = self.determine_winner_loser()
 
@@ -94,12 +97,13 @@ class PongConsumer(AsyncWebsocketConsumer):
                         "type": "game_finished",
                         "winner_id": winner_id,
                         "loser_id": loser_id,
-                        "game_state": PongConsumer.games[
-                            self.game_id
-                        ].game_state.to_dict(),
+                        "game": PongConsumer.games[self.game_id].to_dict(),
                     },
                 )
 
+                # wait 3 seconds then close the game
+                # await asyncio.sleep(3)
+                # await self.close()
                 break
 
             await self.channel_layer.group_send(
@@ -120,18 +124,21 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def game_finished(self, event):
         print("Game Finished Method Called")
-        game_state = event["game_state"]
+        game = event["game"]
         winner_id = event["winner_id"]
         loser_id = event["loser_id"]
+
+        game_id = game["game_id"]
 
         # Send the game state to the client
         await self.send(
             text_data=json.dumps(
                 {
-                    "game_state": game_state,
+                    "game": game,
                     "winner_id": winner_id,
                     "loser_id": loser_id,
                     "game_finished": True,
+                    "game_id": game_id,
                 }
             )
         )
@@ -148,5 +155,3 @@ class PongConsumer(AsyncWebsocketConsumer):
             winner_id = PongConsumer.games[self.game_id].game_state.paddles[1].player_id
             loser_id = PongConsumer.games[self.game_id].game_state.paddles[0].player_id
         return winner_id, loser_id
-
-    
