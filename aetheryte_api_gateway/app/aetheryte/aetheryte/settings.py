@@ -37,7 +37,8 @@ INSTALLED_APPS = [
 
     'login',
 	'usermanager',
-	'livechat'
+	'livechat',
+	'tournament'
 ]
 
 MIDDLEWARE = [
