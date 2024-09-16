@@ -1,18 +1,4 @@
 services:
-    aetheryte-nginx:
-        build:
-            context: nginx
-            dockerfile: Dockerfile
-        networks:
-            transcendence :
-                ipv4_address: 172.20.0.4
-        volumes:
-            - ../../ssl-certificate:/etc/nginx/ssl
-        environment:
-            ELASTIC_USER: ${ROOT_USER}
-            ELASTIC_PASSWORD: ${ROOT_PASSWORD}
-        restart: on-failure
-
     aetheryte-postgres:
         build:
             context: postgres

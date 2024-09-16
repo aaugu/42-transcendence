@@ -5,7 +5,7 @@ import { userID } from '../user/updateProfile.js';
 
 //mode can  be local or remote
 async function createTournament(new_tournament, mode) {
-	const response = await fetch('https://localhost:10444/api/tournament/' + mode + '/', {
+	const response = await fetch('https://localhost:10443/api/tournament/' + mode + '/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
