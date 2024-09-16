@@ -10,14 +10,14 @@ import requests, json
 
 from livechat.models import User, Conversation
 from livechat.serializers import UserSerializer, ConversationSerializer
-from livechat.views.utils import user_exists
+from livechat.views.utils import user_exists, create_user
 
 # Conversations  
 class ConversationView(APIView):
 	# GET: conversations involving current user
 	def get(self, request, user_id):
 		if not user_exists(user_id):
-			if not self.create_user(user_id):
+			if not create_user(user_id):
 				return Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversations = Conversation.objects.filter(Q(user_1=user_id) | Q(user_2=user_id))
@@ -66,11 +66,3 @@ class ConversationView(APIView):
 		if conversation_1 or conversation_2:
 			return True
 		return False
-	
-	# Create user
-	def create_user(self, user_id):
-		user = User(user_id=user_id)
-		user.save()
-
-		user_created = User.objects.filter(Q(user_id=user_id))
-		return user_created

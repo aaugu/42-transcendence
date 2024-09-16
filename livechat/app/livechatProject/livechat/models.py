@@ -22,14 +22,8 @@ class Message(models.Model):
     date = models.CharField(blank=False)
     time = models.CharField(blank=False)
 
-    def get_date(timestamp):
-        return dateformat.format(timezone.localtime(timestamp), 'Y-m-d')
-    
-    def get_time(timestamp):
-        return dateformat.format(timezone.localtime(timestamp), 'H:i')
-
     def __str__(self):
-        return str(self.author) + ": " + str(self.message)
+        return str(self.conversation.id) + " - " + str(self.author) + ": " + str(self.message)
 
 
 class Blacklist(models.Model):
@@ -39,5 +33,3 @@ class Blacklist(models.Model):
 
     def __str__(self):
         return str(self.initiator) + " -> " + str(self.target)
-
-# timestamp = models.DateTimeField(auto_now_add=True)

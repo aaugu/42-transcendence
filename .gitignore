@@ -7,4 +7,4 @@ trash/
 **/init.sql
 **/volumes/ 
 /ssl-certificate/*
-to-delete/*
+db.sqlite3

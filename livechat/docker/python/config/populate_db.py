@@ -3,10 +3,14 @@
 # Ouvrir console docker python avec la commande "docker exec -it transcendence-livechat-python-1 bash"
 
 # Effectuer les commandes suivantes dans la console docker:
+
 # cd app/livechatProject
+
+# Si la base de données est vide, passer ces 3 commandes
 # python manage.py flush (mettre "yes")
 # python manage.py makemigrations
 # python manage.py migrate
+
 # python manage.py shell
 
 # Copier coller le code suivant dans la console python :
