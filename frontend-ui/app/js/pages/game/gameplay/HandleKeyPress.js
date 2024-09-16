@@ -4,6 +4,7 @@ import { controllerRightUp, controllerRightDown, controllerLeftUp, controllerLef
 
 
 export default function handleKeyPress(keysPressed, socket) {
+  if (!socket) return;
   const throttleSend = throttle((direction) => {
     socket.send(JSON.stringify(direction));
   }, 50);

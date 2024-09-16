@@ -3,6 +3,7 @@ import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
 import { urlRoute } from "../../dom/router.js";
 import { hideModal } from "../../dom/modal.js";
+import { newtournamentgameEvent } from "../game/newgameEvent.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -22,9 +23,9 @@ export async function tournamentEvent(e) {
 			break;
 		case "t-start":
 			const tourn_id = document.getElementById('t-start').dataset.tournid;
-			localStorage.setItem('tourn_id', tourn_id);
-			hideModal('single-t-modal');
-			urlRoute('/tournament');
+			newtournamentgameEvent(tourn_id);
+			// localStorage.setItem('tourn_id', tourn_id);
+			// urlRoute('/tournament');
 			break;
 		case "t-play":
 			break;
