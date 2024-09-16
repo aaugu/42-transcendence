@@ -124,10 +124,8 @@ class GenerateMatchesView(View):
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
-        try:
-            len(players) < settings.MIN_PLAYERS
-        except Exception:
-            return JsonResponse(data={'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
+        if len(players) < settings.MIN_PLAYERS:
+            return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
         
         matches = GenerateMatchesView.generate_matches(players, tournament)
         
