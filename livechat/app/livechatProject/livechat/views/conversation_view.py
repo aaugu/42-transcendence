@@ -46,7 +46,7 @@ class ConversationView(APIView):
 			return status.HTTP_409_CONFLICT
 
 		if not user_exists(target_id):
-			if not self.create_user(target_id):
+			if not create_user(target_id):
 				return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 		conversation = Conversation(

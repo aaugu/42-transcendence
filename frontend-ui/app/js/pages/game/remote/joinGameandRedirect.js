@@ -6,7 +6,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 		console.log("join game and redirect");
 		if (senderId !== userID) {
 			console.log("needs to join");
-			const joinGameEndpoint = "https://localhost:10443/pong/join-game";
+			const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
 			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 				method: "GET",
 				headers: {

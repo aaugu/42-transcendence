@@ -6,7 +6,7 @@ export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
 		throw new Error('Did not find conversation ID');
 
-	const response = await fetch('https://localhost:10443/livechat/'+ userID + '/conversation/' + conv_id + '/messages/', {
+	const response = await fetch('https://localhost:10443/api/livechat/'+ userID + '/conversation/' + conv_id + '/messages/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
