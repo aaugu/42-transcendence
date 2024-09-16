@@ -91,7 +91,7 @@ class logout_user(APIView):
     def post(self, request, user_id):
         if user_id > 0:
             # Utilisation de get_object_or_404 pour gérer automatiquement les cas d'utilisateur inexistant
-            user = get_object_or_404(User, id=user_id)
+            user = get_object_or_404(CustomUser, id=user_id)
             user.online = False
             user.save()
             return Response({"Detail": "user successfully logged out"}, status=status.HTTP_200_OK)
