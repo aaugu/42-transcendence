@@ -14,7 +14,6 @@ import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
-import { updateConvList } from "../pages/livechat/updateConvList.js"
 import { startFriendListRefresh, clearFriendList } from "../pages/profile/friends.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
@@ -23,6 +22,7 @@ import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent, newremotegameEvent, newtournamentgameEvent } from "../pages/game/newgameEvent.js"
+import { notifications } from "../pages/livechat/notifications.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		"/livechat" : {
 			content: livechatPage,
 			eventListener: livechatEvent,
-			startFunction: updateConvList,
+			startFunction: notifications,
 			description: "stats page"
 		},
 		"/join-game": {

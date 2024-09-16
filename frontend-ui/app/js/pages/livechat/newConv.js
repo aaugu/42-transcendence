@@ -47,10 +47,9 @@ export async function newConvButton() {
 
 		const history = await getConvHistory(conv_id);
 		set_is_blacklisted(history.is_blacklisted);
-		// console.log("history", history);
 		updateConvList();
 		const users = history.users;
-		if (users[0].id === userID) {
+		if (users.length === 2 && users[0].id === userID) {
 			displayChatInterface(users[1].id);
 		}
 		else {

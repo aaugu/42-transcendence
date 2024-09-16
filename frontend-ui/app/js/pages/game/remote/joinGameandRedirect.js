@@ -3,9 +3,7 @@ import { urlRoute } from "../../../dom/router.js";
 
 export async function joinGameandRedirect(gameId, senderId) {
 	try {
-		console.log("join game and redirect");
 		if (senderId !== userID) {
-			console.log("needs to join");
 			const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
 			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 				method: "GET",
@@ -20,6 +18,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 			}
 		}
 
+		console.log("in join game and redirect before route change");
 		const new_url = `/remote-twoplayer/${gameId}`;
 		urlRoute(new_url);
 

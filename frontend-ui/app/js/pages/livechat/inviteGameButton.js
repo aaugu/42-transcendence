@@ -11,7 +11,7 @@ async function sendGameInvite(game_id, ctc_id) {
 		body: JSON.stringify({
 			"user_id": userID,
 			"target_id": ctc_id,
-			"link": `<a id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" href='#'></a>`
+			"link": `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" class="btn btn-primary" href='#'></button>`
 		}),
 		credentials: 'include'
 	});
