@@ -89,10 +89,19 @@ class UpdateUser(APIView):
 class logout_user(APIView):
     
     def post(self, request, user_id):
-        if (user_id > 0):
-            user = self.get_object(user_id)
+        try:
+            user_id = int(user_id)
+        except ValueError:
+            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user_id > 0:
+            user = get_object_or_404(CustomUser, id=user_id)
             user.online = False
-            user.save()
+            try:
+                user.save()
+                return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
+            except Exception as e:
+                return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            return Response({"Detail": "no user with this id"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"Detail": "user successfully logout"}, status=status.HTTP_200_OK)
+            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+
