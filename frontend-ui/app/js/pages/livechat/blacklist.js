@@ -38,7 +38,7 @@ export async function blockUser(target_id) {
 		throw new Error('Did not find userID or target_id invalid');
 	}
 
-	const response = await fetch('https://localhost:10444/api/livechat' + userID + '/blacklist/', {
+	const response = await fetch('https://localhost:10444/api/livechat/' + userID + '/blacklist/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -63,7 +63,7 @@ export async function unblockUser(target_id) {
 		throw new Error('Did not find userID or target_id invalid');
 	}
 
-	const response = await fetch('https://localhost:10444/api/livechat' + userID + '/blacklist/' + target_id, {
+	const response = await fetch('https://localhost:10444/api/livechat/' + userID + '/blacklist/' + target_id, {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',
