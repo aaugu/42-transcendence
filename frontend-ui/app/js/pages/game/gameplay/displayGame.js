@@ -1,11 +1,12 @@
 import updateGameState from './GameDraw.js';
 import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
+import HandleButtons from './HandleButtons.js';
+import handleKeyPress from './HandleKeyPress.js';
 
-export async function displayGame() {
+export function displayGame() {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
-	console.log("FUNCTION START GAME");
 
 	canvas.classList.remove("hidden");
 	infoCtn.innerHTML = '';
@@ -25,4 +26,5 @@ export async function displayGame() {
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
 
+	return canvas;
 }

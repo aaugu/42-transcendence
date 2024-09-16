@@ -3,8 +3,6 @@ export default function handleButtons(socket) {
 	const stopButton = document.getElementById("stop-button");
 	const resetButton = document.getElementById("reset-button");
 
-  console.log("handle buttons")
-
   if (startButton) {
     startButton.addEventListener("click", () => {
       console.log("GAME LOG: Start button clicked");

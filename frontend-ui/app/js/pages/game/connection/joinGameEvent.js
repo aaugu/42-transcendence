@@ -1,27 +1,48 @@
 import { userID } from "../../user/updateProfile.js";
 import createWebSocketConnection from "../gameplay/WebSocketConnection.js";
 import { displayGame } from "../gameplay/displayGame.js";
+import { handleWebsocketGame } from "../gameplay/handleWebsocket.js";
+import handleButtons from "../gameplay/HandleButtons.js";
+import handleKeyPress from "../gameplay/HandleKeyPress.js";
+import { joinGameandRedirect } from "./joinGameandRedirect.js";
 
-export function joinGameEvent() {
-    const joinButton = document.getElementById("join-button");
-    joinButton.addEventListener("click", async () => {
-        const gameId = document.getElementById("game-id-input").value;
-        console.log("GameID entered by user:", gameId);
-        if (gameId !== "") {
-            try {
-                console.log("TRY GAME JOIN FUNCTION");
-                const socket = await joinGame(gameId);
-                console.log("JOIN GAME SUCCESS");
-                displayGame(socket);
-            }
-            catch (error) {
-                console.error("JOIN GAME ERROR:", error);
-            }
-        }
-        else {
-            console.error("JOIN GAME ERROR: No GameID entered by user");
-        }
-    })
+export function joinGameEvent(event) {
+    const joinButton = document.getElementById("join-game-btn");
+    if (event.target === joinButton) {
+      const gameId = document.getElementById("game-id-input").value;
+      joinGameandRedirect(gameId);
+    }
+    // joinButton.addEventListener("click", async () => {
+    //     const gameId = document.getElementById("game-id-input").value;
+    //     console.log("GameID entered by user:", gameId);
+    //     if (gameId !== "") {
+    //         try {
+    //             console.log("TRY GAME JOIN FUNCTION");
+    //             const j_socket = await joinGame(gameId);
+    //             console.log("JOIN GAME SUCCESS");
+    //             const canvas = displayGame();
+    //             handleWebsocketGame(j_socket, canvas);
+    //             handleButtons(j_socket);
+
+    //             let keysPressed = {};
+    //             document.addEventListener("keydown", function (event) {
+    //               keysPressed[event.key] = true;
+    //               handleKeyPress(keysPressed, j_socket);
+    //             });
+
+    //             document.addEventListener("keyup", function (event) {
+    //               keysPressed[event.key] = false;
+    //               handleKeyPress(keysPressed, j_socket);
+    //             });
+    //         }
+    //         catch (error) {
+    //             console.error("JOIN GAME ERROR:", error);
+    //         }
+    //     }
+    //     else {
+    //         console.error("JOIN GAME ERROR: No GameID entered by user");
+    //     }
+    // })
 }
 
 export async function joinGame(gameId) {
@@ -44,7 +65,7 @@ export async function joinGame(gameId) {
     const data = await response.json();
     console.log("JOIN GAME RESPONSE:", data);
 
-    const socket = await createWebSocketConnection(gameId);
+    const socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
 
     return socket;
 
