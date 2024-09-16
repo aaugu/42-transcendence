@@ -16,7 +16,7 @@ volumes:
     # Live chat
     livechat_postgres_volume:
         driver: local
-    #elk volumes
+    # elk volumes
     # elastic_data_volume:
     #     driver: local
 
@@ -76,7 +76,7 @@ services:
             service: nginx
         ports:
             - "10443:443"
-    # # Elasticsearch / Kibana
+    # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:
     #         file: elk/docker/docker-compose.yml
