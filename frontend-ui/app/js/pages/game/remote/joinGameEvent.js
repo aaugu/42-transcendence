@@ -8,10 +8,24 @@ import { joinGameandRedirect } from "./joinGameandRedirect.js";
 
 export function joinGameEvent(event) {
     const joinButton = document.getElementById("join-game-btn");
-    if (event.target === joinButton) {
-      const gameId = document.getElementById("game-id-input").value;
-      joinGameandRedirect(gameId);
-    }
+    // if (event.target === joinButton) {
+    //   const gameId = document.getElementById("game-id-input").value;
+    //   joinGameandRedirect(gameId);
+    // }
+    switch (event.target.id){
+      case "chat-invite-game-link":
+        console.log("event.target:", event.target);
+        const game_id = event.target.dataset.gameid;
+        const sender_id = event.target.dataset.senderid;
+
+        console.log("game_id in event:", game_id);
+        console.log("sender_id in event:", sender_id);
+        joinGameandRedirect(game_id, sender_id);
+        break;
+      default :
+          break;
+			
+}
     // joinButton.addEventListener("click", async () => {
     //     const gameId = document.getElementById("game-id-input").value;
     //     console.log("GameID entered by user:", gameId);

@@ -1,11 +1,11 @@
 import { userID } from "../../user/updateProfile.js";
 import { urlRoute } from "../../../dom/router.js";
 
-export async function joinGameandRedirect() {
-	// gameId = document.getElementById("game-id-input").value;
-	// senderId = userID;
+export async function joinGameandRedirect(gameId, senderId) {
 	try {
+		console.log("join game and redirect");
 		if (senderId !== userID) {
+			console.log("needs to join");
 			const joinGameEndpoint = "https://localhost:10444/pong/join-game";
 			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 				method: "GET",
@@ -19,9 +19,6 @@ export async function joinGameandRedirect() {
 			throw new Error(`Failed to join game. Status: ${response.status}`);
 			}
 		}
-
-		// const data = await response.json();
-		// console.log("JOIN GAME RESPONSE:", data);
 
 		const new_url = `/remote-twoplayer/${gameId}`;
 		urlRoute(new_url);

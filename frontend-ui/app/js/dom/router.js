@@ -20,7 +20,7 @@ import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/joinGamePage.js"
-import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js"
+import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
 
