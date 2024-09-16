@@ -101,6 +101,14 @@ class PongConsumer(AsyncWebsocketConsumer):
                     },
                 )
 
+                if PongConsumer.games[self.game_id].mode == "TOURNAMENT":
+
+                  # Delay 3 seconds before reseting the game
+                  await asyncio.sleep(5)
+                  PongConsumer.games[self.game_id].game_state.reset_score()
+                  PongConsumer.games[self.game_id].game_state.finished = False
+
+
                 # wait 3 seconds then close the game
                 # await asyncio.sleep(3)
                 # await self.close()
@@ -155,3 +163,5 @@ class PongConsumer(AsyncWebsocketConsumer):
             winner_id = PongConsumer.games[self.game_id].game_state.paddles[1].player_id
             loser_id = PongConsumer.games[self.game_id].game_state.paddles[0].player_id
         return winner_id, loser_id
+
+    # Utils methods
