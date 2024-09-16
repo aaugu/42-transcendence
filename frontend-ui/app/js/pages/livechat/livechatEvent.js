@@ -2,10 +2,15 @@ import { convHistory } from "./convHistory.js";
 import { newConvButton }	from "./newConv.js";
 import { blockUser, colorBlockButton, is_blacklisted, set_is_blacklisted, unblockUser } from "./blacklist.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { chatSocket } from "./startLivechat.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
-        convHistory(e);
+        if (chatSocket) { // close ws
+			chatSocket.close();
+			console.log('LIVE CHAT: Websocket connection closed');
+		}
+		convHistory(e);
         return;
       }
 
@@ -16,6 +21,10 @@ export async function livechatEvent(e) {
 
 	switch (target.id) {
 		case "chat-search-btn":
+			if (chatSocket) { // close ws
+				chatSocket.close();
+				console.log('LIVE CHAT: Websocket connection closed');
+			}
 			newConvButton();
 			break;
 		case "chat-block-btn":

@@ -57,6 +57,7 @@ export async function newConvButton() {
 			displayChatInterface(users[0].id);
 		}
 		displayMessages(history);
+		startLivechat(conv_id);
 
 	} catch (e) {
 		console.error(`USER LOG: ${e.message}`);
