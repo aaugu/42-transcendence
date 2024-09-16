@@ -76,11 +76,6 @@ services:
             service: nginx
         ports:
             - "10443:443"
-    # ssl generation
-    # ssl-generation:
-    #     extends:
-    #         file: sslgen/docker/docker-compose.yml
-    #         service: generate_ssl
     # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:
