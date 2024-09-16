@@ -89,10 +89,11 @@ class UpdateUser(APIView):
 class logout_user(APIView):
     
     def post(self, request, user_id):
-        if (user_id > 0):
-            user = self.get_object(user_id)
+        if user_id > 0:
+            # Utilisation de get_object_or_404 pour gérer automatiquement les cas d'utilisateur inexistant
+            user = get_object_or_404(User, id=user_id)
             user.online = False
             user.save()
+            return Response({"Detail": "user successfully logged out"}, status=status.HTTP_200_OK)
         else:
-            return Response({"Detail": "no user with this id"}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"Detail": "user successfully logout"}, status=status.HTTP_200_OK)
+            return Response({"Detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
