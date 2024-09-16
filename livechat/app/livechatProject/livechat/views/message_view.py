@@ -11,7 +11,6 @@ from livechat.serializers import ConversationSerializer, MessageSerializer
 
 # Messages : get all messages from a conversation
 class MessageView(APIView):
-
 	def get(self, request, user_id, conversation_id):
 		if not self.conversation_exists(conversation_id):
 			return Response(status=status.HTTP_404_NOT_FOUND)
@@ -44,7 +43,6 @@ class MessageView(APIView):
 		if conversation:
 			return True
 		return False
-
 	
 	def is_blacklist(self, initiator, target):
 		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
