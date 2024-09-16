@@ -76,7 +76,7 @@ services:
             service: nginx
         ports:
             - "10443:443"
-    # Elasticsearch / Kibana
+    # # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:
     #         file: elk/docker/docker-compose.yml
