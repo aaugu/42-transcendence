@@ -22,10 +22,12 @@ export async function tournamentEvent(e) {
 			joinTournamentButton();
 			break;
 		case "t-start":
-			const tourn_id = document.getElementById('t-start').dataset.tournid;
-			newtournamentgameEvent(tourn_id);
-			// localStorage.setItem('tourn_id', tourn_id);
-			// urlRoute('/tournament');
+			const tourn_id_start = document.getElementById('t-start').dataset.tournid;
+			newtournamentgameEvent(tourn_id_start);
+			break;
+		case "t-delete":
+			const tourn_id_delete = document.getElementById('t-delete').dataset.tournid;
+			console.log("delete tournament not yet implemented");
 			break;
 		case "t-play":
 			break;
