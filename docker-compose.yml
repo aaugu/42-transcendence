@@ -23,16 +23,6 @@ volumes:
     #     driver: local
 
 services:
-    # Aetheryte API Gateway
-    aetheryte-nginx:
-        extends:
-            file: aetheryte_api_gateway/docker/docker-compose.yml
-            service: aetheryte-nginx
-        depends_on:
-            aetheryte-python:
-                condition: service_healthy
-        ports:
-            - "10444:443"
     aetheryte-postgres:
         extends:
             file: aetheryte_api_gateway/docker/docker-compose.yml
@@ -44,14 +34,6 @@ services:
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy
-
-    # Frontend - User interface
-    ui-nginx:
-        extends:
-            file: frontend-ui/docker/docker-compose.yml
-            service: ui-nginx
-        ports:
-            - "10443:443"
 
     # Pong
     pong-python:
@@ -95,11 +77,12 @@ services:
         depends_on:
             livechat-postgres:
                 condition: service_healthy
-    # ssl generation
-    ssl-generation:
+    nginx:
         extends:
-            file: sslgen/docker/docker-compose.yml
-            service: generate_ssl
+            file: nginx/docker/docker-compose.yml
+            service: nginx
+        ports:
+            - "10443:443"
     # Elasticsearch / Kibana
     # elasticsearch:
     #     extends:

@@ -1,6 +1,6 @@
 export async function logout() {
 
-    const response = await fetch('https://localhost:10444/api/login/token/logout/', {
+    const response = await fetch('https://localhost:10443/api/login/token/logout/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

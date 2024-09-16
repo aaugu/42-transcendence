@@ -24,7 +24,7 @@ export async function getTournaments() {
 }
 
 export async function getTournamentDetails(tournament_id) {
-	const response = await fetch('https://localhost:10444/api/tournament/' + tournament_id + '/', {
+	const response = await fetch('https://localhost:10443/api/tournament/' + tournament_id + '/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
