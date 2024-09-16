@@ -1,7 +1,11 @@
 import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
 import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
-import { startTournamentButton } from "./changeStatusTournament.js";
+import { urlRoute } from "../../dom/router.js";
+import { hideModal } from "../../dom/modal.js";
+import { newtournamentgameEvent } from "../game/newgameEvent.js";
+import { deleteTournament } from "./deleteTournament.js";
+import { updateTournLists } from "./updateTournLists.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -20,7 +24,18 @@ export async function tournamentEvent(e) {
 			joinTournamentButton();
 			break;
 		case "t-start":
-			startTournamentButton();
+			const tourn_id_start = document.getElementById('t-start').dataset.tournid;
+			newtournamentgameEvent(tourn_id_start);
+			break;
+		case "t-delete":
+			const tourn_id_delete = document.getElementById('t-delete').dataset.tournid;
+			try {
+				await deleteTournament(tourn_id_delete);
+				updateTournLists();
+				hideModal('single-t-modal');
+			} catch (e) {
+				console.error("USER LOG: ", e.message);
+			}
 			break;
 		case "t-play":
 			break;

@@ -1,16 +1,4 @@
-import { get_all_tournaments, all_tournaments } from "./tournament.js";
-
 export async function tournamentPage() {
-    var html_tournaments = '';
-
-    await get_all_tournaments();
-    const tournaments = Object.values(all_tournaments);
-    tournaments.forEach(tournament => {
-        html_tournaments += `
-            <li class="list-group-item">
-                <span data-tournid="${tournament.id}">${tournament.name}</span>
-            </li>`;
-    });
 
 	return `
     <div class="two-column-container">
@@ -73,7 +61,11 @@ export async function tournamentPage() {
             <div class="content-box clearfix">
                 <h5 class="m-2">Join a tournament</h5>
                 <ul id="tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
-                    ${html_tournaments}
+                </ul>
+            </div>
+            <div class="content-box clearfix">
+                <h5 class="m-2">My tournaments</h5>
+                <ul id="my-tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
                 </ul>
             </div>
         </div>
@@ -87,10 +79,12 @@ export async function tournamentPage() {
                     </div>
                     <div class="modal-body">
                         <div id="single-t-modal-text"></div>
+                        <label id="t-player-name-label" class="form-label mt-3 hidden" for="t-player-name">Choose a player name or go with your nickname</label>
+                        <input type="text" class="form-control hidden" id="t-player-name" placeholder="">
                         <p class="hidden m-2 text-danger" id="single-t-modal-errormsg"></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-danger hidden" id="t-delete">Delete</button>
                         <button type="button" class="btn btn-dark hidden" id="t-join">Join</button>
                         <button type="button" class="btn btn-dark hidden" id="t-start">Start</button>
                         <button type="button" class="btn btn-dark hidden" id="t-play">Play</button>
