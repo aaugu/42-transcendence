@@ -60,7 +60,7 @@ export class Tournament {
 
     // Backend fetch for starting the tournament
     async #startTournament() {
-		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/start/';
+		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {
 			method: 'PATCH',
 			headers: {
@@ -90,7 +90,7 @@ export class Tournament {
 			throw new Error('Invalid fetch method');
 		}
 
-		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/matches/generate/';
+		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/matches/generate/';
 		const response = await fetch(url, {
 			method: fetch_method,
 			headers: {
@@ -114,7 +114,7 @@ export class Tournament {
 	}
 
 	async #startMatch() {
-		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/match/start/';
+		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/start/';
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -145,7 +145,7 @@ export class Tournament {
 			throw new Error('Invalid parameters to end match');
 		}
 
-		const url = 'https://localhost:10444/api/tournament/' + this.tourn_id + '/match/end/';
+		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/end/';
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: {

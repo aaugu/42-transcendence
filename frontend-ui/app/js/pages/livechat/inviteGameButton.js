@@ -2,7 +2,7 @@ import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 
 async function sendGameInvite(game_id, ctc_id) {
-	const response = await fetch('https://localhost:10444/livechat/notification/', {
+	const response = await fetch('https://localhost:10443/livechat/notification/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

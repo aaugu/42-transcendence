@@ -1,6 +1,6 @@
 import { userID } from "../../user/updateProfile.js";
 
-const gatewayEndpoint = "https://localhost:10444/pong";
+const gatewayEndpoint = "https://localhost:10443/pong";
 
 export async function createGame(mode) {
   const response = await fetch(

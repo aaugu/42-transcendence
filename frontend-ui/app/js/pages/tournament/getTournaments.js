@@ -1,7 +1,7 @@
 import { userID } from '../user/updateProfile.js';
 
 export async function getTournaments() {
-	const response = await fetch('https://localhost:10444/api/tournament/', {
+	const response = await fetch('https://localhost:10443/api/tournament/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -51,7 +51,7 @@ export async function getMyTournaments() {
 		throw new Error('No user ID');
 	}
 
-	const response = await fetch('https://localhost:10444/api/tournament/' + userID + '/mytournament/admin/', {
+	const response = await fetch('https://localhost:10443/api/tournament/' + userID + '/mytournament/admin/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',

@@ -12,7 +12,7 @@ async function newConv(conv_nickname) {
 	// else if (conv_nickname === localStorage.getItem('nickname')) {
 	// 	throw new Error('Cannot add yourself to contact list');
 	// }
-	const response = await fetch('https://localhost:10444/api/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

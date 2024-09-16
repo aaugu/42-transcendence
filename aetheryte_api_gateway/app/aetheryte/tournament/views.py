@@ -211,7 +211,7 @@ class ManageTournamentView(APIView):
         response = requests.delete(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({response_json}, status=response.status_code)
+            return Response(response_json, status=response.status_code)
         else:
             return Response(status=response.status_code)
         
@@ -226,7 +226,7 @@ class ManageTournamentView(APIView):
         response = requests.patch(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
-            return Response({response_json}, status=response.status_code)
+            return Response(response_json, status=response.status_code)
         else:
             return Response(status=response.status_code)
 
