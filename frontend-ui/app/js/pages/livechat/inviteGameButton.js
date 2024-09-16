@@ -1,4 +1,4 @@
-import { createGame } from '../game/gameplay/createnewGame.js';
+import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 
 async function sendGameInvite(game_id, ctc_id) {
@@ -11,11 +11,11 @@ async function sendGameInvite(game_id, ctc_id) {
 		body: JSON.stringify({
 			"player_1_or_sender": {
 				"user_id": userID,
-				"message": `<a href='' onclick=joinGameandRedirect(${game_id}, ${userID})>Go play</a>`
+				"message": `<a id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" href='#'></a>`
 			},
 			"player_2_or_receiver": {
 				"user_id": ctc_id,
-				"message": `<a href='' onclick=joinGameandRedirect(${game_id}, ${userID})>Let's play Pong</a>`
+				"message": `<a id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" href='#'></a>`
 			}
 		}),
 		credentials: 'include'
@@ -36,7 +36,9 @@ async function sendGameInvite(game_id, ctc_id) {
 
 export async function inviteGameButton(ctc_id) {
 	try {
-		const game_id = await createGame();
+		console.log("invite game button");
+		const mode = getGameMode("remote-twoplayer");
+		const game_id = await createGame(mode);
 		await sendGameInvite(game_id, ctc_id);
 	}
 	catch (e) {

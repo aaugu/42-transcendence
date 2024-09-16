@@ -80,7 +80,7 @@ export function displayChatInterface (ctc_id) {
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
-    const play_button = document.getElementById('chat-play-pong');
+    const play_button = document.getElementById('chat-invite-game');
     const block_button = document.getElementById('chat-block-btn');
     play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');
@@ -95,6 +95,6 @@ export function undisplayChatInterface() {
     document.getElementById('chat-msgs').innerHTML = '';
     document.getElementById('chat-div-textarea').classList.add('hidden');
     document.getElementById('chat-send').classList.add('hidden');
-    document.getElementById('chat-play-pong').classList.add('hidden');
+    document.getElementById('chat-invite-game').classList.add('hidden');
     document.getElementById('chat-block-btn').classList.add('hidden');
 }

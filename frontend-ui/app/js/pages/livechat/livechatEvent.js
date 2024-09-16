@@ -3,6 +3,8 @@ import { newConvButton }	from "./newConv.js";
 import { blockUser, colorBlockButton, is_blacklisted, set_is_blacklisted, unblockUser } from "./blacklist.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { inviteGameButton } from "./inviteGameButton.js";
+import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
+import { userID } from "../user/updateProfile.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -12,6 +14,9 @@ export async function livechatEvent(e) {
 
 	let target = e.target;
 	if (target.tagName === 'I' && target.parentElement.id === 'chat-block-btn') {
+		target = target.parentElement;
+	}
+	else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game') {
 		target = target.parentElement;
 	}
 
@@ -40,7 +45,14 @@ export async function livechatEvent(e) {
 			break;
 		case "chat-invite-game":
 			const ctc_id = target.dataset.ctcid;
+			console.log("ctc_id in event:", ctc_id);
 			inviteGameButton(ctc_id);
+			break;
+		case "chat-invite-game-link":
+			const game_id = target.dataset.gameid;
+			const sender_id = target.dataset.senderid;
+			joinGameandRedirect(game_id, sender_id);
+			break;
 		default:
 			break;
 	}

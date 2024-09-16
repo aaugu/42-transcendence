@@ -2,7 +2,7 @@ import { userID } from "../../user/updateProfile.js";
 
 const gatewayEndpoint = "https://localhost:10444/pong";
 
-export async function createGame(userID, mode) {
+export async function createGame(mode) {
   const response = await fetch(
     `${gatewayEndpoint}/create-game/${userID}/${mode}/`,
     {
@@ -25,36 +25,35 @@ export async function createGame(userID, mode) {
 	}
 }
 
+export function getGameMode(mode) {
+  switch (mode) {
+    case "local-twoplayer":
+      return "LOCAL_TWO_PLAYERS";
+    case "local-ai":
+      return "LOCAL_VS_IA";
+    case "remote-twoplayer":
+      return "REMOTE";
+    case "tournament":
+      return "TOURNAMENT";
+    default:
+      console.log("Invalid mode");
+      return null;
+  }
+  
+}
+
 export async function getGameID () {
   const currentUrl = window.location.href;
 
   var mode = currentUrl.split("/")[3];
-  // if (!gameId) {
-  //   console.log(`MODE: ${mode}, USER ID: ${userID}`);
-  // }
 
   console.log("MODE", mode);
-  switch (mode) {
-    case "local-twoplayer":
-      mode = "LOCAL_TWO_PLAYERS";
-      break;
-    case "local-ai":
-      mode = "LOCAL_VS_IA";
-      break;
-    case "remote-twoplayer":
-      mode = "REMOTE";
-      break;
-    case "tournament":
-      mode = "TOURNAMENT";
-      break;
-    default:
-      console.log("Invalid mode");
-  }
+  mode = getGameMode(mode);
 
   let gameData;
 
   try {
-    gameData = await createGame(userID, mode);
+    gameData = await createGame(mode);
     return gameData.game_id;
   }
   catch (e) {

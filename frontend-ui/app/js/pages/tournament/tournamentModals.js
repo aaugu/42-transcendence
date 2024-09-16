@@ -54,8 +54,11 @@ export async function openSingleTournamentModal(e) {
 			if (is_admin === true) {
 				t_modalText.innerText = 'You are the admin. Wanna start this tournament?';
 				const startButton = document.getElementById('t-start');
+				const deleteButton = document.getElementById('t-delete');
 				startButton.classList.remove('hidden');
+				deleteButton.classList.remove('hidden');
 				startButton.dataset.tournid = t_id;
+				deleteButton.dataset.tournid = t_id;
 			}
 			else
 				t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';

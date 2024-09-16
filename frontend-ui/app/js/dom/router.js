@@ -19,10 +19,10 @@ import { startFriendListRefresh, clearFriendList } from "../pages/profile/friend
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
-import { joinGamePage } from "../pages/game/joinGamePage.js"
-import { joinGameEvent } from "../pages/game/connection/joinGameEvent.js"
+import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
+import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent, newremotegameEvent, newtournamentgameEvent } from "../pages/game/newgameEvent.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament" : {
+		"/tournament/:tournId" : {
 			content: gamePage,
 			startFunction: startGameTournament,
 			description: "local tournament game page"
