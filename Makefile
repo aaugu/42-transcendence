@@ -44,7 +44,7 @@ clean: down
 	@(if [ "$$(docker images -q)" ]; then docker rmi -f $$(docker images -qa); fi)
 
 fclean: clean
-	@(echo "${CYAN}Clearing persistent existing volumes and remove .env file...${END}")
+	@(echo "${CYAN}Clearing persistent existing volumes...${END}")
 	@(if [ "$$(docker volume ls -q)" ]; then docker volume rm $$(docker volume ls -q); fi)
 
 re: fclean all

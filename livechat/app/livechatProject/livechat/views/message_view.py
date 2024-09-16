@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 # from rest_framework.decorators import api_view
@@ -39,7 +37,6 @@ class MessageView(APIView):
 							"is_blacklisted": blacklist_status
 						},
 						status=status.HTTP_200_OK)
-			
 
 	def conversation_exists(self, id):
 		conversation = Conversation.objects.filter(id=id)

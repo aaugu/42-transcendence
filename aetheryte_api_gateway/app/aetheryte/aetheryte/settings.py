@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '10.13.1.5']
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'login',
-	'usermanager'
+	'usermanager',
+	'livechat',
+	'tournament'
 ]
 
 MIDDLEWARE = [
@@ -133,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'SIGNING_KEY': "je mange des pingouins saveur arc en ciel tout les matins",
+    'SIGNING_KEY': os.environ.get('AETHERYTE_DJANGO_JWT_PASS'),
 }
 
 # 2fa parameters
@@ -143,8 +145,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ffxivtranscendence@gmail.com'
-EMAIL_HOST_PASSWORD = 'cnnc bmsc zrip yvbn'
+EMAIL_HOST_USER = os.environ.get('AETHERYTE_MAIL')
+EMAIL_HOST_PASSWORD = os.environ.get('AETHERYTE_MAIL_PASS')
 
 # Cors parameters
 CORS_ALLOWED_ORIGINS = [

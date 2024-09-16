@@ -7,7 +7,7 @@ export async function getFriendList() {
         throw new Error('Could not find user ID');
     }
 
-    const response = await fetch('https://localhost:10444/api/user/' + userID + '/friends/status', {
+    const response = await fetch('https://localhost:10443/api/user/' + userID + '/friends/status', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -38,7 +38,7 @@ export async function addFriend(friend_nickname) {
 		throw new Error('Cannot add yourself to contact list');
 	}
 
-    const response = await fetch('https://localhost:10444/api/user/' + userID + '/friends/', {
+    const response = await fetch('https://localhost:10443/api/user/' + userID + '/friends/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -65,7 +65,7 @@ export async function deleteFriend(friend_id) {
         throw new Error('Could not find user ID');
     }
 
-    const response = await fetch('https://localhost:10444/api/user/' + userID + '/friends/delete/' + friend_id + '/', {
+    const response = await fetch('https://localhost:10443/api/user/' + userID + '/friends/delete/' + friend_id + '/', {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',

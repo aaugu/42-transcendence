@@ -5,7 +5,7 @@ import { updateProfile } from "../user/updateProfile.js";
 import { hideModal } from "../../dom/modal.js";
 
 export async function verifyTwoFactorAuth(twoFactorAuthCode) {
-	const response = await fetch('https://localhost:10444/api/login/token/verify-2fa/', {
+	const response = await fetch('https://localhost:10443/api/login/token/verify-2fa/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

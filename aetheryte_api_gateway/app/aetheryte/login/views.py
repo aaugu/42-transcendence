@@ -87,11 +87,8 @@ class UpdateUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class logout_user(APIView):
-    def get_object(self, user_id):
-        return get_object_or_404(CustomUser, id=user_id)
     
-    def post(self, request):
-        user_id = get_user_from_jwt(request)
+    def post(self, request, user_id):
         if (user_id > 0):
             user = self.get_object(user_id)
             user.online = False

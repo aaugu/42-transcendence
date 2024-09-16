@@ -1,6 +1,6 @@
-export async function deleteTournament() {
-	const response = await fetch('https://localhost:10444/api/tournament/', {
-		method: 'GET',
+export async function deleteTournament(tourn_id) {
+	const response = await fetch('https://localhost:10443/api/tournament/' + tourn_id + '/', {
+		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
@@ -14,8 +14,7 @@ export async function deleteTournament() {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
-		return responseData;
+		console.log('USER LOG: DELETE TOURNAMENT SUCCESSFUL');
 	} else {
 		throw new Error('No response from server');
 	}
