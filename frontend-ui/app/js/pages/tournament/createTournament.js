@@ -2,10 +2,11 @@ import { errormsg } from '../../dom/errormsg.js';
 import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
+import { updateTournLists } from './updateTournLists.js';
 
-//mode can  be local or remote
-async function createTournament(new_tournament, mode) {
-	const response = await fetch('https://localhost:10443/api/tournament/' + mode + '/', {
+//type can  be local or remote
+async function createTournament(new_tournament) {
+	const response = await fetch('https://localhost:10443/api/tournament/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -13,6 +14,7 @@ async function createTournament(new_tournament, mode) {
 		},
 		body: JSON.stringify({
 			"name": new_tournament.name,
+			"type": new_tournament.type,
 			"user_id": new_tournament.user_id,
 			"max_players": new_tournament.max_players,
 			"player_names": new_tournament.player_names,
@@ -34,12 +36,13 @@ async function createTournament(new_tournament, mode) {
 	}
 }
 
-function newTournamentData(tournamentName, playerNames, is_private, password) {
+function newTournamentData(tournamentName, max_players, adminNickname, is_private, password, type) {
 	const new_tournament = {
 		"name": tournamentName,
 		"user_id": userID,
-		"max_players": playerNames.length,
-		"player_names": playerNames,
+		"type": type,
+		"max_players": max_players,
+		"player_names": adminNickname,
 		"is_private": is_private,
 		"password": password
 	};
@@ -48,43 +51,31 @@ function newTournamentData(tournamentName, playerNames, is_private, password) {
 
 export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
-	var playerNames;
-	var new_tournament;
-	const username = localStorage.getItem('username') || 'guest';
 	const tournamentName = document.getElementById('tournament-name').value;
-
+	const max_players = document.getElementById('t-nr-players').value;
+	var adminNickname;
+	if (document.getElementById('t-admin-nickname').value === '')
+		adminNickname = localStorage.getItem('nickname');
+	else
+		adminNickname = document.getElementById('t-admin-nickname').value;
 	try {
+		var type;
 		if (local) {
-			const inputs = document.querySelectorAll('.t-player-input');
-			inputs.forEach((input) => {
-				if (input.value.trim() === '') {
-					throw new Error("Fill out all fields");
-				}
-			});
-			playerNames = Array.from(inputs).map(input => input.value);
-			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
-
-			await createTournament(new_tournament, 'local');
-			hideModal('create-t-modal');
-			urlRoute('/tournament/game');
+			type = 'local';
 		}
 		else {
-			playerNames = [username];
-			new_tournament = newTournamentData(tournamentName, playerNames, false, "");
-
-			const response = await createTournament(new_tournament, 'remote');
-			// refresh the join list
-			const tourn_list = document.getElementById('tournament-list');
-			const new_tourn = document.createElement('li');
-			new_tourn.classList.add('list-group-item');
-			// new_tourn.innerHTML = `<span data-tournid="${response.id}">${response.name}</span>`;
-			new_tourn.innerHTML = `<span data-tournid="100">${tournamentName}</span>`;
-			tourn_list.appendChild(new_tourn);
-			hideModal('create-t-modal');
+			type = 'remote';
 		}
+		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, false, "", type);
+		console.log("new-tournament: ", new_tournament);
+		await createTournament(new_tournament);
+		updateTournLists();
+		hideModal('create-t-modal');
+		document.getElementById("t-nr-players").value = 2;
+		document.getElementById('tournament-name').value = "";
 	}
 	catch (e) {
-		console.log(`USER LOG: CREATE TOURNAMENT ${new_tournament.name} FAILED, STATUS: ${e.message}`);
-		errormsg ('Creation failed, try again later', "t-modal-errormsg");
+		console.log(`USER LOG: CREATE TOURNAMENT FAILED, STATUS: ${e.message}`);
+		errormsg (e.message, "t-modal-errormsg");
 	}
 }

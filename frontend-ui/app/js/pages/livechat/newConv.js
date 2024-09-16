@@ -12,7 +12,7 @@ async function newConv(conv_nickname) {
 	// else if (conv_nickname === localStorage.getItem('nickname')) {
 	// 	throw new Error('Cannot add yourself to contact list');
 	// }
-	const response = await fetch('https://localhost:10444/api/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -44,13 +44,12 @@ export async function newConvButton() {
 	try {
 		const response = await newConv(conv_nickname);
 		const conv_id = response.conversation_id;
-		
+
 		const history = await getConvHistory(conv_id);
 		set_is_blacklisted(history.is_blacklisted);
-		// console.log("history", history);
 		updateConvList();
 		const users = history.users;
-		if (users[0].id === userID) {
+		if (users.length === 2 && users[0].id === userID) {
 			displayChatInterface(users[1].id);
 		}
 		else {
