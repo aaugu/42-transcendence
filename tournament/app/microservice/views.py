@@ -172,7 +172,7 @@ class GenerateMatchesView(View):
     
     @staticmethod
     def get_seed_order(nb_players: int) -> list[list[int]]:
-        nb_players = int(2 ** math.ceil(math.log2(nb_players)))
+        nb_players = int(2 ** math.ceil(math.log2(nb_players)))    
         rounds = int(math.log2(nb_players) - 1)
         players = [1, 2]
 
@@ -345,6 +345,7 @@ class EndMatchView(View):
             match.winner = match.player_2
         match.status = Match.FINISHED
         match.save()
+        
     @staticmethod
     def update_tournament(match: Match, nb_matches: int):
         tournament = match.tournament
@@ -684,16 +685,16 @@ class TournamentPlayersView(View):
             elif player.nickname == new_player.nickname:
                 return False, [f'nickname `{player.nickname}` already taken', 400]
 
-        try:
-            user_already_in_tournament = Tournament.objects.filter(
-                players__user_id=new_player.user_id,
-                status__in=[Tournament.CREATED, Tournament.IN_PROGRESS]
-            ).exists()
-        except Exception as e:
-            return False, [f'An unexpected error occurred : {e}', 500]
+        # try:
+        #     user_already_in_tournament = Tournament.objects.filter(
+        #         players__user_id=new_player.user_id,
+        #         status__in=[Tournament.CREATED, Tournament.IN_PROGRESS]
+        #     ).exists()
+        # except Exception as e:
+        #     return False, [f'An unexpected error occurred : {e}', 500]
 
-        if user_already_in_tournament:
-            return False, ['You are already registered for another tournament', 403]
+        # if user_already_in_tournament:
+        #     return False, ['You are already registered for another tournament', 403]
 
         if tournament.max_players <= len(tournament_players):
             return False, ['This tournament is fully booked', 403]

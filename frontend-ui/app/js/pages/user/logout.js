@@ -1,6 +1,8 @@
+import { userID } from './updateProfile.js';
+
 export async function logout() {
 
-    const response = await fetch('https://localhost:10443/api/login/token/logout/', {
+    const response = await fetch('https://localhost:10443/api/login/token/logout/' + userID + '/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

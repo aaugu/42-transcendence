@@ -1,3 +1,5 @@
+import { userID } from '../user/updateProfile.js';
+
 export async function deleteTournament(tourn_id) {
 	const response = await fetch('https://localhost:10443/api/tournament/' + tourn_id + '/', {
 		method: 'DELETE',
@@ -5,6 +7,9 @@ export async function deleteTournament(tourn_id) {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		},
+		body: JSON.stringify({
+			"user_id": userID
+		}),
 		credentials: 'include'
 	});
 	const responseData = await response.json();
