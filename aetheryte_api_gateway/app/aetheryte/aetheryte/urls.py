@@ -5,3 +5,4 @@ urlpatterns = [
 	path('api/user/', include('usermanager.urls')),
 	path('api/livechat/', include('livechat.urls')),
   path('api/tournament/', include('tournament.urls')),
+]
