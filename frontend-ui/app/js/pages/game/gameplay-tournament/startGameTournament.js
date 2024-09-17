@@ -14,7 +14,14 @@ import { errormsg } from '../../../dom/errormsg.js';
 export var t_socket;
 
 export async function startGameTournament() {
-	const tourn_id = window.location.href.split("/")[4];
+	// const tourn_id = window.location.href.split("/")[4];
+	const tourn_id = localStorage.getItem('tourn_id');
+	const gameId = window.location.href.split("/")[4];
+	if (!tourn_id) {
+		urlRoute('/tournament-creation');
+		errormsg("Tournament not found", "homepage-errormsg");
+		return;
+	}
 	let tournament;
 	let gameState = { current: null };
 	let t_details;
@@ -36,7 +43,7 @@ export async function startGameTournament() {
 	}
 
 	if (tournament.game_status === 'In Progress') {
-		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
+		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
 
 		const canvas = displayGame();
 		handleWebsocketTournament(t_socket, tournament, canvas, gameState);
