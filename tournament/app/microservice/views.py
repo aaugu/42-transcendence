@@ -72,7 +72,7 @@ class MatchUtils:
     
     @staticmethod
     def match_status_to_string(status: int):
-        match_status_msg = ["Not played", "In progress", "Finished"]
+        match_status_msg = ["Not Played", "In Progress", "Finished"]
 
         return match_status_msg[status]
 
@@ -94,7 +94,7 @@ class TournamentUtils:
 
     @staticmethod
     def status_to_string(status: int) -> str:
-        status_string = ['Created', 'In progress', 'Finished', 'Local', 'Remote']
+        status_string = ['Created', 'In Progress', 'Finished', 'Local', 'Remote']
         return status_string[status]
 
 @method_decorator(csrf_exempt, name='dispatch')
