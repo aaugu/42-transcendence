@@ -4,27 +4,27 @@ import { errormsg } from '../../../dom/errormsg.js';
 
 export class Tournament {
 
-	constructor(tourn_id) {
+	constructor(tourn_id, game_status) {
         this.tourn_id = tourn_id;
         this.current_match = null;
-        this.game_status = 0; // 0: not started, 1: in progress, 2: finished
+        this.game_status = game_status; // 'Created', 'In Progress', 'Finished'
 		this.all_matches = null;
 		this.userID = userID;
     }
 
 	#nextMatch() {
-		this.current_match = this.all_matches.find(match => match.status === "Not played");
+		this.current_match = this.all_matches.find(match => match.status === "In Progress") ||
+							this.all_matches.find(match => match.status === "Not played");
 	}
 
     // Update match list after a match has been completed
     async updateMatchCycle(winner_id) {
         try {
-            await this.#endMatch(winner_id); // End the match with winner_id
-            const response = await this.#generateMatches('GET'); // Fetch updated matches
+            await this.#endMatch(winner_id);
+            const response = await this.#generateMatches('GET');
 			console.log("response after this.#generateMatches('GET')", response);
-			//check if status === finished
 
-			this.all_matches = response.matches; // Update the match list
+			this.all_matches = response.matches;
 			this.#startNextMatch();
         } catch (e) {
             console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
@@ -33,27 +33,21 @@ export class Tournament {
     }
 
 	async #startNextMatch() {
-		// try {
-			console.log("this.all_matches", this.all_matches);
-			if (!this.all_matches)
-				throw new Error('No matches available');
-			this.#nextMatch();
-			console.log("this.current_match", this.current_match);
-			//CHECK HERE IF MATCH ALREADY IN PROGRESS
+		console.log("this.all_matches", this.all_matches);
+		if (!this.all_matches)
+			throw new Error('No matches available');
+		this.#nextMatch();
+		console.log("this.current_match", this.current_match);
+		if (this.current_match.status === "Not played") {
 			await this.#startMatch();
-		// } catch (e) {
-		// 	console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
-		// }
+		}
     }
 
     async launchTournament() {
         try {
             const response = await this.#generateMatches('POST');
-			//CHECK HERE IF TOURNAMENT ALREADY STARTED
 			console.log("response after this.#generateMatches('POST')", response);
-			if (response.status === "CREATED") {
-            	await this.#startTournament();
-			}
+            await this.#startTournament();
 			this.all_matches = response.matches;
             this.#startNextMatch();
 			this.game_status = 1;
@@ -68,7 +62,21 @@ export class Tournament {
 		}
 	}
 
-    // Backend fetch for starting the tournament
+	async continueTournament() {
+        try {
+            const response = await this.#generateMatches('GET');
+			console.log("response after this.#generateMatches('GET')", response);
+			//check if status === finished
+
+			this.all_matches = response.matches;
+			this.#startNextMatch();
+    	}
+		catch (e) {
+			console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
+            this.all_matches = null;
+		}
+	}
+
     async #startTournament() {
 		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {

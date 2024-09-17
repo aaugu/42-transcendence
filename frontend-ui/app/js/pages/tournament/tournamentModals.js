@@ -18,7 +18,6 @@ export function openCreateTournamentModal() {
 	t_modal.show();
 }
 
-//tournament status 0 = created, 1 = in_progress, 2 = finished
 export async function openSingleTournamentModal(e) {
 		document.getElementById('t-join').classList.add('hidden');
 		document.getElementById('t-start').classList.add('hidden');
@@ -37,7 +36,7 @@ export async function openSingleTournamentModal(e) {
 		}
 		const t_details = await getTournamentDetails(t_id);
 		console.log("t_details: ", t_details);
-		const has_started = (t_details.status === 0);
+		const has_started = (t_details.status === 'Created');
 		const is_admin = (t_details['admin-id'] === userID);
 		const players = t_details.players;
 		for (const playerKey in players) {
@@ -46,7 +45,7 @@ export async function openSingleTournamentModal(e) {
 				break;
 			}
 		}
-		document.getElementById("single-t-modal-title").innerText = `${t_name} (${t_details.type})`;
+		document.getElementById("single-t-modal-title").innerText = `${t_name}`;
 
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
@@ -56,10 +55,18 @@ export async function openSingleTournamentModal(e) {
 			joinButton.classList.remove('hidden');
 			joinButton.dataset.tournid = t_id;
 		}
-		else if (has_started === false && has_joined === true) {
+		else if (has_joined === true) {
 			if (is_admin === true && t_details.type === 'Local') {
-				t_modalText.innerText = `You are the admin. You can start the tournament or delete it.
-					There are currently ${t_details.nb_players} players subscribed (max possible players: ${t_details.max_players})`;
+				t_modalText.innerHTML = `<span>You are the admin. You can start/continue the tournament or delete it.</span>
+										</br>
+										</br>
+										<span>Status: ${t_details.status}</span>
+										</br>
+										 <span>Mode:  ${t_details.type}</span>
+										</br>
+										<span>Subscribed players: ${t_details.nb_players}</span>
+										</br>
+										<span>Max possible players: ${t_details.max_players}</span>`;
 				const startButton = document.getElementById('t-start');
 				const deleteButton = document.getElementById('t-delete');
 				startButton.classList.remove('hidden');
@@ -73,8 +80,10 @@ export async function openSingleTournamentModal(e) {
 				deleteButton.classList.remove('hidden');
 				deleteButton.dataset.tournid = t_id;
 			}
-			else
+			else if (has_started === false)
 				t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
+			else if (has_started === true)
+				t_modalText.innerText = 'This tournament has already started. Go play!';
 		}
 		// else if (has_started === true && has_joined === true){
 		// 	t_modalText.innerText = 'The tournament has already started. Go play!';

@@ -8,17 +8,27 @@ import { Tournament } from './tournamentClass.js';
 import { displayGame } from '../gameplay/displayGame.js';
 import { handleWebsocketTournament } from '../gameplay/handleWebsocket.js';
 import { urlRoute } from '../../../dom/router.js';
+import { getTournamentDetails } from '../../tournament/getTournaments.js';
 
 export var t_socket;
 
 export async function startGameTournament() {
 	const tourn_id = window.location.href.split("/")[4];
 	console.log("tourn id: ", tourn_id);
+	let tournament;
 
-	const tournament = new Tournament(tourn_id);
-	await tournament.launchTournament();
+	//check if already started
+	const t_details = await getTournamentDetails(tourn_id);
+	if (t_details.status === 'In Progress') {
+		tournament = new Tournament(tourn_id, 'In Progress');
+		await tournament.continueTournament();
+	}
+	else {
+		tournament = new Tournament(tourn_id, 'Created');
+		await tournament.launchTournament();
+	}
 
-	if (tournament.game_status === 1) {
+	if (tournament.game_status === 'In Progress') {
 		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
 		if (!t_socket)
 			return; //error handling if game id cannot be created
@@ -41,7 +51,7 @@ export async function startGameTournament() {
 			handleKeyPress(keysPressed, t_socket);
 		});
 	}
-	else if (tournament.game_status === 2) {
+	else if (tournament.game_status === 'Finished') {
 		urlRoute('/tournament');
 		errormsg("Tournament already finished", "homepage-errormsg");
 	}

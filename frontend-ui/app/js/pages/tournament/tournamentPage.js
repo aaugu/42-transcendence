@@ -77,7 +77,7 @@ export async function tournamentPage() {
                     <h1 class="modal-title fs-5" id="single-t-modal-title"></h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body text-start">
                         <div id="single-t-modal-text"></div>
                         <label id="t-player-name-label" class="form-label mt-3 hidden" for="t-player-name">Choose a player name or go with your nickname</label>
                         <input type="text" class="form-control hidden" id="t-player-name" placeholder="">
@@ -86,7 +86,7 @@ export async function tournamentPage() {
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger hidden" id="t-delete">Delete</button>
                         <button type="button" class="btn btn-dark hidden" id="t-join">Join</button>
-                        <button type="button" class="btn btn-dark hidden" id="t-start">Start</button>
+                        <button type="button" class="btn btn-dark hidden" id="t-start">Go</button>
                         <button type="button" class="btn btn-dark hidden" id="t-play">Play</button>
                     </div>
                 </div>
