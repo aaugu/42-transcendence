@@ -79,11 +79,14 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 }
 
 export function handleWebsocketTournament(socket, tournament, canvas, gameState) {
+	const player1html = document.getElementById("player1");
+	const player2html = document.getElementById("player2");
+	
 	socket.onopen = function(event) {
 		console.log("WebSocket connection opened:", event);
 		console.log('current_match', tournament.current_match);
-		document.getElementById("player1").innerText = tournament.current_match.player_1.nickname;
-		document.getElementById("player2").innerText = tournament.current_match.player_2.nickname;
+		player1html.innerText = tournament.current_match.player_1.nickname;
+		player2html.innerText = tournament.current_match.player_2.nickname;
 	};
 
 	socket.onclose = function(event) {
@@ -123,8 +126,10 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 					document.getElementById("t-match-text").innerHTML = `<span>The winner is: ${winner.nickname} !</span>
 																		</br>
 																		<span>Next up: ${tournament.current_match.player_1.nickname} 
-					
-					t_matchmodal.show();													vs ${tournament.current_match.player_2.nickname}</span>`;
+																		vs ${tournament.current_match.player_2.nickname}</span>`;
+					player1html.innerText = tournament.current_match.player_1.nickname;
+					player2html.innerText = tournament.current_match.player_2.nickname;
+					t_matchmodal.show();													
 					setTimeout(() => {
 						hideModal('t-match-modal');
 					}, 3000);
@@ -136,13 +141,11 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 						hideModal('t-match-modal');
 						urlRoute("/tournament-creation");
 					}, 5000);
-					
-					//socket will close automatically upon page change
+
 				}
 			}
 		} catch (error) {
-			console.error("Error parsing message:", error);
-			console.log("Raw message that caused error:", event.data);
+			console.error("Error parsing message:", error.message);
 		}
 	};
 }
