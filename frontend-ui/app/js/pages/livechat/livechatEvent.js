@@ -9,9 +9,11 @@ import { userID } from "../user/updateProfile.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
-        if (chatSocket) { // close ws
-			chatSocket.close();
-			console.log('LIVE CHAT: Websocket connection closed');
+        if (chatSocket) {
+			if (chatSocket.readyState == 1) {
+				chatSocket.close();
+				console.log('LIVE CHAT: Websocket connection closed');
+			}
 		}
 		convHistory(e);
         return;
@@ -27,9 +29,11 @@ export async function livechatEvent(e) {
 
 	switch (target.id) {
 		case "chat-search-btn":
-			if (chatSocket) { // close ws
-				chatSocket.close();
-				console.log('LIVE CHAT: Websocket connection closed');
+			if (chatSocket) {
+				if (chatSocket.readyState == 1) {
+					chatSocket.close();
+					console.log('LIVE CHAT: Websocket connection closed');
+				}
 			}
 			newConvButton();
 			break;

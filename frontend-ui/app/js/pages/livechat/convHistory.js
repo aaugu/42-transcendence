@@ -41,6 +41,7 @@ export async function convHistory(e) {
 		set_is_blacklisted(response.is_blacklisted);
 		displayChatInterface(ctc_id);
 		displayMessages(response);
+		
 		startLivechat(conv_id);
     }
     catch (e) {

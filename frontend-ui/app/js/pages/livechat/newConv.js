@@ -4,6 +4,7 @@ import { set_is_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
+import { startLivechat } from './startLivechat.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {

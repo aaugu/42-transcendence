@@ -1,13 +1,14 @@
 export var chatSocket
 
 export async function startLivechat (conv_id) {
-    console.log("ici");
-    chatSocket = new WebSocket(`ws://localhost:8000/ws/chat/${conv_id}`);
-    console.log(chatSocket.readyState);
+    // chatSocket = new WebSocket(`wss://localhost:10443/ws/chat/${conv_id}`);
+    chatSocket = new WebSocket(`wss://localhost:10443/ws/chat/`);
+    console.log(chatSocket);
+
     chatSocket.onopen = function () {
+        console.log(chatSocket);
         console.log("LIVECHAT LOG: Websocket connection established");
     };
-
     // Recevoir un message du serveur
     chatSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -25,9 +26,9 @@ export async function startLivechat (conv_id) {
     };
 
     // Message listener
-    const messageSubmitBtn = document.getElementById("chat-send");
-    messageSubmitBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        console.log("chat send")
-    });
+    // const messageSubmitBtn = document.getElementById("chat-send");
+    // messageSubmitBtn.addEventListener("click", function (event) {
+    //     event.preventDefault();
+    //     console.log("chat send")
+    // });
 }
