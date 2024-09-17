@@ -29,7 +29,6 @@ export async function startNotificationsRefresh() {
     if (!notificationsRefreshInterval) {
         notificationsRefreshInterval = setInterval(async () => {
             try {
-                console.log("USER LOG: Refreshing notifications list");
                 const notif= document.getElementById('notifications');
                 const response = await getConvHistory(notif.dataset.convid);
                 displayChatInterface(notif.dataset.ctcid);
@@ -43,7 +42,6 @@ export async function startNotificationsRefresh() {
 
 export function clearNotificationsRefresh() {
     if (notificationsRefreshInterval) {
-        console.log("USER LOG: clearing refresh notifications list");
         clearInterval(notificationsRefreshInterval);
         notificationsRefreshInterval = null;
     }

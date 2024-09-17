@@ -37,18 +37,20 @@ export class Tournament {
 				throw new Error('No matches available');
 			this.#nextMatch();
 			console.log("this.current_match", this.current_match);
+			//CHECK HERE IF MATCH ALREADY IN PROGRESS
 			await this.#startMatch();
 		} catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
 		}
     }
 
-	// Launch the tournament and initialize the matches
     async launchTournament() {
         try {
-            const response = await this.#generateMatches('POST'); // Create and fetch initial matches
-            await this.#startTournament(); // Mark tournament as started
-			this.all_matches = response.matches; // Set the match list
+            const response = await this.#generateMatches('POST');
+			//CHECK HERE IF TOURNAMENT ALREADY STARTED
+			console.log("response after this.#generateMatches('POST')", response);
+            await this.#startTournament();
+			this.all_matches = response.matches;
             this.#startNextMatch();
 			this.game_status = 1;
     	}

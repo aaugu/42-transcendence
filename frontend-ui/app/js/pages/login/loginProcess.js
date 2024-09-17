@@ -39,7 +39,7 @@ export async function loginProcess() {
                     errormsg(error.password, "homepage-errormsg");
                 }
                 else if (error.detail) {
-                    errormsg(error.detail, "homepage-errormsg");
+                    errormsg(error.detail + ", are your username and password correct?", "homepage-errormsg");
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }
