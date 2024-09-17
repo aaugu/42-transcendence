@@ -28,9 +28,9 @@ async function sendGameInvite(game_id, ctc_id) {
 export async function inviteGameButton(ctc_id) {
 	try {
 		const mode = getGameMode("remote-twoplayer");
-		// const game = await createGame(mode);
-		// const game_id = game.game_id;
-		// await sendGameInvite(game_id, ctc_id);
+		const game = await createGame(mode);
+		const game_id = game.game_id;
+		await sendGameInvite(game_id, ctc_id);
 	}
 	catch (e) {
 		console.log(`USER LOG: ${e.message}`);
