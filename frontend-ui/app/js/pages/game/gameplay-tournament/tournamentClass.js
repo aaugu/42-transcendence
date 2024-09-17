@@ -132,8 +132,8 @@ export class Tournament {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				"player1": this.current_match.player_1.user_id,
-				"player2": this.current_match.player_2.user_id
+				"player_1": this.current_match.player_1.user_id,
+				"player_2": this.current_match.player_2.user_id
 			}),
 			credentials: 'include'
 		});

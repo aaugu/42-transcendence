@@ -1,5 +1,6 @@
 import { getUserInfo } from "../user/getUserInfo.js"
 import { getFriendList, updateFriendList } from "./friends.js"
+import { updateProfile } from "../user/updateProfile.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -21,7 +22,9 @@ export async function profilePage() {
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
-        
+        updateProfile(false, null);
+        console.log('USER LOG: LOGOUT');
+        urlRoute('/');
     }
 
     localStorage.setItem('avatar', avatar);

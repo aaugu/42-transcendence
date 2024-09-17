@@ -33,16 +33,16 @@ export const updateProfile = async (isConnected, token) => {
 		// navProfileElements.classList.add('hidden');
 		try {
 			await logout();
-			navLogoLink.href = "/";
-			localStorage.setItem('nickname', 'guest');
-			localStorage.setItem('avatar', defaultAvatar);
-			document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-			document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-			document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-			setUserID();
 		}
 		catch (e) {
 			console.log(`USER LOG: ${e.message}`);
 		}
+		navLogoLink.href = "/";
+		localStorage.setItem('nickname', 'guest');
+		localStorage.setItem('avatar', defaultAvatar);
+		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		setUserID();
 	}
 }

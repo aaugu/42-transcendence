@@ -19,7 +19,7 @@ export async function startGameTournament() {
 	await tournament.launchTournament();
 
 	if (tournament.game_status === 1) {
-		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/tournament/${tourn_id}`);
+		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
 		if (!t_socket)
 			return; //error handling if game id cannot be created
 
