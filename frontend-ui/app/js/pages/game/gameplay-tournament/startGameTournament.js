@@ -14,8 +14,8 @@ import { errormsg } from '../../../dom/errormsg.js';
 export var t_socket;
 
 export async function startGameTournament() {
-	// const tourn_id = window.location.href.split("/")[4];
 	const tourn_id = localStorage.getItem('tourn_id');
+	localStorage.removeItem('tourn_id');
 	const gameId = window.location.href.split("/")[4];
 	if (!tourn_id) {
 		urlRoute('/tournament-creation');

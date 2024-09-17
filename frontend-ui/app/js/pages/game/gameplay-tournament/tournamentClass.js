@@ -19,6 +19,7 @@ export class Tournament {
 
     async updateMatchCycle(winner_id) {
         try {
+			console.log("winner_id", winner_id);
             await this.#endMatch(winner_id);
             const response = await this.#generateMatches('GET');
 
@@ -34,7 +35,9 @@ export class Tournament {
 		if (!this.all_matches)
 			throw new Error('No matches available');
 		this.#nextMatch();
+		console.log("current_match in startNextMatch: ", this.current_match);
 		if (!this.current_match) {
+			console.log("setting status to finished")
 			this.game_status = 'Finished';
 			return ;
 		}

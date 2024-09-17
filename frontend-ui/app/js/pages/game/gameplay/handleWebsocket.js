@@ -2,6 +2,7 @@ import  updateGameState  from "./GameDraw.js";
 import { Tournament } from "../gameplay-tournament/tournamentClass.js";
 import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
+import { hideModal } from "../../../dom/modal.js";
 
 export function handleWebsocketGame(socket, canvas, gameState) {
 	socket.onopen = function(event) {
@@ -95,7 +96,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 		errormsg('Connection to game could not be established', "homepage-errormsg");
 	};
 
-	socket.onmessage = function (event) {
+	socket.onmessage = async function (event) {
 		// console.log("Raw message received:", event.data);
 		try {
 			const data = JSON.parse(event.data);
@@ -111,27 +112,32 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 				console.log("Game Finished", data.game_finished);
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
-				const winner = (data.winner_id === 1) ? current_match.player_1 : current_match.player_2
+				const winner = (data.winner_id === 1) ? tournament.current_match.player_1 : tournament.current_match.player_2
 
-				tournament.updateMatchCycle(winner.id);
+				console.log("Winner", winner);
+				await tournament.updateMatchCycle(winner.user_id);
+				console.log("current game status: ", tournament.game_status);
+				console.log("current match: ", tournament.current_match);
+				const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
 				if (tournament.game_status === 'In Progress') {
-					const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
-					document.getElementById("t-match-text").innerText = `The winner is: ${winner.nickname}. Next match: ${tournament.current_match.player_1.nickname} vs ${tournament.current_match.player_2.nickname}`;
-					document.getElementById("t-match-go").onclick = async function() {
-						//reset game state and start next match
-						//hide modal
-					};
-					t_matchmodal.show();
+					document.getElementById("t-match-text").innerHTML = `<span>The winner is: ${winner.nickname} !</span>
+																		</br>
+																		<span>Next up: ${tournament.current_match.player_1.nickname} 
+					
+					t_matchmodal.show();													vs ${tournament.current_match.player_2.nickname}</span>`;
+					setTimeout(() => {
+						hideModal('t-match-modal');
+					}, 3000);
 				}
 				else if (tournament.game_status === 'Finished') {
-					const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
-					document.getElementById("t-match-text").innerText = `Congratulations ${winner.nickname},you won this tournament!`;
+					document.getElementById("t-match-text").innerText = `Congratulations ${winner.nickname}, you won this tournament!`;
 					t_matchmodal.show();
 					setTimeout(() => {
-						t_matchmodal.show();
-					}, 3000);
+						hideModal('t-match-modal');
+						urlRoute("/tournament-creation");
+					}, 5000);
+					
 					//socket will close automatically upon page change
-					urlRoute("/tournament-creation");
 				}
 			}
 		} catch (error) {
