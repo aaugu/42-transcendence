@@ -72,7 +72,7 @@ class MatchUtils:
     
     @staticmethod
     def match_status_to_string(status: int):
-        match_status_msg = ["Not played", "In progress", "Finished"]
+        match_status_msg = ["Not Played", "In Progress", "Finished"]
 
         return match_status_msg[status]
 
