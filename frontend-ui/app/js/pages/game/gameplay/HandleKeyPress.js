@@ -8,6 +8,7 @@ import {
 import { userID } from "../../user/updateProfile.js";
 
 export default function handleKeyPress(keysPressed, socket, gameState) {
+  if (!socket) return ;
   const throttleSend = throttle((direction) => {
     socket.send(JSON.stringify(direction));
   }, 50);
