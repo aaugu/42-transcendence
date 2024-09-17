@@ -1,5 +1,6 @@
 import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
+import { setCurrentContactID } from './notifications.js';
 
 //placement values: right, left
 function newMsg (avatar, time, msgText, id) {
@@ -95,4 +96,5 @@ export function displayChatInterface (ctc_id) {
         document.getElementById('chat-invite-game').classList.add('hidden');
         document.getElementById('chat-block-btn').classList.add('hidden');
     }
+    setCurrentContactID(ctc_id);
 }

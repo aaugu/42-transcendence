@@ -125,7 +125,7 @@ export async function startFriendListRefresh() {
     }
 }
 
-export function clearFriendList() {
+export function clearFriendListRefresh() {
     if (friendListRefreshInterval) {
         clearInterval(friendListRefreshInterval);
         friendListRefreshInterval = null;
