@@ -17,7 +17,7 @@ export async function startGameTournament() {
 	const tournament = new Tournament(tourn_id);
 	await tournament.launchTournament();
 
-	t_socket = new WebSocket(`ws://localhost:9000/ws/pong/tournament/${tourn_id}`);
+	t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
 	if (!t_socket)
 		return; //error handling if game id cannot be created
 
