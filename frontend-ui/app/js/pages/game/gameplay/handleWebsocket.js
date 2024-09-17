@@ -1,5 +1,6 @@
 import  updateGameState  from "./GameDraw.js";
 import { Tournament } from "../gameplay-tournament/tournamentClass.js";
+import { urlRoute } from "../../../dom/router.js";
 
 export function handleWebsocketGame(socket, canvas) {
 	socket.onopen = function(event) {
@@ -71,7 +72,7 @@ export function handleWebsocketTournament(socket, tournament, canvas) {
 				const winner = (data.winner_id === 1) ? current_match.player_1 : current_match.player_2
 
 				tournament.updateMatchCycle(winner.id);
-				if (tournament.game_status === 1) {
+				if (tournament.game_status === 'In Progress') {
 					const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
 					document.getElementById("t-match-text").innerText = `The winner is: ${winner.nickname}. Next match: ${tournament.current_match.player_1.nickname} vs ${tournament.current_match.player_2.nickname}`;
 					document.getElementById("t-match-go").onclick = async function() {
@@ -80,7 +81,16 @@ export function handleWebsocketTournament(socket, tournament, canvas) {
 					};
 					t_matchmodal.show();
 				}
-				//si c'est null == fin du tournament
+				else if (tournament.game_status === 'Finished') {
+					const t_matchmodal = new bootstrap.Modal(document.getElementById('t-match-modal'));
+					document.getElementById("t-match-text").innerText = `Congratulations ${winner.nickname},you won this tournament!`;
+					t_matchmodal.show();
+					setTimeout(() => {
+						t_matchmodal.show();
+					}, 3000);
+					//socket will close automatically upon page change
+					urlRoute("/tournament-creation");
+				}
 			}
 		} catch (error) {
 			console.error("Error parsing message:", error);

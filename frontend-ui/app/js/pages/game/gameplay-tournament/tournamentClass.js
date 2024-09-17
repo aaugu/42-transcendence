@@ -14,10 +14,9 @@ export class Tournament {
 
 	#nextMatch() {
 		this.current_match = this.all_matches.find(match => match.status === "In Progress") ||
-							this.all_matches.find(match => match.status === "Not played");
+							this.all_matches.find(match => match.status === "Not Played") || null;
 	}
 
-    // Update match list after a match has been completed
     async updateMatchCycle(winner_id) {
         try {
             await this.#endMatch(winner_id);
@@ -35,7 +34,11 @@ export class Tournament {
 		if (!this.all_matches)
 			throw new Error('No matches available');
 		this.#nextMatch();
-		if (this.current_match.status === "Not played") {
+		if (!this.current_match) {
+			this.game_status = 'Finished';
+			return ;
+		}
+		if (this.current_match.status === "Not Played") {
 			await this.#startMatch();
 		}
     }
