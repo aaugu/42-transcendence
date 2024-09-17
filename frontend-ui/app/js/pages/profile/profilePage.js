@@ -22,9 +22,9 @@ export async function profilePage() {
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
-        updateProfile(false, null);
-        console.log('USER LOG: LOGOUT');
-        urlRoute('/');
+        // updateProfile(false, null);
+        // console.log('USER LOG: LOGOUT');
+        // urlRoute('/');
     }
 
     localStorage.setItem('avatar', avatar);

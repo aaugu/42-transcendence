@@ -36,7 +36,7 @@ export async function openSingleTournamentModal(e) {
 		}
 		const t_details = await getTournamentDetails(t_id);
 		console.log("t_details: ", t_details);
-		const has_started = (t_details.status === 'Created');
+		const has_started = (t_details.status !== 'Created');
 		const is_admin = (t_details['admin-id'] === userID);
 		const players = t_details.players;
 		for (const playerKey in players) {
@@ -85,6 +85,7 @@ export async function openSingleTournamentModal(e) {
 			else if (has_started === true)
 				t_modalText.innerText = 'This tournament has already started. Go play!';
 		}
+
 		// else if (has_started === true && has_joined === true){
 		// 	t_modalText.innerText = 'The tournament has already started. Go play!';
 		// 	const playButton = document.getElementById('t-play');

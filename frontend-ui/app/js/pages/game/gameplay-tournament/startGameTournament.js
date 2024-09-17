@@ -14,7 +14,6 @@ export var t_socket;
 
 export async function startGameTournament() {
 	const tourn_id = window.location.href.split("/")[4];
-	console.log("tourn id: ", tourn_id);
 	let tournament;
 
 	//check if already started
@@ -32,8 +31,6 @@ export async function startGameTournament() {
 		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
 		if (!t_socket)
 			return; //error handling if game id cannot be created
-
-		console.log("FUNCTION START TOURNAMENT GAME");
 
 		const canvas = displayGame();
 		handleWebsocketTournament(t_socket, tournament, canvas);

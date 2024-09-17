@@ -22,7 +22,6 @@ export class Tournament {
         try {
             await this.#endMatch(winner_id);
             const response = await this.#generateMatches('GET');
-			console.log("response after this.#generateMatches('GET')", response);
 
 			this.all_matches = response.matches;
 			this.#startNextMatch();
@@ -33,11 +32,9 @@ export class Tournament {
     }
 
 	async #startNextMatch() {
-		console.log("this.all_matches", this.all_matches);
 		if (!this.all_matches)
 			throw new Error('No matches available');
 		this.#nextMatch();
-		console.log("this.current_match", this.current_match);
 		if (this.current_match.status === "Not played") {
 			await this.#startMatch();
 		}
@@ -45,18 +42,18 @@ export class Tournament {
 
     async launchTournament() {
         try {
+			console.log("TOURNAMENT LOG: Launch Tournament");
             const response = await this.#generateMatches('POST');
-			console.log("response after this.#generateMatches('POST')", response);
             await this.#startTournament();
 			this.all_matches = response.matches;
             this.#startNextMatch();
-			this.game_status = 1;
+			this.game_status = 'In Progress';
     	}
 		catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
 			this.all_matches = null;
-			if (this.game_status !== 2)
-				this.game_status = 0;
+			if (this.game_status !== 'Finished')
+				this.game_status = 'Created';
 			urlRoute("/tournament-creation");
 			errormsg(e.message, "homepage-errormsg");
 		}
@@ -64,8 +61,8 @@ export class Tournament {
 
 	async continueTournament() {
         try {
+			console.log("TOURNAMENT LOG: Continue Tournament");
             const response = await this.#generateMatches('GET');
-			console.log("response after this.#generateMatches('GET')", response);
 			//check if status === finished
 
 			this.all_matches = response.matches;
