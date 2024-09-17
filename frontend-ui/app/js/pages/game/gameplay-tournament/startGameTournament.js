@@ -37,10 +37,6 @@ export async function startGameTournament() {
 
 	if (tournament.game_status === 'In Progress') {
 		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
-		if (t_socket.readyState !== WebSocket.OPEN)
-			urlRoute('/tournament-creation');
-			errormsg('Connection to game could not be established', "homepage-errormsg");
-			return; //error handling if game id cannot be created
 
 		const canvas = displayGame();
 		handleWebsocketTournament(t_socket, tournament, canvas, gameState);

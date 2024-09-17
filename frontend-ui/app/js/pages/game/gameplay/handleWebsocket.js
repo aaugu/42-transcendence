@@ -1,6 +1,7 @@
 import  updateGameState  from "./GameDraw.js";
 import { Tournament } from "../gameplay-tournament/tournamentClass.js";
 import { urlRoute } from "../../../dom/router.js";
+import { errormsg } from "../../../dom/errormsg.js";
 
 export function handleWebsocketGame(socket, canvas, gameState) {
 	socket.onopen = function(event) {
@@ -13,6 +14,8 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 
 	socket.onerror = function(error) {
 		console.error("WebSocket error:", error);
+		urlRoute('/local-twoplayer');
+		errormsg('Connection to game could not be established', "homepage-errormsg");
 	};
 
   socket.onmessage = function (event) {
@@ -88,6 +91,8 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 
 	socket.onerror = function(error) {
 		console.error("WebSocket error:", error);
+		urlRoute('/tournament-creation');
+		errormsg('Connection to game could not be established', "homepage-errormsg");
 	};
 
 	socket.onmessage = function (event) {

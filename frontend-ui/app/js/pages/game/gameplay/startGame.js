@@ -6,8 +6,6 @@ import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
-import { urlRoute } from '../../../dom/router.js';
-import { errormsg } from '../../../dom/errormsg.js';
 
 export var g_socket;
 
@@ -17,11 +15,7 @@ export async function startGame() {
   	let gameState = { current: null };
 
 	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
-	if (g_socket.readyState !== WebSocket.OPEN) {
-		urlRoute('/tournament-creation');
-		errormsg('Connection to game could not be established', "homepage-errormsg");
-		return ;
-	}
+	
 	const canvas = displayGame();
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
