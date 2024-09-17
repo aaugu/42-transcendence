@@ -7,8 +7,9 @@ import { canvasWidth, canvasHeight } from '../gameplay/GameConstants.js';
 import { Tournament } from './tournamentClass.js';
 import { displayGame } from '../gameplay/displayGame.js';
 import { handleWebsocketTournament } from '../gameplay/handleWebsocket.js';
-import { urlRoute } from '../../../dom/router.js';
 import { getTournamentDetails } from '../../tournament/getTournaments.js';
+import { urlRoute } from '../../../dom/router.js';
+import { errormsg } from '../../../dom/errormsg.js';
 
 export var t_socket;
 
@@ -36,7 +37,9 @@ export async function startGameTournament() {
 
 	if (tournament.game_status === 'In Progress') {
 		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${tourn_id}`);
-		if (!t_socket)
+		if (t_socket.readyState !== WebSocket.OPEN)
+			urlRoute('/tournament-creation');
+			errormsg('Connection to game could not be established', "homepage-errormsg");
 			return; //error handling if game id cannot be created
 
 		const canvas = displayGame();
