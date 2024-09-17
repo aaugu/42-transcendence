@@ -1,5 +1,7 @@
+import { userID } from '../user/updateProfile.js';
+
 export async function getTournaments() {
-	const response = await fetch('https://localhost:10443/api/tournament/remote/', {
+	const response = await fetch('https://localhost:10443/api/tournament/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -38,6 +40,33 @@ export async function getTournamentDetails(tournament_id) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
+		return responseData;
+	} else {
+		throw new Error('No response from server');
+	}
+}
+
+export async function getMyTournaments() {
+	if (userID === null) {
+		throw new Error('No user ID');
+	}
+
+	const response = await fetch('https://localhost:10443/api/tournament/' + userID + '/mytournament/admin/', {
+		method: 'GET',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	});
+	const responseData = await response.json();
+	if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error('GET MY TOURNAMENTS FAILED');
+	}
+	if (responseData !== null) {
+		console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
 		return responseData;
 	} else {
 		throw new Error('No response from server');

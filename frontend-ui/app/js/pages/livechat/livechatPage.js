@@ -24,7 +24,7 @@ export async function livechatPage() {
                 <ul id="chat-msgs"class="row list-unstyled custom-scrollbar flex-grow-1 text-white
                         w-100 mb-2"></ul>
                 <div class="d-flex align-items-center">
-                    <button id="chat-play-pong" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
+                    <button id="chat-invite-game" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
                         <i class="bi bi-controller text-white"></i>
                     </button>
                     <button id="chat-block-btn" class="btn btn-outline-danger btn-sm btn-rounded hidden" title="Block user" type="button">

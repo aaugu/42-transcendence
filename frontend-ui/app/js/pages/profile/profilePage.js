@@ -21,6 +21,7 @@ export async function profilePage() {
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
+        
     }
 
     localStorage.setItem('avatar', avatar);
