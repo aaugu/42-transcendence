@@ -14,7 +14,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 
 	socket.onerror = function(error) {
 		console.error("WebSocket error:", error);
-		urlRoute('/local-twoplayer');
+		urlRoute('/profile');
 		errormsg('Connection to game could not be established', "homepage-errormsg");
 	};
 
