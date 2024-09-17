@@ -1,4 +1,6 @@
 import { userID } from '../../user/updateProfile.js'
+import { urlRoute } from '../../../dom/router.js';
+import { errormsg } from '../../../dom/errormsg.js';
 
 export class Tournament {
 
@@ -31,7 +33,7 @@ export class Tournament {
     }
 
 	async #startNextMatch() {
-		try {
+		// try {
 			console.log("this.all_matches", this.all_matches);
 			if (!this.all_matches)
 				throw new Error('No matches available');
@@ -39,9 +41,9 @@ export class Tournament {
 			console.log("this.current_match", this.current_match);
 			//CHECK HERE IF MATCH ALREADY IN PROGRESS
 			await this.#startMatch();
-		} catch (e) {
-			console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
-		}
+		// } catch (e) {
+		// 	console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
+		// }
     }
 
     async launchTournament() {
@@ -49,7 +51,9 @@ export class Tournament {
             const response = await this.#generateMatches('POST');
 			//CHECK HERE IF TOURNAMENT ALREADY STARTED
 			console.log("response after this.#generateMatches('POST')", response);
-            await this.#startTournament();
+			if (response.status === "CREATED") {
+            	await this.#startTournament();
+			}
 			this.all_matches = response.matches;
             this.#startNextMatch();
 			this.game_status = 1;
@@ -57,6 +61,10 @@ export class Tournament {
 		catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
 			this.all_matches = null;
+			if (this.game_status !== 2)
+				this.game_status = 0;
+			urlRoute("/tournament-creation");
+			errormsg(e.message, "homepage-errormsg");
 		}
 	}
 

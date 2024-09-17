@@ -58,7 +58,8 @@ export async function openSingleTournamentModal(e) {
 		}
 		else if (has_started === false && has_joined === true) {
 			if (is_admin === true && t_details.type === 'Local') {
-				t_modalText.innerText = 'You are the admin. You can start the tournament or delete it.';
+				t_modalText.innerText = `You are the admin. You can start the tournament or delete it.
+					There are currently ${t_details.nb_players} players subscribed (max possible players: ${t_details.max_players})`;
 				const startButton = document.getElementById('t-start');
 				const deleteButton = document.getElementById('t-delete');
 				startButton.classList.remove('hidden');
@@ -67,7 +68,7 @@ export async function openSingleTournamentModal(e) {
 				deleteButton.dataset.tournid = t_id;
 			}
 			else if (is_admin === true && t_details.type === 'Remote') {
-				t_modalText.innerText = 'Remote tournamens are not yet implemented. Sorry!';
+				t_modalText.innerText = 'Remote tournaments are not yet implemented. Sorry!';
 				const deleteButton = document.getElementById('t-delete');
 				deleteButton.classList.remove('hidden');
 				deleteButton.dataset.tournid = t_id;
