@@ -45,7 +45,6 @@ export async function livechatEvent(e) {
 			break;
 		case "chat-invite-game":
 			const ctc_id = target.dataset.ctcid;
-			console.log("ctc_id in event:", ctc_id);
 			inviteGameButton(ctc_id);
 			break;
 		case "chat-invite-game-link":

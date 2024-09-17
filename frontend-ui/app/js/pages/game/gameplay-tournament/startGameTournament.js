@@ -15,9 +15,16 @@ export var t_socket;
 export async function startGameTournament() {
 	const tourn_id = window.location.href.split("/")[4];
 	let tournament;
+	let gameState = { current: null };
+	let t_details;
 
-	//check if already started
-	const t_details = await getTournamentDetails(tourn_id);
+	try {
+		t_details = await getTournamentDetails(tourn_id);
+	} catch (e) {
+		urlRoute('/tournament');
+		errormsg(e.message, "homepage-errormsg");
+		return;
+	}
 	if (t_details.status === 'In Progress') {
 		tournament = new Tournament(tourn_id, 'In Progress');
 		await tournament.continueTournament();
@@ -33,19 +40,19 @@ export async function startGameTournament() {
 			return; //error handling if game id cannot be created
 
 		const canvas = displayGame();
-		handleWebsocketTournament(t_socket, tournament, canvas);
+		handleWebsocketTournament(t_socket, tournament, canvas, gameState);
 		handleButtons(t_socket);
 
 		let keysPressed = {}
 
 		document.addEventListener("keydown", function (event) {
 			keysPressed[event.key] = true;
-			handleKeyPress(keysPressed, t_socket);
+			handleKeyPress(keysPressed, t_socket, gameState);
 		});
 
 		document.addEventListener("keyup", function (event) {
 			keysPressed[event.key] = false;
-			handleKeyPress(keysPressed, t_socket);
+			handleKeyPress(keysPressed, t_socket, gameState);
 		});
 	}
 	else if (tournament.game_status === 'Finished') {

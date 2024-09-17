@@ -39,11 +39,11 @@ function updateEventListenerMainCont(newEventListener = null) {
 }
 
 function resetDataRouteChange() {
-	if (g_socket) {
+	if (g_socket && g_socket.readyState === WebSocket.OPEN) {
 		g_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}
-	if (t_socket) {
+	if (t_socket && t_socket.readyState === WebSocket.OPEN) {
 		t_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}

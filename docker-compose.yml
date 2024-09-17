@@ -88,8 +88,6 @@ services:
     #     extends:
     #         file: elk/docker/docker-compose.yml
     #         service: elasticsearch
-    #     ports:
-    #         - "9200:9200"
     # init-elasticsearch:
     #     extends:
     #         file: elk/docker/docker-compose.yml
@@ -98,5 +96,3 @@ services:
     #     extends:
     #         file: elk/docker/docker-compose.yml
     #         service: kibana
-    #     ports:
-    #         - "5601:5601"
