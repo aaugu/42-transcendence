@@ -6,7 +6,6 @@ import requests
 
 from typing import Any, Optional
 
-from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
@@ -39,6 +38,17 @@ class MatchUtils:
         }
 
         return data
+    
+    @staticmethod
+    def match_notif_to_json(match: Match, notif: bool):
+        match_data = MatchUtils.match_to_json(match)
+        data = {
+            'message_sent_to_livechat': notif,
+            'match': match_data
+        }
+
+        return data
+    
     @staticmethod
     def match_to_json(match: Match):
         return {
@@ -58,9 +68,10 @@ class MatchUtils:
                 'nickname': match.winner.nickname
             } if match.winner is not None else None
         }
+    
     @staticmethod
     def match_status_to_string(status: int):
-        match_status_msg = ["Not played", "In progress", "Finished"]
+        match_status_msg = ["Not Played", "In Progress", "Finished"]
 
         return match_status_msg[status]
 
@@ -82,7 +93,7 @@ class TournamentUtils:
 
     @staticmethod
     def status_to_string(status: int) -> str:
-        status_string = ['Created', 'In progress', 'Finished', 'Local', 'Remote']
+        status_string = ['Created', 'In Progress', 'Finished', 'Local', 'Remote']
         return status_string[status]
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -112,6 +123,9 @@ class GenerateMatchesView(View):
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
+        if len(players) < settings.MIN_PLAYERS:
+            return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
+        
         matches = GenerateMatchesView.generate_matches(players, tournament)
         
         try:
@@ -160,7 +174,7 @@ class GenerateMatchesView(View):
     
     @staticmethod
     def get_seed_order(nb_players: int) -> list[list[int]]:
-        nb_players = int(2 ** math.ceil(math.log2(nb_players)))
+        nb_players = int(2 ** math.ceil(math.log2(nb_players)))    
         rounds = int(math.log2(nb_players) - 1)
         players = [1, 2]
 
@@ -241,12 +255,12 @@ class StartMatchView(View):
             match.save()
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
-        
 
         if player1 is not None and player2 is not None:
             response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
-          
-        return JsonResponse(MatchUtils.match_to_json(match), status=200)
+        if response.status_code != 201:
+            return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
+        return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
@@ -333,6 +347,7 @@ class EndMatchView(View):
             match.winner = match.player_2
         match.status = Match.FINISHED
         match.save()
+
     @staticmethod
     def update_tournament(match: Match, nb_matches: int):
         tournament = match.tournament
@@ -378,7 +393,6 @@ class TournamentView(View):
             json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
         valid_tournament, errors = TournamentView.is_valid_tournament(json_request)
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
@@ -672,16 +686,16 @@ class TournamentPlayersView(View):
             elif player.nickname == new_player.nickname:
                 return False, [f'nickname `{player.nickname}` already taken', 400]
 
-        try:
-            user_already_in_tournament = Tournament.objects.filter(
-                players__user_id=new_player.user_id,
-                status__in=[Tournament.CREATED, Tournament.IN_PROGRESS]
-            ).exists()
-        except Exception as e:
-            return False, [f'An unexpected error occurred : {e}', 500]
+        # try:
+        #     user_already_in_tournament = Tournament.objects.filter(
+        #         players__user_id=new_player.user_id,
+        #         status__in=[Tournament.CREATED, Tournament.IN_PROGRESS]
+        #     ).exists()
+        # except Exception as e:
+        #     return False, [f'An unexpected error occurred : {e}', 500]
 
-        if user_already_in_tournament:
-            return False, ['You are already registered for another tournament', 403]
+        # if user_already_in_tournament:
+        #     return False, ['You are already registered for another tournament', 403]
 
         if tournament.max_players <= len(tournament_players):
             return False, ['This tournament is fully booked', 403]
