@@ -1,12 +1,8 @@
-from django.views import View
+
 from django.http import HttpRequest
-from rest_framework import permissions, viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework import status
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+
 
 import requests, json
 from login import utils
