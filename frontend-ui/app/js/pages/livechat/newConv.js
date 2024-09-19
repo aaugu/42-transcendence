@@ -1,9 +1,10 @@
 import { userID, updateProfile } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
-import { set_is_blacklisted } from './blacklist.js';
+import { set_contact_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
+import { startLivechat } from './startLivechat.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -46,7 +47,7 @@ export async function newConvButton() {
 		const conv_id = response.conversation_id;
 
 		const history = await getConvHistory(conv_id);
-		set_is_blacklisted(history.is_blacklisted);
+		set_contact_blacklisted(history.contact_blacklisted);
 		updateConvList();
 		const users = history.users;
 		if (users.length === 2 && users[0].id === userID) {
@@ -55,6 +56,7 @@ export async function newConvButton() {
 		else {
 			displayChatInterface(users[0].id);
 		}
+		startLivechat(conv_id, response);
 		displayMessages(history);
 		document.getElementById('chat-search-input').value = '';
 

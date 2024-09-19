@@ -2,7 +2,6 @@ import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
 import { setCurrentContactID } from './notifications.js';
 
-//placement values: right, left
 function newMsg (avatar, time, msgText, id) {
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
@@ -17,13 +16,13 @@ function newMsg (avatar, time, msgText, id) {
         </div>
         </div>
         <img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="30">
+        class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="20">
     </li>`;
     }
     else {
         return `<li data-msgid="${id}" class="d-flex mb-4">
         <img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
+        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="20">
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
@@ -79,7 +78,7 @@ export function displayChatInterface (ctc_id) {
     const welcomeMessages = document.getElementById('chat-welcome');
     welcomeMessages.innerHTML = '';
 
-    
+
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
     const play_button = document.getElementById('chat-invite-game');

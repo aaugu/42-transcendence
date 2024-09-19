@@ -15,6 +15,7 @@ import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
 import { startFriendListRefresh, clearFriendListRefresh } from "../pages/profile/friends.js"
+import { chatSocket} from "../pages/livechat/startLivechat.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
@@ -46,6 +47,12 @@ function resetDataRouteChange() {
 	if (t_socket && t_socket.readyState === WebSocket.OPEN) {
 		t_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
+	}
+	if (chatSocket) {
+		if (chatSocket.readyState == 1) {
+			chatSocket.close();
+			console.log('LIVE CHAT: Websocket connection closed');
+		}
 	}
 	reset_all_tournaments();
 	reset_all_conv();
