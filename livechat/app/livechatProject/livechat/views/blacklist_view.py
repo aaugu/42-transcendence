@@ -9,6 +9,7 @@ import requests
 
 from livechat.models import User, Blacklist
 from livechat.serializers import BlacklistSerializer
+from livechat.views.utils import blacklist_exists
 
 class BlacklistView(APIView):
 	# POST:
@@ -39,30 +40,23 @@ class BlacklistView(APIView):
 
 	# UTILS
 	def create_blacklist(self, initiator, target):
-		if self.blacklist_exists(initiator, target):
+		if blacklist_exists(initiator, target):
 			return status.HTTP_409_CONFLICT
 
 		blacklist = Blacklist(initiator=initiator, target=target, blacklisted_id=target.user_id)
 		blacklist.save()
 
-		if self.blacklist_exists(initiator, target):
+		if blacklist_exists(initiator, target):
 			return status.HTTP_201_CREATED
 		return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 	def delete_blacklist(self, initiator, target):
-		if not self.blacklist_exists(initiator, target):
+		if not blacklist_exists(initiator, target):
 			return status.HTTP_410_GONE
 			
 		blacklist = Blacklist.objects.get(initiator=initiator, target=target)
 		blacklist.delete()
 
-		if not self.blacklist_exists(initiator, target):
+		if not blacklist_exists(initiator, target):
 			return status.HTTP_204_NO_CONTENT
 		return status.HTTP_422_UNPROCESSABLE_ENTITY
-
-	def blacklist_exists(self, initiator, target):
-		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
-
-		if blacklist:
-			return True
-		return False

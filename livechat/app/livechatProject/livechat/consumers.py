@@ -1,9 +1,10 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from livechat.models import Message, Conversation
+from livechat.models import Message, Conversation, Blacklist
 from datetime import datetime
 from asgiref.sync import sync_to_async
+from livechat.views.utils import blacklist_exists
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
@@ -33,17 +34,30 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message_content = text_data_json['message']
 		author_id = text_data_json['author']
-		# author_id = self.scope['user'].id  # ID de l'utilisateur connecté
 		current_date = datetime.now().strftime("%Y-%m-%d")
 		current_time = datetime.now().strftime("%H:%M")
 
-		# Récupérer la conversation
+		# Check if conversation exists
 		try:
 			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
 		except Conversation.DoesNotExist:
-			return  # Si la conversation n'existe pas, ne rien faire
+			return
 		
-		# Sauvegarder le message dans la base de données
+		# # Get target of that conversation
+		# if (conversation.user_1 == author_id):
+		# 	target_id = conversation.user_2
+		# else:
+		# 	target_id = conversation.user_1
+		
+		# Check if target did blacklist author
+		# blacklist = await self.get_backlist(target_id, author_id)
+		# if blacklist:
+		# 	await self.send(text_data=json.dumps({
+		# 		'blacklist': True,
+		# 	}))
+		# 	return
+
+		# Save message in database
 		await sync_to_async(Message.objects.create)(
 			conversation=conversation,
 			author=author_id,
@@ -52,7 +66,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			time=current_time
 		)
 
-		# Envoyer le message via WebSocket à tous les utilisateurs du groupe
+		# Send message to all users of group via WebSocket
 		await self.channel_layer.group_send(
 			self.room_group_name,
 			{
@@ -62,19 +76,22 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				'date': current_date,
 				'time': current_time
 			}
-		)
+		)	
 
-	# # Recevoir un message du groupe de chat
+	# # Receive message from chat group
 	async def chat_message(self, event):
 		message = event['message']
 		author = event['author']
 		date = event['date']
 		time = event['time']
 
-		# # Envoyer le message via WebSocket aux clients connectés
+		# # Send message to connected clients via WebSocket
 		await self.send(text_data=json.dumps({
 			'author': author,
 			'message': message,
 			'date': date,
-			'time': time,
+			'time': time
 		}))
+
+	# async def get_backlist(self, initiator, target):
+	# 	return Blacklist.objects.filter(initiator=initiator, target=target)

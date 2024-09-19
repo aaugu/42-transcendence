@@ -34,6 +34,7 @@ export async function livechatPage() {
                         <div data-mdb-input-init class="form-outline form-white">
                             <textarea class="form-control" id="chat-textarea" rows="1" style="resize: none; font-size=10px;"></textarea>
                         </div>
+                        <span class="hidden mt-1 text-danger" id="livechat-blacklist-errormsg" style="font-size: 10px;"></span>
                     </div>
                     <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
                 </div>

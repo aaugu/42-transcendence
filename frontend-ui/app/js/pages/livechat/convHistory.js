@@ -1,6 +1,6 @@
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { userID } from '../user/updateProfile.js';
-import { set_is_blacklisted } from "./blacklist.js";
+import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
 
 export async function getConvHistory(conv_id) {
@@ -38,11 +38,10 @@ export async function convHistory(e) {
 		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 
 		const response = await getConvHistory(conv_id);
-		set_is_blacklisted(response.is_blacklisted);
+		set_contact_blacklisted(response.contact_blacklisted);
 		displayChatInterface(ctc_id);
 		displayMessages(response);
-		
-		startLivechat(conv_id);
+		startLivechat(conv_id, response);
     }
     catch (e) {
         console.error("USER LOG: ", e.message);

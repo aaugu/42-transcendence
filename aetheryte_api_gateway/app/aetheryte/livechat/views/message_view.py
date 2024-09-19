@@ -32,7 +32,8 @@ class MessageView(APIView):
 			return Response({	
 								"messages": response_json['messages'],
 								"users": users_serializer.data,
-								"is_blacklisted": response_json['is_blacklisted'] 
+								"contact_blacklisted": response_json['contact_blacklisted'],
+								"is_blacklisted": response_json['is_blacklisted']
 							},
 							status=status.HTTP_200_OK)
 		else:

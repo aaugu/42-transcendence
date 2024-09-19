@@ -1,6 +1,6 @@
 import { userID } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
-import { set_is_blacklisted } from './blacklist.js';
+import { set_contact_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
@@ -47,7 +47,7 @@ export async function newConvButton() {
 		const conv_id = response.conversation_id;
 
 		const history = await getConvHistory(conv_id);
-		set_is_blacklisted(history.is_blacklisted);
+		set_contact_blacklisted(history.contact_blacklisted);
 		updateConvList();
 		const users = history.users;
 		if (users.length === 2 && users[0].id === userID) {
