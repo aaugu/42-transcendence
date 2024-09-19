@@ -43,47 +43,47 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		except Conversation.DoesNotExist:
 			return
 		
-		# # Get target of that conversation
-		# if (conversation.user_1 == author_id):
-		# 	target_id = conversation.user_2
-		# else:
-		# 	target_id = conversation.user_1
+		# Get target of that conversation
+		if (conversation.user_1 == author_id):
+			target_id = conversation.user_2
+		else:
+			target_id = conversation.user_1
 		
-		# try:
-		# 	target = await self.get_user(target_id)
-		# 	author = await self.get_user(author_id)
-		# except User.DoesNotExist:
-		# 	return
+		try:
+			target = await self.get_user(target_id)
+			author = await self.get_user(author_id)
+		except User.DoesNotExist:
+			return
 
-		# # Check if target did blacklist author
-		# try:
-		# 	blacklist = await self.get_backlist(target, author)
-		# except Blacklist.DoesNotExist:
+		# Check if target did blacklist author
+		try:
+			blacklist = await self.get_backlist(target, author)
+		except Blacklist.DoesNotExist:
 			# Save message in database
-		await sync_to_async(Message.objects.create)(
-			conversation=conversation,
-			author=author_id,
-			message=message_content,
-			date=current_date,
-			time=current_time
-		)
+			await sync_to_async(Message.objects.create)(
+				conversation=conversation,
+				author=author_id,
+				message=message_content,
+				date=current_date,
+				time=current_time
+			)
 
-		# Send message to all users of group via WebSocket
-		await self.channel_layer.group_send(
-			self.room_group_name,
-			{
-				'type': 'chat_message',
-				'message': message_content,
-				'author': author_id,
-				'date': current_date,
-				'time': current_time
-			}
-		)
-		return
+			# Send message to all users of group via WebSocket
+			await self.channel_layer.group_send(
+				self.room_group_name,
+				{
+					'type': 'chat_message',
+					'message': message_content,
+					'author': author_id,
+					'date': current_date,
+					'time': current_time
+				}
+			)
+			return
 	
-		# await self.send(text_data=json.dumps({
-		# 	'blacklist': True,
-		# }))
+		await self.send(text_data=json.dumps({
+			'blacklist': True,
+		}))
 
 	# # Receive message from chat group
 	async def chat_message(self, event):

@@ -17,11 +17,11 @@ export async function startLivechat (conv_id, response) {
 	// When receiving message from server
 	chatSocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
-		// console.log("data: ", data);
-		// if( data.blacklist == true) {
-		// 	errormsg("Could not send message, you are blacklisted", 'livechat-blacklist-errormsg');
-		// 	return;
-		// }
+
+		if( data.blacklist == true) {
+			errormsg("Could not send message, you are blacklisted", 'livechat-blacklist-errormsg');
+			return;
+		}
 
 		const userLookup = response.users.reduce((acc, user) => {
 			acc[user.id] = {
