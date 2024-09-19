@@ -5,23 +5,20 @@ export var chatSocket
 
 export async function startLivechat (conv_id, response) {
 	chatSocket = new WebSocket(`wss://localhost:10443/ws/chat/${conv_id}`);
-	console.log(response);
-	console.log("contact blacklist: ", contact_blacklisted);
 
-	const messageSubmitBtn = document.getElementById("chat-send");
 	const messageInput = document.getElementById("chat-textarea");
+	const messageSubmitBtn = document.getElementById("chat-send");
+	const chatArea = document.getElementById("chat-msgs");
 
 	chatSocket.onopen = function () {
-		console.log(chatSocket);
 		console.log("LIVECHAT LOG: Websocket connection established");
 	};
 
-	// Recevoir un message du serveur
+	// When receiving message from server
 	chatSocket.onmessage = function(e) {
 		const data = JSON.parse(e.data);
-		console.log("data: ", data);
-		// console.log("data blacklisted: ", data['blacklisted']);
-		// if( data.blacklisted ) {
+		// console.log("data: ", data);
+		// if( data.blacklist == true) {
 		// 	errormsg("Could not send message, you are blacklisted", 'livechat-blacklist-errormsg');
 		// 	return;
 		// }
@@ -34,29 +31,13 @@ export async function startLivechat (conv_id, response) {
 			return acc;
 		}, {});
 
-		const chatArea = document.getElementById("chat-msgs");
-
-		let avatar, id;
-		if (response.users[0].id === data.author) {
+		let id;
+		if (response.users[0].id === data.author)
 			id = response.users[0].id;
-			
-		} else {
+		else
 			id = response.users[1].id;
-		}
 		
-		const messageElement = document.createElement("li");
-		messageElement.classList.add("d-flex");
-		messageElement.classList.add("mb-4");
-
-		if (id == userID) {
-			avatar = localStorage.getItem('avatar');
-			messageElement.classList.add("justify-content-end");
-		} else {
-			avatar = userLookup[id].avatar;
-		}
-		
-		const newMessage = newChatMsg(avatar, data.time, data.message, id);
-		messageElement.innerHTML = newMessage;
+		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
 		chatArea.appendChild(messageElement);
 		chatArea.scrollTop = chatArea.scrollHeight;
 	};
@@ -67,19 +48,19 @@ export async function startLivechat (conv_id, response) {
 
 	// Message listeners
 	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();	
-		sendMessage(messageInput.value);
+		event.preventDefault();
+
+		if (contact_blacklisted == true) {
+			console.error("USER LOG: ", "Contact is blacklisted");
+			errormsg("You blacklisted that user", 'livechat-blacklist-errormsg');
+		} else {
+			sendMessage(messageInput.value);
+		}
 		messageInput.value = '';	
 	});	
 }
 
 function sendMessage(message) {
-	if (contact_blacklisted == true) {
-		console.error("USER LOG: ", "Contact is blacklisted");
-		errormsg("You blacklisted that user", 'livechat-blacklist-errormsg');
-		return;
-	}
-
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
@@ -88,7 +69,26 @@ function sendMessage(message) {
 	}
 }
 
-export function newChatMsg (avatar, time, msgText, id) {
+function createMsgElement(id, userLookup, time, message) {
+	const messageElement = document.createElement("li");
+	messageElement.classList.add("d-flex");
+	messageElement.classList.add("mb-4");
+
+	let avatar;
+	if (id == userID) {
+		avatar = localStorage.getItem('avatar');
+		messageElement.classList.add("justify-content-end");
+	} else {
+		avatar = userLookup[id].avatar;
+	}
+	
+	const newMessage = newChatMsg(avatar, time, message, id);
+	messageElement.innerHTML = newMessage;
+
+	return messageElement
+}
+
+function newChatMsg (avatar, time, msgText, id) {
     if (id === userID) {
         return `<div class="card">
         <div class="card-body">

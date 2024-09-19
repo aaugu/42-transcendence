@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from livechat.models import Message, Conversation, Blacklist
+from livechat.models import Message, Conversation, Blacklist, User
 from datetime import datetime
 from asgiref.sync import sync_to_async
 from livechat.views.utils import blacklist_exists
@@ -49,15 +49,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		# else:
 		# 	target_id = conversation.user_1
 		
-		# Check if target did blacklist author
-		# blacklist = await self.get_backlist(target_id, author_id)
-		# if blacklist:
-		# 	await self.send(text_data=json.dumps({
-		# 		'blacklist': True,
-		# 	}))
+		# try:
+		# 	target = await self.get_user(target_id)
+		# 	author = await self.get_user(author_id)
+		# except User.DoesNotExist:
 		# 	return
 
-		# Save message in database
+		# # Check if target did blacklist author
+		# try:
+		# 	blacklist = await self.get_backlist(target, author)
+		# except Blacklist.DoesNotExist:
+			# Save message in database
 		await sync_to_async(Message.objects.create)(
 			conversation=conversation,
 			author=author_id,
@@ -76,7 +78,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				'date': current_date,
 				'time': current_time
 			}
-		)	
+		)
+		return
+	
+		# await self.send(text_data=json.dumps({
+		# 	'blacklist': True,
+		# }))
 
 	# # Receive message from chat group
 	async def chat_message(self, event):
@@ -93,5 +100,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'time': time
 		}))
 
-	# async def get_backlist(self, initiator, target):
-	# 	return Blacklist.objects.filter(initiator=initiator, target=target)
+	@database_sync_to_async
+	def get_backlist(self, initiator, target):
+		return Blacklist.objects.get(initiator=initiator, target=target)
+	
+	@database_sync_to_async
+	def get_user(self, id):
+		return User.objects.get(user_id=id)
