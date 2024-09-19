@@ -18,7 +18,9 @@ volumes:
     # Live chat
     livechat_postgres_volume:
         driver: local
-    #elk volumes
+    pong_postgres_volume:
+        driver: local
+    # elk volumes
     # elastic_data_volume:
     #     driver: local
 
@@ -88,8 +90,6 @@ services:
     #     extends:
     #         file: elk/docker/docker-compose.yml
     #         service: elasticsearch
-    #     ports:
-    #         - "9200:9200"
     # init-elasticsearch:
     #     extends:
     #         file: elk/docker/docker-compose.yml
@@ -98,5 +98,3 @@ services:
     #     extends:
     #         file: elk/docker/docker-compose.yml
     #         service: kibana
-    #     ports:
-    #         - "5601:5601"

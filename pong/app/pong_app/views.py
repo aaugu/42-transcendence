@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+# from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from .game.game import *
 from django.http import JsonResponse
 from .services import GameService
@@ -56,6 +56,19 @@ def join_game(request, joiner_id, game_id):
 
     return JsonResponse(curr_game)
 
+# @csrf_exempt
+def end_game(request):
+    print(f'Received request to end game')
+
+    if not request.POST:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    try:
+        data = GameService.end_game(request)
+        return JsonResponse({"message": "Game ended", "data": data})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
 def retrieve_last_games(request, user_id, nb_of_games):
   print(f'Received request to get the last: {nb_of_games} of {user_id}')
 
@@ -70,6 +83,15 @@ def retrieve_last_games(request, user_id, nb_of_games):
     'Entries in the db'
 
   return JsonResponse(datas, safe=False)
+
+def get_game(request, game_id):
+    print(f'Received request to get game with id: {game_id}')
+
+    game = GameService.get_game(game_id=game_id)
+    if not game:
+        return JsonResponse({"error": "Game not found"}, status=404)
+
+    return JsonResponse(game.to_dict())
 
 
 # def retrieve_all_games(request):

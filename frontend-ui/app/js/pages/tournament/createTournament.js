@@ -4,7 +4,7 @@ import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
 import { updateTournLists } from './updateTournLists.js';
 
-//mode can  be local or remote
+//type can  be local or remote
 async function createTournament(new_tournament) {
 	const response = await fetch('https://localhost:10443/api/tournament/', {
 		method: 'POST',
@@ -14,7 +14,7 @@ async function createTournament(new_tournament) {
 		},
 		body: JSON.stringify({
 			"name": new_tournament.name,
-			"type": new_tournament.mode,
+			"type": new_tournament.type,
 			"user_id": new_tournament.user_id,
 			"max_players": new_tournament.max_players,
 			"player_names": new_tournament.player_names,
@@ -37,11 +37,11 @@ async function createTournament(new_tournament) {
 	}
 }
 
-function newTournamentData(tournamentName, max_players, adminNickname, is_private, password, mode) {
+function newTournamentData(tournamentName, max_players, adminNickname, is_private, password, type) {
 	const new_tournament = {
 		"name": tournamentName,
 		"user_id": userID,
-		"type": mode,
+		"type": type,
 		"max_players": max_players,
 		"player_names": adminNickname,
 		"is_private": is_private,
@@ -60,14 +60,14 @@ export async function createTournamentButton() {
 	else
 		adminNickname = document.getElementById('t-admin-nickname').value;
 	try {
-		var mode;
+		var type;
 		if (local) {
-			mode = 'local';
+			type = 'local';
 		}
 		else {
-			mode = 'remote';
+			type = 'remote';
 		}
-		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, false, "", mode);
+		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, false, "", type);
 		console.log("new-tournament: ", new_tournament);
 		await createTournament(new_tournament);
 		updateTournLists();

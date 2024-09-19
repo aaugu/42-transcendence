@@ -68,6 +68,8 @@ CORS_ALLOWED_ORIGINS = [
   "https://localhost:10443",
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://localhost:10443']
+
 ROOT_URLCONF = "pong_project.urls"
 
 TEMPLATES = [

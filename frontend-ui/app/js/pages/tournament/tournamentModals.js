@@ -20,6 +20,12 @@ export function openCreateTournamentModal() {
 
 //tournament status 0 = created, 1 = in_progress, 2 = finished
 export async function openSingleTournamentModal(e) {
+		document.getElementById('t-join').classList.add('hidden');
+		document.getElementById('t-start').classList.add('hidden');
+		document.getElementById('t-play').classList.add('hidden');
+		document.getElementById('t-delete').classList.add('hidden');
+		document.getElementById('t-player-name-label').classList.add('hidden');
+		document.getElementById('t-player-name').classList.add('hidden');
 	try {
 		let has_joined = false;
 		const t_modalText = document.getElementById("single-t-modal-text");
@@ -40,7 +46,7 @@ export async function openSingleTournamentModal(e) {
 				break;
 			}
 		}
-		document.getElementById("single-t-modal-title").innerText = t_name;
+		document.getElementById("single-t-modal-title").innerText = `${t_name} (${t_details.type})`;
 
 		if (has_started === false && has_joined === false) {
 			t_modalText.innerText = 'You have not joined this tournament yet. Want to join?';
@@ -50,9 +56,9 @@ export async function openSingleTournamentModal(e) {
 			joinButton.classList.remove('hidden');
 			joinButton.dataset.tournid = t_id;
 		}
-		else if (has_started === false && has_joined === true){
-			if (is_admin === true) {
-				t_modalText.innerText = 'You are the admin. Wanna start this tournament?';
+		else if (has_started === false && has_joined === true) {
+			if (is_admin === true && t_details.type === 'Local') {
+				t_modalText.innerText = 'You are the admin. You can start the tournament or delete it.';
 				const startButton = document.getElementById('t-start');
 				const deleteButton = document.getElementById('t-delete');
 				startButton.classList.remove('hidden');
@@ -60,15 +66,21 @@ export async function openSingleTournamentModal(e) {
 				startButton.dataset.tournid = t_id;
 				deleteButton.dataset.tournid = t_id;
 			}
+			else if (is_admin === true && t_details.type === 'Remote') {
+				t_modalText.innerText = 'Remote tournamens are not yet implemented. Sorry!';
+				const deleteButton = document.getElementById('t-delete');
+				deleteButton.classList.remove('hidden');
+				deleteButton.dataset.tournid = t_id;
+			}
 			else
 				t_modalText.innerText = 'You are already a participant of this tournament but it has not started yet.';
 		}
-		else if (has_started === true && has_joined === true){
-			t_modalText.innerText = 'The tournament has already started. Go play!';
-			const playButton = document.getElementById('t-play');
-			playButton.classList.remove('hidden');
-			playButton.dataset.tournid = t_id;
-		}
+		// else if (has_started === true && has_joined === true){
+		// 	t_modalText.innerText = 'The tournament has already started. Go play!';
+		// 	const playButton = document.getElementById('t-play');
+		// 	playButton.classList.remove('hidden');
+		// 	playButton.dataset.tournid = t_id;
+		// }
 		else {
 			t_modalText.innerText = 'Sorry, this tournament has already started without you!';
 

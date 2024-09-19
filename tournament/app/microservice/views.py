@@ -6,7 +6,6 @@ import requests
 
 from typing import Any, Optional
 
-from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict

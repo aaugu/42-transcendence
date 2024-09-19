@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('creator_id', models.IntegerField()),
                 ('joiner_id', models.IntegerField()),
                 ('winner_id', models.IntegerField(blank=True, null=True)),
-                ('looser_id', models.IntegerField(blank=True, null=True)),
+                ('loser_id', models.IntegerField(blank=True, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('status', models.CharField(choices=[('WAITING', 'Waiting for player'), ('IN_PROGRESS', 'In progress'), ('FINISHED', 'Finished')], default='WAITING', max_length=20)),
             ],

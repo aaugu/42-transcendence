@@ -1,5 +1,7 @@
 import requests
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 
@@ -13,6 +15,22 @@ def join_game(request, joiner_id, game_id):
     response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
     return JsonResponse(response.json(), status=response.status_code)
 
+# @csrf_exempt
+# def end_game(request):
+#     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
+#     return JsonResponse(response.json(), status=response.status_code)
+@csrf_exempt
+def end_game(request):
+    response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
+    if response.text:  # Check if the response is not empty
+        return JsonResponse(response.json(), status=response.status_code)
+    else:
+        return JsonResponse({"error": "Empty response"}, status=400)
+
 def retrieve_last_games(request, user_id, nb_of_games):
     response = requests.get(f"{PONG_SERVICE_URL}/retrieve_last_games/{user_id}/{nb_of_games}")
     return JsonResponse(response.json(), safe=False, status=response.status_code)
+
+def get_game(request, game_id):
+    response = requests.get(f"{PONG_SERVICE_URL}/get-game/{game_id}/")
+    return JsonResponse(response.json(), status=response.status_code)

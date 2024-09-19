@@ -1,6 +1,11 @@
-export async function logout() {
+import { userID } from './updateProfile.js';
 
-    const response = await fetch('https://localhost:10443/api/login/token/logout/', {
+export async function logout() {
+	if (userID === null) {
+		throw new Error('No user ID found');
+	}
+
+    const response = await fetch('https://localhost:10443/api/login/token/logout/' + userID + '/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

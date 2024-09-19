@@ -44,9 +44,4 @@ export async function joinTournamentButton() {
 			hideModal('single-t-modal');
 		}, 1000);
 	}
-	finally {
-		document.getElementById('t-join').classList.add('hidden');
-		document.getElementById('t-player-name-label').classList.add('hidden');
-		document.getElementById('t-player-name').classList.add('hidden');
-	}
 }
