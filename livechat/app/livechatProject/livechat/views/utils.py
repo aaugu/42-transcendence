@@ -1,5 +1,5 @@
 from django.db.models import Q
-from livechat.models import User, Blacklist
+from livechat.models import User
 
 # Check if user exists
 def user_exists(user_id):
@@ -16,10 +16,3 @@ def create_user(user_id):
 
     user_created = User.objects.filter(user_id=user_id)
     return user_created
-
-def blacklist_exists(initiator, target):
-    blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
-
-    if blacklist:
-        return True
-    return False

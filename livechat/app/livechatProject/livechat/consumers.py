@@ -4,7 +4,6 @@ from channels.db import database_sync_to_async
 from livechat.models import Message, Conversation, Blacklist, User
 from datetime import datetime
 from asgiref.sync import sync_to_async
-from livechat.views.utils import blacklist_exists
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):

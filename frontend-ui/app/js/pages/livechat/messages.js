@@ -2,7 +2,7 @@ import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
 
 //placement values: right, left
-export function newMsg (avatar, time, msgText, id) {
+function newMsg (avatar, time, msgText, id) {
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
         <div class="card">
