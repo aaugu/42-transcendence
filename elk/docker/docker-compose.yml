@@ -33,7 +33,9 @@ services:
     entrypoint: ["sh", "-c", "scripts/init-elastic.sh && sh -c scripts/init-kibana.sh"]
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.10.2
+    build:
+      context: kibana
+      dockerfile: Dockerfile
     container_name: transcendence-kibana
     networks:
       transcendence:
