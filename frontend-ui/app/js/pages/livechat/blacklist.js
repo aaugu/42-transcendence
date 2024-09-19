@@ -1,15 +1,16 @@
 import { userID } from "../user/updateProfile.js";
 
-export var is_blacklisted = false;
+export var contact_blacklisted = false;
+export var is_blacklist = false
 
-export function set_is_blacklisted(value) {
-	is_blacklisted = value;
+export function set_contact_blacklisted(value) {
+	contact_blacklisted = value;
 }
 
 export function colorBlockButton() {
 	const block_button = document.getElementById('chat-block-btn');
 	const icon = block_button.querySelector('i');
-	if (is_blacklisted === true) {
+	if (contact_blacklisted === true) {
         block_button.classList.remove('btn-outline-danger');
         block_button.classList.add('btn-outline-success');
         if (icon) {
@@ -77,4 +78,5 @@ export async function unblockUser(target_id) {
 		throw new Error(`${response.status}`);
 	}
 	console.log('USER LOG: UNBLOCK USER SUCCESSFUL');
+	
 }

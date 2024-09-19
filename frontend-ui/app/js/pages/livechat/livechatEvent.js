@@ -1,14 +1,21 @@
 import { convHistory } from "./convHistory.js";
 import { newConvButton }	from "./newConv.js";
-import { blockUser, colorBlockButton, is_blacklisted, set_is_blacklisted, unblockUser } from "./blacklist.js";
+import { blockUser, colorBlockButton, contact_blacklisted, set_contact_blacklisted, unblockUser } from "./blacklist.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
 import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
 import { userID } from "../user/updateProfile.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
-        convHistory(e);
+        if (chatSocket) {
+			if (chatSocket.readyState == 1) {
+				chatSocket.close();
+				console.log('LIVE CHAT: Websocket connection closed');
+			}
+		}
+		convHistory(e);
         return;
       }
 
@@ -22,19 +29,25 @@ export async function livechatEvent(e) {
 
 	switch (target.id) {
 		case "chat-search-btn":
+			if (chatSocket) {
+				if (chatSocket.readyState == 1) {
+					chatSocket.close();
+					console.log('LIVE CHAT: Websocket connection closed');
+				}
+			}
 			newConvButton();
 			break;
 		case "chat-block-btn":
 			try {
 				const ctc_id = target.dataset.ctcid;
-				if (is_blacklisted === false) {
+				if (contact_blacklisted === false) {
 					await blockUser(ctc_id);
-					set_is_blacklisted(true);
+					set_contact_blacklisted(true);
 					colorBlockButton();
 				}
 				else {
 					await unblockUser(ctc_id);
-					set_is_blacklisted(false);
+					set_contact_blacklisted(false);
 					colorBlockButton();
 				}
 			}
