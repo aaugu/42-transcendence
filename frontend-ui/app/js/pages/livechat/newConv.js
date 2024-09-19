@@ -1,4 +1,4 @@
-import { userID } from '../user/updateProfile.js';
+import { userID, updateProfile } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
 import { set_is_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
@@ -7,7 +7,7 @@ import { getConvHistory } from './convHistory.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('Did not find userID or nickname invalid');
+		throw new Error('403');
 	}
 	// else if (conv_nickname === localStorage.getItem('nickname')) {
 	// 	throw new Error('Cannot add yourself to contact list');
@@ -56,12 +56,14 @@ export async function newConvButton() {
 			displayChatInterface(users[0].id);
 		}
 		displayMessages(history);
+		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
+		if (e.message === '403') {
+            updateProfile(false, null);
+			return ;
+        }
 		console.error(`USER LOG: ${e.message}`);
 		errormsg(e.message, 'livechat-errormsg');
 	}
-	finally {
-        document.getElementById('chat-search-input').value = '';
-    }
 }

@@ -2,7 +2,7 @@ import { newConvButton } from "./newConv.js";
 import { updateConvList } from "./updateConvList.js";
 import { get_all_conv, all_conversations } from "./conversations.js";
 import { getConvHistory } from "./convHistory.js";
-import { userID } from "../user/updateProfile.js";
+import { userID, updateProfile } from "../user/updateProfile.js";
 import { displayChatInterface, displayMessages } from "./messages.js";
 
 let notificationsRefreshInterval;

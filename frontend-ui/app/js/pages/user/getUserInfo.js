@@ -2,7 +2,7 @@ import { userID } from "./updateProfile.js";
 
 export async function getUserInfo() {
     if (userID === null)
-        throw new Error ("Could not identify user");
+        throw new Error ("403");
 	const url = 'https://localhost:10443/api/user/';
 
     const response = await fetch(url + userID + '/', {
@@ -16,11 +16,13 @@ export async function getUserInfo() {
 
     if (!response.ok) {
         const error = await response.json();
-        if (response.status === 401 || response.status === 404 || response.status === 403) {
+        if (response.status === 401 || response.status === 404) {
             if (error.detail) {
                 throw new Error (error.detail);
             }
         }
+        if (response.status === 403)
+            throw new Error(`${response.status}`)
         throw new Error('Could not get user info');
     }
 

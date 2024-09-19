@@ -32,5 +32,6 @@ export async function updateConvList() {
         });
     }
     const conv_list = document.getElementById('chat-contact-list');
-    conv_list.innerHTML = notifications + html_contacts;
+    if (conv_list)
+        conv_list.innerHTML = notifications + html_contacts;
 }

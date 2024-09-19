@@ -1,6 +1,7 @@
 import { getUserInfo } from "../user/getUserInfo.js"
-import { getFriendList, updateFriendList } from "./friends.js"
+import { updateFriendList } from "./friends.js"
 import { updateProfile } from "../user/updateProfile.js"
+import { errormsg } from "../../dom/errormsg.js"
 
 export async function profilePage() {
     var username = "Guest";
@@ -21,10 +22,12 @@ export async function profilePage() {
         friends_html = await updateFriendList();
     }
     catch (e) {
+        if (e.message === "403") {
+            updateProfile(false, null);
+            errormsg('You were automatically logged out', 'homepage-errormsg');
+            return '';
+        }
         console.log("USER LOG: ", e.message);
-        // updateProfile(false, null);
-        // console.log('USER LOG: LOGOUT');
-        // urlRoute('/');
     }
 
     localStorage.setItem('avatar', avatar);

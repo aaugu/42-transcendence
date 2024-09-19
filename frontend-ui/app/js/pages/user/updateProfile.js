@@ -1,6 +1,7 @@
 import { defaultAvatar } from './avatar.js';
 import { getCookie } from './cookie.js';
 import { logout } from './logout.js';
+import { urlRoute } from '../../dom/router.js'
 
 // export var userIsConnected = (localStorage.getItem("userIsConnected") === "true");
 export var userID = null;
@@ -44,5 +45,6 @@ export const updateProfile = async (isConnected, token) => {
 		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		setUserID();
+		urlRoute('/');
 	}
 }

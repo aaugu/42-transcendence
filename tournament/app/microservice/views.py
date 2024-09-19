@@ -6,7 +6,6 @@ import requests
 
 from typing import Any, Optional
 
-from django.shortcuts import render
 from django.http import HttpRequest, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
@@ -29,7 +28,7 @@ class MatchUtils:
     @staticmethod
     def get_next_match_id(match_id: int, nb_matches: int) -> int:
         return nb_matches - int((nb_matches - match_id) / 2)
-    
+
     @staticmethod
     def matches_to_json(matches: list[Match]) -> dict[str, list[any]]:
         matches_data = [MatchUtils.match_to_json(match) for match in matches]
@@ -39,7 +38,7 @@ class MatchUtils:
         }
 
         return data
-    
+
     @staticmethod
     def match_notif_to_json(match: Match, notif: bool):
         match_data = MatchUtils.match_to_json(match)
@@ -49,7 +48,7 @@ class MatchUtils:
         }
 
         return data
-    
+
     @staticmethod
     def match_to_json(match: Match):
         return {
@@ -69,7 +68,7 @@ class MatchUtils:
                 'nickname': match.winner.nickname
             } if match.winner is not None else None
         }
-    
+
     @staticmethod
     def match_status_to_string(status: int):
         match_status_msg = ["Not Played", "In Progress", "Finished"]
@@ -126,9 +125,9 @@ class GenerateMatchesView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         if len(players) < settings.MIN_PLAYERS:
             return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
-        
+
         matches = GenerateMatchesView.generate_matches(players, tournament)
-        
+
         try:
             tournament.matches.all().delete()           # supprime la memoire
             Match.objects.bulk_create(matches)          # insère la liste d’objets indiquée dans la base de données de manière efficace
@@ -136,12 +135,12 @@ class GenerateMatchesView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse(MatchUtils.matches_to_json(matches), status=200)
-    
+
     @staticmethod
     def sort_players(players: list[Player]) -> list[Player]:
         random.shuffle(players)
         return players
-    
+
     @staticmethod
     def generate_matches(players: list[Player], tournament: Tournament) -> list[Match]:
         nb_players = len(players)
@@ -172,10 +171,10 @@ class GenerateMatchesView(View):
             )
         GenerateMatchesView.manage_no_opponent(matches, nb_matches_first_round)
         return matches
-    
+
     @staticmethod
     def get_seed_order(nb_players: int) -> list[list[int]]:
-        nb_players = int(2 ** math.ceil(math.log2(nb_players)))    
+        nb_players = int(2 ** math.ceil(math.log2(nb_players)))
         rounds = int(math.log2(nb_players) - 1)
         players = [1, 2]
 
@@ -198,7 +197,7 @@ class GenerateMatchesView(View):
             out.append(length - player)
 
         return out
-    
+
     @staticmethod
     def manage_no_opponent(matches: list[Match], nb_matches_first_round: int):
         for i in range(0, nb_matches_first_round):
@@ -211,9 +210,9 @@ class GenerateMatchesView(View):
                 if i % 2 == 0:
                     matches[next_match_id].player_1 = winner
                 else:
-                    matches[next_match_id].player_2 = winner  
+                    matches[next_match_id].player_2 = winner
 
-@method_decorator(csrf_exempt, name='dispatch')    
+@method_decorator(csrf_exempt, name='dispatch')
 class StartMatchView(View):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
@@ -257,11 +256,11 @@ class StartMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
-        # if player1 is not None and player2 is not None:
-        #     response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
-        # if response.status_code != 201:
-        #     return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
-        return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
+
+        if player1 is not None and player2 is not None:
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+
+        return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
@@ -326,7 +325,7 @@ class EndMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
-    
+
     @staticmethod
     def get_match(tournament_id: int, winner: int):                         # objet utilisé pour englober plusieurs paramètre nommés.
         return Match.objects.get(                                           # peuvent être combinés à l’aide des opérateurs &, | et ^.
@@ -369,8 +368,8 @@ class EndMatchView(View):
                 next_match.player_2 = match.winner
             next_match.save()
 
-@method_decorator(csrf_exempt, name='dispatch')    
-class TournamentView(View): 
+@method_decorator(csrf_exempt, name='dispatch')
+class TournamentView(View):
     @staticmethod
     def get(request: HttpRequest) -> JsonResponse:
         filter_params = TournamentView.get_filter_params(request)
@@ -425,7 +424,7 @@ class TournamentView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
-    
+
     @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
         try:
@@ -481,7 +480,7 @@ class TournamentView(View):
     @staticmethod
     def is_valid_tournament(json_request: dict[str, Any]) -> tuple[bool, Optional[list[str]]]:
         errors = []
-        name = json_request.get('name') 
+        name = json_request.get('name')
         max_players = json_request.get('max_players')
         is_private = json_request.get('is_private')
         password = json_request.get('password')
@@ -520,7 +519,7 @@ class TournamentView(View):
         if errors:
             return False, errors
         return True, None
-    
+
     @staticmethod
     def is_valid_max_players(max_players: Any) -> tuple[bool, Optional[str]]:
         if max_players is None:
@@ -532,7 +531,7 @@ class TournamentView(View):
         if max_players < settings.MIN_PLAYERS:
             return False, error.NOT_ENOUGH_SLOTS
         return True, None
-    
+
     @staticmethod
     def is_valid_private(is_private: Any) -> tuple[bool, Optional[str]]:
         if is_private is None:
@@ -614,14 +613,14 @@ class TournamentPlayersView(View):
             return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
 
         return JsonResponse(model_to_dict(player), status=201)
-    
+
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int):
         try:
             json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-        
+
         user_id = json_request.get('user_id')
 
         try:
@@ -664,7 +663,7 @@ class TournamentPlayersView(View):
         if errors:
             return False, errors
         return True, None
-    
+
     @staticmethod
     def player_can_join_tournament(new_player: Player, password: Optional[str], tournament: Tournament)\
             -> tuple[bool, Optional[list[str | int]]]:
@@ -703,7 +702,7 @@ class TournamentPlayersView(View):
 
         return True, None
 
-""" TournamentlocalView 
+""" TournamentlocalView
 @method_decorator(csrf_exempt, name='dispatch')
 class TournamentlocalView(View):
     @staticmethod
@@ -718,7 +717,7 @@ class TournamentlocalView(View):
             name=json_request['name'],
             admin_id=user_id
         )
-        
+
         max_players = json_request.get('max_players')
         if max_players is not None:
             tournament.max_players = max_players
@@ -731,7 +730,7 @@ class TournamentlocalView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
-    
+
     @staticmethod
     def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
         player_names = list(json_request.get('player_names'))
@@ -748,7 +747,7 @@ class TournamentlocalView(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class StartTournamentView(View):
     @staticmethod
-    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:    
+    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
             json_request = json.loads(request.body.decode('utf-8'))
         except Exception:
@@ -767,7 +766,7 @@ class StartTournamentView(View):
         start_error = StartTournamentView.check_permissions(user_id, tournament, players, matches)
         if start_error is not None:
             return JsonResponse(data={'errors': [start_error]}, status=403)
-                                
+
         tournament.status = Tournament.IN_PROGRESS
         tournament.start_datetime = datetime.datetime.now(datetime.UTC)
 
@@ -777,7 +776,7 @@ class StartTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse({'message': f'Tournament `{tournament.name}` successfully started'}, status=200)
-    
+
     @staticmethod
     def check_permissions(user_id: int, tournament: Tournament, players, matches) -> Optional[str]:
         if tournament.status != Tournament.CREATED:
@@ -826,7 +825,7 @@ class ManageTournamentView(View):
         }
 
         return JsonResponse(tournament_data, status=200)
-    
+
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
@@ -859,7 +858,7 @@ class ManageTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse({'message': f'tournament `{tournament_name}` successfully deleted'}, status=200)
-    
+
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
@@ -874,7 +873,7 @@ class ManageTournamentView(View):
             return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
-        
+
         user_id = body.get('user_id')
         manage_errors = ManageTournamentView.check_manage_permissions(user_id, tournament)
         if manage_errors is not None:
@@ -891,7 +890,7 @@ class ManageTournamentView(View):
 
         tournament_data = ManageTournamentView.get_tournament_data(tournament)
         return JsonResponse(tournament_data, status=200)
-    
+
     @staticmethod
     def get_tournament_data(tournament: Tournament) -> dict[str, Any]:
         tournament_data = {
@@ -912,7 +911,7 @@ class ManageTournamentView(View):
             return ['You are not the owner of the tournament, so you cannot update the settings']
 
         return None
-    
+
     @staticmethod
     def update_tournament_settings(body: dict, tournament: Tournament, tournament_players) -> Optional[list[str]]:
         update_errors = []
@@ -932,7 +931,7 @@ class ManageTournamentView(View):
             update_errors.append(new_password_error)
 
         return update_errors
-    
+
     @staticmethod
     def update_tournament_name(body: dict, tournament: Tournament) -> Optional[list[str]]:
         new_name = body.get('name')
@@ -956,8 +955,8 @@ class ManageTournamentView(View):
                 tournament.max_players = new_max_players
         return None
 
-    
-    
+
+
     @staticmethod
     def update_is_private(body: dict, tournament: Tournament) -> Optional[str]:
         new_is_private = body.get('is_private')
@@ -989,7 +988,7 @@ class ManageTournamentView(View):
             else:
                 tournament.password = make_password(new_password)
         return None
-    
+
 @method_decorator(csrf_exempt, name='dispatch')
 class DeleteInactiveTournamentView(View):
     @staticmethod
@@ -1006,7 +1005,7 @@ class DeleteInactiveTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         return JsonResponse({'message': 'Tournament deleted'}, status=200)
 
-@method_decorator(csrf_exempt, name='dispatch')    
+@method_decorator(csrf_exempt, name='dispatch')
 class MyTournamentAsPlayerView(View):
     @staticmethod
     def get(request: HttpRequest, user_id: int) -> JsonResponse:
@@ -1036,7 +1035,7 @@ class MyTournamentAsPlayerView(View):
             status=200
         )
 
-@method_decorator(csrf_exempt, name='dispatch')    
+@method_decorator(csrf_exempt, name='dispatch')
 class MyTournamentAsAdminView(View):
     @staticmethod
     def get(request: HttpRequest, user_id: int) -> JsonResponse:
