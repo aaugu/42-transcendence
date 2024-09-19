@@ -27,7 +27,7 @@ async function newConv(conv_nickname) {
 		if (response.status === 404)
 			throw new Error('User does not exist');
 		else if (response.status === 409)
-			throw new Error('User already added to contact list');
+			throw new Error('Not possible');
 		throw new Error(`${response.status}`);
 	}
 	const responseData = await response.json();
