@@ -12,9 +12,6 @@ let html = `
 				<div class="modal-body">
 					<div id="t-match-text"></div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-dark" id="t-match-go">Go</button>
-				</div>
 			</div>
 		</div>
 	</div>

@@ -1,13 +1,14 @@
-import { userID } from '../user/updateProfile.js';
+import { userID, updateProfile } from '../user/updateProfile.js';
 import { updateConvList } from './updateConvList.js';
-import { set_is_blacklisted } from './blacklist.js';
+import { set_contact_blacklisted } from './blacklist.js';
 import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
+import { startLivechat } from './startLivechat.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('Did not find userID or nickname invalid');
+		throw new Error('403');
 	}
 	// else if (conv_nickname === localStorage.getItem('nickname')) {
 	// 	throw new Error('Cannot add yourself to contact list');
@@ -27,7 +28,7 @@ async function newConv(conv_nickname) {
 		if (response.status === 404)
 			throw new Error('User does not exist');
 		else if (response.status === 409)
-			throw new Error('User already added to contact list');
+			throw new Error('Not possible');
 		throw new Error(`${response.status}`);
 	}
 	const responseData = await response.json();
@@ -46,7 +47,7 @@ export async function newConvButton() {
 		const conv_id = response.conversation_id;
 
 		const history = await getConvHistory(conv_id);
-		set_is_blacklisted(history.is_blacklisted);
+		set_contact_blacklisted(history.contact_blacklisted);
 		updateConvList();
 		const users = history.users;
 		if (users.length === 2 && users[0].id === userID) {
@@ -55,13 +56,16 @@ export async function newConvButton() {
 		else {
 			displayChatInterface(users[0].id);
 		}
+		startLivechat(conv_id, response);
 		displayMessages(history);
+		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
+		if (e.message === '403') {
+            updateProfile(false, null);
+			return ;
+        }
 		console.error(`USER LOG: ${e.message}`);
 		errormsg(e.message, 'livechat-errormsg');
 	}
-	finally {
-        document.getElementById('chat-search-input').value = '';
-    }
 }

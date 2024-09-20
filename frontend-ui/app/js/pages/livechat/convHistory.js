@@ -1,6 +1,8 @@
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { userID } from '../user/updateProfile.js';
-import { set_is_blacklisted } from "./blacklist.js";
+import { set_contact_blacklisted } from "./blacklist.js";
+import { startLivechat } from "./startLivechat.js";
+import { errormsg } from "../../dom/errormsg.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -37,11 +39,19 @@ export async function convHistory(e) {
 		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 
 		const response = await getConvHistory(conv_id);
-		set_is_blacklisted(response.is_blacklisted);
+		set_contact_blacklisted(response.contact_blacklisted);
 		displayChatInterface(ctc_id);
 		displayMessages(response);
+
+		if (conv_id && response.users.length == 2)
+			startLivechat(conv_id, response);
     }
     catch (e) {
+		if (e.message === "403") {
+            updateProfile(false, null);
+			errormsg('You were automatically logged out', 'homepage-errormsg');
+			return ;
+        }
         console.error("USER LOG: ", e.message);
 		errormsg(e.message, 'livechat-errormsg');
     }

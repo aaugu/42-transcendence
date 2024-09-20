@@ -20,7 +20,7 @@ export async function updateConvList() {
             if (contact_nickname === localStorage.getItem('nickname')) {
                 notifications += `
                 <li class="list-group-item" style="background-color: #6d96ff;">
-                    <span data-convid="${conv.id}" data-ctcid="${contact_id}">Notifications</span>
+                    <span id="notifications" data-convid="${conv.id}" data-ctcid="${contact_id}">Notifications</span>
                 </li>`;
             }
             else {
@@ -32,5 +32,6 @@ export async function updateConvList() {
         });
     }
     const conv_list = document.getElementById('chat-contact-list');
-    conv_list.innerHTML = notifications + html_contacts;
+    if (conv_list)
+        conv_list.innerHTML = notifications + html_contacts;
 }

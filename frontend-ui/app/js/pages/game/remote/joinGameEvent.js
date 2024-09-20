@@ -13,8 +13,8 @@ export function joinGameEvent(event) {
         const game_id = document.getElementById("game-id").value;
         const sender_id = 0;
 
-        console.log("game_id in event:", game_id);
-        console.log("sender_id in event:", sender_id);
+        // console.log("game_id in event:", game_id);
+        // console.log("sender_id in event:", sender_id);
         joinGameandRedirect(game_id, sender_id);
         break;
       default :

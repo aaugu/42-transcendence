@@ -1,8 +1,12 @@
-import { userID } from "../../user/updateProfile.js";
+import { userID, updateProfile } from "../../user/updateProfile.js";
+import { errormsg } from "../../../dom/errormsg.js"
 
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
 export async function createGame(mode) {
+  if (userID === null)
+    throw new Error('403');
+
   const response = await fetch(
     `${gatewayEndpoint}/create-game/${userID}/${mode}/`,
     {
@@ -33,13 +37,13 @@ export function getGameMode(mode) {
       return "LOCAL_VS_IA";
     case "remote-twoplayer":
       return "REMOTE";
-    case "tournament":
+    case "tournament-creation":
       return "TOURNAMENT";
     default:
       console.log("Invalid mode");
       return null;
   }
-  
+
 }
 
 export async function getGameID () {
@@ -57,6 +61,10 @@ export async function getGameID () {
     return gameData.game_id;
   }
   catch (e) {
+    if (e.message === "403") {
+      updateProfile(false, null);
+      errormsg('You were automatically logged out', 'homepage-errormsg');
+    }
     console.error(`USER LOG: ${e.message}`);
     return null;
   }

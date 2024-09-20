@@ -1,5 +1,6 @@
 import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
+import { urlRoute } from '../../dom/router.js'
 
 async function sendGameInvite(game_id, ctc_id) {
 	const response = await fetch('https://localhost:10443/api/livechat/notification/', {
@@ -11,7 +12,7 @@ async function sendGameInvite(game_id, ctc_id) {
 		body: JSON.stringify({
 			"user_id": userID,
 			"target_id": ctc_id,
-			"link": `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" class="btn btn-primary" href='#'></button>`
+			"link": `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" class="btn btn-primary" href='#'>Join the game</button>`
 		}),
 		credentials: 'include'
 	});
@@ -31,6 +32,8 @@ export async function inviteGameButton(ctc_id) {
 		const game = await createGame(mode);
 		const game_id = game.game_id;
 		await sendGameInvite(game_id, ctc_id);
+		const new_url = `/remote-twoplayer/${game_id}`;
+		urlRoute(new_url);
 	}
 	catch (e) {
 		console.log(`USER LOG: ${e.message}`);

@@ -18,7 +18,7 @@ class NotificationView(APIView):
 
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
-		if not body['user_id'] and not body['target_id']:
+		if not body['user_id'] or not body['target_id'] or not body['link']:
 			return Response(status=status.HTTP_400_BAD_REQUEST)
 		
 		user_id = body['user_id']
@@ -28,9 +28,10 @@ class NotificationView(APIView):
 		
 		user_nickname = CustomUser.objects.filter(id=user_id).first().nickname
 		target_nickname = CustomUser.objects.filter(id=target_id).first().nickname
+		link = body['link']
 
 		user_message = "You invited " + target_nickname + " to play with you"
-		target_message = user_nickname + " invites you play to play a pong game\n" + '<a href="/join-game">Join the Game</a>'
+		target_message = user_nickname + " invites you play to play a pong game\n" + link
 
 		url = "http://172.20.5.2:8000/livechat/notification/"
 		body = {
