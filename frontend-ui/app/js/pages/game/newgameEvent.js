@@ -29,7 +29,7 @@ export async function newremotegameEvent(e) {
 export async function newtournamentgameEvent(tourn_id) {
 	if (tourn_id) {
 		localStorage.setItem('tourn_id', tourn_id);
-		const newGameId = await getGameID();
+		const newGameId = await getGameID(tourn_id);
 		const new_url = `/tournament/${newGameId}`;
 		hideModal('single-t-modal');
 		urlRoute(new_url);
