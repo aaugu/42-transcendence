@@ -37,9 +37,11 @@ export async function convHistory(e) {
         const conv_id = targetElement ? targetElement.dataset.convid : null;
 		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 
+		const ctc_nickname = secondTargetElement.innerText;
+
 		const response = await getConvHistory(conv_id);
 		set_contact_blacklisted(response.contact_blacklisted);
-		displayChatInterface(ctc_id);
+		displayChatInterface(ctc_id, ctc_nickname);
 		displayMessages(response);
 		startLivechat(conv_id, response);
     }

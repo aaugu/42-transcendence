@@ -74,20 +74,23 @@ export function displayMessages(response) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-export function displayChatInterface (ctc_id) {
+export function displayChatInterface (ctc_id, ctc_nickname) {
     const welcomeMessages = document.getElementById('chat-welcome');
     welcomeMessages.innerHTML = '';
-
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
     const play_button = document.getElementById('chat-invite-game');
     const block_button = document.getElementById('chat-block-btn');
+    const nickname = document.getElementById('ctc-nickname');
     play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');
+    nickname.classList.remove('hidden');
     colorBlockButton();
     block_button.setAttribute('data-ctcid', ctc_id);
     play_button.setAttribute('data-ctcid', ctc_id);
+    nickname.setAttribute('data-ctcid', ctc_id);
+    nickname.innerText = ctc_nickname;
 
     if (parseInt(ctc_id) === userID) {
         document.getElementById('chat-div-textarea').classList.add('hidden');
