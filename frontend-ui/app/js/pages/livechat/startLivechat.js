@@ -43,7 +43,7 @@ export async function startLivechat (conv_id, response) {
 	};
 
 	chatSocket.onclose = function(e) {
-		console.log('Chat socket closed successfully');
+		console.log('LIVECHAT LOG : Websocket connection closed');
 	};
 
 	// Message listeners

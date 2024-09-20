@@ -2,6 +2,7 @@ import { displayChatInterface, displayMessages } from "./messages.js";
 import { userID } from '../user/updateProfile.js';
 import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
+import { errormsg } from "../../dom/errormsg.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -41,7 +42,9 @@ export async function convHistory(e) {
 		set_contact_blacklisted(response.contact_blacklisted);
 		displayChatInterface(ctc_id);
 		displayMessages(response);
-		startLivechat(conv_id, response);
+
+		if (conv_id && response.users.length == 2)
+			startLivechat(conv_id, response);
     }
     catch (e) {
 		if (e.message === "403") {
