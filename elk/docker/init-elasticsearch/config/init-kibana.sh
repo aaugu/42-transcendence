@@ -9,7 +9,7 @@ fi
 
 echo "\n$CYAN-------------------- GENERATING KIBANA MODEL VIEW... --------------------$NC"
 
-until curl -s -X GET "http://172.20.6.3:5601/log/api/status" | grep -q '"level":"available"'; do
+until curl -s -X GET "http://172.20.6.3:5601/kibana/api/status" | grep -q '"level":"available"'; do
   echo "Waiting for  Kibana..."
   sleep 5
 done
@@ -17,7 +17,7 @@ done
 # Créer une Data View
 sleep 20
 
-curl -X POST "http://172.20.6.3:5601/log/api/saved_objects/index-pattern/my-data-view" \
+curl -X POST "http://172.20.6.3:5601/kibana/api/saved_objects/index-pattern/my-data-view" \
   -H "kbn-xsrf: true" \
   -H "Content-Type: application/json" \
   -u "${ELASTICSEARCH_USERNAME}:${ELASTIC_PASSWORD}" \
