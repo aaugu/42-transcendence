@@ -1,28 +1,29 @@
 import { userID } from '../../user/updateProfile.js'
+import { urlRoute } from '../../../dom/router.js';
+import { errormsg } from '../../../dom/errormsg.js';
 
 export class Tournament {
 
-	constructor(tourn_id) {
+	constructor(tourn_id, game_status) {
         this.tourn_id = tourn_id;
         this.current_match = null;
-        this.game_status = 0; // 0: not started, 1: in progress, 2: finished
+        this.game_status = game_status; // 'Created', 'In Progress', 'Finished'
 		this.all_matches = null;
 		this.userID = userID;
     }
 
 	#nextMatch() {
-		this.current_match = this.all_matches.find(match => match.status === "Not played");
+		this.current_match = this.all_matches.find(match => match.status === "In Progress") ||
+							this.all_matches.find(match => match.status === "Not Played") || null;
 	}
 
-    // Update match list after a match has been completed
     async updateMatchCycle(winner_id) {
         try {
-            await this.#endMatch(winner_id); // End the match with winner_id
-            const response = await this.#generateMatches('GET'); // Fetch updated matches
-			console.log("response after this.#generateMatches('GET')", response);
-			//check if status === finished
+			console.log("winner_id", winner_id);
+            await this.#endMatch(winner_id);
+            const response = await this.#generateMatches('GET');
 
-			this.all_matches = response.matches; // Update the match list
+			this.all_matches = response.matches;
 			this.#startNextMatch();
         } catch (e) {
             console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
@@ -31,34 +32,54 @@ export class Tournament {
     }
 
 	async #startNextMatch() {
-		try {
-			console.log("this.all_matches", this.all_matches);
-			if (!this.all_matches)
-				throw new Error('No matches available');
-			this.#nextMatch();
-			console.log("this.current_match", this.current_match);
+		if (!this.all_matches)
+			throw new Error('No matches available');
+		this.#nextMatch();
+		console.log("current_match in startNextMatch: ", this.current_match);
+		if (!this.current_match) {
+			console.log("setting status to finished")
+			this.game_status = 'Finished';
+			return ;
+		}
+		if (this.current_match.status === "Not Played") {
 			await this.#startMatch();
-		} catch (e) {
-			console.error(`TOURNAMENT LOG: ERROR STARTING MATCH: ${e.message}`);
 		}
     }
 
-	// Launch the tournament and initialize the matches
     async launchTournament() {
         try {
-            const response = await this.#generateMatches('POST'); // Create and fetch initial matches
-            await this.#startTournament(); // Mark tournament as started
-			this.all_matches = response.matches; // Set the match list
+			console.log("TOURNAMENT LOG: Launch Tournament");
+            const response = await this.#generateMatches('POST');
+            await this.#startTournament();
+			this.all_matches = response.matches;
             this.#startNextMatch();
-			this.game_status = 1;
+			this.game_status = 'In Progress';
     	}
 		catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
 			this.all_matches = null;
+			if (this.game_status !== 'Finished')
+				this.game_status = 'Created';
+			urlRoute("/tournament-creation");
+			errormsg(e.message, "homepage-errormsg");
 		}
 	}
 
-    // Backend fetch for starting the tournament
+	async continueTournament() {
+        try {
+			console.log("TOURNAMENT LOG: Continue Tournament");
+            const response = await this.#generateMatches('GET');
+			//check if status === finished
+
+			this.all_matches = response.matches;
+			this.#startNextMatch();
+    	}
+		catch (e) {
+			console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
+            this.all_matches = null;
+		}
+	}
+
     async #startTournament() {
 		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {
@@ -122,8 +143,8 @@ export class Tournament {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				"player1": this.current_match.player_1.user_id,
-				"player2": this.current_match.player_2.user_id
+				"player_1": this.current_match.player_1.user_id,
+				"player_2": this.current_match.player_2.user_id
 			}),
 			credentials: 'include'
 		});
