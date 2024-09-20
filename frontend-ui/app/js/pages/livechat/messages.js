@@ -89,7 +89,7 @@ export function displayChatInterface (ctc_id, ctc_nickname) {
     colorBlockButton();
     block_button.setAttribute('data-ctcid', ctc_id);
     play_button.setAttribute('data-ctcid', ctc_id);
-    nickname.setAttribute('data-ctcid', ctc_id);
+    nickname.setAttribute('data-otherctcid', ctc_id);
     nickname.innerText = ctc_nickname;
 
     if (parseInt(ctc_id) === userID) {

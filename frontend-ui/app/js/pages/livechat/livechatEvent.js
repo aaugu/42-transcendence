@@ -6,6 +6,7 @@ import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
 import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
 import { userID } from "../user/updateProfile.js";
+import { urlRoute } from "../../dom/router.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -64,6 +65,11 @@ export async function livechatEvent(e) {
 			const game_id = target.dataset.gameid;
 			const sender_id = target.dataset.senderid;
 			joinGameandRedirect(game_id, sender_id);
+			break;
+		case "ctc-nickname":
+			const other_person_ctc_id = target.dataset.otherctcid;
+			const new_url = `/profile/${other_person_ctc_id}`;
+			urlRoute(new_url);
 			break;
 		default:
 			break;
