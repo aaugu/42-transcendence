@@ -23,8 +23,6 @@ export async function publicProfilePage() {
         console.log("USER LOG: ", e.message);
     }
 
-	console.log("avatar: ", avatar);
-
     return `
     <h2 class="text-bold display-6"></h2>
     <div class="two-column-container">

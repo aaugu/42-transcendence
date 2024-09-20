@@ -85,18 +85,21 @@ export function displayChatInterface (ctc_id, ctc_nickname) {
     const nickname = document.getElementById('ctc-nickname');
     play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');
-    nickname.classList.remove('hidden');
     colorBlockButton();
     block_button.setAttribute('data-ctcid', ctc_id);
     play_button.setAttribute('data-ctcid', ctc_id);
-    nickname.setAttribute('data-otherctcid', ctc_id);
-    nickname.innerText = ctc_nickname;
+    if (ctc_nickname !== "Notifications") {
+        nickname.classList.remove('hidden');
+        nickname.setAttribute('data-otherctcid', ctc_id);
+        nickname.innerText = ctc_nickname;
+    }
 
     if (parseInt(ctc_id) === userID) {
         document.getElementById('chat-div-textarea').classList.add('hidden');
         document.getElementById('chat-send').classList.add('hidden');
         document.getElementById('chat-invite-game').classList.add('hidden');
         document.getElementById('chat-block-btn').classList.add('hidden');
+        document.getElementById('ctc-nickname').classList.add('hidden');
     }
     setCurrentContactID(ctc_id);
 }
