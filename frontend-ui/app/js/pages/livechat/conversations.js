@@ -1,14 +1,15 @@
-import { userID } from "../user/updateProfile.js";
+import { errormsg } from "../../dom/errormsg.js";
+import { userID, updateProfile } from "../user/updateProfile.js";
 
-export var all_conversations = {};
+export var all_conversations = [];
 
 export function reset_all_conv() {
-    all_conversations = {};
+    all_conversations = [];
 }
 
 async function allConversations() {
 	if (userID === null) {
-		throw new Error('Did not find user ID');
+		throw new Error('403');
 	}
 
 	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/conversations/', {
@@ -68,7 +69,12 @@ export async function get_all_conv() {
 		all_conversations = conversationsWithUserDetails;
 	}
 	catch (e) {
+		all_conversations = [];
+		if (e.message === "403") {
+            updateProfile(false, null);
+			errormsg('You were automatically logged out', 'homepage-errormsg');
+			return ;
+        }
 		console.error("USER LOG: ", e.message);
-		all_conversations = {};
 	}
 }

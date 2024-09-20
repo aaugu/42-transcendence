@@ -13,10 +13,10 @@ volumes:
     # Tournament
     tournament_postgres_volume:
         driver: local
+    pong_postgres_volume:
+        driver: local
     # Live chat
     livechat_postgres_volume:
-        driver: local
-    pong_postgres_volume:
         driver: local
     # elk volumes
     # elastic_data_volume:

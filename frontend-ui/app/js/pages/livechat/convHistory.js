@@ -44,6 +44,11 @@ export async function convHistory(e) {
 		startLivechat(conv_id, response);
     }
     catch (e) {
+		if (e.message === "403") {
+            updateProfile(false, null);
+			errormsg('You were automatically logged out', 'homepage-errormsg');
+			return ;
+        }
         console.error("USER LOG: ", e.message);
 		errormsg(e.message, 'livechat-errormsg');
     }

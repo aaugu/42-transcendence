@@ -18,7 +18,6 @@ export async function joinGameandRedirect(gameId, senderId) {
 			}
 		}
 
-		console.log("in join game and redirect before route change");
 		const new_url = `/remote-twoplayer/${gameId}`;
 		urlRoute(new_url);
 

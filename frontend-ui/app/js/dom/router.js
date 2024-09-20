@@ -14,8 +14,8 @@ import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
 import { reset_all_conv } from "../pages/livechat/conversations.js"
+import { startFriendListRefresh, clearFriendListRefresh } from "../pages/profile/friends.js"
 import { chatSocket} from "../pages/livechat/startLivechat.js"
-import { startFriendListRefresh, clearFriendList } from "../pages/profile/friends.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
@@ -23,7 +23,7 @@ import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent, newremotegameEvent, newAIgameEvent } from "../pages/game/newgameEvent.js"
-import { notifications } from "../pages/livechat/notifications.js"
+import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -40,11 +40,11 @@ function updateEventListenerMainCont(newEventListener = null) {
 }
 
 function resetDataRouteChange() {
-	if (g_socket) {
+	if (g_socket && g_socket.readyState === WebSocket.OPEN) {
 		g_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}
-	if (t_socket) {
+	if (t_socket && t_socket.readyState === WebSocket.OPEN) {
 		t_socket.close();
 		console.log('GAME LOG: Websocket connection closed');
 	}
@@ -56,7 +56,8 @@ function resetDataRouteChange() {
 	}
 	reset_all_tournaments();
 	reset_all_conv();
-	clearFriendList();
+	clearFriendListRefresh();
+	clearNotificationsRefresh();
 }
 
 function matchRoute(route, path) {

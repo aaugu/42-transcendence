@@ -48,7 +48,7 @@ export async function getTournamentDetails(tournament_id) {
 
 export async function getMyTournaments() {
 	if (userID === null) {
-		throw new Error('No user ID');
+		throw new Error('403');
 	}
 
 	const response = await fetch('https://localhost:10443/api/tournament/' + userID + '/mytournament/admin/', {
@@ -61,7 +61,9 @@ export async function getMyTournaments() {
 	});
 	const responseData = await response.json();
 	if (!response.ok) {
-		if (responseData.errors)
+		if (response.status === 403)
+			throw new Error(`${response.status}`);
+		else if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error('GET MY TOURNAMENTS FAILED');
 	}
