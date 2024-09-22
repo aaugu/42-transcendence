@@ -13,7 +13,7 @@ export async function createGame(mode, tourn_id = null) {
 
   if (tourn_id) {
     response = await fetch(
-      `${gatewayEndpoint}/create-game/${userID}/${mode}/${tourn_id}/`,
+      `${gatewayEndpoint}/create-game-tournament/${userID}/${mode}/${tourn_id}/`,
       {
         headers: {
           'Accept': 'application/json',
