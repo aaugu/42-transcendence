@@ -70,7 +70,7 @@ def create_game_tournament(request, creator_id, mode, tournament_id):
         return JsonResponse({"error": "Invalid game mode"}, status=400)
 
     # Création du jeu via un service (hypothétique)
-    game = GameService.create_game(creator_id, mode, tournament_id)
+    game = GameService.create_game_tournament(creator_id, mode, tournament_id)
 
     return JsonResponse(game.to_dict())
 

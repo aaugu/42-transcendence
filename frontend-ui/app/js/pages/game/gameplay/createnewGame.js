@@ -9,9 +9,10 @@ export async function createGame(mode, tourn_id = null) {
     throw new Error('403');
 
   var response;
-  console.log(`MODE = ${mode}`);
+  console.log(`MODE & TOURN_ID: ${mode} ${tourn_id}`);
 
   if (tourn_id) {
+    console.log(`IN GAME TOURNAMENT CREATION`);
     response = await fetch(
       `${gatewayEndpoint}/create-game-tournament/${userID}/${mode}/${tourn_id}/`,
       {

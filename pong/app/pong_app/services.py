@@ -49,7 +49,8 @@ class GameService:
         return game_instance
 
     @staticmethod
-    def create_game_tournament(creator_id, mode: GameMode, tournament_id=None):
+    def create_game_tournament(creator_id, mode: GameMode, tournament_id):
+        tournament_id = str(uuid.uuid4())
 
         Games.objects.create(
             game_id=tournament_id,
