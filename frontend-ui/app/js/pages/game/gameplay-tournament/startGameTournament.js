@@ -14,6 +14,7 @@ import { errormsg } from '../../../dom/errormsg.js';
 export var t_socket;
 
 export async function startGameTournament() {
+	document.getElementById('tournament-table').classList.remove('hidden');
 	const tourn_id = localStorage.getItem('tourn_id');
 	localStorage.removeItem('tourn_id');
 	const gameId = window.location.href.split("/")[4];

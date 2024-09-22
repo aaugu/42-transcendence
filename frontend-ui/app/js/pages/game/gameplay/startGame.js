@@ -10,12 +10,13 @@ import { handleWebsocketGame } from './handleWebsocket.js';
 export var g_socket;
 
 export async function startGame() {
+	document.getElementById('tournament-table').classList.add('hidden');
 	const gameId = window.location.href.split("/")[4];
 	console.log("game Id: ", gameId);
   	let gameState = { current: null };
 
 	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
-	
+
 	const canvas = displayGame();
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);

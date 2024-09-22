@@ -12,8 +12,8 @@ function updateTournamentTable(matches) {
 			match_html += `
 				<tr>
 					<th scope="row">${match.id}</th>
-					<td>${match.player_1}</td>
-					<td>${match.player_2}</td>
+					<td>${match.player_1.nickname}</td>
+					<td>${match.player_2.nickname}</td>
 					<td>${match.status}</td>
 				</tr>
 			`;

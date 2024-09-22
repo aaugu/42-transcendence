@@ -53,7 +53,7 @@ export function getGameMode(mode) {
     case "remote-twoplayer":
       return "REMOTE";
     case "tournament-creation":
-      return "REMOTE";
+      return "TOURNAMENT";
     default:
       console.log("Invalid mode");
       return null;
