@@ -17,7 +17,7 @@ export async function startGameTournament() {
 	const tourn_id = localStorage.getItem('tourn_id');
 	localStorage.removeItem('tourn_id');
 	const gameId = window.location.href.split("/")[4];
-	if (!tourn_id) {
+	if (!tourn_id || !gameId) {
 		urlRoute('/tournament-creation');
 		errormsg("Tournament not found", "homepage-errormsg");
 		return;

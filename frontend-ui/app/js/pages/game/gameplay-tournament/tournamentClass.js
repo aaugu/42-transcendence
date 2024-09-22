@@ -2,6 +2,26 @@ import { userID } from '../../user/updateProfile.js'
 import { urlRoute } from '../../../dom/router.js';
 import { errormsg } from '../../../dom/errormsg.js';
 
+function updateTournamentTable(matches) {
+	const tourn_table = document.getElementById('tournament-table-body');
+	tourn_table.innerHTML = '';
+	var match_html = '';
+
+	matches.forEach(match => {
+		if (match.status !== 'Finished') {
+			match_html += `
+				<tr>
+					<th scope="row">${match.id}</th>
+					<td>${match.player_1}</td>
+					<td>${match.player_2}</td>
+					<td>${match.status}</td>
+				</tr>
+			`;
+		}
+	});
+	tourn_table.innerHTML = match_html;
+}
+
 export class Tournament {
 
 	constructor(tourn_id, game_status) {
@@ -19,7 +39,6 @@ export class Tournament {
 
     async updateMatchCycle(winner_id) {
         try {
-			console.log("winner_id", winner_id);
             await this.#endMatch(winner_id);
             const response = await this.#generateMatches('GET');
 
@@ -35,15 +54,14 @@ export class Tournament {
 		if (!this.all_matches)
 			throw new Error('No matches available');
 		this.#nextMatch();
-		console.log("current_match in startNextMatch: ", this.current_match);
 		if (!this.current_match) {
-			console.log("setting status to finished")
 			this.game_status = 'Finished';
 			return ;
 		}
 		if (this.current_match.status === "Not Played") {
 			await this.#startMatch();
 		}
+		updateTournamentTable(this.all_matches);
     }
 
     async launchTournament() {
@@ -69,7 +87,6 @@ export class Tournament {
         try {
 			console.log("TOURNAMENT LOG: Continue Tournament");
             const response = await this.#generateMatches('GET');
-			//check if status === finished
 
 			this.all_matches = response.matches;
 			this.#startNextMatch();
