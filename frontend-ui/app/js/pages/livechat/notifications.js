@@ -26,7 +26,7 @@ export async function notifications() {
         }
         updateConvList(); 
     } catch (e) {
-        if (e.message === "500") {
+        if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();
 		}
     }

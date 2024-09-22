@@ -76,7 +76,7 @@ export async function get_all_conv() {
 			errormsg('You were automatically logged out', 'homepage-errormsg');
 			return ;
         }
-		if (e.message === "500") {
+		if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();
 			return ;
 		}

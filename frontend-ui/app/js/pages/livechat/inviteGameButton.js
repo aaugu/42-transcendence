@@ -37,7 +37,7 @@ export async function inviteGameButton(ctc_id) {
 		urlRoute(new_url);
 	}
 	catch (e) {
-		if (e.message === "500") {
+		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}

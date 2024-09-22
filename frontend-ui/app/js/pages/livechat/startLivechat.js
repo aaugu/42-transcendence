@@ -49,8 +49,11 @@ export async function startLivechat (conv_id, response) {
 	// Message listeners
 	messageSubmitBtn.addEventListener('click', function (event) {
 		event.preventDefault();
-
-		if ( chatSocket && chatSocket.readyState === 1) {
+		if (!response) {
+			close(chatSocket);
+			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
+		}
+		else if ( chatSocket && chatSocket.readyState === 1) {
 			if (contact_blacklisted == true) {
 				console.error("USER LOG: ", "Contact is blacklisted");
 				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');

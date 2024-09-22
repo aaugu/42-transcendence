@@ -66,7 +66,7 @@ export async function newConvButton() {
             updateProfile(false, null);
 			return ;
         }
-		if (e.message === "500") {
+		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", 'livechat-errormsg');;
 			return ;
 		}

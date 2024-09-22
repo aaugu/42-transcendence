@@ -50,7 +50,7 @@ export async function livechatEvent(e) {
 				}
 			}
 			catch (e) {
-				if (e.message === "500") {
+				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "livechat-conversation-errormsg");
 					return ;
 				}
