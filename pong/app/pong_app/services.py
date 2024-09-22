@@ -3,6 +3,7 @@ from .game.game import Game, GameMode, GameState
 from .models import Games
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+import time
 
 
 class GameService:
@@ -24,25 +25,48 @@ class GameService:
                 game_id=game_id, creator_id=creator_id, status="WAITING", mode="REMOTE"
             )
 
-        else:
+        elif mode == GameMode.LOCAL_TWO_PLAYERS:
             Games.objects.create(
                 game_id=game_id,
                 creator_id=creator_id,
                 status="IN_PROGRESS",
-                mode="NOT REMOTE",
+                mode="LOCAL_TWO_PLAYERS",
             )
 
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
-        print(f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}")
+
+        print(
+            f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}"
+        )
 
         from .consumers.consumers import PongConsumer
 
         PongConsumer.games[game_id] = game_instance
 
-        print(f" Service: ${game_instance.game_id}, {game_instance.mode}")
+        print(f" Service create game: ${game_instance.game_id}, {game_instance.mode}")
 
+        return game_instance
 
+    @staticmethod
+    def create_game_tournament(creator_id, mode: GameMode, tournament_id=None):
+
+        Games.objects.create(
+            game_id=tournament_id,
+            creator_id=creator_id,
+            status="IN_PROGRESS",
+            mode="TOURNAMENT",
+        )
+        game_instance = Game(mode=mode, game_id=tournament_id)
+        game_instance.game_state.paddles[0].player_id = 1
+        game_instance.game_state.paddles[1].player_id = 2
+        from .consumers.consumers import PongConsumer
+
+        print(
+            f" Service create game tournament: ${game_instance.game_id}, {game_instance.mode}"
+        )
+
+        PongConsumer.games[tournament_id] = game_instance
         return game_instance
 
     @staticmethod
@@ -54,13 +78,14 @@ class GameService:
         from .consumers.consumers import PongConsumer
 
         PongConsumer.games[game_id].game_state.paddles[1].player_id = joiner_id
-        print(f"Joined game {game_id} with user {joiner_id} Left Paddle ID = {PongConsumer.games[game_id].game_state.paddles[0].player_id} and Right Paddle ID = {PongConsumer.games[game_id].game_state.paddles[1].player_id}")
+        print(
+            f"Joined game {game_id} with user {joiner_id} Left Paddle ID = {PongConsumer.games[game_id].game_state.paddles[0].player_id} and Right Paddle ID = {PongConsumer.games[game_id].game_state.paddles[1].player_id}"
+        )
         # PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
 
         game.save()
 
         return game
-
 
     @staticmethod
     def end_game(request):
@@ -73,17 +98,21 @@ class GameService:
         game.status = "FINISHED"
         game.winner_id = winner_id
         game.loser_id = loser_id
-        if game.mode == "REMOTE":
-            game.save()
+        game.save()
+
+        if game.mode == "LOCAL_TWO_PLAYERS":
+            time.sleep(5)  # Wait for 5 seconds
+            Games.objects.filter(id=game_id).delete()
 
         # Return a dictionary that can be converted to JSON
-        return {
-            "game_id": game.game_id,
-            "status": game.status,
-            "winner_id": game.winner_id,
-            "loser_id": game.loser_id,
-            "mode": game.mode,
-        }
+        # return {
+        #     "game_id": game.game_id,
+        #     "status": game.status,
+        #     "winner_id": game.winner_id,
+        #     "loser_id": game.loser_id,
+        #     "mode": game.mode,
+        # }
+        return f"Game {game_id} is finished."
 
     @staticmethod
     def get_game(game_id):

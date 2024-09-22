@@ -180,6 +180,7 @@ class GameState:
         self.ballReset(1)
         self.score = [0, 0]
         self.finished = False
+        self.paused = False
 
     def ballReset(self, pos):
         self.ball.position[0] = PARAMS["canvas_width"] / 2

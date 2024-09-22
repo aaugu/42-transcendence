@@ -7,8 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
 
-def create_game(request, creator_id, mode, tournament_id=None):
-    response = requests.get(f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{tournament_id if tournament_id else ''}/")
+def create_game(request, creator_id, mode):
+    response = requests.get(f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/")
+    return JsonResponse(response.json(), status=response.status_code)
+
+def create_game_tournament(request, creator_id, mode, tournament_id):
+    response = requests.get(f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{tournament_id}/")
     return JsonResponse(response.json(), status=response.status_code)
 
 def join_game(request, joiner_id, game_id):
