@@ -14,15 +14,21 @@ export async function getUserInfo() {
         credentials: 'include',
     });
 
+    console.log("response status : ", response.status);
+    console.log("response", response);
+
     if (!response.ok) {
-        const error = await response.json();
+        // const error = await response.json();
         if (response.status === 401 || response.status === 404) {
-            if (error.detail) {
-                throw new Error (error.detail);
-            }
+            // if (error.detail) {
+            //     throw new Error (error.detail);
+            // }
         }
         if (response.status === 403)
             throw new Error(`${response.status}`)
+        if (response.status === 502) {
+            throw new Error(`${response.status}`)
+        }
         throw new Error('Could not get user info');
     }
 

@@ -50,7 +50,10 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 		}
 		catch (e) {
 			console.log(`USER LOG: ${e.message}`);
-			errormsg("Unable to change 2FA", "activate2fa-errormsg");
+			if (e.message === "502")
+				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
+			else
+				errormsg("Unable to change 2FA", "activate2fa-errormsg");
 		}
 		hideModal('activate-2fa-modal');
 
@@ -64,7 +67,10 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
-			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
+			if (e.message === "502")
+				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
+			else
+				errormsg("Unable to change 2FA", "activate2fa-errormsg");
 			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');

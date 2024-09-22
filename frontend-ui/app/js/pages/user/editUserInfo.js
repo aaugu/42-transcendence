@@ -21,15 +21,18 @@ export async function editUserInfo(infoType, newInfo) {
             }),
             credentials: 'include',
         });
-
+        
+        if (!response.ok && response.status === 502) {
+            throw new Error(`${response.status}`);
+        }
         if (!response.ok) {
             const error = await response.json();
 			if (response.status === 400) {
-				if (error.email)
+                if (error.email)
 					throw new Error(error.email);
                 if (error.nickname)
                     throw new Error(error.nickname);
-			}
+            }
             throw new Error('Could not edit user info');
         }
         const responseData = await response.json();
@@ -39,6 +42,7 @@ export async function editUserInfo(infoType, newInfo) {
             throw new Error('No response from server');
         }
     } catch (e) {
+        console.log(e);
         console.error('USER LOG: USER PATCH FETCH FAILURE, ' + e.message);
         throw new Error(e.message);
     }
@@ -112,7 +116,11 @@ export function editUserInfoModal(e) {
             console.log(`USER LOG: SUCCESSFULLY CHANGED ${currentField}`);
             hideModal('edit-modal');
         } catch (e) {
-            errormsg(e.message, 'editmodal-errormsg');
+            if (e.message === "502") {
+                errormsg("Service temporarily unavailable", "editmodal-errormsg");
+            } else {
+                errormsg(e.message, 'editmodal-errormsg');
+            }
             console.log(`USER LOG: ${e.message}`);
         }
 

@@ -1,7 +1,8 @@
 import { getUserInfo } from "../user/getUserInfo.js"
-import { updateFriendList } from "./friends.js"
+import { clearFriendListRefresh, updateFriendList } from "./friends.js"
 import { updateProfile } from "../user/updateProfile.js"
 import { errormsg } from "../../dom/errormsg.js"
+import { error500 } from "../errorpage/error500.js";
 
 export async function profilePage() {
     var username = "Guest";
@@ -22,6 +23,10 @@ export async function profilePage() {
         friends_html = await updateFriendList();
     }
     catch (e) {
+        if (e.message === "502") {
+            clearFriendListRefresh();
+            return error500();
+        }
         if (e.message === "403") {
             updateProfile(false, null);
             errormsg('You were automatically logged out', 'homepage-errormsg');
