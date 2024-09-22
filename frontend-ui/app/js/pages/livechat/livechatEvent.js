@@ -66,8 +66,9 @@ export async function livechatEvent(e) {
 			break;
 		case "ctc-nickname":
 			const other_person_ctc_id = target.dataset.otherctcid;
-			const new_url = `/profile/${other_person_ctc_id}`;
-			urlRoute(new_url);
+			localStorage.setItem('ctc_id', other_person_ctc_id);
+			const nickname = target.textContent;
+			urlRoute(`/profile/${nickname}`);
 			break;
 		default:
 			break;

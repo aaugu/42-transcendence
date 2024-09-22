@@ -8,7 +8,7 @@ export async function publicProfilePage() {
     var avatar = "images/default_avatar.png";
     var friends_html = '';
 
-	const user_id = window.location.href.split("/")[4];
+    const user_id = localStorage.getItem('ctc_id');
 
     try {
         const userinfo = await getUserInfo(user_id);
@@ -18,6 +18,8 @@ export async function publicProfilePage() {
         avatar = userinfo.avatar;
 
         friends_html = await updateFriendList(user_id);
+
+        localStorage.removeItem('ctc_id');
     }
     catch (e) {
         console.log("USER LOG: ", e.message);
