@@ -100,19 +100,19 @@ class GameService:
         game.loser_id = loser_id
         game.save()
 
-        if game.mode == "LOCAL_TWO_PLAYERS":
-            time.sleep(5)  # Wait for 5 seconds
-            Games.objects.filter(id=game_id).delete()
+        # if game.mode == "LOCAL_TWO_PLAYERS":
+        #     time.sleep(5)  # Wait for 5 seconds
+        #     Games.objects.filter(id=game_id).delete()
 
         # Return a dictionary that can be converted to JSON
-        # return {
-        #     "game_id": game.game_id,
-        #     "status": game.status,
-        #     "winner_id": game.winner_id,
-        #     "loser_id": game.loser_id,
-        #     "mode": game.mode,
-        # }
-        return f"Game {game_id} is finished."
+        return {
+            "game_id": game.game_id,
+            "status": game.status,
+            "winner_id": game.winner_id,
+            "loser_id": game.loser_id,
+            "mode": game.mode,
+        }
+        # return f"Game {game_id} is finished."
 
     @staticmethod
     def get_game(game_id):

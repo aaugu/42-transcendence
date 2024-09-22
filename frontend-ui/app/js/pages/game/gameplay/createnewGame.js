@@ -9,7 +9,7 @@ export async function createGame(mode, tourn_id = null) {
     throw new Error('403');
 
   var response;
-  print(`MODE = ${mode}`);
+  console.log(`MODE = ${mode}`);
 
   if (tourn_id) {
     response = await fetch(
