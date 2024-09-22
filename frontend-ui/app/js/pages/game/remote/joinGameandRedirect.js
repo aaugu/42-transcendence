@@ -1,5 +1,6 @@
 import { userID } from "../../user/updateProfile.js";
 import { urlRoute } from "../../../dom/router.js";
+import { errormsg } from "../../../dom/errormsg.js";
 
 export async function joinGameandRedirect(gameId, senderId) {
 	try {
@@ -22,6 +23,9 @@ export async function joinGameandRedirect(gameId, senderId) {
 		urlRoute(new_url);
 
 	  } catch(error) {
+		if (e.message === "500") {
+			errormsg("Service temporarily unavailable", "livechat-conversation-error");
+		}
 		console.error("JOIN GAME ERROR:", error);
 	  }
 }

@@ -3,6 +3,7 @@ import { userID } from '../user/updateProfile.js';
 import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { error500 } from "../errorpage/error500.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -52,6 +53,10 @@ export async function convHistory(e) {
 			errormsg('You were automatically logged out', 'homepage-errormsg');
 			return ;
         }
+		if (e.message === "500") {
+			document.getElementById('main-content').innerHTML = error500();
+			return ;
+		}
         console.error("USER LOG: ", e.message);
 		errormsg(e.message, 'livechat-errormsg');
     }

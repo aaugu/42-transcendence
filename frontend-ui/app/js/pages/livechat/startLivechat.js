@@ -19,7 +19,7 @@ export async function startLivechat (conv_id, response) {
 		const data = JSON.parse(e.data);
 
 		if( data.blacklist == true) {
-			errormsg("Could not send message, you are blacklisted", 'livechat-blacklist-errormsg');
+			errormsg("Could not send message, you are blacklisted", 'livechat-conversation-errormsg');
 			return;
 		}
 
@@ -50,11 +50,16 @@ export async function startLivechat (conv_id, response) {
 	messageSubmitBtn.addEventListener('click', function (event) {
 		event.preventDefault();
 
-		if (contact_blacklisted == true) {
-			console.error("USER LOG: ", "Contact is blacklisted");
-			errormsg("You blacklisted that user", 'livechat-blacklist-errormsg');
-		} else {
-			sendMessage(messageInput.value);
+		if ( chatSocket && chatSocket.readyState === 1) {
+			if (contact_blacklisted == true) {
+				console.error("USER LOG: ", "Contact is blacklisted");
+				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
+			} else {
+				sendMessage(messageInput.value);
+			}
+		}
+		else {
+			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 		}
 		messageInput.value = '';	
 	});	

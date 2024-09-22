@@ -1,6 +1,7 @@
 import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
+import { errormsg } from '../../dom/errormsg.js';
 
 async function sendGameInvite(game_id, ctc_id) {
 	const response = await fetch('https://localhost:10443/api/livechat/notification/', {
@@ -36,6 +37,10 @@ export async function inviteGameButton(ctc_id) {
 		urlRoute(new_url);
 	}
 	catch (e) {
+		if (e.message === "500") {
+			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
+			return ;
+		}
 		console.log(`USER LOG: ${e.message}`);
 	}
 
