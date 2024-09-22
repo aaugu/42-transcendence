@@ -26,8 +26,6 @@ export async function getConvHistory(conv_id) {
 	if (responseData !== null) {
 		console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 

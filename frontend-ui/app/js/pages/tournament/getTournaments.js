@@ -18,8 +18,6 @@ export async function getTournaments() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -41,8 +39,6 @@ export async function getTournamentDetails(tournament_id) {
 	if (responseData !== null) {
 		console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -70,7 +66,5 @@ export async function getMyTournaments() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }

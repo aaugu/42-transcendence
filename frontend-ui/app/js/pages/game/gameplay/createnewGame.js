@@ -7,30 +7,20 @@ export async function createGame(mode, tourn_id = null) {
   if (userID === null)
     throw new Error('403');
 
-  var response;
+  var url;
+  if (tourn_id)
+    url = `${gatewayEndpoint}/create-game-tournament/${userID}/${mode}/${tourn_id}/`;
+  else
+    url = `${gatewayEndpoint}/create-game/${userID}/${mode}/`;
 
-  // if (tourn_id) {
-  //   response = await fetch(
-  //     `${gatewayEndpoint}/create-game/${userID}/${mode}/${tourn_id}/`,
-  //     {
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       credentials: 'include'
-  //     });
-  // }
-  // else {
-    response = await fetch(
-      `${gatewayEndpoint}/create-game/${userID}/${mode}/`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      });
-  // }
+  const response = await fetch(url,
+  {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  });
   if (!response.ok) {
 		throw new Error(`${response.status}`);
 	}
@@ -39,8 +29,6 @@ export async function createGame(mode, tourn_id = null) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 

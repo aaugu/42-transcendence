@@ -35,8 +35,6 @@ async function newConv(conv_nickname) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 

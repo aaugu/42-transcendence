@@ -21,7 +21,5 @@ export async function logout() {
 	}
 	if (responseData !== null) {
 		console.log('LOGOUT SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 }

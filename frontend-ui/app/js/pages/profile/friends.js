@@ -25,8 +25,6 @@ export async function getFriendList(id = null) {
 	if (responseData !== null) {
 		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData.online_statuses;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -56,8 +54,6 @@ export async function addFriend(friend_nickname) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: ADD FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -83,8 +79,6 @@ export async function deleteFriend(friend_id) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: DELETE FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 
 }

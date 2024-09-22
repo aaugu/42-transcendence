@@ -29,8 +29,6 @@ async function allConversations() {
 	if (responseData !== null) {
 		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
