@@ -43,6 +43,8 @@ export async function startGameTournament() {
 		await tournament.launchTournament();
 	}
 
+  console.log("Tourn ID: ", tourn_id);
+
 	if (tournament.game_status === 'In Progress') {
 		t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
 

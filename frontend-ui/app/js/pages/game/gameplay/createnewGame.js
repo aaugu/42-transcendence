@@ -4,6 +4,7 @@ import { errormsg } from "../../../dom/errormsg.js"
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
 export async function createGame(mode, tourn_id = null) {
+  console.log("IN CREATE GAME");
   if (userID === null)
     throw new Error('403');
 
@@ -50,12 +51,13 @@ export function getGameMode(mode) {
 }
 
 export async function getGameID (tourn_id = null) {
+  console.log("IN GET GAME ID");
   const currentUrl = window.location.href;
 
   var mode = currentUrl.split("/")[3];
 
-  console.log("MODE", mode);
   mode = getGameMode(mode);
+  console.log("MODE", mode);
 
   let gameData;
 

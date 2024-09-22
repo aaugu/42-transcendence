@@ -27,6 +27,19 @@ def pong_view(request):
 
     return render(request, "pong_app/pong.html", context)
 
+def join_game(request, joiner_id, game_id):
+    print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
+
+    if not joiner_id or not game_id:
+      return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    GameService.join_game(joiner_id=joiner_id, game_id=game_id)
+
+    curr_game = GameService.get_game(game_id=game_id).to_dict()
+
+    return JsonResponse(curr_game)
+
+
 def create_game(request, creator_id, mode):
     print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
@@ -44,17 +57,22 @@ def create_game(request, creator_id, mode):
 
     return JsonResponse(game.to_dict())
 
-def join_game(request, joiner_id, game_id):
-    print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
+def create_game_tournament(request, creator_id, mode, tournament_id):
+    print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
-    if not joiner_id or not game_id:
-      return JsonResponse({"error": "Missing required parameters"}, status=400)
+    # Vérification des paramètres
+    if not creator_id or not mode:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
 
-    GameService.join_game(joiner_id=joiner_id, game_id=game_id)
+    try:
+        mode = GameMode[mode.upper()]
+    except KeyError:
+        return JsonResponse({"error": "Invalid game mode"}, status=400)
 
-    curr_game = GameService.get_game(game_id=game_id).to_dict()
+    # Création du jeu via un service (hypothétique)
+    game = GameService.create_game_tournament(creator_id, mode, tournament_id)
 
-    return JsonResponse(curr_game)
+    return JsonResponse(game.to_dict())
 
 # @csrf_exempt
 def end_game(request):
