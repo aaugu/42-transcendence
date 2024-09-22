@@ -52,7 +52,6 @@ function resetDataRouteChange() {
 	if (chatSocket) {
 		if (chatSocket.readyState == 1) {
 			chatSocket.close();
-			console.log('LIVE CHAT: Websocket connection closed');
 		}
 	}
 	reset_all_tournaments();

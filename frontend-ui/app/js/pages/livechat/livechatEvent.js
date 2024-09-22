@@ -13,7 +13,6 @@ export async function livechatEvent(e) {
         if (chatSocket) {
 			if (chatSocket.readyState == 1) {
 				chatSocket.close();
-				console.log('LIVE CHAT: Websocket connection closed');
 			}
 		}
 		convHistory(e);
@@ -33,7 +32,6 @@ export async function livechatEvent(e) {
 			if (chatSocket) {
 				if (chatSocket.readyState == 1) {
 					chatSocket.close();
-					console.log('LIVE CHAT: Websocket connection closed');
 				}
 			}
 			newConvButton();
