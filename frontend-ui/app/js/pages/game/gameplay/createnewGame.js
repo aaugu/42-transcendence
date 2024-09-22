@@ -9,18 +9,18 @@ export async function createGame(mode, tourn_id = null) {
 
   var response;
 
-  if (tourn_id) {
-    response = await fetch(
-      `${gatewayEndpoint}/create-game/${userID}/${mode}/${tourn_id}/`,
-      {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      });
-  }
-  else {
+  // if (tourn_id) {
+  //   response = await fetch(
+  //     `${gatewayEndpoint}/create-game/${userID}/${mode}/${tourn_id}/`,
+  //     {
+  //       headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       credentials: 'include'
+  //     });
+  // }
+  // else {
     response = await fetch(
       `${gatewayEndpoint}/create-game/${userID}/${mode}/`,
       {
@@ -30,7 +30,7 @@ export async function createGame(mode, tourn_id = null) {
         },
         credentials: 'include'
       });
-  }
+  // }
   if (!response.ok) {
 		throw new Error(`${response.status}`);
 	}
@@ -53,7 +53,7 @@ export function getGameMode(mode) {
     case "remote-twoplayer":
       return "REMOTE";
     case "tournament-creation":
-      return "TOURNAMENT";
+      return "REMOTE";
     default:
       console.log("Invalid mode");
       return null;
