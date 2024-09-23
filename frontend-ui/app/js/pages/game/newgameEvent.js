@@ -27,12 +27,24 @@ export async function newremotegameEvent(e) {
 }
 
 export async function newtournamentgameEvent(tourn_id) {
-	if (tourn_id) {
-		localStorage.setItem('tourn_id', tourn_id);
-		const newGameId = await getGameID();
-		const new_url = `/tournament/${newGameId}`;
-		hideModal('single-t-modal');
-		urlRoute(new_url);
+	try { // ajouté un try/catch pour empêcher de changer d'url et emmener vers du not found
+		if (tourn_id) {
+			localStorage.setItem('tourn_id', tourn_id);
+			const newGameId = await getGameID();
+			const new_url = `/tournament/${newGameId}`;
+			hideModal('single-t-modal');
+			urlRoute(new_url);
+		}
+	} catch (e) {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+		
+		}else if (e.message === "403") {
+			updateProfile(false, null);
+			errormsg('You were automatically logged out', 'homepage-errormsg');
+		} 
+		else {
+			errormsg("This tournament cannot be started, try again later", 'single-t-modal');
+		}
 	}
-	errormsg("This tournament cannot be started, try again later", 'single-t-modal');
 }

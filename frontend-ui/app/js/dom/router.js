@@ -167,9 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "stats page"
 		},
 		"/join-game": {
-		content: joinGamePage,
-		eventListener: joinGameEvent,
-		description: "join an existing game",
+			content: joinGamePage,
+			eventListener: joinGameEvent,
+			description: "join an existing game",
 		},
     }
 
