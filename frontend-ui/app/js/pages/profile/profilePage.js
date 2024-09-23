@@ -24,7 +24,7 @@ export async function profilePage() {
     catch (e) {
         if (e.message === "403") {
             updateProfile(false, null);
-            errormsg('You were automatically logged out', 'homepage-errormsg');
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
             return '';
         }
         console.log("USER LOG: ", e.message);

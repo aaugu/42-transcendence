@@ -71,7 +71,7 @@ export async function getGameID (tourn_id = null) {
   catch (e) {
     if (e.message === "403") {
       updateProfile(false, null);
-      errormsg('You were automatically logged out', 'homepage-errormsg');
+      errormsg('You were redirected to the landing page', 'homepage-errormsg');
     }
     console.error(`USER LOG: ${e.message}`);
     return null;
