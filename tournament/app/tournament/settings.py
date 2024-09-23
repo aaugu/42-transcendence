@@ -26,13 +26,9 @@ MAX_TOURNAMENT_NAME_LENGTH = 20
 
 MIN_NICKNAME_LENGTH = 3
 MAX_NICKNAME_LENGTH = 20
-HASH_PASSWORD_MAX_LENGTH = 128
 
 MAX_PLAYERS = 16
 MIN_PLAYERS = 2
-
-PASSWORD_MIN_LENGTH = 4
-PASSWORD_MAX_LENGTH = 30
 # fin test ---------------------------
 
 # Quick-start development settings - unsuitable for production

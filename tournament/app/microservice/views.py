@@ -1,7 +1,6 @@
 import json
 import math
 import random
-import datetime
 import requests
 
 from typing import Any, Optional
@@ -11,8 +10,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 from django.views import View
 from django.db.models import Q
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth.hashers import make_password
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -83,7 +80,6 @@ class TournamentUtils:
             'name': tournament.name,
             'max_players': tournament.max_players,
             'nb_players': tournament.players.count(),
-            'is_private': tournament.is_private,
             'type': TournamentUtils.status_to_string(tournament.type),
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
@@ -129,8 +125,8 @@ class GenerateMatchesView(View):
         matches = GenerateMatchesView.generate_matches(players, tournament)
 
         try:
-            tournament.matches.all().delete()           # supprime la memoire
-            Match.objects.bulk_create(matches)          # insère la liste d’objets indiquée dans la base de données de manière efficace
+            tournament.matches.all().delete()
+            Match.objects.bulk_create(matches)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
@@ -397,16 +393,12 @@ class TournamentView(View):
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
         type = json_request.get('type')
-        is_private = json_request.get('is_private')
         user_id = json_request.get('user_id')
         tournament = Tournament(
             name=json_request['name'],
-            is_private=is_private,
             admin_id=user_id
         )
 
-        if is_private:
-            tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
         if type == "remote":
             tournament.type = Tournament.REMOTE
         elif type == "local":
@@ -423,7 +415,7 @@ class TournamentView(View):
                 return JsonResponse({'errors': register_admin_errors}, status=400)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
-        return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
+        return JsonResponse(model_to_dict(tournament), status=201)
 
     @staticmethod
     def delete(request: HttpRequest) -> JsonResponse:
@@ -467,13 +459,7 @@ class TournamentView(View):
     @staticmethod
     def get_filter_params(request: HttpRequest) -> dict:
         filter_params = {}
-
-        if 'display_private' not in request.GET:
-            filter_params['is_private'] = False
-        if 'display_completed' not in request.GET:
-            filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
-        # if 'display_all' not in request.GET:
-        #     filter_params['type__in'] = [Tournament.REMOTE]
+        filter_params['status__in'] = [Tournament.CREATED, Tournament.IN_PROGRESS]
 
         return filter_params
 
@@ -482,22 +468,14 @@ class TournamentView(View):
         errors = []
         name = json_request.get('name')
         max_players = json_request.get('max_players')
-        is_private = json_request.get('is_private')
-        password = json_request.get('password')
 
         valid_name, name_errors = TournamentView.is_valid_name(name)
         valid_max_players, max_players_error = TournamentView.is_valid_max_players(max_players)
-        valid_private, is_private_error = TournamentView.is_valid_private(is_private)
-        valid_password, password_error = TournamentView.is_valid_password(password)
 
         if not valid_name:
             errors.extend(name_errors)
         if not valid_max_players:
             errors.append(max_players_error)
-        if not valid_private:
-            errors.append(is_private_error)
-        if valid_private and is_private and not valid_password:
-            errors.append(password_error)
 
         if errors:
             return False, errors
@@ -530,26 +508,6 @@ class TournamentView(View):
             return False, error.TOO_MANY_SLOTS
         if max_players < settings.MIN_PLAYERS:
             return False, error.NOT_ENOUGH_SLOTS
-        return True, None
-
-    @staticmethod
-    def is_valid_private(is_private: Any) -> tuple[bool, Optional[str]]:
-        if is_private is None:
-            return False, error.IS_PRIVATE_MISSING
-        elif not isinstance(is_private, bool):
-            return False, error.IS_PRIVATE_NOT_BOOL
-        return True, None
-
-    @staticmethod
-    def is_valid_password(password: Any) -> tuple[bool, Optional[str]]:
-        if password is None:
-            return False, error.PASSWORD_MISSING
-        if not isinstance(password, str):
-            return False, error.PASSWORD_NOT_STRING
-        if len(password) < settings.PASSWORD_MIN_LENGTH:
-            return False, error.PASSWORD_TOO_SHORT
-        if len(password) > settings.PASSWORD_MAX_LENGTH:
-            return False, error.PASSWORD_TOO_LONG
         return True, None
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -601,8 +559,7 @@ class TournamentPlayersView(View):
 
         player = Player(nickname=user_nickname, user_id=user_id, tournament=tournament)
 
-        password = json_request.get('password')
-        can_join, error_data = TournamentPlayersView.player_can_join_tournament(player, password, tournament)
+        can_join, error_data = TournamentPlayersView.player_can_join_tournament(player, tournament)
 
         if not can_join:
             return JsonResponse({'errors': [error_data[0]]}, status=error_data[1])
@@ -665,7 +622,7 @@ class TournamentPlayersView(View):
         return True, None
 
     @staticmethod
-    def player_can_join_tournament(new_player: Player, password: Optional[str], tournament: Tournament)\
+    def player_can_join_tournament(new_player: Player, tournament: Tournament)\
             -> tuple[bool, Optional[list[str | int]]]:
         try:
             tournament_players = tournament.players.all()
@@ -675,74 +632,16 @@ class TournamentPlayersView(View):
         if tournament.status != Tournament.CREATED:
             return False, ['The registration phase is over', 403]
 
-        if tournament.is_private and password is None:
-            return False, [error.PASSWORD_MISSING, 400]
-        if tournament.is_private and not check_password(password, tournament.password):   #pour authentifier manuellement un utilisateur en comparant un mot de passe en clair à l’empreinte du mot de passe dans la base de données,
-            return False, [error.PASSWORD_NOT_MATCH, 403]
-
         for player in tournament_players:
             if player.user_id == new_player.user_id:
                 return False, [f'You are already registered as `{player.nickname}` for the tournament', 403]
             elif player.nickname == new_player.nickname:
                 return False, [f'nickname `{player.nickname}` already taken', 400]
 
-        # try:
-        #     user_already_in_tournament = Tournament.objects.filter(
-        #         players__user_id=new_player.user_id,
-        #         status__in=[Tournament.CREATED, Tournament.IN_PROGRESS]
-        #     ).exists()
-        # except Exception as e:
-        #     return False, [f'An unexpected error occurred : {e}', 500]
-
-        # if user_already_in_tournament:
-        #     return False, ['You are already registered for another tournament', 403]
-
         if tournament.max_players <= len(tournament_players):
             return False, ['This tournament is fully booked', 403]
 
         return True, None
-
-""" TournamentlocalView
-@method_decorator(csrf_exempt, name='dispatch')
-class TournamentlocalView(View):
-    @staticmethod
-    def post(request: HttpRequest) -> JsonResponse:
-        try:
-            json_request = json.loads(request.body.decode('utf-8'))
-        except Exception:
-            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
-        user_id = json_request.get('user_id')
-        tournament = Tournament(
-            name=json_request['name'],
-            admin_id=user_id
-        )
-
-        max_players = json_request.get('max_players')
-        if max_players is not None:
-            tournament.max_players = max_players
-        try:
-            test=tournament.save()
-            register_players_errors = TournamentlocalView.register_players_as_player(json_request, tournament)
-            if register_players_errors is not None:
-                tournament.delete()
-                return JsonResponse({'errors': register_players_errors}, status=400)
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-        return JsonResponse(model_to_dict(tournament, exclude=['password']), status=201)
-
-    @staticmethod
-    def register_players_as_player(json_request, tournament: Tournament) -> Optional[list[str]]:
-        player_names = list(json_request.get('player_names'))
-        i=0
-        for name in player_names:
-            player = Player(nickname=name, user_id=i, tournament=tournament)
-            i=+1
-            try:
-                player.save()
-            except Exception as e:
-                return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
-        return None """
 
 @method_decorator(csrf_exempt, name='dispatch')
 class StartTournamentView(View):
@@ -768,7 +667,6 @@ class StartTournamentView(View):
             return JsonResponse(data={'errors': [start_error]}, status=403)
 
         tournament.status = Tournament.IN_PROGRESS
-        tournament.start_datetime = datetime.datetime.now(datetime.UTC)
 
         try:
             tournament.save()
@@ -818,7 +716,6 @@ class ManageTournamentView(View):
                 'nickname': player.nickname,
                 'user_id': player.user_id,
             } for player in tournament_players],
-            'is_private': tournament.is_private,
             'type': TournamentUtils.status_to_string(tournament.type),
             'status': TournamentUtils.status_to_string(tournament.status),
             'admin-id': tournament.admin_id
@@ -858,152 +755,6 @@ class ManageTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse({'message': f'tournament `{tournament_name}` successfully deleted'}, status=200)
-
-    @staticmethod
-    def patch(request: HttpRequest, tournament_id: int) -> JsonResponse:
-        try:
-            body = json.loads(request.body.decode('utf-8'))
-        except Exception:
-            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
-        try:
-            tournament = Tournament.objects.get(id=tournament_id)
-            tournament_players = tournament.players.all()
-        except ObjectDoesNotExist:
-            return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        user_id = body.get('user_id')
-        manage_errors = ManageTournamentView.check_manage_permissions(user_id, tournament)
-        if manage_errors is not None:
-            return JsonResponse(data={'errors': manage_errors}, status=403)
-
-        update_errors = ManageTournamentView.update_tournament_settings(body, tournament, tournament_players)
-        if update_errors:
-            return JsonResponse(data={'errors': update_errors}, status=400)
-
-        try:
-            tournament.save()
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        tournament_data = ManageTournamentView.get_tournament_data(tournament)
-        return JsonResponse(tournament_data, status=200)
-
-    @staticmethod
-    def get_tournament_data(tournament: Tournament) -> dict[str, Any]:
-        tournament_data = {
-            'id': tournament.id,
-            'name': tournament.name,
-            'max_players': tournament.max_players,
-            'is_private': tournament.is_private,
-            'status': TournamentUtils.status_to_string(tournament.status),
-        }
-        return tournament_data
-
-    @staticmethod
-    def check_manage_permissions(user_id: int, tournament: Tournament) -> Optional[list[str]]:
-        if tournament.status != Tournament.CREATED:
-            return ['The tournament has already started, so you cannot update the settings']
-
-        if tournament.admin_id != user_id:
-            return ['You are not the owner of the tournament, so you cannot update the settings']
-
-        return None
-
-    @staticmethod
-    def update_tournament_settings(body: dict, tournament: Tournament, tournament_players) -> Optional[list[str]]:
-        update_errors = []
-
-        new_name_errors = ManageTournamentView.update_tournament_name(body, tournament)
-        new_max_players_error = ManageTournamentView.update_max_players(body, tournament, tournament_players)
-        new_is_private_error = ManageTournamentView.update_is_private(body, tournament)
-        new_password_error = ManageTournamentView.update_password(body, tournament)
-
-        if new_name_errors is not None:
-            update_errors.extend(new_name_errors)
-        if new_max_players_error is not None:
-            update_errors.append(new_max_players_error)
-        if new_is_private_error is not None:
-            update_errors.append(new_is_private_error)
-        if new_password_error is not None:
-            update_errors.append(new_password_error)
-
-        return update_errors
-
-    @staticmethod
-    def update_tournament_name(body: dict, tournament: Tournament) -> Optional[list[str]]:
-        new_name = body.get('name')
-        if new_name is not None:
-            valid_new_name, new_name_errors = TournamentView.is_valid_name(new_name)
-            if not valid_new_name:
-                return new_name_errors
-            else:
-                tournament.name = new_name
-        return None
-
-    @staticmethod
-    def update_max_players(body: dict, tournament: Tournament, tournament_players) -> Optional[str]:
-        new_max_players = body.get('max_players')
-        if new_max_players is not None:
-            valid_new_max_players, new_max_players_error = ManageTournamentView.is_valid_max_players(
-                new_max_players, tournament_players)
-            if not valid_new_max_players:
-                return new_max_players_error
-            else:
-                tournament.max_players = new_max_players
-        return None
-
-
-
-    @staticmethod
-    def update_is_private(body: dict, tournament: Tournament) -> Optional[str]:
-        new_is_private = body.get('is_private')
-        if new_is_private is not None:
-            valid_is_private, is_private_error = TournamentView.is_valid_private(new_is_private)
-            if not valid_is_private:
-                return is_private_error
-            else:
-                tournament.is_private = new_is_private
-        return None
-
-    @staticmethod
-    def is_valid_max_players(new_max_players: Any, tournament_players: Any) -> tuple[bool, Optional[str]]:
-        valid_max_players, max_players_error = TournamentView.is_valid_max_players(new_max_players)
-        if not valid_max_players:
-            return False, max_players_error
-        elif len(tournament_players) > new_max_players:
-            return False, f'You cannot set the max players to {new_max_players} because there are already ' \
-                          f'{len(tournament_players)} players registered'
-        return True, None
-
-    @staticmethod
-    def update_password(body: dict, tournament: Tournament) -> Optional[str]:
-        new_password = body.get('password')
-        valid_password, password_error = TournamentView.is_valid_password(new_password)
-        if tournament.is_private and (tournament.password is None or new_password is not None):
-            if not valid_password:
-                return password_error
-            else:
-                tournament.password = make_password(new_password)
-        return None
-
-@method_decorator(csrf_exempt, name='dispatch')
-class DeleteInactiveTournamentView(View):
-    @staticmethod
-    def delete(request: HttpRequest) -> JsonResponse:
-        limit_datetime = datetime.datetime.now(datetime.UTC) - datetime.timedelta(hours=1)
-        try:
-            in_progress_tournaments = Tournament.objects.filter(
-                status=Tournament.IN_PROGRESS
-            )
-            for tournament in in_progress_tournaments:
-                if tournament.start_datetime < limit_datetime:
-                    tournament.delete()
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-        return JsonResponse({'message': 'Tournament deleted'}, status=200)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class MyTournamentAsPlayerView(View):

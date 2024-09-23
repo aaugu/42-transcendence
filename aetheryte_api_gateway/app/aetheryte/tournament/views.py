@@ -146,25 +146,6 @@ class TournamentPlayersView(APIView):
         else:
             return Response(status=response.status_code)
 
-"""  TournamentlocalView
-class TournamentlocalView(APIView):
-    @staticmethod
-    def post(request: HttpRequest) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
-            return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/local/"
-        json_request = json.loads(request.body.decode('utf-8'))
-        response = requests.post(url = request_url, json = json_request)
-        if response.json() is not None:
-            response_json = response.json()
-            return Response(response_json, status=response.status_code)
-        else:
-
-            return Response(status=response.status_code) 
-"""
-
 class StartTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
@@ -205,36 +186,6 @@ class ManageTournamentView(APIView):
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.delete(url = request_url, json = json_request)
-        if response.json() is not None:
-            response_json = response.json()
-            return Response(response_json, status=response.status_code)
-        else:
-            return Response(status=response.status_code)
-        
-    @staticmethod
-    def patch(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
-            return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
-        json_request = json.loads(request.body.decode('utf-8'))
-        response = requests.patch(url = request_url, json = json_request)
-        if response.json() is not None:
-            response_json = response.json()
-            return Response(response_json, status=response.status_code)
-        else:
-            return Response(status=response.status_code)
-
-class DeleteInactiveTournamentView(APIView):
-    @staticmethod
-    def delete(request: HttpRequest) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
-            return Response('errors: access denied', status=403)
-        request_url = "http://172.20.2.2:10000/tournament/delete_inactive/"
-        response = requests.delete(url = request_url)
         if response.json() is not None:
             response_json = response.json()
             return Response(response_json, status=response.status_code)

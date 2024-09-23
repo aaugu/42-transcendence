@@ -16,11 +16,8 @@ class Tournament(models.Model):
     name = models.CharField(max_length=settings.MAX_TOURNAMENT_NAME_LENGTH)
     admin_id = models.IntegerField(default=0)
     max_players = models.IntegerField(default=16, blank=True)
-    is_private = models.BooleanField(default=False)
-    password = models.CharField(max_length=settings.HASH_PASSWORD_MAX_LENGTH, blank=True, null=True)
     status = models.IntegerField(default=CREATED)
     type = models.IntegerField(default=LOCAL)
-    start_datetime = models.DateTimeField(null=True)
 
 
 class Player(models.Model):
@@ -40,5 +37,3 @@ class Match(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE, related_name='matches')
     match_id = models.IntegerField()
     status = models.IntegerField(default=NOT_PLAYED)
-    # player_1_score = models.IntegerField(null=True)
-    # player_2_score = models.IntegerField(null=True)
