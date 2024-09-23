@@ -26,8 +26,6 @@ export async function getConvHistory(conv_id) {
 	if (responseData !== null) {
 		console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -38,9 +36,11 @@ export async function convHistory(e) {
         const conv_id = targetElement ? targetElement.dataset.convid : null;
 		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 
+		const ctc_nickname = secondTargetElement.innerText;
+
 		const response = await getConvHistory(conv_id);
 		set_contact_blacklisted(response.contact_blacklisted);
-		displayChatInterface(ctc_id);
+		displayChatInterface(ctc_id, ctc_nickname);
 		displayMessages(response);
 
 		if (conv_id && response.users.length == 2)

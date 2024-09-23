@@ -35,8 +35,6 @@ async function newConv(conv_nickname) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -51,10 +49,10 @@ export async function newConvButton() {
 		updateConvList();
 		const users = history.users;
 		if (users.length === 2 && users[0].id === userID) {
-			displayChatInterface(users[1].id);
+			displayChatInterface(users[1].id, conv_nickname);
 		}
 		else {
-			displayChatInterface(users[0].id);
+			displayChatInterface(users[0].id, conv_nickname);
 		}
 		startLivechat(conv_id, response);
 		displayMessages(history);
