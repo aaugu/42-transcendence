@@ -31,6 +31,7 @@ export function signupPage() {
         </div>
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="signup-submit">Sign up</button>
+            <p class="hidden m-2 text-danger" id="signup-errormsg"></p>
         </row>
     </div>
     `;

@@ -16,6 +16,10 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 		}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.detail)
@@ -94,7 +98,11 @@ export async function twoFactorAuthLoginButton() {
 		urlRoute('/profile');
 	}
 	catch (e) {
-		errormsg('Invalid verification code', 'login-twoFA-errormsg');
+		if (e.message === "502") {
+			errormsg('Service temporarily unavailable', 'login-twoFA-errormsg');
+		} else {
+			errormsg('Invalid verification code', 'login-twoFA-errormsg');
+		}
 		console.log(`USER LOG: ${e.message}`);
 	}
 }
