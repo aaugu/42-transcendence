@@ -25,6 +25,7 @@ import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent, newremotegameEvent, newAIgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
+import { userID } from "../pages/user/updateProfile.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -196,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		resetDataRouteChange();
 		setUserID();
         var currentRoute = window.location.pathname;
-        if (currentRoute.length == 0 ) {
+        if (currentRoute.length == 0) {
 			currentRoute = "/";
 			window.history.pushState({}, '', currentRoute);
 		}
