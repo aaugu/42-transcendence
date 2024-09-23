@@ -25,6 +25,7 @@ export async function notifications() {
             await newConvButton();
         }
         updateConvList(); 
+        document.getElementById("livechat-page").classList.remove("d-none");
     } catch (e) {
         if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();

@@ -1,7 +1,7 @@
 export async function livechatPage() {
 
     return `
-    <div class="content-box d-flex">
+    <div class="content-box d-flex d-none" id="livechat-page">
         <div id="livechat" class="row m-2 rounded-end rounded-3" style="min-height: 75%;">
             <div class="col-lg-4 d-flex flex-column">
                 <div id="livechat-menu" class="w-100 rounded-end rounded-3">
