@@ -14,13 +14,9 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
       socket.send(JSON.stringify(direction));
     }, 50);
 
-    console.log(`Current Gane State: ${JSON.stringify(gameState.current)}`);
-
     const gameMode = window.location.pathname.split("/")[1];
-    console.log("GAME MODE", gameMode);
-    const isRemoteGame =
+    const isRemoteGame = 
       gameMode === "remote-twoplayer" || gameMode === "join-game";
-    console.log("IS REMOTE GAME", isRemoteGame);
 
     const keyActionMap = {
       [controllerLeftUp]: { direction_left_paddle: "up" },

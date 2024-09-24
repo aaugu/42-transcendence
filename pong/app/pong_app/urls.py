@@ -20,7 +20,7 @@ from .views import (
 urlpatterns = [
     path("pong/", pong_view, name="pong"),
     path("create-game/<creator_id>/<mode>/", create_game, name='create_game'),
-    path("create-game-tournament/<creator_id>/<mode>/<tournament_id>/", create_game_tournament, name='create_game_tournament'),
+    path("create-game-tournament/<player_one_id>/<player_two_id>/<mode>/", create_game_tournament, name='create_game_tournament'),
     path("end-game/", end_game, name='end_game'),
     path("join-game/<joiner_id>/<game_id>/", join_game, name='join_game'),
     path("retrieve_last_games/<user_id>/<nb_of_games>", retrieve_last_games, name='retrieve_last_games')

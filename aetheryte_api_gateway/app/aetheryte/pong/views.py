@@ -11,18 +11,14 @@ def create_game(request, creator_id, mode):
     response = requests.get(f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/")
     return JsonResponse(response.json(), status=response.status_code)
 
-def create_game_tournament(request, creator_id, mode, tournament_id):
-    response = requests.get(f"{PONG_SERVICE_URL}/create-game-tournament/{creator_id}/{mode}/{tournament_id}/")
+def create_game_tournament(request, player_one_id, player_two_id, mode):
+    response = requests.get(f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/")
     return JsonResponse(response.json(), status=response.status_code)
 
 def join_game(request, joiner_id, game_id):
     response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
     return JsonResponse(response.json(), status=response.status_code)
 
-# @csrf_exempt
-# def end_game(request):
-#     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
-#     return JsonResponse(response.json(), status=response.status_code)
 @csrf_exempt
 def end_game(request):
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
