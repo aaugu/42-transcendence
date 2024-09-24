@@ -41,7 +41,7 @@ export async function newtournamentgameEvent(tourn_id) {
 		
 		}else if (e.message === "403") {
 			updateProfile(false, null);
-			errormsg('You were automatically logged out', 'homepage-errormsg');
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		} 
 		else {
 			errormsg("This tournament cannot be started, try again later", 'single-t-modal');

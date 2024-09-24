@@ -34,7 +34,5 @@ export async function getUserInfo(id = null) {
     if (responseData !== null) {
         console.log("USER LOG: GET USER INFO SUCCESSFUL");
         return responseData;
-    } else {
-        throw new Error('No response from server');
     }
 }

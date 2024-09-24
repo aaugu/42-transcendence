@@ -27,8 +27,6 @@ async function joinTournament(nickname, tournament_id) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: JOIN TOURNAMENT SUCCESSFUL');
-	} else {
-		throw new Error(`${response.status}`);
 	}
 }
 

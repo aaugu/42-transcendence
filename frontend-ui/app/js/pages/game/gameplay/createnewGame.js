@@ -24,8 +24,6 @@ export async function createGame(mode) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 

@@ -38,8 +38,6 @@ export async function editUserInfo(infoType, newInfo) {
         const responseData = await response.json();
         if (responseData !== null) {
             console.log("USER LOG: USER EDIT SUCCESSFUL");
-        } else {
-            throw new Error('No response from server');
         }
     } catch (e) {
         console.log(e);

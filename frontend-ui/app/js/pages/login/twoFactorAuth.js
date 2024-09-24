@@ -32,8 +32,6 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	if (responseData !== null) {
 		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
 		return responseData;
-	} else {
-		throw new Error(`${response.status}`);
 	}
 }
 
