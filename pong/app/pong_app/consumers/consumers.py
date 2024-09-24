@@ -118,14 +118,14 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def game_loop(self):
         while True:
-            if PongConsumer.games[self.game_id].mode == "REMOTE":
+            if PongConsumer.games[self.game_id].mode == GameMode.REMOTE:
                 PongConsumer.games[self.game_id].game_state.start()
 
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()
 
             if PongConsumer.games[self.game_id].game_state.finished:
-                print(f"Game {self.game_id} finished")
+                print(f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}")
 
                 winner_id, loser_id = self.determine_winner_loser()
 
@@ -139,14 +139,16 @@ class PongConsumer(AsyncWebsocketConsumer):
                     },
                 )
 
-                if PongConsumer.games[self.game_id].mode == "TOURNAMENT":
+                if PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT:
+                    print(f"Game {self.game_id} is a tournament game, a end game message will be sent")
 
                     # Delay 3 seconds before reseting the game
                     await asyncio.sleep(5)
                     PongConsumer.games[self.game_id].game_state.reset_score()
                     PongConsumer.games[self.game_id].game_state.finished = False
 
-                break
+                else:
+                    break
 
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -156,7 +158,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 },
             )
 
-            await asyncio.sleep(1 / 60)
+            await asyncio.sleep(1 / 120)
 
     async def game_state_update(self, event):
         game_state = event["game_state"]
