@@ -1,9 +1,5 @@
-import createWebSocketConnection from '../gameplay/WebSocketConnection.js'
 import handleButtons from '../gameplay/HandleButtons.js';
 import handleKeyPress from '../gameplay/HandleKeyPress.js';
-import updateGameState from '../gameplay/GameDraw.js';
-import throttle from '../gameplay/Throttle.js';
-import { canvasWidth, canvasHeight } from '../gameplay/GameConstants.js';
 import { Tournament } from './tournamentClass.js';
 import { displayGame } from '../gameplay/displayGame.js';
 import { handleWebsocketTournament } from '../gameplay/handleWebsocket.js';
