@@ -55,7 +55,6 @@ export async function convHistory(e) {
         }
 		if (e.message === "500" || e.message === "502") {
 			document.getElementById('conversation').innerHTML = error500();
-			// errormsg("Service temporarily unavailable", "livechat-conversation-errormsg"); // permettrait de continuer à discuter si le service a planté pendant qu'on était dans une conversation
 			return ;
 		}
         console.error("USER LOG: ", e.message);
