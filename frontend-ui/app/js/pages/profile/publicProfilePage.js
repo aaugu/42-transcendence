@@ -1,3 +1,4 @@
+import { error500 } from "../errorpage/error500.js";
 import { getUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
 
@@ -22,6 +23,8 @@ export async function publicProfilePage() {
         localStorage.removeItem('ctc_id');
     }
     catch (e) {
+        if (e.message == "502")
+            return error500();
         console.log("USER LOG: ", e.message);
     }
 

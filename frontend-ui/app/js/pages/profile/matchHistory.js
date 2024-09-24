@@ -16,7 +16,7 @@ export async function matchHistory (id = null) {
 	});
 	if (!response.ok) {
 		if (response.status === 500 || response.status === 502)
-			throw new Error('Server error');
+			throw new Error(`${response.status}`);
 		const data = await response.json();
 		if (data.errors)
 			throw new Error(`${responseData.errors}`);
