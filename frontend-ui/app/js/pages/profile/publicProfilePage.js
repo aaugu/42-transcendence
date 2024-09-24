@@ -5,7 +5,7 @@ export async function publicProfilePage() {
     var username = "Guest";
     var nickname = "Guest-nickname";
     var email = "Guest-email";
-    var avatar = "/images/default_avatar.png";
+    var avatar = "images/default_avatar.png";
     var friends_html = '';
 
     const user_id = localStorage.getItem('ctc_id');
