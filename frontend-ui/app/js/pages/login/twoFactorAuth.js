@@ -33,7 +33,7 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
 		return responseData;
 	} else {
-		throw new Error('USER LOG: No response from server');
+		throw new Error(`${response.status}`);
 	}
 }
 
@@ -72,9 +72,9 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 		}
 		catch (e) {
 			if (e.message === "502")
-				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
+				errormsg("Service temporarily unavailable", "deactivate2fa-errormsg");
 			else
-				errormsg("Unable to change 2FA", "activate2fa-errormsg");
+				errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
 			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');
