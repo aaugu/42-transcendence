@@ -1,11 +1,12 @@
 import { userID } from "./updateProfile.js";
 
-export async function getUserInfo() {
-    if (userID === null)
+export async function getUserInfo(id = null) {
+    const user_id = id || userID;
+    if (user_id === null)
         throw new Error ("403");
 	const url = 'https://localhost:10443/api/user/';
 
-    const response = await fetch(url + userID + '/', {
+    const response = await fetch(url + user_id + '/', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',

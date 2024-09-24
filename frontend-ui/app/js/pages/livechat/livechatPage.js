@@ -21,6 +21,7 @@ export async function livechatPage() {
                     <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
                     <div class="h6 text-center">Select a contact to start a conversation or invite someone for a Pong Game</div>
                 </div>
+                <a id="ctc-nickname" class="hidden" href=""></a>
                 <ul id="chat-msgs"class="row list-unstyled custom-scrollbar flex-grow-1 text-white
                         w-100 mb-2"></ul>
                 <div class="d-flex align-items-center">

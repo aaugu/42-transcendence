@@ -45,7 +45,7 @@ export async function updateTournLists() {
         }
         if (e.message === "403") {
             updateProfile(false, null);
-            errormsg('You were automatically logged out', 'homepage-errormsg');
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
             return ;
         }
         console.error('USER LOG: ', e.message);

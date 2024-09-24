@@ -48,7 +48,5 @@ export async function editPassword(newPassword, repeatNewPassword, oldPassword) 
 	}
 	if (responseData !== null) {
 		console.log("USER LOG: USER EDIT SUCCESSFUL");
-	} else {
-		throw new Error(`${response.status}`);
 	}
 }

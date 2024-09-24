@@ -18,18 +18,16 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-    if (!response.ok) {
-        if (response.status === 404)
-            throw new Error('Conversation could not be found');
-        throw new Error(`${response.status}`);
-    }
-    const responseData = await response.json();
-    if (responseData !== null) {
-        console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
-        return responseData;
-    } else {
-        throw new Error('No response from server');
-    }
+	if (!response.ok) {
+		if (response.status === 404)
+			throw new Error('Conversation could not be found');
+		throw new Error(`${response.status}`);
+	}
+	const responseData = await response.json();
+	if (responseData !== null) {
+		console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
+		return responseData;
+	}
 }
 
 export async function convHistory(e) {
@@ -39,10 +37,12 @@ export async function convHistory(e) {
         const conv_id = targetElement ? targetElement.dataset.convid : null;
         const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 
-        const response = await getConvHistory(conv_id);
-        set_contact_blacklisted(response.contact_blacklisted);
-        displayChatInterface(ctc_id);
-        displayMessages(response);
+		const ctc_nickname = secondTargetElement.innerText;
+
+		const response = await getConvHistory(conv_id);
+		set_contact_blacklisted(response.contact_blacklisted);
+		displayChatInterface(ctc_id, ctc_nickname);
+		displayMessages(response);
 
         if (conv_id && response.users.length == 2)
             startLivechat(conv_id, response);
@@ -50,7 +50,7 @@ export async function convHistory(e) {
     catch (e) {
         if (e.message === "403") {
             updateProfile(false, null);
-            errormsg('You were automatically logged out', 'homepage-errormsg');
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
             return ;
         }
         if (e.message === "500" || e.message === "502") {
