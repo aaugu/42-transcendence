@@ -13,6 +13,10 @@ export async function logout() {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.Detail)

@@ -16,6 +16,10 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 		}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.detail)
@@ -28,8 +32,6 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	if (responseData !== null) {
 		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
 		return responseData;
-	} else {
-		throw new Error('USER LOG: No response from server');
 	}
 }
 
@@ -50,7 +52,10 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 		}
 		catch (e) {
 			console.log(`USER LOG: ${e.message}`);
-			errormsg("Unable to change 2FA", "activate2fa-errormsg");
+			if (e.message === "502")
+				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
+			else
+				errormsg("Unable to change 2FA", "activate2fa-errormsg");
 		}
 		hideModal('activate-2fa-modal');
 
@@ -64,7 +69,10 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
-			errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
+			if (e.message === "502")
+				errormsg("Service temporarily unavailable", "deactivate2fa-errormsg");
+			else
+				errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
 			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');
@@ -88,7 +96,11 @@ export async function twoFactorAuthLoginButton() {
 		urlRoute('/profile');
 	}
 	catch (e) {
-		errormsg('Invalid verification code', 'login-twoFA-errormsg');
+		if (e.message === "502") {
+			errormsg('Service temporarily unavailable', 'login-twoFA-errormsg');
+		} else {
+			errormsg('Invalid verification code', 'login-twoFA-errormsg');
+		}
 		console.log(`USER LOG: ${e.message}`);
 	}
 }

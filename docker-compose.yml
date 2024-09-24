@@ -13,6 +13,7 @@ volumes:
     # Tournament
     tournament_postgres_volume:
         driver: local
+    # Pong
     pong_postgres_volume:
         driver: local
     # Live chat

@@ -1,7 +1,8 @@
 import { getUserInfo } from "../user/getUserInfo.js"
-import { updateFriendList } from "./friends.js"
+import { clearFriendListRefresh, updateFriendList } from "./friends.js"
 import { updateProfile } from "../user/updateProfile.js"
 import { errormsg } from "../../dom/errormsg.js"
+import { error500 } from "../errorpage/error500.js";
 
 export async function profilePage() {
     var username = "Guest";
@@ -20,8 +21,15 @@ export async function profilePage() {
         is_2fa_enabled = userinfo.is_2fa_enabled;
 
         friends_html = await updateFriendList();
+        
+        localStorage.setItem('avatar', avatar);
+        localStorage.setItem('nickname', nickname);
     }
     catch (e) {
+        if (e.message === "502") {
+            clearFriendListRefresh();
+            return error500();
+        }
         if (e.message === "403") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
@@ -30,8 +38,6 @@ export async function profilePage() {
         console.log("USER LOG: ", e.message);
     }
 
-    localStorage.setItem('avatar', avatar);
-    localStorage.setItem('nickname', nickname);
 
     return `
     <h2 class="text-bold display-6"></h2>
@@ -62,68 +68,68 @@ export async function profilePage() {
                 </div>
             </div>
 
-			<!-- Edit Modal -->
-			<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="edit-modal-label">Edit user info</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
+            <!-- Edit Modal -->
+            <div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="edit-modal-label">Edit user info</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
                         <form id="editForm"></form>
                         <p class="hidden m-2 text-danger" id="editmodal-errormsg"></p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-dark" id="edit-save">Save</button>
-					</div>
-				</div>
-				</div>
-			</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-dark" id="edit-save">Save</button>
+                    </div>
+                </div>
+                </div>
+            </div>
 
             <div id="2fa" class="content-box clearfix">
                 <h5 class="m-2">2fa authentication</h5>
-				<button type="button" class="btn ${is_2fa_enabled ? "btn-outline-danger" : "btn-outline-success"}" data-bs-toggle="modal"
-				data-bs-target=${is_2fa_enabled ? "#deactivate-2fa-modal" : "#activate-2fa-modal"} id="2fa-profile-btn">${is_2fa_enabled ? "Deactivate" : "Activate"}</button>
+                <button type="button" class="btn ${is_2fa_enabled ? "btn-outline-danger" : "btn-outline-success"}" data-bs-toggle="modal"
+                data-bs-target=${is_2fa_enabled ? "#deactivate-2fa-modal" : "#activate-2fa-modal"} id="2fa-profile-btn">${is_2fa_enabled ? "Deactivate" : "Activate"}</button>
 
-				<!-- 2FA Modals -->
-				<div class="modal fade" id="activate-2fa-modal" tabindex="-1" aria-labelledby="activate-2fa" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h1 class="modal-title fs-5" id="activate-2fa">Activate 2FA</h1>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<p>You will be prompted to log in again. Are you sure?</p>
+                <!-- 2FA Modals -->
+                <div class="modal fade" id="activate-2fa-modal" tabindex="-1" aria-labelledby="activate-2fa" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="activate-2fa">Activate 2FA</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You will be prompted to log in again. Are you sure?</p>
                                 <p class="hidden m-2 text-danger" id="activate2fa-errormsg"></p>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
-								<button type="button" class="btn btn-dark" id="confirm-2fa-activation">Yes</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="modal fade" id="deactivate-2fa-modal" tabindex="-1" aria-labelledby="deactivate-2fa" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h1 class="modal-title fs-5" id="deactivate-2fa">Deactive 2FA</h1>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-							</div>
-							<div class="modal-body">
-								<p>Are you sure?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-dark" id="confirm-2fa-activation">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="deactivate-2fa-modal" tabindex="-1" aria-labelledby="deactivate-2fa" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="deactivate-2fa">Deactive 2FA</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure?</p>
                                 <p class="hidden m-2 text-danger" id="deactivate2fa-errormsg"></p>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
-								<button type="button" class="btn btn-dark" id="confirm-2fa-deactivation">Yes</button>
-							</div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-lightgrey" data-bs-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-dark" id="confirm-2fa-deactivation">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="column-right">
@@ -166,4 +172,3 @@ export async function profilePage() {
     </row>
     `;
 }
-

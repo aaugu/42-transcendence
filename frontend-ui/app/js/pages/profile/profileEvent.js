@@ -33,8 +33,12 @@ export async function profileEvent(e) {
 				const friends_html = await updateFriendList();
 				friendList.innerHTML = friends_html;
 			} catch (e) {
+				if (e.message === "502") {
+					errormsg("Service temporarily unavailable", "friendlist-errormsg");
+					break;
+				}
 				console.log("USER LOG: ", e.message);
-				errormsg('User not found','friendlist-errormsg');
+				errormsg(e.message, 'friendlist-errormsg');
 			}
 			break;
 		case "unfriend-btn":
@@ -46,6 +50,10 @@ export async function profileEvent(e) {
 				friendList.innerHTML = friends_html;
 			}
 			catch (e) {
+				if (e.message === "502") {
+					errormsg("Service temporarily unavailable", "friendlist-errormsg");
+					break;
+				}
 				console.log("USER LOG: ", e.message);
 			}
 		default:
