@@ -34,14 +34,14 @@ export function handleWebsocketGame(socket, canvas, gameState) {
         updateGameState(data.game_state, canvas);
       }
 
+      if (data.player_disconnect) {
+        console.log(data.message)
+        console.log("Remaining player:", data.remaining_player);
+        console.log("Disconnected player:", data.player_id);
+      }
+
       if (data.game_finished) {
         console.log("Game Finished", data.game_finished);
-        // console.log(
-        //   `Paddle Left played_id, ${data.game_state.paddles[0].player_id}, score: ${data.game_state.score[0]}`
-        // );
-        // console.log(
-        //   `Paddle Right played_id, ${data.game_state.paddles[1].player_id}, score: ${data.game_state.score[1]}`
-        // );
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
         console.log("GameID", data.game.game_id);
