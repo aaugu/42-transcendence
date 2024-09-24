@@ -57,11 +57,11 @@ def create_game(request, creator_id, mode):
 
     return JsonResponse(game.to_dict())
 
-def create_game_tournament(request, creator_id, mode, tournament_id):
-    print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
+def create_game_tournament(request, player_one_id, player_two_id, mode):
+    print(f'Received request to create tournament game with player_one_id: {player_one_id}, player_two_id: {player_two_id} and mode: {mode}')
 
     # Vérification des paramètres
-    if not creator_id or not mode:
+    if not player_one_id or not player_two_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
 
     try:
@@ -70,7 +70,7 @@ def create_game_tournament(request, creator_id, mode, tournament_id):
         return JsonResponse({"error": "Invalid game mode"}, status=400)
 
     # Création du jeu via un service (hypothétique)
-    game = GameService.create_game_tournament(creator_id, mode, tournament_id)
+    game = GameService.create_game_tournament(player_two_id, player_two_id, mode)
 
     return JsonResponse(game.to_dict())
 

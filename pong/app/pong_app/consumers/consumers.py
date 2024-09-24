@@ -35,12 +35,16 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Check connection limits based on game mode
         if game_mode == GameMode.LOCAL_TWO_PLAYERS:
             if PongConsumer.user_per_room[self.game_id] > 0:
-                print(f"LOCAL_TWO_PLAYERS game {self.game_id} already has a connection. Rejecting new connection.")
+                print(
+                    f"LOCAL_TWO_PLAYERS game {self.game_id} already has a connection. Rejecting new connection."
+                )
                 await self.close()
                 return
         elif game_mode == GameMode.TOURNAMENT:
             if PongConsumer.user_per_room[self.game_id] > 0:
-                print(f"TOURNAMENT game {self.game_id} is full. Rejecting new connection.")
+                print(
+                    f"TOURNAMENT game {self.game_id} is full. Rejecting new connection."
+                )
                 await self.close()
                 return
         elif game_mode == GameMode.REMOTE:
@@ -51,12 +55,20 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         # Increment user count for the game
         if PongConsumer.user_per_room[self.game_id] == 0 and GameMode.REMOTE:
-            self.player_id = game.game_state.paddles[0].player_id  # Track the player in self
-            PongConsumer.players_in_game[self.game_id] = game.game_state.paddles[0].player_id
+            self.player_id = game.game_state.paddles[
+                0
+            ].player_id  # Track the player in self
+            PongConsumer.players_in_game[self.game_id] = game.game_state.paddles[
+                0
+            ].player_id
         elif PongConsumer.user_per_room[self.game_id] == 1 and GameMode.REMOTE:
-            self.player_id = game.game_state.paddles[1].player_id  # Track the player in self
-            PongConsumer.players_in_game[self.game_id] = game.game_state.paddles[1].player_id
-        
+            self.player_id = game.game_state.paddles[
+                1
+            ].player_id  # Track the player in self
+            PongConsumer.players_in_game[self.game_id] = game.game_state.paddles[
+                1
+            ].player_id
+
         PongConsumer.user_per_room[self.game_id] += 1
 
         print(f"Consumer players in game: {PongConsumer.players_in_game}")
@@ -81,7 +93,9 @@ class PongConsumer(AsyncWebsocketConsumer):
                 "player_id": self.player_id,
                 "message": f"Player {self.player_id} has disconnected",
             }
-            await self.channel_layer.group_send(self.room_group_name, disconnection_message)
+            await self.channel_layer.group_send(
+                self.room_group_name, disconnection_message
+            )
 
         # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -116,6 +130,50 @@ class PongConsumer(AsyncWebsocketConsumer):
         elif start_stop_reset == "reset":
             PongConsumer.games[self.game_id].game_state.reset_score()
 
+    # async def game_loop(self):
+    #     while True:
+    #         if PongConsumer.games[self.game_id].mode == GameMode.REMOTE:
+    #             PongConsumer.games[self.game_id].game_state.start()
+
+    #         # Update de the game_state
+    #         PongConsumer.games[self.game_id].game_state.update()
+
+    #         if PongConsumer.games[self.game_id].game_state.finished:
+    #             print(f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}")
+
+    #             winner_id, loser_id = self.determine_winner_loser()
+
+    #             await self.channel_layer.group_send(
+    #                 self.room_group_name,
+    #                 {
+    #                     "type": "game_finished",
+    #                     "winner_id": winner_id,
+    #                     "loser_id": loser_id,
+    #                     "game": PongConsumer.games[self.game_id].to_dict(),
+    #                 },
+    #             )
+
+    #             if PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT:
+    #                 print(f"Game {self.game_id} is a tournament game, a end game message will be sent")
+
+    #                 # Delay 3 seconds before reseting the game
+    #                 await asyncio.sleep(5)
+    #                 PongConsumer.games[self.game_id].game_state.reset_score()
+    #                 PongConsumer.games[self.game_id].game_state.finished = False
+
+    #             else:
+    #                 break
+
+    #         await self.channel_layer.group_send(
+    #             self.room_group_name,
+    #             {
+    #                 "type": "game_state_update",
+    #                 "game_state": PongConsumer.games[self.game_id].game_state.to_dict(),
+    #             },
+    #         )
+
+    #         await asyncio.sleep(1 / 120)
+
     async def game_loop(self):
         while True:
             if PongConsumer.games[self.game_id].mode == GameMode.REMOTE:
@@ -125,7 +183,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             PongConsumer.games[self.game_id].game_state.update()
 
             if PongConsumer.games[self.game_id].game_state.finished:
-                print(f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}")
+                print(
+                    f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"
+                )
 
                 winner_id, loser_id = self.determine_winner_loser()
 
@@ -139,16 +199,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     },
                 )
 
-                if PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT:
-                    print(f"Game {self.game_id} is a tournament game, a end game message will be sent")
-
-                    # Delay 3 seconds before reseting the game
-                    await asyncio.sleep(5)
-                    PongConsumer.games[self.game_id].game_state.reset_score()
-                    PongConsumer.games[self.game_id].game_state.finished = False
-
-                else:
-                    break
+                break
 
             await self.channel_layer.group_send(
                 self.room_group_name,
