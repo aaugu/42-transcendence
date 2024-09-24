@@ -2,12 +2,13 @@ import { userID } from "../user/updateProfile.js";
 
 let friendListRefreshInterval;
 
-export async function getFriendList() {
-    if (userID === null) {
+export async function getFriendList(id = null) {
+	const user_id = id || userID;
+    if (user_id === null) {
         throw new Error('Could not find user ID');
     }
 
-    const response = await fetch('https://localhost:10443/api/user/' + userID + '/friends/status', {
+    const response = await fetch('https://localhost:10443/api/user/' + user_id + '/friends/status', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -24,13 +25,10 @@ export async function getFriendList() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData.online_statuses;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
 export async function addFriend(friend_nickname) {
-    console.log("in add friend");
     if (userID === null) {
         throw new Error('Could not find user ID');
     }
@@ -55,8 +53,6 @@ export async function addFriend(friend_nickname) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: ADD FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -82,27 +78,38 @@ export async function deleteFriend(friend_id) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: DELETE FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 
 }
 
-export async function updateFriendList() {
+export async function updateFriendList(id = null) {
     var friends_html = '';
     try {
-        const friends = await getFriendList();
-        friends.forEach (friend => {
-            friends_html += `
-            <li class="list-group-item">
-                <span>${friend.nickname}</span>
-                <div class="align-content-end">
-                    <button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">unfriend</button>
-                    <span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
-                </div>
-            </li>
-            `;
-        });
+        const friends = await getFriendList(id);
+		if (id) {
+			friends.forEach (friend => {
+				friends_html += `
+				<li class="list-group-item">
+					<span>${friend.nickname}</span>
+					<div class="align-content-end">
+						<span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
+					</div>
+				</li>
+				`;
+			});
+		} else {
+			friends.forEach (friend => {
+				friends_html += `
+				<li class="list-group-item">
+					<span>${friend.nickname}</span>
+					<div class="align-content-end">
+						<button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">unfriend</button>
+						<span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
+					</div>
+				</li>
+				`;
+			});
+		}
     }
     catch (e) {
         console.log("USER LOG: ", e.message);

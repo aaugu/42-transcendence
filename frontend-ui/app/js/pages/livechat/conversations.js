@@ -29,8 +29,6 @@ async function allConversations() {
 	if (responseData !== null) {
 		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -72,7 +70,7 @@ export async function get_all_conv() {
 		all_conversations = [];
 		if (e.message === "403") {
             updateProfile(false, null);
-			errormsg('You were automatically logged out', 'homepage-errormsg');
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return ;
         }
 		console.error("USER LOG: ", e.message);
