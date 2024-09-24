@@ -29,7 +29,6 @@ export async function getFriendList(id = null) {
 }
 
 export async function addFriend(friend_nickname) {
-    console.log("in add friend");
     if (userID === null) {
         throw new Error('Could not find user ID');
     }
