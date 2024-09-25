@@ -35,20 +35,53 @@ export function handleWebsocketGame(socket, canvas, gameState) {
       }
 
       if (data.player_disconnect) {
-        console.log(data.message)
+        console.log(data.message);
         console.log("Remaining player:", data.remaining_player);
         console.log("Disconnected player:", data.player_id);
+        console.log("GameID", data.game_id);
+        self.close();
+
+        let url = "https://localhost:10443/api/pong/end-game/";
+
+        let formData = new FormData();
+        formData.append("winner_id", data.remaining_player);
+        formData.append("loser_id", data.player_id);
+        formData.append("game_id", data.game_id);
+
+        fetch(url, {
+          method: "POST",
+          body: formData,
+          credentials: "include",
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((text) => {
+                throw new Error(
+                  `Request failed with status ${response.status}: ${text}`
+                );
+              });
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Game Ended Due to Deconnexion", data);
+          })
+          .catch((error) => {
+            console.error("Error during fetch:", error);
+          });
       }
 
       if (data.game_finished) {
         console.log("Game Finished", data.game_finished);
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
-        console.log("GameID", data.game.game_id);
+        console.log("GameID", data.game_id);
         let url = "https://localhost:10443/api/pong/end-game/";
 
         let formData = new FormData();
-        formData.append("winner_id", data.winner_id);
+        if (data.winner_id !== null) {
+          formData.append("winner_id", data.winner_id);
+        }
         if (data.loser_id !== null) {
           formData.append("loser_id", data.loser_id);
         }
@@ -128,10 +161,11 @@ export function handleWebsocketTournament(
         console.log("Game Finished", data.game_finished);
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
-        const winner =
-          data.winner_id === 1
-            ? tournament.current_match.player_1
-            : tournament.current_match.player_2;
+        const winner = data.winner_id ===
+          tournament.current_match.player_1 ? tournament.current_match.player_1 : tournament.current_match.player_2;
+          // data.winner_id === 1
+          //   ? tournament.current_match.player_1
+          //   : tournament.current_match.player_2;
 
         console.log("Winner", winner);
         await tournament.updateMatchCycle(winner.user_id);

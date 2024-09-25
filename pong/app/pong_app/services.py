@@ -35,6 +35,7 @@ class GameService:
 
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
+        # print(f"Created game {game_id} with user {creator_id}")
 
         print(
             f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}"
@@ -166,7 +167,8 @@ class GameService:
     def get_user_games(user_id):
         games = Games.objects.filter(
             Q(creator_id=user_id) | Q(joiner_id=user_id),
-            Q(mode="TOURNAMENT") | Q(mode="REMOTE")
+            Q(mode="TOURNAMENT") | Q(mode="REMOTE"),
+            status="FINISHED"
         ).order_by("-created_at")
 
         return games

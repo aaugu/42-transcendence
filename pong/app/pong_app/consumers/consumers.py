@@ -24,6 +24,10 @@ class PongConsumer(AsyncWebsocketConsumer):
         game = PongConsumer.games[self.game_id]
         game_mode = PongConsumer.games[self.game_id].mode
 
+        if PongConsumer.games[self.game_id].game_state.finished:
+            print(f"Game {self.game_id} is already finished. Rejecting new connection.")
+            await self.close()
+
         # Initialize user count if not exists
         if self.game_id not in PongConsumer.user_per_room:
             print(f"In connect method, user_per_room: {PongConsumer.user_per_room}")
@@ -84,6 +88,8 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         print("Consumer disconnected")
         PongConsumer.games[self.game_id].game_state.pause()
+
+        PongConsumer.games[self.game_id].game_state.finished = True
 
         # Decrement user count for the room
         if self.game_id in PongConsumer.user_per_room:
@@ -227,6 +233,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             text_data=json.dumps(
                 {
                     "player_id": player_id,
+                    "game_id": game_id,
                     "message": message,
                     "player_disconnect": True,
                     "remaining_player": remaining_player,  # Include 
