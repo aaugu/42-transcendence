@@ -14,7 +14,7 @@ export async function startGame() {
 	const gameId = window.location.href.split("/")[4];
   	let gameState = { current: null };
 
-	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
+	g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
 
 	const canvas = displayGame();
 	handleWebsocketGame(g_socket, canvas, gameState);
