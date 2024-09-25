@@ -31,6 +31,8 @@ export async function loginProcess() {
         })
         .then(async response => {
             if (!response.ok) {
+                if ( response.status === 502)
+                    throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
                     errormsg(error.username, "homepage-errormsg");
@@ -60,7 +62,13 @@ export async function loginProcess() {
                 }
             }
         })
-        .catch(e => console.error('USER LOG: LOGIN FETCH FAILURE, '+ e));
+        .catch(e => {
+            if (e.message === "502") {
+                errormsg("Service temporarily unavailable", "login-errormsg");
+                return;
+            }
+            console.error('USER LOG: LOGIN FETCH FAILURE, '+ e)
+        });
     }
 
     await sendLoginDataToAPI(username, password);

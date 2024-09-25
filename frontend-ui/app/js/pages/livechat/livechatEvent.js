@@ -6,6 +6,7 @@ import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
 import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
 import { userID } from "../user/updateProfile.js";
+import { urlRoute } from "../../dom/router.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -50,6 +51,10 @@ export async function livechatEvent(e) {
 				}
 			}
 			catch (e) {
+				if (e.message === "500" || e.message === "502") {
+					errormsg("Service temporarily unavailable", "livechat-conversation-errormsg");
+					return ;
+				}
 				console.log(`USER LOG: ${e.message}`);
 				errormsg(e.message, 'livechat-errormsg');
 			}
@@ -62,6 +67,12 @@ export async function livechatEvent(e) {
 			const game_id = target.dataset.gameid;
 			const sender_id = target.dataset.senderid;
 			joinGameandRedirect(game_id, sender_id);
+			break;
+		case "ctc-nickname":
+			const other_person_ctc_id = target.dataset.otherctcid;
+			localStorage.setItem('ctc_id', other_person_ctc_id);
+			const nickname = target.textContent;
+			urlRoute(`/profile/${nickname}`);
 			break;
 		default:
 			break;

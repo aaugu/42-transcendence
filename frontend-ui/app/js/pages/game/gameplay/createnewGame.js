@@ -24,8 +24,6 @@ export async function createGame(mode) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -62,8 +60,10 @@ export async function getGameID () {
   }
   catch (e) {
     if (e.message === "403") {
-      updateProfile(false, null);
-      errormsg('You were automatically logged out', 'homepage-errormsg');
+      throw new Error(`${e.message}`);
+    }
+    if (e.message === "500" || e.message === "502") {
+      throw new Error(`${e.message}`);
     }
     console.error(`USER LOG: ${e.message}`);
     return null;

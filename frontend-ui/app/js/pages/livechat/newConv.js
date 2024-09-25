@@ -5,6 +5,7 @@ import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
+import { error500 } from '../errorpage/error500.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -35,8 +36,6 @@ async function newConv(conv_nickname) {
 	if (responseData !== null) {
 		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -51,10 +50,10 @@ export async function newConvButton() {
 		updateConvList();
 		const users = history.users;
 		if (users.length === 2 && users[0].id === userID) {
-			displayChatInterface(users[1].id);
+			displayChatInterface(users[1].id, conv_nickname);
 		}
 		else {
-			displayChatInterface(users[0].id);
+			displayChatInterface(users[0].id, conv_nickname);
 		}
 		startLivechat(conv_id, response);
 		displayMessages(history);
@@ -65,6 +64,10 @@ export async function newConvButton() {
             updateProfile(false, null);
 			return ;
         }
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", 'livechat-errormsg');;
+			return ;
+		}
 		console.error(`USER LOG: ${e.message}`);
 		errormsg(e.message, 'livechat-errormsg');
 	}

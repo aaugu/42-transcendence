@@ -9,6 +9,10 @@ export async function getTournaments() {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -18,8 +22,6 @@ export async function getTournaments() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -32,6 +34,10 @@ export async function getTournamentDetails(tournament_id) {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -41,8 +47,6 @@ export async function getTournamentDetails(tournament_id) {
 	if (responseData !== null) {
 		console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -59,6 +63,10 @@ export async function getMyTournaments() {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (response.status === 403)
@@ -70,7 +78,5 @@ export async function getMyTournaments() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }

@@ -24,6 +24,8 @@ import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent, newremotegameEvent, newAIgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
+import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
+import { userID } from "../pages/user/updateProfile.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -160,6 +162,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: startFriendListRefresh,
 			description: "profile page"
 		},
+		"/profile/:id" : {
+			content: publicProfilePage,
+			// eventListener: profileEvent,
+			// startFunction: startFriendListRefresh,
+			description: "someone else's profile page"
+		},
 		"/livechat" : {
 			content: livechatPage,
 			eventListener: livechatEvent,
@@ -167,9 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			description: "stats page"
 		},
 		"/join-game": {
-		content: joinGamePage,
-		eventListener: joinGameEvent,
-		description: "join an existing game",
+			content: joinGamePage,
+			eventListener: joinGameEvent,
+			description: "join an existing game",
 		},
     }
 
@@ -189,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		resetDataRouteChange();
 		setUserID();
         var currentRoute = window.location.pathname;
-        if (currentRoute.length == 0 ) {
+        if (currentRoute.length == 0) {
 			currentRoute = "/";
 			window.history.pushState({}, '', currentRoute);
 		}
