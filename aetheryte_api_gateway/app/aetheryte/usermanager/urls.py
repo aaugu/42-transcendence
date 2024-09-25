@@ -8,5 +8,6 @@ urlpatterns = [
 	path('<int:pk>/friends/status', get_friends_status.as_view(), name="get friends status"),
     path('<int:pk>/friends/delete/<int:friend_id>/', friends_list_user_delete.as_view(), name='delete_friend'),
 	path('<int:user_id>/changepass/', ChangePasswordView.as_view(), name='change_password'),
-    path('getUser/nickname/<str:user_nickname>', getUserByNickname.as_view(), name='get_user_by_nickname'),
+    path('getuser/nickname/<str:user_nickname>', getUserByNickname.as_view(), name='get_user_by_nickname'),
+    path('getuser/id/<int:user_id>', getUserById.as_view(), name='get_user_by_id'),
 ]
