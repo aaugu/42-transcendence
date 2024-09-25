@@ -27,19 +27,13 @@ export function updateTournamentTable(matches) {
 }
 
 export async function newMatchCycle(tournament) {
-	// try {
-		localStorage.setItem('tourn_id', tournament.tourn_id);
+	localStorage.setItem('tourn_id', tournament.tourn_id);
 
-		const player1_id = tournament.current_match.player_1.user_id;
-		const player2_id = tournament.current_match.player_2.user_id;
-		const response = await createTournamentGame(player1_id, player2_id);
-		const newGameId = response.game_id;
-		const new_url = `/tournament/${newGameId}`;
-		hideModal('t-match-modal');
-		urlRoute(new_url);
-	// }
-	// catch (e) {
-	// 	errormsg(e.message, 't-match-modal-errormsg');
-	// 	urlRoute('/tournament-creation');
-	// }
+	const player1_id = tournament.current_match.player_1.user_id;
+	const player2_id = tournament.current_match.player_2.user_id;
+	const response = await createTournamentGame(player1_id, player2_id);
+	const newGameId = response.game_id;
+	const new_url = `/tournament/${newGameId}`;
+	hideModal('t-match-modal');
+	urlRoute(new_url);
 }
