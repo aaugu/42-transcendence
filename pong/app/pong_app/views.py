@@ -87,20 +87,32 @@ def end_game(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-def retrieve_last_games(request, user_id, nb_of_games):
-  print(f'Received request to get the last: {nb_of_games} of {user_id}')
+def get_user_games(request, user_id):
+    print(f'Received request to get games for user: {user_id}')
 
-  games_to_retrieve = request.GET.get("number_of_games")
-  user = request.GET.get("user_id")
+    games = GameService.get_user_games(user_id=user_id)
+    datas = [game.to_dict() for game in games]
+    if len(datas) > 0:
+        'No entries in the db'
+    else:
+        'Entries in the db'
 
-  games = GameService.get_all_games()
-  datas = [game.to_dict() for game in games]
-  if len(datas) > 0:
-    'No entries in the db'
-  else:
-    'Entries in the db'
+    return JsonResponse(datas, safe=False)
 
-  return JsonResponse(datas, safe=False)
+# def retrieve_last_games(request, user_id, nb_of_games):
+#   print(f'Received request to get the last: {nb_of_games} of {user_id}')
+
+#   games_to_retrieve = request.GET.get("number_of_games")
+#   user = request.GET.get("user_id")
+
+#   games = GameService.get_all_games()
+#   datas = [game.to_dict() for game in games]
+#   if len(datas) > 0:
+#     'No entries in the db'
+#   else:
+#     'Entries in the db'
+
+#   return JsonResponse(datas, safe=False)
 
 def get_game(request, game_id):
     print(f'Received request to get game with id: {game_id}')

@@ -97,8 +97,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log(`TOURNAMENT LOG: ${responseData.message}`);
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -125,8 +123,6 @@ export class Tournament {
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: GENERATE MATCHES SUCCESSFUL');
 			return responseData;
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -152,8 +148,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: START TOURNAMENT SUCCESSFUL');
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -162,7 +156,6 @@ export class Tournament {
 			throw new Error('Invalid parameters to end match');
 		}
 
-		console.log("winner_id in end match: ", winner_id);
 		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/end/';
 		const response = await fetch(url, {
 			method: 'POST',
@@ -183,8 +176,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: END MATCH SUCCESSFUL');
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 }

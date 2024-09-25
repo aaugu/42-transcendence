@@ -35,6 +35,7 @@ class GameService:
 
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
+        # print(f"Created game {game_id} with user {creator_id}")
 
         print(
             f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}"
@@ -84,7 +85,7 @@ class GameService:
         print(f"{player_one_id} and {player_two_id}")
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = player_one_id
-        print(f"Created game {game_id} with user game_instance.game_state.paddles[0].player_id {player_one_id}")
+        print(f"Created game {game_id} with user {player_one_id}")
         game_instance.game_state.paddles[1].player_id = player_two_id
         print(f"Created game {game_id} with user {player_two_id}")
         from .consumers.consumers import PongConsumer
@@ -121,6 +122,12 @@ class GameService:
         winner_id = request.POST.get("winner_id")
         loser_id = request.POST.get("loser_id")
 
+        if GameService.get_game(game_id).mode == GameMode.LOCAL_TWO_PLAYERS:
+          if winner_id == 'null':
+            winner_id = None
+          if loser_id == 'null':
+            loser_id = None
+
         game = Games.objects.get(game_id=game_id)
         game.status = "FINISHED"
         game.winner_id = winner_id
@@ -135,7 +142,6 @@ class GameService:
             "loser_id": game.loser_id,
             "mode": game.mode,
         }
-        # return f"Game {game_id} is finished."
 
     @staticmethod
     def get_game(game_id):
@@ -158,10 +164,11 @@ class GameService:
     #     return games
 
     @staticmethod
-    def get_user_games(user_id, x):
+    def get_user_games(user_id):
         games = Games.objects.filter(
             Q(creator_id=user_id) | Q(joiner_id=user_id),
-            Q(mode="TOURNAMENT") | Q(mode="REMOTE")
-        ).order_by("-created_at")[:x]
+            Q(mode="TOURNAMENT") | Q(mode="REMOTE"),
+            status="FINISHED"
+        ).order_by("-created_at")
 
         return games

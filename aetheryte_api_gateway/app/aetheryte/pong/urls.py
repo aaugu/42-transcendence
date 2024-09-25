@@ -8,4 +8,5 @@ urlpatterns = [
     path("end-game/", views.end_game, name='end_game'),
     path("retrieve_last_games/<user_id>/<nb_of_games>", views.retrieve_last_games, name='retrieve_last_games'),
     path("get-game/<game_id>/", views.get_game, name='get_game'),
+    path("get-user-games/<user_id>/", views.get_user_games, name='get_user_games'),
 ]

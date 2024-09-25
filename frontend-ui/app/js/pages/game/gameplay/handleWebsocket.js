@@ -24,26 +24,26 @@ export function handleWebsocketGame(socket, canvas, gameState) {
   };
 
   socket.onmessage = async function (event) {
-    // console.log("Raw message received:", event.data);
     try {
       const data = JSON.parse(event.data);
-      // console.log("Parsed data:", data);
 
       if (data.game_state) {
         gameState.current = data.game_state;
-        // console.log(`Current Game State: ${gameState.current}`);
         updateGameState(data.game_state, canvas);
+      }
+
+      if (data.player_disconnect) {
+        console.log(data.message);
+        console.log("Remaining player:", data.remaining_player);
+        console.log("Disconnected player:", data.player_id);
+        console.log("GameID", data.game_id);
+
+		await endGame(data.remaining_player, data.player_id, data.game_id);
+		self.close();
       }
 
       if (data.game_finished) {
         console.log("Game Finished", data.game_finished);
-        // console.log(
-        //   `Paddle Left played_id, ${data.game_state.paddles[0].player_id}, score: ${data.game_state.score[0]}`
-        // );
-        // console.log(
-        //   `Paddle Right played_id, ${data.game_state.paddles[1].player_id}, score: ${data.game_state.score[1]}`
-        // );
-
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
         console.log("GameID", data.game.game_id);
@@ -97,7 +97,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 				console.log("LoserID", data.loser_id);
 
 				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
-								tournament.current_match.player_1
+							tournament.current_match.player_1
 							: tournament.current_match.player_2;
 
 				console.log("Winner sent to tournament: ", winner);

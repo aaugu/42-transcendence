@@ -27,6 +27,10 @@ def end_game(request):
     else:
         return JsonResponse({"error": "Empty response"}, status=400)
 
+def get_user_games(request, user_id):
+    response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
+    return JsonResponse(response.json(), safe=False, status=response.status_code)
+
 def retrieve_last_games(request, user_id, nb_of_games):
     response = requests.get(f"{PONG_SERVICE_URL}/retrieve_last_games/{user_id}/{nb_of_games}")
     return JsonResponse(response.json(), safe=False, status=response.status_code)
