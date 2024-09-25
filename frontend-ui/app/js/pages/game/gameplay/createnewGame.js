@@ -1,17 +1,12 @@
-import { userID, updateProfile } from "../../user/updateProfile.js";
-import { errormsg } from "../../../dom/errormsg.js"
+import { userID } from "../../user/updateProfile.js";
 
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
-export async function createGame(mode, tourn_id = null) {
+export async function createGame(mode) {
   if (userID === null)
     throw new Error('403');
 
-  var url;
-  if (tourn_id)
-    url = `${gatewayEndpoint}/create-game-tournament/${userID}/${mode}/${tourn_id}/`;
-  else
-    url = `${gatewayEndpoint}/create-game/${userID}/${mode}/`;
+    const url = `${gatewayEndpoint}/create-game/${userID}/${mode}/`;
 
   const response = await fetch(url,
   {
@@ -71,22 +66,16 @@ export function getGameMode(mode) {
 
 }
 
-export async function getGameID (tourn_id = null) {
-  console.log("IN GET GAME ID");
+export async function getGameID () {
   const currentUrl = window.location.href;
-
   var mode = currentUrl.split("/")[3];
 
   mode = getGameMode(mode);
-  console.log("MODE", mode);
 
   let gameData;
 
   try {
-    if (tourn_id)
-      gameData = await createGame(mode, tourn_id);
-    else
-      gameData = await createGame(mode);
+	gameData = await createGame(mode);
     return gameData.game_id;
   }
   catch (e) {
