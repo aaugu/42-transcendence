@@ -43,10 +43,10 @@ export function handleWebsocketGame(socket, canvas, gameState) {
       }
 
       if (data.game_finished) {
-        console.log("Game Finished", data.game_finished);
-        console.log("WinnerID", data.winner_id);
-        console.log("LoserID", data.loser_id);
-        console.log("GameID", data.game.game_id);
+        console.log("Game Finished: ", data.game_finished);
+        // console.log("WinnerID", data.winner_id);
+        // console.log("LoserID", data.loser_id);
+        // console.log("GameID", data.game.game_id);
 
 		await endGame(data.winner_id, data.loser_id, data.game.game_id);
       }
