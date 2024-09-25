@@ -262,16 +262,28 @@ class StartMatchView(View):
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
         request_url = "http://localhost:8000/livechat/notification/"
-        json_request = {
-            'user_1': {
-                'user_id': player1.user_id,
-                'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
-            },
-            'user_2': {
-                'user_id': player2.user_id,
-                'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
-            },
-        }
+        if tournament.type == Tournament.LOCAL:
+            json_request = {
+                'user_1': {
+                    'user_id': player1.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                },
+                'user_2': {
+                    'user_id': player2.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                },
+            }
+        elif tournament.type == Tournament.REMOTE:
+            json_request = {
+                'user_1': {
+                    'user_id': player1.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                },
+                'user_2': {
+                    'user_id': player2.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                },
+            }
         return requests.post(url = request_url, json = json_request)
 
     @staticmethod
