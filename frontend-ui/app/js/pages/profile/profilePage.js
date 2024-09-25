@@ -16,6 +16,9 @@ export async function profilePage() {
 	var match_wins = '';
 	var match_losses = '';
 
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+	document.getElementById('logo').href = "/profile";
+
     try {
         const userinfo = await getUserInfo();
         username = userinfo.username;

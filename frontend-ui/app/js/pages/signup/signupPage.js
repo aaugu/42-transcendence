@@ -1,4 +1,6 @@
 export function signupPage() {
+    document.getElementById('nav-profile-elements').classList.add('hidden');
+	document.getElementById('logo').href = "/";
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Sign up here</h1>

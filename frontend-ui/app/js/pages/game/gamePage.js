@@ -31,5 +31,7 @@ let html = `
 
 export function gamePage() {
     document.getElementById("check").checked = false;
+	document.getElementById('nav-profile-elements').classList.remove('hidden');
+	document.getElementById('logo').href = "/profile";
     return html;
 }
