@@ -44,10 +44,6 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 
       if (data.game_finished) {
         console.log("Game Finished: ", data.game_finished);
-        // console.log("WinnerID", data.winner_id);
-        // console.log("LoserID", data.loser_id);
-        // console.log("GameID", data.game.game_id);
-
 		await endGame(data.winner_id, data.loser_id, data.game.game_id);
       }
     } catch (error) {
@@ -100,7 +96,6 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 							tournament.current_match.player_1
 							: tournament.current_match.player_2;
 
-				console.log("Winner sent to tournament: ", winner);
 				await tournament.updateMatchCycle(winner.user_id);
 
 				console.log("current game status: ", tournament.game_status);
@@ -109,15 +104,15 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 				await endGame(data.winner_id, data.loser_id, data.game.game_id);
 
 				const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
-				if (tournament.game_status === "In Progress") {
+				if (tournament.game_status === "In Progress" && tournament.current_match) {
 					document.getElementById("t-match-text").innerHTML = `
 												<span>The winner is: ${winner.nickname}!</span>
 												</br>
 												<span>Next up: ${tournament.current_match.player_1.nickname}
 												vs ${tournament.current_match.player_2.nickname}</span>`;
 					t_matchmodal.show();
-					setTimeout(() => {
-					newMatchCycle(tournament);
+					setTimeout(async () => {
+					await newMatchCycle(tournament);
 					}, 3000);
 				}
 				else if (tournament.game_status === "Finished") {
@@ -131,7 +126,13 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 				}
 			}
 		} catch (error) {
-			console.error("Error parsing message:", error.message);
+			if (error.message === "500" || error.message === "502") {
+				urlRoute("/tournament-creation");
+				errormsg(
+					"Tournament could not be properly continued due to a server error",
+					"homepage-errormsg"
+				);
+			}
 		}
 	};
 }

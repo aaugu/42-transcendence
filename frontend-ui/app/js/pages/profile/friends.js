@@ -136,7 +136,8 @@ export async function startFriendListRefresh() {
         friendListRefreshInterval = setInterval(async () => {
 			const friendList = document.getElementById('friend-list');
 			const friends_html = await updateFriendList();
-			friendList.innerHTML = friends_html;
+			if (friendList)
+				friendList.innerHTML = friends_html;
         }, 15000);
     }
 }

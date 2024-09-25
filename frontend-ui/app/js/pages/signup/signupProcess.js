@@ -73,7 +73,7 @@ export async function signupProcess() {
                     errormsg(error.username, "homepage-errormsg");
                 }
                 else if (error.email) {
-                    errormsg(error.email[0], "homepage-errormsg");
+                    errormsg(error.email, "homepage-errormsg");
                 }
                 else if (error.nickname) {
                     errormsg(error.nickname, "homepage-errormsg");

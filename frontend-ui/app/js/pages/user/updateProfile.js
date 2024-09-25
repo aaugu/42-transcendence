@@ -23,7 +23,7 @@ export const updateProfile = async (isConnected, token) => {
 	const navLogoLink = document.getElementById('logo');
 
 	if (isConnected) {
-		// navProfileElements.classList.remove('hidden');
+		navProfileElements.classList.remove('hidden');
 		navLogoLink.href = "/profile";
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // 1 week
@@ -31,7 +31,7 @@ export const updateProfile = async (isConnected, token) => {
 		setUserID();
 	}
 	else {
-		// navProfileElements.classList.add('hidden');
+		navProfileElements.classList.add('hidden');
 		try {
 			await logout();
 		}

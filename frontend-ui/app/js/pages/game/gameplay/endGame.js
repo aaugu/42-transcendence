@@ -1,3 +1,7 @@
+import { errormsg } from "../../../dom/errormsg.js";
+import { updateProfile } from "../../user/updateProfile.js";
+import { urlRoute } from "../../../dom/router.js";
+
 export async function endGame(winner_id, loser_id, game_id) {
 	let url = "https://localhost:10443/api/pong/end-game/";
 
@@ -34,7 +38,12 @@ export async function endGame(winner_id, loser_id, game_id) {
 	})
 	.catch((error) => {
 		if (error.message === "500" || error.message === "502") {
-			
+			errormsg('Game could not be properly finished due to a server error', 'homepage-errormsg');
+			urlRoute('/profile');
+		}
+		else if (error.message === "403") {
+			updateProfile(false, null);
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		}
 		console.error("GAME LOG: end match failed, ", error.message);
 	});

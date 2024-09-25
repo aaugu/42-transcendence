@@ -27,7 +27,7 @@ export function updateTournamentTable(matches) {
 }
 
 export async function newMatchCycle(tournament) {
-	try {
+	// try {
 		localStorage.setItem('tourn_id', tournament.tourn_id);
 
 		const player1_id = tournament.current_match.player_1.user_id;
@@ -37,9 +37,9 @@ export async function newMatchCycle(tournament) {
 		const new_url = `/tournament/${newGameId}`;
 		hideModal('t-match-modal');
 		urlRoute(new_url);
-	}
-	catch (e) {
-		errormsg(e.message, 't-match-modal-errormsg');
-		urlRoute('/tournament-creation');
-	}
+	// }
+	// catch (e) {
+	// 	errormsg(e.message, 't-match-modal-errormsg');
+	// 	urlRoute('/tournament-creation');
+	// }
 }

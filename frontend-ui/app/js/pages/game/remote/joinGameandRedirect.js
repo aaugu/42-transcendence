@@ -15,17 +15,16 @@ export async function joinGameandRedirect(gameId, senderId) {
 			});
 
 			if (!response.ok) {
-				throw new Error(`Failed to join game. Status: ${response.status}`);
+				throw new Error(`${response.status}`);
 			}
 		}
 
 		const new_url = `/remote-twoplayer/${gameId}`;
 		urlRoute(new_url);
 
-	  } catch(error) {
-		if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", "livechat-conversation-error");
+	  } catch(e) {
+		if (e.message == "500" || e.message == "502") {
+			errormsg("Service temporarily unavailable", "homepage-errormsg");
 		}
-		console.error("JOIN GAME ERROR:", error);
 	  }
 }

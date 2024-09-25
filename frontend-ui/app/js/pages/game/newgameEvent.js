@@ -5,6 +5,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { Tournament } from './gameplay-tournament/tournamentClass.js';
 import { getTournamentDetails } from '../tournament/getTournaments.js';
 import { error500 } from "../errorpage/error500.js";
+import { updateProfile } from '../user/updateProfile.js';
 
 export async function newlocalgameEvent(e) {
 	try {
@@ -74,9 +75,9 @@ export async function newtournamentgameEvent(tourn_id) {
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			}
 			else {
-				errormsg("This tournament cannot be started, try again later", 'single-t-modal');
+				errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
 			}
 		}
 	}
-	errormsg("This tournament cannot be started, try again later", 'single-t-modal');
+	errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
 }
