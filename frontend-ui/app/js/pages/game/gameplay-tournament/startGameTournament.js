@@ -38,7 +38,7 @@ export async function startGameTournament() {
 		return;
 	}
 
-	t_socket = new WebSocket(`wss://localhost:9000/wsn/pong/${gameId}`);
+	t_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
 
 	const canvas = displayGame();
 	handleWebsocketTournament(t_socket, tournament, canvas, gameState);
