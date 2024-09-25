@@ -3,6 +3,7 @@ import { clearFriendListRefresh, updateFriendList } from "./friends.js"
 import { updateProfile } from "../user/updateProfile.js"
 import { errormsg } from "../../dom/errormsg.js"
 import { error500 } from "../errorpage/error500.js";
+import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
 export async function profilePage() {
     var username = "Guest";
@@ -11,6 +12,9 @@ export async function profilePage() {
     var avatar = "images/default_avatar.png";
     var is_2fa_enabled = false;
     var friends_html = '';
+	var matches_html = '';
+	var match_wins = '';
+	var match_losses = '';
 
     try {
         const userinfo = await getUserInfo();
@@ -21,7 +25,12 @@ export async function profilePage() {
         is_2fa_enabled = userinfo.is_2fa_enabled;
 
         friends_html = await updateFriendList();
-        
+		matches_html = await matchHistoryList();
+
+		const match_wins_losses = matchWinsLosses();
+		match_wins = match_wins_losses.wins;
+		match_losses = match_wins_losses.losses;
+
         localStorage.setItem('avatar', avatar);
         localStorage.setItem('nickname', nickname);
     }
@@ -136,20 +145,11 @@ export async function profilePage() {
             <div id="personal-stats" class="content-box">
                 <h5 class="m-2">Match history</h5>
                 <div class="profile-details centered">
-                    <p>Total wins: 3</p>
-                    <p>Total losses: 2</p>
+                    <p>Total wins: ${match_wins}</p>
+                    <p>Total losses: ${match_losses}</p>
                 </div>
                 <ul class="list-group custom-scrollbar m-2 flex-grow-1">
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
+                    ${matches_html}
                 </ul>
             </div>
             <div class="content-box">

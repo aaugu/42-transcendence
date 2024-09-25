@@ -20,7 +20,7 @@ export async function getFriendList(id = null) {
 	if (!response.ok && response.status === 502)
 		throw new Error(`${response.status}`);
 
-	const responseData = await response.json(); // ne fonctionne pas en cas d'erreur 500 car la réponse ne peut pas être interprêtée en json, vérif du 500 avant
+	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
@@ -134,13 +134,9 @@ export async function updateFriendList(id = null) {
 export async function startFriendListRefresh() {
     if (!friendListRefreshInterval) {
         friendListRefreshInterval = setInterval(async () => {
-            try {
-                const friendList = document.getElementById('friend-list');
-                const friends_html = await updateFriendList();
-                friendList.innerHTML = friends_html;
-            } catch (e) { // On ne rentre jamais ici car même en cas d'erreur d'updateFriendList() on renvoie une valeur à utiliser, ce try/catch pourrait être supprimé
-                console.log("USER LOG: Failed to refresh friend list:", e.message);
-            }
+			const friendList = document.getElementById('friend-list');
+			const friends_html = await updateFriendList();
+			friendList.innerHTML = friends_html;
         }, 15000);
     }
 }

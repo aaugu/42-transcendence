@@ -1,6 +1,7 @@
 import { error500 } from "../errorpage/error500.js";
 import { getUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
+import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
 export async function publicProfilePage() {
     var username = "Guest";
@@ -8,6 +9,9 @@ export async function publicProfilePage() {
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
     var friends_html = '';
+	var matches_html = '';
+	var match_wins = '';
+	var match_losses = '';
 
     const user_id = localStorage.getItem('ctc_id');
 
@@ -19,6 +23,11 @@ export async function publicProfilePage() {
         avatar = userinfo.avatar;
 
         friends_html = await updateFriendList(user_id);
+		matches_html = await matchHistoryList(user_id);
+
+		const match_wins_losses = matchWinsLosses(user_id);
+		match_wins = match_wins_losses.wins;
+		match_losses = match_wins_losses.losses;
 
         localStorage.removeItem('ctc_id');
     }
@@ -54,20 +63,11 @@ export async function publicProfilePage() {
             <div id="personal-stats" class="content-box">
                 <h5 class="m-2">Match history</h5>
                 <div class="profile-details centered">
-                    <p>Total wins: 3</p>
-                    <p>Total losses: 2</p>
+                    <p>Total wins: ${match_wins}</p>
+                    <p>Total losses: ${match_losses}</p>
                 </div>
                 <ul class="list-group custom-scrollbar m-2 flex-grow-1">
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
+                    ${matches_html}
                 </ul>
             </div>
             <div class="content-box">
