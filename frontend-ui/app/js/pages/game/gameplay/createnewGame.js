@@ -91,8 +91,10 @@ export async function getGameID (tourn_id = null) {
   }
   catch (e) {
     if (e.message === "403") {
-      updateProfile(false, null);
-      errormsg('You were redirected to the landing page', 'homepage-errormsg');
+      throw new Error(`${e.message}`);
+    }
+    if (e.message === "500" || e.message === "502") {
+      throw new Error(`${e.message}`);
     }
     console.error(`USER LOG: ${e.message}`);
     return null;

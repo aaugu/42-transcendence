@@ -9,6 +9,10 @@ export async function getTournaments() {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -30,6 +34,10 @@ export async function getTournamentDetails(tournament_id) {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -55,6 +63,10 @@ export async function getMyTournaments() {
 		},
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (response.status === 403)

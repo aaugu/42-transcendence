@@ -1,5 +1,6 @@
 import { userID } from "../../user/updateProfile.js";
 import { urlRoute } from "../../../dom/router.js";
+import { errormsg } from "../../../dom/errormsg.js";
 
 export async function joinGameandRedirect(gameId, senderId) {
 	try {
@@ -14,7 +15,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 			});
 
 			if (!response.ok) {
-			throw new Error(`Failed to join game. Status: ${response.status}`);
+				throw new Error(`Failed to join game. Status: ${response.status}`);
 			}
 		}
 
@@ -22,6 +23,9 @@ export async function joinGameandRedirect(gameId, senderId) {
 		urlRoute(new_url);
 
 	  } catch(error) {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "livechat-conversation-error");
+		}
 		console.error("JOIN GAME ERROR:", error);
 	  }
 }

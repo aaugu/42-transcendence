@@ -36,6 +36,10 @@ export async function editPassword(newPassword, repeatNewPassword, oldPassword) 
 		}),
 		credentials: 'include',
 	});
+
+	if (!response.ok && response.status === 502) {
+		throw new Error(`${response.status}`);
+	}
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.old_password)

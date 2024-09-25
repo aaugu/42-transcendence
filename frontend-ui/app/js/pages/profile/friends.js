@@ -1,3 +1,4 @@
+import { error500 } from "../errorpage/error500.js";
 import { userID } from "../user/updateProfile.js";
 
 let friendListRefreshInterval;
@@ -16,7 +17,10 @@ export async function getFriendList(id = null) {
 		},
 		credentials: 'include'
 	});
-	const responseData = await response.json();
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
+	const responseData = await response.json(); // ne fonctionne pas en cas d'erreur 500 car la réponse ne peut pas être interprêtée en json, vérif du 500 avant
 	if (!response.ok) {
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
@@ -45,6 +49,10 @@ export async function addFriend(friend_nickname) {
         body: JSON.stringify({"friend_nickname": friend_nickname}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.details)
@@ -70,6 +78,10 @@ export async function deleteFriend(friend_id) {
         body: JSON.stringify({"friend_id": friend_id}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.details)
@@ -112,8 +124,9 @@ export async function updateFriendList(id = null) {
 		}
     }
     catch (e) {
+		clearFriendListRefresh();
         console.log("USER LOG: ", e.message);
-        friends_html = '';
+		friends_html = error500();
     }
     return friends_html;
 }
@@ -125,7 +138,7 @@ export async function startFriendListRefresh() {
                 const friendList = document.getElementById('friend-list');
                 const friends_html = await updateFriendList();
                 friendList.innerHTML = friends_html;
-            } catch (e) {
+            } catch (e) { // On ne rentre jamais ici car même en cas d'erreur d'updateFriendList() on renvoie une valeur à utiliser, ce try/catch pourrait être supprimé
                 console.log("USER LOG: Failed to refresh friend list:", e.message);
             }
         }, 15000);

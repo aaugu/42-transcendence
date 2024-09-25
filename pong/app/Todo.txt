@@ -1,2 +1,0 @@
-Button to Start the Game
-Button to Stop the Game

@@ -16,6 +16,9 @@ export async function getUserInfo(id = null) {
     });
 
     if (!response.ok) {
+        if (response.status === 502) {
+            throw new Error(`${response.status}`)
+        }
         const error = await response.json();
         if (response.status === 401 || response.status === 404) {
             if (error.detail) {
@@ -31,7 +34,5 @@ export async function getUserInfo(id = null) {
     if (responseData !== null) {
         console.log("USER LOG: GET USER INFO SUCCESSFUL");
         return responseData;
-    } else {
-        throw new Error('No response from server');
     }
 }

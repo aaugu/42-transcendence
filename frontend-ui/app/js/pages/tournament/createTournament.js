@@ -23,6 +23,10 @@ async function createTournament(new_tournament) {
 		}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+	
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -73,7 +77,12 @@ export async function createTournamentButton() {
 		document.getElementById('tournament-name').value = "";
 	}
 	catch (e) {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "t-modal-errormsg");
+			return;
+		} else {
+			errormsg (e.message, "t-modal-errormsg");
+		}
 		console.log(`USER LOG: CREATE TOURNAMENT FAILED, STATUS: ${e.message}`);
-		errormsg (e.message, "t-modal-errormsg");
 	}
 }

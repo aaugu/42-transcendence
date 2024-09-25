@@ -15,6 +15,10 @@ async function joinTournament(nickname, tournament_id) {
 		}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && ( response.status === 502 || response.status === 500))
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -36,8 +40,13 @@ export async function joinTournamentButton() {
 		hideModal('single-t-modal');
 	}
 	catch (e) {
-		console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
-		errormsg(e.message, "single-t-modal-errormsg");
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+		}
+		else {
+			console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
+			errormsg(e.message, "single-t-modal-errormsg");
+		}
 		setTimeout(() => {
 			hideModal('single-t-modal');
 		}, 1000);

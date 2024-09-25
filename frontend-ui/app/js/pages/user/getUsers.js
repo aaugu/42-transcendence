@@ -23,8 +23,6 @@ export async function getUsers() {
         if (responseData !== null) {
             console.log("USER LOG: GET USERS SUCCESSFUL");
             return responseData;
-        } else {
-            throw new Error('No response from server');
         }
     } catch (e) {
         console.error('USER LOG: GET USERS FETCH FAILURE, ' + e.message);

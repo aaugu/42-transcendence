@@ -66,6 +66,8 @@ export async function signupProcess() {
         })
         .then(async response => {
             if (!response.ok) {
+                if ( response.status === 502)
+                    throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
                     errormsg(error.username, "homepage-errormsg");
@@ -86,7 +88,14 @@ export async function signupProcess() {
                 loginProcess();
             }
         })
-        .catch(e => console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e));
+        .catch(e => {
+            if (e.message === "502") {
+                errormsg("Service temporarily unavailable", "signup-errormsg");
+                return;
+            }
+            console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e)
+        });
+
     }
 
 	await sendSignupDataToAPI(userdata);

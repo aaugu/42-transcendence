@@ -100,6 +100,10 @@ export async function openSingleTournamentModal(e) {
 		t_modal.show();
 	}
 	catch (e) {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "join-and-tournament-errormsg");
+			return ;
+		}
 		console.log("USER LOG: ", e.message);
 	}
 }
