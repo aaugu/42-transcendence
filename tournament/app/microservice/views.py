@@ -237,6 +237,7 @@ class StartMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
         try:
             match = StartMatchView.get_match(tournament_id, player1, player2)
+            link = body.get('link')
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_NOT_FOUND]}, status=404)
         except Exception as e:
@@ -254,13 +255,13 @@ class StartMatchView(View):
 
 
         if player1 is not None and player2 is not None:
-            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, link)
         if response.status_code != 201:
             return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
         return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
-    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
+    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, link):
         request_url = "http://localhost:8000/livechat/notification/"
         if tournament.type == Tournament.LOCAL:
             json_request = {
@@ -277,11 +278,11 @@ class StartMatchView(View):
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{link}`'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{link}`'
                 },
             }
         return requests.post(url = request_url, json = json_request)
