@@ -4,7 +4,6 @@ import { errormsg } from "../../../dom/errormsg.js"
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
 export async function createGame(mode, tourn_id = null) {
-  console.log("IN CREATE GAME");
   if (userID === null)
     throw new Error('403');
 
@@ -13,6 +12,28 @@ export async function createGame(mode, tourn_id = null) {
     url = `${gatewayEndpoint}/create-game-tournament/${userID}/${mode}/${tourn_id}/`;
   else
     url = `${gatewayEndpoint}/create-game/${userID}/${mode}/`;
+
+  const response = await fetch(url,
+  {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include'
+  });
+  if (!response.ok) {
+		throw new Error(`${response.status}`);
+	}
+
+	const responseData = await response.json();
+	if (responseData !== null) {
+		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
+		return responseData;
+	}
+}
+
+export async function createTournamentGame(player1_id, player2_id) {
+  const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/TOURNAMENT/`;
 
   const response = await fetch(url,
   {

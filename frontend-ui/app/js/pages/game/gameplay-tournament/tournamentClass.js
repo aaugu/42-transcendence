@@ -2,26 +2,6 @@ import { userID } from '../../user/updateProfile.js'
 import { urlRoute } from '../../../dom/router.js';
 import { errormsg } from '../../../dom/errormsg.js';
 
-function updateTournamentTable(matches) {
-	const tourn_table = document.getElementById('tournament-table-body');
-	tourn_table.innerHTML = '';
-	var match_html = '';
-
-	matches.forEach(match => {
-		if (match.status !== 'Finished') {
-			match_html += `
-				<tr>
-					<th scope="row">${match.id}</th>
-					<td>${match.player_1.nickname}</td>
-					<td>${match.player_2.nickname}</td>
-					<td>${match.status}</td>
-				</tr>
-			`;
-		}
-	});
-	tourn_table.innerHTML = match_html;
-}
-
 export class Tournament {
 
 	constructor(tourn_id, game_status) {
@@ -61,7 +41,6 @@ export class Tournament {
 		if (this.current_match.status === "Not Played") {
 			await this.#startMatch();
 		}
-		updateTournamentTable(this.all_matches);
     }
 
     async launchTournament() {

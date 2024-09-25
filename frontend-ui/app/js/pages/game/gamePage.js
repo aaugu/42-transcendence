@@ -22,6 +22,7 @@ let html = `
 			<div class="modal-content">
 				<div class="modal-body">
 					<div id="t-match-text"></div>
+					<p class="hidden m-2 text-danger" id="t-match-modal-errormsg"></p>
 				</div>
 			</div>
 		</div>
