@@ -162,6 +162,7 @@ export class Tournament {
 			throw new Error('Invalid parameters to end match');
 		}
 
+		console.log("winner_id in end match: ", winner_id);
 		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/end/';
 		const response = await fetch(url, {
 			method: 'POST',

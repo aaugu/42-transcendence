@@ -1,9 +1,9 @@
 import updateGameState from "./GameDraw.js";
-import { Tournament } from "../gameplay-tournament/tournamentClass.js";
 import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
 import { hideModal } from "../../../dom/modal.js";
 import { updateTournamentTable, newMatchCycle } from "../gameplay-tournament/updateTournament.js";
+import { endGame } from "../gameplay/endGame.js";
 
 export function handleWebsocketGame(socket, canvas, gameState) {
   socket.onopen = function (event) {
@@ -23,7 +23,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
     );
   };
 
-  socket.onmessage = function (event) {
+  socket.onmessage = async function (event) {
     // console.log("Raw message received:", event.data);
     try {
       const data = JSON.parse(event.data);
@@ -43,118 +43,96 @@ export function handleWebsocketGame(socket, canvas, gameState) {
         // console.log(
         //   `Paddle Right played_id, ${data.game_state.paddles[1].player_id}, score: ${data.game_state.score[1]}`
         // );
+
         console.log("WinnerID", data.winner_id);
         console.log("LoserID", data.loser_id);
         console.log("GameID", data.game.game_id);
-        let url = "https://localhost:10443/api/pong/end-game/";
 
-        let formData = new FormData();
-        formData.append("winner_id", data.winner_id);
-        if (data.loser_id !== null) {
-          formData.append("loser_id", data.loser_id);
-        }
-        formData.append("game_id", data.game.game_id);
-
-        fetch(url, {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-        })
-          .then((response) => {
-            if (!response.ok) {
-              return response.text().then((text) => {
-                throw new Error(
-                  `Request failed with status ${response.status}: ${text}`
-                );
-              });
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Game Ended", data);
-          })
-          .catch((error) => {
-            console.error("Error during fetch:", error);
-          });
+		await endGame(data.winner_id, data.loser_id, data.game.game_id);
       }
     } catch (error) {
-      console.error("Error parsing message:", error);
+      console.error("Error parsing message:", error.message);
       console.log("Raw message that caused error:", event.data);
     }
   };
 }
 
 export function handleWebsocketTournament(socket, tournament, canvas, gameState) {
-  const player1html = document.getElementById("player1");
-  const player2html = document.getElementById("player2");
+	const player1html = document.getElementById("player1");
+	const player2html = document.getElementById("player2");
 
-  socket.onopen = function (event) {
-    console.log("WebSocket connection opened:", event);
-    console.log("current_match", tournament.current_match);
-    player1html.innerText = tournament.current_match.player_1.nickname;
-    player2html.innerText = tournament.current_match.player_2.nickname;
-    updateTournamentTable(tournament.all_matches);
-  };
+	socket.onopen = function (event) {
+		console.log("WebSocket connection opened:", event);
+		console.log("current_match", tournament.current_match);
+		player1html.innerText = tournament.current_match.player_1.nickname;
+		player2html.innerText = tournament.current_match.player_2.nickname;
+		updateTournamentTable(tournament.all_matches);
+	};
 
-  socket.onclose = function (event) {
-    console.log("WebSocket connection closed:", event);
-  };
+	socket.onclose = function (event) {
+		console.log("WebSocket connection closed:", event);
+	};
 
-  socket.onerror = function (error) {
-    console.error("WebSocket error:", error);
-    urlRoute("/tournament-creation");
-    errormsg(
-      "Connection to game could not be established",
-      "homepage-errormsg"
-    );
-  };
+	socket.onerror = function (error) {
+		console.error("WebSocket error:", error);
+		urlRoute("/tournament-creation");
+		errormsg(
+			"Connection to game could not be established",
+			"homepage-errormsg"
+		);
+	};
 
-  socket.onmessage = async function (event) {
-    try {
-      const data = JSON.parse(event.data);
+	socket.onmessage = async function (event) {
+		try {
+			// console.log("Raw message received:", event.data);
+			const data = JSON.parse(event.data);
 
-      if (data.game_state) {
-        gameState.current = data.game_state;
-        updateGameState(data.game_state, canvas);
-      }
+			if (data.game_state) {
+				gameState.current = data.game_state;
+				updateGameState(data.game_state, canvas);
+			}
 
-      if (data.game_finished) {
-        console.log("Game Finished", data.game_finished);
-        console.log("WinnerID", data.winner_id);
-        console.log("LoserID", data.loser_id);
-        const winner = data.winner_id === tournament.current_match.player_1.user_id ?
-                        tournament.current_match.player_1
-                      : tournament.current_match.player_2;
+			if (data.game_finished) {
+				console.log("Game Finished", data.game_finished);
+				console.log("WinnerID", data.winner_id);
+				console.log("LoserID", data.loser_id);
 
-        console.log("Winner", winner);
-        await tournament.updateMatchCycle(winner.user_id);
-        console.log("current game status: ", tournament.game_status);
-        console.log("current match: ", tournament.current_match);
+				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
+								tournament.current_match.player_1
+							: tournament.current_match.player_2;
 
-        const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
-        if (tournament.game_status === "In Progress") {
-          document.getElementById("t-match-text").innerHTML = `<span>The winner is: ${winner.nickname}
-                                    !</span>
-																		</br>
-																		<span>Next up: ${tournament.current_match.player_1.nickname}
-																		vs ${tournament.current_match.player_2.nickname}</span>`;
-          t_matchmodal.show();
-          setTimeout(() => {
-            newMatchCycle(tournament);
-          }, 3000);
-        }
-        else if (tournament.game_status === "Finished") {
-          document.getElementById("t-match-text").innerText =
-                `Congratulations ${winner.nickname}, you won this tournament!`;
-          t_matchmodal.show();
-          setTimeout(() => {
-            hideModal("t-match-modal");
-            urlRoute("/tournament-creation");
-          }, 5000);
-        }
-      }
-    } catch (error) {
-      console.error("Error parsing message:", error.message);
-    }
-  };
+				console.log("Winner sent to tournament: ", winner);
+				await tournament.updateMatchCycle(winner.user_id);
+
+				console.log("current game status: ", tournament.game_status);
+				console.log("current match: ", tournament.current_match);
+
+				await endGame(data.winner_id, data.loser_id, data.game.game_id);
+
+				const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
+				if (tournament.game_status === "In Progress") {
+					document.getElementById("t-match-text").innerHTML = `
+												<span>The winner is: ${winner.nickname}!</span>
+												</br>
+												<span>Next up: ${tournament.current_match.player_1.nickname}
+												vs ${tournament.current_match.player_2.nickname}</span>`;
+					t_matchmodal.show();
+					setTimeout(() => {
+					newMatchCycle(tournament);
+					}, 3000);
+				}
+				else if (tournament.game_status === "Finished") {
+					document.getElementById("t-match-text").innerText =
+						`Congratulations ${winner.nickname}, you won this tournament!`;
+						t_matchmodal.show();
+					setTimeout(() => {
+						hideModal("t-match-modal");
+						urlRoute("/tournament-creation");
+					}, 5000);
+				}
+			}
+		} catch (error) {
+			console.error("Error parsing message:", error.message);
+		}
+	};
 }

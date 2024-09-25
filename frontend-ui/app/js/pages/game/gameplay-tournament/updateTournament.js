@@ -11,6 +11,8 @@ export function updateTournamentTable(matches) {
 
 	matches.forEach(match => {
 		if (match.status !== 'Finished') {
+			console.log("Match: ", match);
+
 			var player2;
 			if (match.player_2)
 				player2 = match.player_2;
@@ -19,7 +21,7 @@ export function updateTournamentTable(matches) {
 			match_html += `
 				<tr>
 					<th scope="row">${match.id}</th>
-					<td>${match.player_1.nickname}</td>
+					<td>${match.player_1 ? match.player_1.nickname : "TBD"}</td>
 					<td>${player2.nickname}</td>
 					<td>${match.status}</td>
 				</tr>

@@ -81,10 +81,12 @@ class GameService:
             status="IN_PROGRESS",
             mode="TOURNAMENT",
         )
-
+        print(f"{player_one_id} and {player_two_id}")
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = player_one_id
+        print(f"Created game {game_id} with user game_instance.game_state.paddles[0].player_id {player_one_id}")
         game_instance.game_state.paddles[1].player_id = player_two_id
+        print(f"Created game {game_id} with user {player_two_id}")
         from .consumers.consumers import PongConsumer
 
         print(
