@@ -293,7 +293,7 @@ class EndMatchView(View):
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
         try:
-            Tournament.objects.get(id=tournament_id)
+            tournament = Tournament.objects.get(id=tournament_id)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [f'Tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
@@ -301,14 +301,14 @@ class EndMatchView(View):
 
         winner = body.get('winner')
         try:
-            winner = Player.objects.get(tournament_id=tournament_id, user_id=winner)
+            winner = Player.objects.get(tournament=tournament, user_id=winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_PLAYER_NOT_EXIST]}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         try:
-            match = EndMatchView.get_match(tournament_id, winner)
+            match = EndMatchView.get_match(tournament, winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_NOT_FOUND]}, status=404)
         except Exception as e:
@@ -324,21 +324,21 @@ class EndMatchView(View):
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
     @staticmethod
-    def get_match(tournament_id: int, winner: int):                         # objet utilisé pour englober plusieurs paramètre nommés.
+    def get_match(tournament: Tournament, winner: Player):                         # objet utilisé pour englober plusieurs paramètre nommés.
         return Match.objects.get(                                           # peuvent être combinés à l’aide des opérateurs &, | et ^.
             Q(
-                tournament_id=tournament_id,
+                tournament=tournament,
                 player_1=winner,
                 status=Match.IN_PROGRESS
             ) | Q(
-                tournament_id=tournament_id,
+                tournament=tournament,
                 player_2=winner,
                 status=Match.IN_PROGRESS
             )
         )
     @staticmethod
-    def set_winner(match: Match, winner: int):
-        if match.player_1.user_id == winner:
+    def set_winner(match: Match, winner: Player):
+        if match.player_1.user_id == winner.user_id:
             match.winner = match.player_1
         else:
             match.winner = match.player_2
