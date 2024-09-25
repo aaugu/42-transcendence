@@ -38,9 +38,6 @@ export async function startGameTournament() {
 		return;
 	}
 
-	console.log("Game ID: ", gameId);
-	console.log("Tourn ID: ", tourn_id);
-
 	t_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
 
 	const canvas = displayGame();

@@ -12,7 +12,6 @@ export var g_socket;
 export async function startGame() {
 	document.getElementById('tournament-table').classList.add('hidden');
 	const gameId = window.location.href.split("/")[4];
-	console.log("game Id: ", gameId);
   	let gameState = { current: null };
 
 	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);

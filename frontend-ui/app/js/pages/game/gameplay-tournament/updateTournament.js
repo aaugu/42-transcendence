@@ -13,16 +13,11 @@ export function updateTournamentTable(matches) {
 		if (match.status !== 'Finished') {
 			console.log("Match: ", match);
 
-			var player2;
-			if (match.player_2)
-				player2 = match.player_2;
-			else
-				player2 = { nickname: 'TBD' };
 			match_html += `
 				<tr>
 					<th scope="row">${match.id}</th>
 					<td>${match.player_1 ? match.player_1.nickname : "TBD"}</td>
-					<td>${player2.nickname}</td>
+					<td>${match.player_2 ? match.player_2.nickname : "TBD"}</td>
 					<td>${match.status}</td>
 				</tr>
 			`;
@@ -40,7 +35,6 @@ export async function newMatchCycle(tournament) {
 		const response = await createTournamentGame(player1_id, player2_id);
 		const newGameId = response.game_id;
 		const new_url = `/tournament/${newGameId}`;
-		console.log("new match ID: " + newGameId);
 		hideModal('t-match-modal');
 		urlRoute(new_url);
 	}

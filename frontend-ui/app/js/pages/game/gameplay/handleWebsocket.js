@@ -84,7 +84,6 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 
 	socket.onmessage = async function (event) {
 		try {
-			// console.log("Raw message received:", event.data);
 			const data = JSON.parse(event.data);
 
 			if (data.game_state) {

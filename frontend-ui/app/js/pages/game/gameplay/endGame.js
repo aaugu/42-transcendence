@@ -27,6 +27,6 @@ export async function endGame(winner_id, loser_id, game_id) {
 		console.log("GAME LOG: match successfully ended, ", data);
 	})
 	.catch((error) => {
-		console.error("Error during fetch:", error);
+		console.error("GAME LOG: end match failed, ", error.message);
 	});
 }

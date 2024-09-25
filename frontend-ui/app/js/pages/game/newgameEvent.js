@@ -49,7 +49,6 @@ export async function newtournamentgameEvent(tourn_id) {
 			const response = await createTournamentGame(player1_id, player2_id);
 			const newGameId = response.game_id;
 			const new_url = `/tournament/${newGameId}`;
-			console.log("new match ID: " + newGameId);
 			hideModal('single-t-modal');
 			urlRoute(new_url);
 		}
