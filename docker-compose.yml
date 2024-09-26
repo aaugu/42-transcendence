@@ -41,8 +41,6 @@ services:
         extends:
             file: pong/docker/docker-compose.yml
             service: pong-python
-        ports:
-            - "9000:9000"
 
     pong-postgres:
         extends:
@@ -73,8 +71,6 @@ services:
         extends:
             file: livechat/docker/docker-compose.yml
             service: livechat-python
-        ports:
-            - "8000:8000"
         depends_on:
             livechat-postgres:
                 condition: service_healthy
