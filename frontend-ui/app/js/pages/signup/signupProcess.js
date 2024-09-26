@@ -77,10 +77,10 @@ export async function signupProcess() {
                     errormsg(error.username, "homepage-errormsg");
                 }
                 else if (error.email) {
-                    errormsg(error.email), "homepage-errormsg";
+                    errormsg(error.email, "homepage-errormsg");
                 }
                 else if (error.nickname) {
-                    errormsg(error.nickname), "homepage-errormsg";
+                    errormsg(error.nickname, "homepage-errormsg");
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }

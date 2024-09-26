@@ -27,6 +27,19 @@ def pong_view(request):
 
     return render(request, "pong_app/pong.html", context)
 
+def join_game(request, joiner_id, game_id):
+    print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
+
+    if not joiner_id or not game_id:
+      return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    GameService.join_game(joiner_id=joiner_id, game_id=game_id)
+
+    curr_game = GameService.get_game(game_id=game_id).to_dict()
+
+    return JsonResponse(curr_game)
+
+
 def create_game(request, creator_id, mode):
     print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
@@ -44,17 +57,22 @@ def create_game(request, creator_id, mode):
 
     return JsonResponse(game.to_dict())
 
-def join_game(request, joiner_id, game_id):
-    print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
+def create_game_tournament(request, player_one_id, player_two_id, mode):
+    print(f'Received request to create tournament game with player_one_id: {player_one_id}, player_two_id: {player_two_id} and mode: {mode}')
 
-    if not joiner_id or not game_id:
-      return JsonResponse({"error": "Missing required parameters"}, status=400)
+    # Vérification des paramètres
+    if not player_one_id or not player_two_id or not mode:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
 
-    GameService.join_game(joiner_id=joiner_id, game_id=game_id)
+    try:
+        mode = GameMode[mode.upper()]
+    except KeyError:
+        return JsonResponse({"error": "Invalid game mode"}, status=400)
 
-    curr_game = GameService.get_game(game_id=game_id).to_dict()
+    # Création du jeu via un service (hypothétique)
+    game = GameService.create_game_tournament(player_one_id, player_two_id, mode)
 
-    return JsonResponse(curr_game)
+    return JsonResponse(game.to_dict())
 
 # @csrf_exempt
 def end_game(request):
@@ -69,20 +87,32 @@ def end_game(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-def retrieve_last_games(request, user_id, nb_of_games):
-  print(f'Received request to get the last: {nb_of_games} of {user_id}')
+def get_user_games(request, user_id):
+    print(f'Received request to get games for user: {user_id}')
 
-  games_to_retrieve = request.GET.get("number_of_games")
-  user = request.GET.get("user_id")
+    games = GameService.get_user_games(user_id=user_id)
+    datas = [game.to_dict() for game in games]
+    if len(datas) > 0:
+        'No entries in the db'
+    else:
+        'Entries in the db'
 
-  games = GameService.get_all_games()
-  datas = [game.to_dict() for game in games]
-  if len(datas) > 0:
-    'No entries in the db'
-  else:
-    'Entries in the db'
+    return JsonResponse(datas, safe=False)
 
-  return JsonResponse(datas, safe=False)
+# def retrieve_last_games(request, user_id, nb_of_games):
+#   print(f'Received request to get the last: {nb_of_games} of {user_id}')
+
+#   games_to_retrieve = request.GET.get("number_of_games")
+#   user = request.GET.get("user_id")
+
+#   games = GameService.get_all_games()
+#   datas = [game.to_dict() for game in games]
+#   if len(datas) > 0:
+#     'No entries in the db'
+#   else:
+#     'Entries in the db'
+
+#   return JsonResponse(datas, safe=False)
 
 def get_game(request, game_id):
     print(f'Received request to get game with id: {game_id}')

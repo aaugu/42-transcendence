@@ -1,5 +1,6 @@
 export async function livechatPage() {
-
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+	document.getElementById('logo').href = "/profile";
     return `
     <div class="content-box d-flex d-none" id="livechat-page">
         <div id="livechat" class="row m-2 rounded-end rounded-3" style="min-height: 75%;">

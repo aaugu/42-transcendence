@@ -11,9 +11,6 @@ async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
 		throw new Error('403');
 	}
-	// else if (conv_nickname === localStorage.getItem('nickname')) {
-	// 	throw new Error('Cannot add yourself to contact list');
-	// }
 	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',
 		headers: {

@@ -22,7 +22,7 @@ import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent, newremotegameEvent, newAIgameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
 import { userID } from "../pages/user/updateProfile.js"
@@ -120,21 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: startGame,
 			description: "local two player game page"
 		},
-		"/local-ai" : {
-			content: newgamePage,
-			startFunction: newAIgameEvent,
-			description: "local IA game page"
-		},
-		"/local-ai/:gameId" : {
-			content: gamePage,
-			startFunction: startGame,
-			description: "local IA game page"
-		},
-		"/remote-twoplayer" : {
-			content: newgamePage,
-			eventListener: newremotegameEvent,
-			description: "remote two player game page"
-		},
+		// "/remote-twoplayer" : {
+		// 	content: newgamePage,
+		// 	eventListener: newremotegameEvent,
+		// 	description: "remote two player game page"
+		// },
 		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,

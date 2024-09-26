@@ -1,10 +1,18 @@
 import { userID } from "../../user/updateProfile.js";
 import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
+import { getUserInfo } from "../../user/getUserInfo.js";
 
 export async function joinGameandRedirect(gameId, senderId) {
 	try {
-		if (senderId !== userID) {
+			const userInfo = await getUserInfo(senderId);
+
+			console.log("user info: ", userInfo);
+			if (userInfo) {
+				localStorage.setItem('left', userInfo.nickname);
+				localStorage.setItem('right', localStorage.getItem('nickname'));
+			}
+
 			const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
 			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 				method: "GET",
@@ -15,17 +23,15 @@ export async function joinGameandRedirect(gameId, senderId) {
 			});
 
 			if (!response.ok) {
-				throw new Error(`Failed to join game. Status: ${response.status}`);
+				throw new Error(`${response.status}`);
+			}
+
+			const new_url = `/remote-twoplayer/${gameId}`;
+			urlRoute(new_url);
+
+		} catch(e) {
+			if (e.message == "500" || e.message == "502") {
+				errormsg("Service temporarily unavailable", "homepage-errormsg");
 			}
 		}
-
-		const new_url = `/remote-twoplayer/${gameId}`;
-		urlRoute(new_url);
-
-	  } catch(error) {
-		if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg");
-		}
-		console.error("JOIN GAME ERROR:", error);
-	  }
 }

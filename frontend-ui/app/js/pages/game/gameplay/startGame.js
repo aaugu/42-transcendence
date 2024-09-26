@@ -6,17 +6,28 @@ import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
+import { errormsg } from "../../../dom/errormsg.js";
+import { urlRoute } from "../../../dom/router.js";
 
 export var g_socket;
 
 export async function startGame() {
+	document.getElementById('tournament-table').classList.add('hidden');
 	const gameId = window.location.href.split("/")[4];
-	console.log("game Id: ", gameId);
   	let gameState = { current: null };
+	  const right_player = localStorage.getItem('right');
+	  const left_player = localStorage.getItem('left');
 
-	g_socket = new WebSocket(`ws://localhost:9000/ws/pong/${gameId}`);
-	
+	g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
+
 	const canvas = displayGame();
+	if (right_player && left_player) {
+		document.getElementById('player1').innerText = left_player;
+		document.getElementById('player2').innerText = right_player;
+	}
+	localStorage.removeItem('right');
+	localStorage.removeItem('left');
+
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
 

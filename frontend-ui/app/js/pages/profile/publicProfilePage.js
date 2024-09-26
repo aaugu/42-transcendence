@@ -1,26 +1,36 @@
 import { error500 } from "../errorpage/error500.js";
-import { getUserInfo } from "../user/getUserInfo.js"
+import { getNicknameUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
+import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
 export async function publicProfilePage() {
     var username = "Guest";
     var nickname = "Guest-nickname";
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
+	var user_id = "";
     var friends_html = '';
+	var matches_html = '';
+	var match_wins = '';
+	var match_losses = '';
 
-    const user_id = localStorage.getItem('ctc_id');
+	nickname = window.location.href.split("/")[4];
+	if (nickname === null || nickname === "")
+		return error500();
 
     try {
-        const userinfo = await getUserInfo(user_id);
+        const userinfo = await getNicknameUserInfo(nickname);
         username = userinfo.username;
-        nickname = userinfo.nickname;
         email = userinfo.email;
         avatar = userinfo.avatar;
+		user_id = userinfo.id;
 
         friends_html = await updateFriendList(user_id);
+		matches_html = await matchHistoryList(nickname, user_id);
 
-        localStorage.removeItem('ctc_id');
+		const match_wins_losses = matchWinsLosses(nickname);
+		match_wins = match_wins_losses.wins;
+		match_losses = match_wins_losses.losses;
     }
     catch (e) {
         if (e.message == "502")
@@ -54,21 +64,22 @@ export async function publicProfilePage() {
             <div id="personal-stats" class="content-box">
                 <h5 class="m-2">Match history</h5>
                 <div class="profile-details centered">
-                    <p>Total wins: 3</p>
-                    <p>Total losses: 2</p>
+                    <p>Total wins: ${match_wins}</p>
+                    <p>Total losses: ${match_losses}</p>
                 </div>
-                <ul class="list-group custom-scrollbar m-2 flex-grow-1">
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span>Date</span>
-                        <span>Opponent</span>
-                        <span>WON/LOST</span>
-                    </li>
-                </ul>
+				<table class="table custom-scrollbar">
+					<thead>
+						<tr>
+						<th scope="col">Date</th>
+						<th scope="col">Opponent</th>
+						<th scope="col">Mode</th>
+						<th scope="col">Result</th>
+						</tr>
+					</thead>
+					<tbody>
+						${matches_html}
+					</tbody>
+				</table>
             </div>
             <div class="content-box">
                 <h5 class="m-2">Friends</h5>
