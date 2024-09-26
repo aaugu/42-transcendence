@@ -80,14 +80,17 @@ export function displayChatInterface (ctc_id, ctc_nickname) {
 
     document.getElementById('chat-div-textarea').classList.remove('hidden');
     document.getElementById('chat-send').classList.remove('hidden');
+    const play_button_local = document.getElementById('chat-invite-game-local');
     const play_button = document.getElementById('chat-invite-game');
     const block_button = document.getElementById('chat-block-btn');
     const nickname = document.getElementById('ctc-nickname');
+    play_button_local.classList.remove("hidden");
     play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');
     colorBlockButton();
     block_button.setAttribute('data-ctcid', ctc_id);
     play_button.setAttribute('data-ctcid', ctc_id);
+    play_button_local.setAttribute('data-ctcid', ctc_id);
     if (ctc_nickname !== "Notifications") {
         nickname.classList.remove('hidden');
         nickname.setAttribute('data-otherctcid', ctc_id);
@@ -98,6 +101,7 @@ export function displayChatInterface (ctc_id, ctc_nickname) {
         document.getElementById('chat-div-textarea').classList.add('hidden');
         document.getElementById('chat-send').classList.add('hidden');
         document.getElementById('chat-invite-game').classList.add('hidden');
+        document.getElementById('chat-invite-game-local').classList.add('hidden');
         document.getElementById('chat-block-btn').classList.add('hidden');
         document.getElementById('ctc-nickname').classList.add('hidden');
     }

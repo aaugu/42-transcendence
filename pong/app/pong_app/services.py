@@ -17,7 +17,7 @@ class GameService:
     """
 
     @staticmethod
-    def create_game(creator_id, mode: GameMode):
+    def create_game(creator_id, mode: GameMode, joiner_id):
         game_id = str(uuid.uuid4())
 
         if mode == GameMode.REMOTE:
@@ -29,6 +29,7 @@ class GameService:
             Games.objects.create(
                 game_id=game_id,
                 creator_id=creator_id,
+                joiner_id=joiner_id,
                 status="IN_PROGRESS",
                 mode="LOCAL_TWO_PLAYERS",
             )
