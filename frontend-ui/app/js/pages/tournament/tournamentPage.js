@@ -89,7 +89,6 @@ export async function tournamentPage() {
                         <button type="button" class="btn btn-danger hidden" id="t-delete">Delete</button>
                         <button type="button" class="btn btn-dark hidden" id="t-join">Join</button>
                         <button type="button" class="btn btn-dark hidden" id="t-start">Go</button>
-                        <button type="button" class="btn btn-dark hidden" id="t-play">Play</button>
                     </div>
                 </div>
             </div>

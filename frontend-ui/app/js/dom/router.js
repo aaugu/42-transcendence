@@ -26,6 +26,7 @@ import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEven
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
 import { userID } from "../pages/user/updateProfile.js"
+import { startGameTournamentremote, t_remote_socket } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
 
 let urlRoute;
 let currentEventListener = null;
@@ -44,16 +45,15 @@ function updateEventListenerMainCont(newEventListener = null) {
 function resetDataRouteChange() {
 	if (g_socket && g_socket.readyState === WebSocket.OPEN) {
 		g_socket.close();
-		console.log('GAME LOG: Websocket connection closed');
 	}
 	if (t_socket && t_socket.readyState === WebSocket.OPEN) {
 		t_socket.close();
-		console.log('GAME LOG: Websocket connection closed');
 	}
-	if (chatSocket) {
-		if (chatSocket.readyState == 1) {
-			chatSocket.close();
-		}
+	if (chatSocket && chatSocket.readyState == WebSocket.OPEN) {
+		chatSocket.close();
+	}
+	if (t_remote_socket && t_remote_socket.readyState == WebSocket.OPEN) {
+		t_remote_socket.close();
 	}
 	reset_all_tournaments();
 	reset_all_conv();
@@ -120,11 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: startGame,
 			description: "local two player game page"
 		},
-		// "/remote-twoplayer" : {
-		// 	content: newgamePage,
-		// 	eventListener: newremotegameEvent,
-		// 	description: "remote two player game page"
-		// },
 		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,
@@ -136,14 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament/:tournId" : {
+		"/tournament/:gameId" : {
 			content: gamePage,
 			startFunction: startGameTournament,
 			description: "local tournament game page"
 		},
-		"/tournament-remote" : {
+		"/tournament-remote/:gameId" : {
 			content: gamePage,
-			startFunction: startGameTournament,
+			startFunction: startGameTournamentremote,
 			description: "remote tournament game page"
 		},
         "/profile" : {
@@ -154,8 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/profile/:id" : {
 			content: publicProfilePage,
-			// eventListener: profileEvent,
-			// startFunction: startFriendListRefresh,
 			description: "someone else's profile page"
 		},
 		"/livechat" : {
@@ -182,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         goToRoute();
     }
 
-	//add in the end: || ((currentRoute !== "/" && currentRoute !== "/login" && currentRoute !== "/signup") && userID !== null)
     const goToRoute = async () => {
 		resetDataRouteChange();
 		setUserID();

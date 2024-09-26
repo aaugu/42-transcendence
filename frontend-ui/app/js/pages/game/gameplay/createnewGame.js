@@ -53,12 +53,12 @@ export function getGameMode(mode) {
   switch (mode) {
     case "local-twoplayer":
       return "LOCAL_TWO_PLAYERS";
-    case "local-ai":
-      return "LOCAL_VS_IA";
     case "remote-twoplayer":
       return "REMOTE";
     case "tournament-creation":
       return "TOURNAMENT";
+	  case "tournament-remote":
+		return "TOURNAMENT_REMOTE";
     default:
       console.log("Invalid mode");
       return null;
@@ -66,26 +66,16 @@ export function getGameMode(mode) {
 
 }
 
-export async function getGameID () {
-  const currentUrl = window.location.href;
-  var mode = currentUrl.split("/")[3];
+export async function getGameID (game_mode = null) {
+	const currentUrl = window.location.href;
+	var mode = game_mode || currentUrl.split("/")[3];
+	let gameData;
 
-  mode = getGameMode(mode);
+	mode = getGameMode(mode);
 
-  let gameData;
-
-  try {
 	gameData = await createGame(mode);
-    return gameData.game_id;
-  }
-  catch (e) {
-    if (e.message === "403") {
-      throw new Error(`${e.message}`);
-    }
-    if (e.message === "500" || e.message === "502") {
-      throw new Error(`${e.message}`);
-    }
-    console.error(`USER LOG: ${e.message}`);
-    return null;
-  }
+	if (gameData === null) {
+		throw new Error("500");
+	}
+	return gameData.game_id;
 }

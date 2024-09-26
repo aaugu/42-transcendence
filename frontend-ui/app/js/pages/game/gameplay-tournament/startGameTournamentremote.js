@@ -1,8 +1,8 @@
 import handleButtons from '../gameplay/HandleButtons.js';
 import handleKeyPress from '../gameplay/HandleKeyPress.js';
-import { Tournament } from './tournamentClass.js';
+import { RemoteTournament } from './tournamentClass.js';
 import { displayGame } from '../gameplay/displayGame.js';
-import { handleWebsocketTournamentremote } from '../gameplay/handleWebsocket.js';
+import { handleWebsocketTournament_remote } from '../gameplay/handleWebsocket.js';
 import { getTournamentDetails } from '../../tournament/getTournaments.js';
 import { urlRoute } from '../../../dom/router.js';
 import { errormsg } from '../../../dom/errormsg.js';
@@ -25,7 +25,7 @@ export async function startGameTournamentremote() {
 
 		t_details = await getTournamentDetails(tourn_id);
 		if (t_details.status === 'In Progress') {
-			tournament = new Tournament(tourn_id, 'In Progress');
+			tournament = new RemoteTournament(tourn_id, 'In Progress');
 			await tournament.continueTournament();
 		}
 		else if (t_details.status === 'Created')
@@ -41,7 +41,7 @@ export async function startGameTournamentremote() {
 	t_remote_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
 
 	const canvas = displayGame();
-	handleWebsocketTournamentremote(t_remote_socket, tournament, canvas, gameState);
+	handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);
 	handleButtons(t_remote_socket);
 
 	let keysPressed = {}

@@ -97,10 +97,10 @@ def check_collision_with_edges_paddle(paddle):
 
 class GameMode(Enum):
     LOCAL_TWO_PLAYERS = 1
-    LOCAL_VS_IA = 2
-    TOURNAMENT = 3
-    REMOTE = 4
-    
+    TOURNAMENT = 2
+    REMOTE = 3
+    TOURNAMENT_REMOTE = 4
+
 
 class Game:
     def __init__(self, game_id, mode):

@@ -2,7 +2,7 @@ import updateGameState from "./GameDraw.js";
 import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
 import { hideModal } from "../../../dom/modal.js";
-import { updateTournamentTable, newMatchCycle } from "../gameplay-tournament/updateTournament.js";
+import { updateTournamentTable, newMatchCycle, newMatchCycle_remote } from "../gameplay-tournament/updateTournament.js";
 import { endGame } from "../gameplay/endGame.js";
 import { userID } from "../../user/updateProfile.js";
 
@@ -124,7 +124,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 					setTimeout(() => {
 						hideModal("t-match-modal");
 						urlRoute("/tournament-creation");
-					}, 5000);
+					}, 3000);
 				}
 			}
 		} catch (error) {
@@ -139,9 +139,10 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 	};
 }
 
-export function handleWebsocketTournamentremote(socket, tournament, canvas, gameState) {
+export function handleWebsocketTournament_remote(socket, tournament, canvas, gameState) {
 	const player1html = document.getElementById("player1");
 	const player2html = document.getElementById("player2");
+	const is_exec_player = tournament.current_match.player_1.user_id === userID;
 
 	socket.onopen = function (event) {
 		console.log("WebSocket connection opened:", event);
@@ -173,45 +174,49 @@ export function handleWebsocketTournamentremote(socket, tournament, canvas, game
 				updateGameState(data.game_state, canvas);
 			}
 
+			if (data.player_disconnect) {
+				// console.log(data.message);
+				// console.log("Remaining player:", data.remaining_player);
+				// console.log("Disconnected player:", data.player_id);
+				// console.log("GameID", data.game_id);
+
+				await endGame(data.remaining_player, data.player_id, data.game_id);
+				tournament.updateMatchCycle_remote(data.remaining_player);
+				await newMatchCycle_remote(tournament);
+				urlRoute("/profile");
+				errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
+			}
+
 			if (data.game_finished) {
-				if (tournament.current_match.player_1.user_id === userID){
-					console.log("Game Finished", data.game_finished);
-					console.log("WinnerID", data.winner_id);
-					console.log("LoserID", data.loser_id);
+				console.log("Game Finished", data.game_finished);
+				console.log("WinnerID", data.winner_id);
+				console.log("LoserID", data.loser_id);
 
-					const winner = data.winner_id == tournament.current_match.player_1.user_id ?
-								tournament.current_match.player_1
-								: tournament.current_match.player_2;
+				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
+							tournament.current_match.player_1
+							: tournament.current_match.player_2;
 
-					await tournament.updateMatchCycle(winner.user_id);
-
-					console.log("current game status: ", tournament.game_status);
-					console.log("current match: ", tournament.current_match);
-
+				if (is_exec_player){
 					await endGame(data.winner_id, data.loser_id, data.game.game_id);
+					await tournament.endMatch(data.winner_id);
 				}
+				await tournament.updateMatchCycle_remote();
 
 				const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
 				if (tournament.game_status === "In Progress" && tournament.current_match) {
-					document.getElementById("t-match-text").innerHTML = `
-												<span>The winner is: ${winner.nickname}!</span>
-												</br>
-												<span>Next up: ${tournament.current_match.player_1.nickname}
-												vs ${tournament.current_match.player_2.nickname}</span>`;
-					t_matchmodal.show();
-					setTimeout(async () => {
-					await newMatchCycle(tournament);
-					}, 3000);
+					document.getElementById("t-match-text").innerText = `Congratulations ${winner.nickname}, you won this match!`;
+					if (is_exec_player)
+						await newMatchCycle_remote(tournament);
 				}
 				else if (tournament.game_status === "Finished") {
 					document.getElementById("t-match-text").innerText =
-						`Congratulations ${winner.nickname}, you won this tournament!`;
-						t_matchmodal.show();
-					setTimeout(() => {
-						hideModal("t-match-modal");
-						urlRoute("/tournament-creation");
-					}, 5000);
+						`This was the last match of this tournament. Congratulations ${winner.nickname}, you won!`;
 				}
+				t_matchmodal.show();
+				setTimeout(() => {
+					hideModal("t-match-modal");
+					urlRoute("/profile");
+				}, 3000);
 			}
 		} catch (error) {
 			if (error.message === "500" || error.message === "502") {
@@ -220,6 +225,10 @@ export function handleWebsocketTournamentremote(socket, tournament, canvas, game
 					"Tournament could not be properly continued due to a server error",
 					"homepage-errormsg"
 				);
+			}
+			if (error.message === "403") {
+				urlRoute("/profile");
+				errormsg("You were redirected to the landing page", "homepage-errormsg");
 			}
 		}
 	};
