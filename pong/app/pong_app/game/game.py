@@ -99,7 +99,7 @@ class GameMode(Enum):
     LOCAL_TWO_PLAYERS = 1
     TOURNAMENT = 2
     REMOTE = 3
-    REMOTE_TOURNAMENT = 4
+    TOURNAMENT_REMOTE = 4
     
 
 class Game:

@@ -55,14 +55,18 @@ class PongConsumer(AsyncWebsocketConsumer):
                 return
 
         # Increment user count for the game
-        if PongConsumer.user_per_room[self.game_id] == 0 and GameMode.REMOTE:
+        if PongConsumer.user_per_room[self.game_id] == 0 and (
+            GameMode.REMOTE or GameMode.TOURNAMENT_REMOTE
+        ):
             self.player_id = game.game_state.paddles[
                 0
             ].player_id  # Track the player in self
             PongConsumer.players_in_game.setdefault(self.game_id, []).append(
                 game.game_state.paddles[0].player_id
             )
-        elif PongConsumer.user_per_room[self.game_id] == 1 and GameMode.REMOTE:
+        elif PongConsumer.user_per_room[self.game_id] == 1 and (
+            GameMode.REMOTE or GameMode.TOURNAMENT_REMOTE
+        ):
             self.player_id = game.game_state.paddles[
                 1
             ].player_id  # Track the player in self
@@ -139,20 +143,16 @@ class PongConsumer(AsyncWebsocketConsumer):
                 PongConsumer.games[self.game_id].game_state.paddles[0].move("down")
 
         if start_stop_reset == "start":
-            print(f"Start Triggered")
             PongConsumer.games[self.game_id].game_state.start()
         elif start_stop_reset == "pause":
-            print(f"Stop Triggered")
             PongConsumer.games[self.game_id].game_state.pause()
-        elif start_stop_reset == "reset":
-            PongConsumer.games[self.game_id].game_state.reset_score()
 
     async def game_loop(self):
         while True:
             if (
                 PongConsumer.games[self.game_id].mode == GameMode.REMOTE
-                and PongConsumer.user_per_room[self.game_id] == 2
-            ):
+                or PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT_REMOTE
+            ) and PongConsumer.user_per_room[self.game_id] == 2:
                 # await asyncio.sleep(2)
                 PongConsumer.games[self.game_id].game_state.start()
 
@@ -236,7 +236,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "game_id": game_id,
                     "message": message,
                     "player_disconnect": True,
-                    "remaining_player": remaining_player,  # Include 
+                    "remaining_player": remaining_player,  # Include
                 }
             )
         )
