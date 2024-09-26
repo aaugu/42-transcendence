@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView,ManageTournamentView, DeleteInactiveTournamentView, MyTournamentAsPlayerView, MyTournamentAsAdminView)
+from microservice.views import (GenerateMatchesView, StartMatchView, EndMatchView, TournamentView, TournamentPlayersView, StartTournamentView, ManageTournamentView, MyTournamentAsAdminView)
 
 urlpatterns = [
     path('tournament/', TournamentView.as_view(), name='new_tournament'),

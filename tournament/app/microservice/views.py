@@ -254,7 +254,7 @@ class StartMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
 
-        if player1 is not None and player2 is not None:
+        if player1 is not None or player2 is not None:
             response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, link)
         if response.status_code != 201:
             return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
@@ -262,7 +262,7 @@ class StartMatchView(View):
 
     @staticmethod
     def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, link):
-        request_url = "http://localhost:8000/livechat/notification/"
+        request_url = "http://172.20.5.2:8000/livechat/notification/"
         if tournament.type == Tournament.LOCAL:
             json_request = {
                 'user_1': {
@@ -506,12 +506,13 @@ class TournamentView(View):
     @staticmethod
     def is_valid_type(type: Any) -> tuple[bool, Optional[list[str]]]:
         errors = []
-
+        remote = "remote"
+        local = "local"
         if type is None:
             return False, [error.IS_TYPE_MISSING]
         if not isinstance(type, str):
             return False, error.TYPE_NOT_STRING
-        if type != "remote" or "local":
+        if not type == local and not type == remote:
             return False, [error.TYPE_NOT_MATCH]
         if errors:
             return False, errors
