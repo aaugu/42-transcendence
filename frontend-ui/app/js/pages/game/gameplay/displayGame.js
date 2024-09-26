@@ -15,12 +15,21 @@ export function displayGame() {
 							<button class="btn btn-dark" id="stop-button">Stop</button>
 							<button class="btn btn-light" id="reset-button">Reset</button>
 						</div>
+						</br>
 						<div>
-							<span id="player1"></span>
 							<span id="score-p-1">0</span>
 							<span>:</span>
 							<span id="score-p-2">0</span>
-							<span id="player2"></span>
+						</div>
+						</br>
+						<div>
+							<span id="player1">Player 1</span>
+							<span> VS </span>
+							<span id="player2">Player 2</span>
+						</div>
+						<div class="justify-content-between">
+							<span>(F - V)</span>
+							<span>(N - J)</span>
 						</div>`;
 
 	canvas.width = canvasWidth;

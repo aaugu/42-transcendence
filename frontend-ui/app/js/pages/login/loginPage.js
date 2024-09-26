@@ -1,4 +1,6 @@
 export function loginPage() {
+	document.getElementById('nav-profile-elements').classList.add('hidden');
+	document.getElementById('logo').href = "/";
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Log in here</h1>
@@ -11,6 +13,7 @@ export function loginPage() {
         </div>
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="login-submit">Log in</button>
+			<p class="hidden m-2 text-danger" id="login-errormsg"></p>
         </row>
 		<!-- 2FA Modal -->
 		<div class="modal fade" id="login-2fa-modal" tabindex="-1" aria-labelledby="login-2fa" aria-hidden="true">

@@ -1,7 +1,8 @@
 export async function tournamentPage() {
-
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+	document.getElementById('logo').href = "/profile";
 	return `
-    <div class="two-column-container">
+    <div class="two-column-container d-none" id="tournament-page">
         <div class="column-left" style="flex: 1 1 40%;">
             <div class="content-box clearfix">
                 <h5 class="m-3">Create a tournament</h5>
@@ -68,6 +69,7 @@ export async function tournamentPage() {
                 <ul id="my-tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
                 </ul>
             </div>
+            <p class="hidden m-2 text-danger" id="join-and-tournament-errormsg"></p>
         </div>
         <!-- Join/start/play tournament modal -->
         <div class="modal fade" id="single-t-modal" tabindex="-1" aria-labelledby="single-t-modal" aria-hidden="true">

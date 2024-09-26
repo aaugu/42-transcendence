@@ -8,3 +8,4 @@ trash/
 **/volumes/ 
 /ssl-certificate/*
 db.sqlite3
+.placeholder

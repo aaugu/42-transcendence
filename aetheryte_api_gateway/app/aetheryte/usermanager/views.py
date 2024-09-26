@@ -2,24 +2,13 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import requests
-
 from login.models import *
 from login.serializers import *
-from login.utils import dprint
 
 from .utils import *
 from .serializer import *
 
 class general_user(APIView):
-    def get(self, request):
-        if check_authentication(request):
-            users = CustomUser.objects.all()
-            serializer = CustomUserSerializer(users, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-    
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,7 +23,7 @@ class general_user(APIView):
             new_user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
         
 class detailed_user(APIView):
     def get(self, request, pk):
@@ -158,7 +147,7 @@ class ChangePasswordView(APIView):
     def post(self, request, user_id, *args, **kwargs):
         if check_authentication(request):
             data = request.data.copy()
-            data['user_id'] = user_id  # Ajoute l'ID de l'utilisateur au data pour le serializer
+            data['user_id'] = user_id
             serializer = ChangePasswordSerializer(data=data, context={'request': request})
             if serializer.is_valid():
                 serializer.save()
@@ -166,3 +155,15 @@ class ChangePasswordView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"status": "ERROR", "details": "Authentication failed"}, status=status.HTTP_403_FORBIDDEN)
+        
+class getUserByNickname(APIView):
+    def get(self, request, user_nickname):
+        if check_authentication(request):
+            try:
+                user = CustomUser.objects.get(nickname=user_nickname)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this Nickname"}, status=status.HTTP_404_NOT_FOUND)
+            serializer = CustomUserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)

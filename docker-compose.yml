@@ -13,14 +13,15 @@ volumes:
     # Tournament
     tournament_postgres_volume:
         driver: local
+    # Pong
     pong_postgres_volume:
         driver: local
     # Live chat
     livechat_postgres_volume:
         driver: local
     # elk volumes
-    # elastic_data_volume:
-    #     driver: local
+    elastic_data_volume:
+        driver: local
 
 services:
     aetheryte-postgres:
@@ -40,8 +41,6 @@ services:
         extends:
             file: pong/docker/docker-compose.yml
             service: pong-python
-        ports:
-            - "9000:9000"
 
     pong-postgres:
         extends:
@@ -72,8 +71,6 @@ services:
         extends:
             file: livechat/docker/docker-compose.yml
             service: livechat-python
-        ports:
-            - "8000:8000"
         depends_on:
             livechat-postgres:
                 condition: service_healthy
@@ -84,15 +81,15 @@ services:
         ports:
             - "10443:443"
     # Elasticsearch / Kibana
-    # elasticsearch:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: elasticsearch
-    # init-elasticsearch:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: init-elasticsearch
-    # kibana:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: kibana
+    elasticsearch:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: elasticsearch
+    init-elasticsearch:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: init-elasticsearch
+    kibana:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: kibana

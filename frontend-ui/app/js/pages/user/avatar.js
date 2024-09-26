@@ -1,6 +1,6 @@
 import { editUserInfo } from './editUserInfo.js';
 
-export const defaultAvatar = "images/default_avatar.png"
+export const defaultAvatar = "/images/default_avatar.png"
 
 export function readAvatarFile(file) {
     return new Promise((resolve, reject) => {

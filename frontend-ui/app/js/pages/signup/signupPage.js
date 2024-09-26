@@ -1,4 +1,6 @@
 export function signupPage() {
+    document.getElementById('nav-profile-elements').classList.add('hidden');
+	document.getElementById('logo').href = "/";
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Sign up here</h1>
@@ -23,7 +25,7 @@ export function signupPage() {
             </div>
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="avatarOption" id="uploadAvatar" value="upload">
-                <label class="form-check-label" for="avatar-upload-file">
+                <label class="form-check-label">
                     Upload your own avatar
                 </label>
             </div>
@@ -31,6 +33,7 @@ export function signupPage() {
         </div>
         <row class="justify-content-center">
             <button type="submit" class="btn btn-dark" id="signup-submit">Sign up</button>
+            <p class="hidden m-2 text-danger" id="signup-errormsg"></p>
         </row>
     </div>
     `;
