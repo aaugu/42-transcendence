@@ -40,7 +40,7 @@ class MatchUtils:
     def match_notif_to_json(match: Match, notif: bool):
         match_data = MatchUtils.match_to_json(match)
         data = {
-            'message_sent_to_livechat': notif,
+            'is_notif_send': notif,
             'match': match_data
         }
 
@@ -227,6 +227,7 @@ class StartMatchView(View):
 
         player1 = body.get('player_1')
         player2 = body.get('player_2')
+        link = body.get('link')
 
         try:
             player1 = Player.objects.get(tournament_id=tournament_id, user_id=player1)
@@ -253,24 +254,37 @@ class StartMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
 
-        # if player1 is not None and player2 is not None:
-        #     response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
-
-        return JsonResponse(MatchUtils.match_to_json(match), status=200)
+        if player1 is not None and player2 is not None:
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, link)
+        if response.status_code != 201:
+            return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
+        return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
-    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player):
-        request_url = "http://localhost:8000/api/livechat/notification/"
-        json_request = {
-            'user_1': {
-                'user_id': player1.user_id,
-                'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
-            },
-            'user_2': {
-                'user_id': player2.user_id,
-                'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
-            },
-        }
+    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, link):
+        request_url = "http://localhost:8000/livechat/notification/"
+        if tournament.type == Tournament.LOCAL:
+            json_request = {
+                'user_1': {
+                    'user_id': player1.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                },
+                'user_2': {
+                    'user_id': player2.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                },
+            }
+        elif tournament.type == Tournament.REMOTE:
+            json_request = {
+                'user_1': {
+                    'user_id': player1.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{link}`'
+                },
+                'user_2': {
+                    'user_id': player2.user_id,
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{link}`'
+                },
+            }
         return requests.post(url = request_url, json = json_request)
 
     @staticmethod
@@ -292,7 +306,7 @@ class EndMatchView(View):
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
         try:
-            Tournament.objects.get(id=tournament_id)
+            tournament = Tournament.objects.get(id=tournament_id)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [f'Tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
@@ -300,14 +314,14 @@ class EndMatchView(View):
 
         winner = body.get('winner')
         try:
-            winner = Player.objects.get(tournament_id=tournament_id, user_id=winner)
+            winner = Player.objects.get(tournament=tournament, user_id=winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_PLAYER_NOT_EXIST]}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         try:
-            match = EndMatchView.get_match(tournament_id, winner)
+            match = EndMatchView.get_match(tournament, winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_NOT_FOUND]}, status=404)
         except Exception as e:
@@ -323,21 +337,21 @@ class EndMatchView(View):
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 
     @staticmethod
-    def get_match(tournament_id: int, winner: int):                         # objet utilisé pour englober plusieurs paramètre nommés.
-        return Match.objects.get(                                           # peuvent être combinés à l’aide des opérateurs &, | et ^.
+    def get_match(tournament: Tournament, winner: Player):
+        return Match.objects.get(
             Q(
-                tournament_id=tournament_id,
+                tournament=tournament,
                 player_1=winner,
                 status=Match.IN_PROGRESS
             ) | Q(
-                tournament_id=tournament_id,
+                tournament=tournament,
                 player_2=winner,
                 status=Match.IN_PROGRESS
             )
         )
     @staticmethod
-    def set_winner(match: Match, winner: int):
-        if match.player_1.user_id == winner:
+    def set_winner(match: Match, winner: Player):
+        if match.player_1.user_id == winner.user_id:
             match.winner = match.player_1
         else:
             match.winner = match.player_2
@@ -418,31 +432,6 @@ class TournamentView(View):
         return JsonResponse(model_to_dict(tournament), status=201)
 
     @staticmethod
-    def delete(request: HttpRequest) -> JsonResponse:
-        try:
-            json_request = json.loads(request.body.decode('utf-8'))
-        except Exception:
-            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
-        user_id = json_request.get('user_id')
-
-        try:
-            user_tournaments = Tournament.objects.filter(admin_id=user_id, status=Tournament.CREATED)
-            nb_tournaments = len(user_tournaments)
-            if user_tournaments:
-                user_tournaments.delete()
-
-            player = Player.objects.filter(user_id=user_id, tournament__status=Tournament.CREATED)
-            if player:
-                player.delete()
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        if nb_tournaments == 0:
-            return JsonResponse({'message': 'No tournament created by this user'}, status=200)
-        return JsonResponse({'message': 'Tournaments created by this user have been deleted'}, status=200)
-
-    @staticmethod
     def register_admin_as_player(json_request, tournament: Tournament, user_id: int) -> Optional[list[str]]:
         admin_nickname = json_request.get('player_names')
         if admin_nickname is not None:
@@ -468,14 +457,18 @@ class TournamentView(View):
         errors = []
         name = json_request.get('name')
         max_players = json_request.get('max_players')
+        type = json_request.get('type')
 
         valid_name, name_errors = TournamentView.is_valid_name(name)
         valid_max_players, max_players_error = TournamentView.is_valid_max_players(max_players)
+        valid_type, type_errors = TournamentView.is_valid_type(type)
 
         if not valid_name:
             errors.extend(name_errors)
         if not valid_max_players:
             errors.append(max_players_error)
+        if not valid_type:
+            errors.extend(type_errors)
 
         if errors:
             return False, errors
@@ -508,6 +501,20 @@ class TournamentView(View):
             return False, error.TOO_MANY_SLOTS
         if max_players < settings.MIN_PLAYERS:
             return False, error.NOT_ENOUGH_SLOTS
+        return True, None
+    
+    @staticmethod
+    def is_valid_type(type: Any) -> tuple[bool, Optional[list[str]]]:
+        errors = []
+
+        if type is None:
+            return False, [error.IS_TYPE_MISSING]
+        if not isinstance(type, str):
+            return False, error.TYPE_NOT_STRING
+        if type != "remote" or "local":
+            return False, [error.TYPE_NOT_MATCH]
+        if errors:
+            return False, errors
         return True, None
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -570,39 +577,6 @@ class TournamentPlayersView(View):
             return JsonResponse({'errors': [f'An unexpected error occurred : {e}']}, status=500)
 
         return JsonResponse(model_to_dict(player), status=201)
-
-    @staticmethod
-    def delete(request: HttpRequest, tournament_id: int):
-        try:
-            json_request = json.loads(request.body.decode('utf-8'))
-        except Exception:
-            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-
-        user_id = json_request.get('user_id')
-
-        try:
-            tournament = Tournament.objects.get(id=tournament_id)
-        except ObjectDoesNotExist:
-            return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        try:
-            player = tournament.players.get(user_id=user_id)
-        except ObjectDoesNotExist:
-            return JsonResponse({'errors': [error.NOT_REGISTERED]}, status=404)
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        if tournament.status != Tournament.CREATED:
-            return JsonResponse({'errors': [error.CANT_LEAVE]}, status=403)
-
-        try:
-            player.delete()
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        return JsonResponse({'message': f'You left the tournament `{tournament.name}`'}, status=200)
 
     @staticmethod
     def is_valid_nickname(nickname: str) -> tuple[bool, Optional[list[str]]]:
@@ -755,36 +729,6 @@ class ManageTournamentView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
         return JsonResponse({'message': f'tournament `{tournament_name}` successfully deleted'}, status=200)
-
-@method_decorator(csrf_exempt, name='dispatch')
-class MyTournamentAsPlayerView(View):
-    @staticmethod
-    def get(request: HttpRequest, user_id: int) -> JsonResponse:
-        active_tournaments = []
-
-        try:
-            my_tournaments = Tournament.objects.filter(
-                status__in=[Tournament.CREATED, Tournament.IN_PROGRESS],
-                type__in=[Tournament.REMOTE, Tournament.LOCAL],
-                players__user_id=user_id
-            )
-        except ObjectDoesNotExist:
-            my_tournaments = []
-        except Exception as e:
-            return JsonResponse({'errors': [str(e)]}, status=500)
-
-        if len(my_tournaments) > 0:
-            active_tournaments.extend(my_tournaments)
-
-        tournaments_data = TournamentUtils.tournament_to_json(active_tournaments)
-
-        return JsonResponse(
-            {
-                'nb-active-tournaments': len(tournaments_data),
-                'active-tournaments': tournaments_data
-            },
-            status=200
-        )
 
 @method_decorator(csrf_exempt, name='dispatch')
 class MyTournamentAsAdminView(View):

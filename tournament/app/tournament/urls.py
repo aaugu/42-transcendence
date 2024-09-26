@@ -26,7 +26,6 @@ urlpatterns = [
     path('tournament/<int:tournament_id>/matches/generate/', GenerateMatchesView.as_view(), name='generate_matches'),
     path('tournament/<int:tournament_id>/match/start/', StartMatchView.as_view(), name='start_match'),
     path('tournament/<int:tournament_id>/match/end/', EndMatchView.as_view(), name='end_match'),
-    path('tournament/<int:user_id>/mytournament/player/', MyTournamentAsPlayerView.as_view(), name='tournament_as_player'),
     path('tournament/<int:user_id>/mytournament/admin/', MyTournamentAsAdminView.as_view(), name='tournament_as_admin')
 ]
 
@@ -35,7 +34,6 @@ TournamentView:
     -get    : optention de la liste des tournois avec les inforamations ralatives
                 'id', 'name', 'max_players', 'nb_players', 'status','admin-id'
     -post   : creer un tounoi et enregistre l'admin en joueur
-    -delete : suprime tout les tournois(CREATED) d'un utilisateur
 
 ManageTournamentView:
     -get    : optention des informations relative a un tournoi avec la liste de joueur
@@ -45,7 +43,6 @@ ManageTournamentView:
 TournamentPlayersView:
     -get    : optention de la liste des joueurs 'players'('nickname','user_id') avec 'max_players' et 'nb_players'
     -post   : ajoute un joueur a un tournois
-    -delete : suprime un joueur d'un tournois (cas d'un joueur quitant le tournois par lui-meme)
 
 StartTournamentView:
     -patch  : modifie le status d'un tournois et set le start time
@@ -59,9 +56,6 @@ StartMatchView:
 
 EndMatchView:
     -post   : set le "winner", modifie le status d'un matche en FINISHED et update le tournoi. Si c'est la final (calcule interne) set le tournois en FINISHED
-
-MyTournamentAsPlayerView:
-    -get    : optention de la list des tournois ou l'utilisateur est un joueur
 
 MyTournamentAsAdminView:
     -get    : optention de la list des tournois ou l'utilisateur en est l'Admin
