@@ -19,6 +19,7 @@ class GameService:
     @staticmethod
     def create_game(creator_id, mode: GameMode, joiner_id):
         game_id = str(uuid.uuid4())
+        game_instance = Game(mode=mode, game_id=game_id)
 
         if mode == GameMode.REMOTE:
             Games.objects.create(
@@ -33,6 +34,7 @@ class GameService:
                 status="IN_PROGRESS",
                 mode="LOCAL_TWO_PLAYERS",
             )
+            game_instance.game_state.paddles[1].player_id = joiner_id
 
         elif mode == GameMode.TOURNAMENT_REMOTE:
             print(f"Creating TOURNAMENT REMOTE game with id {game_id}")
@@ -43,7 +45,6 @@ class GameService:
                 mode="TOURNAMENT-REMOTE",
             )
 
-        game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
 
         print(
@@ -146,7 +147,7 @@ class GameService:
     def get_user_games(user_id):
         games = Games.objects.filter(
             Q(creator_id=user_id) | Q(joiner_id=user_id),
-            Q(mode="TOURNAMENT") | Q(mode="REMOTE"),
+            Q(mode="TOURNAMENT") | Q(mode="REMOTE") | Q(mode="TOURNAMENT-REMOTE") | Q(mode="LOCAL_TWO_PLAYERS"),
             status="FINISHED"
         ).order_by("-created_at")
 

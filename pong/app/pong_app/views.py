@@ -40,7 +40,7 @@ def join_game(request, joiner_id, game_id):
     return JsonResponse(curr_game)
 
 
-def create_game(request, creator_id, mode):
+def create_game(request, creator_id, mode, joiner_id):
     print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
     # Vérification des paramètres
@@ -53,7 +53,7 @@ def create_game(request, creator_id, mode):
         return JsonResponse({"error": "Invalid game mode"}, status=400)
 
     # Création du jeu via un service (hypothétique)
-    game = GameService.create_game(creator_id, mode)
+    game = GameService.create_game(creator_id, mode, joiner_id)
 
     return JsonResponse(game.to_dict())
 

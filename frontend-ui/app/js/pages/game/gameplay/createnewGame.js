@@ -2,11 +2,11 @@ import { userID } from "../../user/updateProfile.js";
 
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
-export async function createGame(mode) {
+export async function createGame(mode, id = 0) {
   if (userID === null)
     throw new Error('403');
 
-    const url = `${gatewayEndpoint}/create-game/${userID}/${mode}/`;
+    const url = `${gatewayEndpoint}/create-game/${userID}/${mode}/${id}/`;
 
   const response = await fetch(url,
   {
