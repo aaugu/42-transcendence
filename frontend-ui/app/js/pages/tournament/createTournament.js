@@ -17,9 +17,7 @@ async function createTournament(new_tournament) {
 			"type": new_tournament.type,
 			"user_id": new_tournament.user_id,
 			"max_players": new_tournament.max_players,
-			"player_names": new_tournament.player_names,
-			"is_private": new_tournament.is_private,
-			"password": new_tournament.password
+			"player_names": new_tournament.player_names
 		}),
 		credentials: 'include'
 	});
@@ -38,15 +36,13 @@ async function createTournament(new_tournament) {
 	}
 }
 
-function newTournamentData(tournamentName, max_players, adminNickname, is_private, password, type) {
+function newTournamentData(tournamentName, max_players, adminNickname, type) {
 	const new_tournament = {
 		"name": tournamentName,
 		"user_id": userID,
 		"type": type,
 		"max_players": max_players,
-		"player_names": adminNickname,
-		"is_private": is_private,
-		"password": password
+		"player_names": adminNickname
 	};
 	return new_tournament;
 }
@@ -68,7 +64,7 @@ export async function createTournamentButton() {
 		else {
 			type = 'remote';
 		}
-		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, false, "", type);
+		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, type);
 		console.log("new-tournament: ", new_tournament);
 		await createTournament(new_tournament);
 		updateTournLists();
