@@ -5,7 +5,6 @@ from .views import (
     create_game_tournament,
     end_game,
     join_game,
-    # retrieve_last_games,
     get_user_games,
     # game_state,
     # game_points,

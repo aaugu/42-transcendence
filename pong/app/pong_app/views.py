@@ -99,21 +99,6 @@ def get_user_games(request, user_id):
 
     return JsonResponse(datas, safe=False)
 
-# def retrieve_last_games(request, user_id, nb_of_games):
-#   print(f'Received request to get the last: {nb_of_games} of {user_id}')
-
-#   games_to_retrieve = request.GET.get("number_of_games")
-#   user = request.GET.get("user_id")
-
-#   games = GameService.get_all_games()
-#   datas = [game.to_dict() for game in games]
-#   if len(datas) > 0:
-#     'No entries in the db'
-#   else:
-#     'Entries in the db'
-
-#   return JsonResponse(datas, safe=False)
-
 def get_game(request, game_id):
     print(f'Received request to get game with id: {game_id}')
 
@@ -122,10 +107,6 @@ def get_game(request, game_id):
         return JsonResponse({"error": "Game not found"}, status=404)
 
     return JsonResponse(game.to_dict())
-
-
-# def retrieve_all_games(request):
-
 
 # def game_state(request):
 #     state_dict = PongConsumer.shared_game_state.to_dict()
