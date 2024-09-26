@@ -1,5 +1,5 @@
 import { error500 } from "../errorpage/error500.js";
-import { getUserInfo } from "../user/getUserInfo.js"
+import { getNicknameUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
 import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
@@ -8,19 +8,22 @@ export async function publicProfilePage() {
     var nickname = "Guest-nickname";
     var email = "Guest-email";
     var avatar = "images/default_avatar.png";
+	var user_id = "";
     var friends_html = '';
 	var matches_html = '';
 	var match_wins = '';
 	var match_losses = '';
 
-    const user_id = localStorage.getItem('ctc_id');
+	nickname = window.location.href.split("/")[4];
+	if (nickname === null || nickname === "")
+		return error500();
 
     try {
-        const userinfo = await getUserInfo(user_id);
+        const userinfo = await getNicknameUserInfo(nickname);
         username = userinfo.username;
-        nickname = userinfo.nickname;
         email = userinfo.email;
         avatar = userinfo.avatar;
+		user_id = userinfo.id;
 
         friends_html = await updateFriendList(user_id);
 		matches_html = await matchHistoryList(user_id);
@@ -28,8 +31,6 @@ export async function publicProfilePage() {
 		const match_wins_losses = matchWinsLosses(user_id);
 		match_wins = match_wins_losses.wins;
 		match_losses = match_wins_losses.losses;
-
-        localStorage.removeItem('ctc_id');
     }
     catch (e) {
         if (e.message == "502")

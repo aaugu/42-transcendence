@@ -38,7 +38,7 @@ export async function matchHistoryList(id = null) {
     try {
         const matches = await matchHistory(id);
 		all_matches = matches;
-		console.log("response from get-user-games: ", matches);
+		console.log("response from matchHistoryList: ", matches);
 		matches.forEach (match => {
 			const date = match.created_at.split(' ')[0];
 			matches_html += `<li class="list-group-item">
