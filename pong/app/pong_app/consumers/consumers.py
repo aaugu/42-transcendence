@@ -48,7 +48,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 )
                 await self.close()
                 return
-        elif game_mode == GameMode.REMOTE:
+        elif game_mode == GameMode.REMOTE or game_mode == GameMode.TOURNAMENT_REMOTE:
             if PongConsumer.user_per_room[self.game_id] >= 2:
                 print(f"REMOTE game {self.game_id} is full. Rejecting new connection.")
                 await self.close()
