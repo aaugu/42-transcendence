@@ -39,7 +39,8 @@ export function handleWebsocketGame(socket, canvas, gameState) {
         console.log("GameID", data.game_id);
 
 		await endGame(data.remaining_player, data.player_id, data.game_id);
-		self.close();
+		urlRoute("/profile");
+		errormsg("The game was interrupted due to the disconnection of your opponent", "homepage-errormsg");
       }
 
       if (data.game_finished) {

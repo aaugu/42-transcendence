@@ -15,7 +15,7 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
     }, 50);
 
     const gameMode = window.location.pathname.split("/")[1];
-    const isRemoteGame = 
+    const isRemoteGame =
       gameMode === "remote-twoplayer" || gameMode === "join-game";
 
     const keyActionMap = {
@@ -26,7 +26,7 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
     };
 
     if (isRemoteGame) {
-      console.log(`UserID ${userID}, Left paddle: ${gameState.current.paddles[0].player_id} Right paddle: ${gameState.current.paddles[1].player_id}`);
+    //   console.log(`UserID ${userID}, Left paddle: ${gameState.current.paddles[0].player_id} Right paddle: ${gameState.current.paddles[1].player_id}`);
 
       let playerIndex = null;
       if (userID == gameState.current.paddles[0].player_id) {

@@ -6,6 +6,8 @@ import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
+import { errormsg } from "../../../dom/errormsg.js";
+import { urlRoute } from "../../../dom/router.js";
 
 export var g_socket;
 
@@ -17,6 +19,11 @@ export async function startGame() {
 	g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
 
 	const canvas = displayGame();
+	if (!canvas) {
+		errormsg("Could not find players", "homepage-errormsg");
+		urlRoute('/profile');
+		return;
+	}
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
 
