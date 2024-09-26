@@ -93,7 +93,6 @@ export async function inviteGameButtonLocal(ctc_id) {
 		const mode = getGameMode("local-twoplayer");
 		const game = await createGame(mode);
 		const game_id = game.game_id;
-		console.log("mode: ", mode);
 		await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/local-twoplayer/${game_id}`;
 		urlRoute(new_url);
