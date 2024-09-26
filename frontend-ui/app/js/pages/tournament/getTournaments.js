@@ -40,6 +40,8 @@ export async function getTournamentDetails(tournament_id) {
 
 	const responseData = await response.json();
 	if (!response.ok) {
+		if (response.status == 404)
+			throw new Error(`Tournament does not exists or was deleted`);
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error('GET TOURNAMENT DETAILS FAILED');

@@ -40,7 +40,7 @@ export async function getUserInfo(id = null) {
 export async function getNicknameUserInfo(nickname) {
     if (nickname === null || nickname === "")
         throw new Error ("403");
-	const url = 'https://localhost:10443/api/user/getUser/nickname/';
+	const url = 'https://localhost:10443/api/user/getuser/nickname/';
 
     const response = await fetch(url + nickname, {
         method: 'GET',

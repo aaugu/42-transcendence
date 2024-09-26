@@ -397,16 +397,16 @@ class TournamentView(View):
         if not valid_tournament:
             return JsonResponse(data={'errors': errors}, status=400)
         type = json_request.get('type')
-        is_private = json_request.get('is_private')
+        # is_private = json_request.get('is_private')
         user_id = json_request.get('user_id')
         tournament = Tournament(
             name=json_request['name'],
-            is_private=is_private,
+            is_private=False,
             admin_id=user_id
         )
-
-        if is_private:
-            tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
+        tournament.password = ""
+        # if is_private:
+        #     tournament.password = make_password(json_request['password'])       #Crée une empreinte de mot de passe au format utilisé par cette application.
         if type == "remote":
             tournament.type = Tournament.REMOTE
         elif type == "local":
