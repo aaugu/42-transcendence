@@ -1,5 +1,6 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { userID, updateProfile } from "../user/updateProfile.js";
+import { error500 } from "../errorpage/error500.js";
 
 export var all_conversations = [];
 
@@ -29,8 +30,6 @@ async function allConversations() {
 	if (responseData !== null) {
 		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -72,9 +71,13 @@ export async function get_all_conv() {
 		all_conversations = [];
 		if (e.message === "403") {
             updateProfile(false, null);
-			errormsg('You were automatically logged out', 'homepage-errormsg');
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return ;
         }
+		if (e.message === "500" || e.message === "502") {
+			document.getElementById('main-content').innerHTML = error500();
+			return ;
+		}
 		console.error("USER LOG: ", e.message);
 	}
 }

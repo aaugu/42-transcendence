@@ -66,15 +66,17 @@ export async function signupProcess() {
         })
         .then(async response => {
             if (!response.ok) {
+                if ( response.status === 502)
+                    throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
                     errormsg(error.username, "homepage-errormsg");
                 }
                 else if (error.email) {
-                    errormsg(error.email), "homepage-errormsg";
+                    errormsg(error.email, "homepage-errormsg");
                 }
                 else if (error.nickname) {
-                    errormsg(error.nickname), "homepage-errormsg";
+                    errormsg(error.nickname, "homepage-errormsg");
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }
@@ -86,7 +88,14 @@ export async function signupProcess() {
                 loginProcess();
             }
         })
-        .catch(e => console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e));
+        .catch(e => {
+            if (e.message === "502") {
+                errormsg("Service temporarily unavailable", "signup-errormsg");
+                return;
+            }
+            console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e)
+        });
+
     }
 
 	await sendSignupDataToAPI(userdata);

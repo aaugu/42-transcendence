@@ -6,6 +6,7 @@ import { hideModal } from "../../dom/modal.js";
 import { newtournamentgameEvent } from "../game/newgameEvent.js";
 import { deleteTournament } from "./deleteTournament.js";
 import { updateTournLists } from "./updateTournLists.js";
+import { errormsg } from "../../dom/errormsg.js";
 
 export async function tournamentEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -34,6 +35,10 @@ export async function tournamentEvent(e) {
 				updateTournLists();
 				hideModal('single-t-modal');
 			} catch (e) {
+				if (e.message === "500" || e.message === "502") {
+					errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+					break ;
+				}
 				console.error("USER LOG: ", e.message);
 			}
 			break;

@@ -47,7 +47,7 @@ class BlacklistView(APIView):
 
 		if self.blacklist_exists(initiator, target):
 			return status.HTTP_201_CREATED
-		return status.HTTP_422_UNPROCESSABLE_ENTITY
+		return status.HTTP_500_INTERNAL_SERVER_ERROR
 
 	def delete_blacklist(self, initiator, target):
 		if not self.blacklist_exists(initiator, target):
@@ -58,7 +58,7 @@ class BlacklistView(APIView):
 
 		if not self.blacklist_exists(initiator, target):
 			return status.HTTP_204_NO_CONTENT
-		return status.HTTP_422_UNPROCESSABLE_ENTITY
+		return status.HTTP_500_INTERNAL_SERVER_ERROR
 
 	def blacklist_exists(self, initiator, target):
 		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)

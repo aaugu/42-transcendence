@@ -1,13 +1,15 @@
+import { error500 } from "../errorpage/error500.js";
 import { userID } from "../user/updateProfile.js";
 
 let friendListRefreshInterval;
 
-export async function getFriendList() {
-    if (userID === null) {
+export async function getFriendList(id = null) {
+	const user_id = id || userID;
+    if (user_id === null) {
         throw new Error('Could not find user ID');
     }
 
-    const response = await fetch('https://localhost:10443/api/user/' + userID + '/friends/status', {
+    const response = await fetch('https://localhost:10443/api/user/' + user_id + '/friends/status', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',
@@ -15,6 +17,9 @@ export async function getFriendList() {
 		},
 		credentials: 'include'
 	});
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
@@ -24,13 +29,10 @@ export async function getFriendList() {
 	if (responseData !== null) {
 		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData.online_statuses;
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
 export async function addFriend(friend_nickname) {
-    console.log("in add friend");
     if (userID === null) {
         throw new Error('Could not find user ID');
     }
@@ -47,6 +49,10 @@ export async function addFriend(friend_nickname) {
         body: JSON.stringify({"friend_nickname": friend_nickname}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.details)
@@ -55,8 +61,6 @@ export async function addFriend(friend_nickname) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: ADD FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 }
 
@@ -74,6 +78,10 @@ export async function deleteFriend(friend_id) {
         body: JSON.stringify({"friend_id": friend_id}),
 		credentials: 'include'
 	});
+
+	if (!response.ok && response.status === 502)
+		throw new Error(`${response.status}`);
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.details)
@@ -82,31 +90,43 @@ export async function deleteFriend(friend_id) {
 	}
 	if (responseData !== null) {
 		console.log('USER LOG: DELETE FRIEND SUCCESSFUL');
-	} else {
-		throw new Error('No response from server');
 	}
 
 }
 
-export async function updateFriendList() {
+export async function updateFriendList(id = null) {
     var friends_html = '';
     try {
-        const friends = await getFriendList();
-        friends.forEach (friend => {
-            friends_html += `
-            <li class="list-group-item">
-                <span>${friend.nickname}</span>
-                <div class="align-content-end">
-                    <button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">unfriend</button>
-                    <span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
-                </div>
-            </li>
-            `;
-        });
+        const friends = await getFriendList(id);
+		if (id) {
+			friends.forEach (friend => {
+				friends_html += `
+				<li class="list-group-item">
+					<span>${friend.nickname}</span>
+					<div class="align-content-end">
+						<span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
+					</div>
+				</li>
+				`;
+			});
+		} else {
+			friends.forEach (friend => {
+				friends_html += `
+				<li class="list-group-item">
+					<span>${friend.nickname}</span>
+					<div class="align-content-end">
+						<button id="unfriend-btn" data-friendid="${friend.id}" class="btn btn-outline-danger btn-sm" style="font-size: 10px;">unfriend</button>
+						<span class="status-dot ${friend.online ? 'bg-success' : 'bg-danger'} rounded-circle"></span>
+					</div>
+				</li>
+				`;
+			});
+		}
     }
     catch (e) {
+		clearFriendListRefresh();
         console.log("USER LOG: ", e.message);
-        friends_html = '';
+		friends_html = error500();
     }
     return friends_html;
 }
@@ -114,13 +134,10 @@ export async function updateFriendList() {
 export async function startFriendListRefresh() {
     if (!friendListRefreshInterval) {
         friendListRefreshInterval = setInterval(async () => {
-            try {
-                const friendList = document.getElementById('friend-list');
-                const friends_html = await updateFriendList();
-                friendList.innerHTML = friends_html;
-            } catch (e) {
-                console.log("USER LOG: Failed to refresh friend list:", e.message);
-            }
+			const friendList = document.getElementById('friend-list');
+			const friends_html = await updateFriendList();
+			if (friendList)
+				friendList.innerHTML = friends_html;
         }, 15000);
     }
 }

@@ -19,13 +19,13 @@ export function openCreateTournamentModal() {
 }
 
 export async function openSingleTournamentModal(e) {
+	try {
 		document.getElementById('t-join').classList.add('hidden');
 		document.getElementById('t-start').classList.add('hidden');
 		document.getElementById('t-play').classList.add('hidden');
 		document.getElementById('t-delete').classList.add('hidden');
 		document.getElementById('t-player-name-label').classList.add('hidden');
 		document.getElementById('t-player-name').classList.add('hidden');
-	try {
 		let has_joined = false;
 		const t_modalText = document.getElementById("single-t-modal-text");
 		const t_name = e.target.innerText;
@@ -100,6 +100,10 @@ export async function openSingleTournamentModal(e) {
 		t_modal.show();
 	}
 	catch (e) {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", "join-and-tournament-errormsg");
+			return ;
+		}
 		console.log("USER LOG: ", e.message);
 	}
 }
