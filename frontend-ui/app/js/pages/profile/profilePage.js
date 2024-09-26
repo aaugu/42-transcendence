@@ -28,9 +28,9 @@ export async function profilePage() {
         is_2fa_enabled = userinfo.is_2fa_enabled;
 
         friends_html = await updateFriendList();
-		matches_html = await matchHistoryList();
+		matches_html = await matchHistoryList(nickname, userinfo.id);
 
-		const match_wins_losses = matchWinsLosses();
+		const match_wins_losses = matchWinsLosses(nickname);
 		match_wins = match_wins_losses.wins;
 		match_losses = match_wins_losses.losses;
 
@@ -151,9 +151,19 @@ export async function profilePage() {
                     <p>Total wins: ${match_wins}</p>
                     <p>Total losses: ${match_losses}</p>
                 </div>
-                <ul class="list-group custom-scrollbar m-2 flex-grow-1">
-                    ${matches_html}
-                </ul>
+				<table class="table custom-scrollbar">
+					<thead>
+						<tr>
+						<th scope="col">Date</th>
+						<th scope="col">Opponent</th>
+						<th scope="col">Mode</th>
+						<th scope="col">Result</th>
+						</tr>
+					</thead>
+					<tbody>
+						${matches_html}
+					</tbody>
+				</table>
             </div>
             <div class="content-box">
                 <h5 class="m-2">Friends</h5>

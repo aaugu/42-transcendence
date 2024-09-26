@@ -32,20 +32,21 @@ export async function matchHistory (id = null) {
 	}
 }
 
-export async function matchHistoryList(id = null) {
+export async function matchHistoryList(nickname, id) {
 	var matches_html = '';
-	const user_id = id || userID;
     try {
         const matches = await matchHistory(id);
 		all_matches = matches;
 		console.log("response from matchHistoryList: ", matches);
 		matches.forEach (match => {
 			const date = match.created_at.split(' ')[0];
-			matches_html += `<li class="list-group-item">
-								<span>${date}</span>
-								<span>${match.mode}</span>
-								<span>${match.winner_id == user_id ? "WON" : "LOST"}</span>
-							</li> `
+			matches_html += `
+			<tr>
+					<th scope="row">${date}</th>
+					<td>${match.winner_id == nickname ? match.loser_id : match.winner_id}</td>
+					<td>${match.mode}</td>
+					<td>${match.winner_id == nickname ? "WON" : "LOST"}</td>
+				</tr>`
 		});
     }
     catch (e) {
@@ -55,11 +56,9 @@ export async function matchHistoryList(id = null) {
     return matches_html;
 }
 
-export  function matchWinsLosses(id = null) {
-	const user_id = id || userID;
-
-	const wins = all_matches.filter(match => match.winner_id == user_id).length;
-	const losses = all_matches.filter(match => match.winner_id != user_id).length;
+export  function matchWinsLosses(nickname) {
+	const wins = all_matches.filter(match => match.winner_id == nickname).length;
+	const losses = all_matches.filter(match => match.winner_id != nickname).length;
 
 	return {wins, losses};
 }
