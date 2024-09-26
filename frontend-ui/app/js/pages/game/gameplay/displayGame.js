@@ -18,12 +18,21 @@ export function displayGame() {
 							<button class="btn btn-dark" id="stop-button">Stop</button>
 							<button class="btn btn-light" id="reset-button">Reset</button>
 						</div>
+						</br>
 						<div>
-							<span id="player1"></span>
 							<span id="score-p-1">0</span>
 							<span>:</span>
 							<span id="score-p-2">0</span>
+						</div>
+						</br>
+						<div>
+							<span id="player1"></span>
+							<span> VS </span>
 							<span id="player2"></span>
+						</div>
+						<div class="justify-content-between">
+							<span>(F - V)</span>
+							<span>(N - J)</span>
 						</div>`;
 
 	console.log("right player and left player: ", right_player, left_player);
