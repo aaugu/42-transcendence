@@ -3,6 +3,22 @@ import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
 import { getUserInfo } from "../../user/getUserInfo.js";
 
+export async function joinGame(gameId, id = null) {
+	const user_id = id || userID;
+	const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
+	const response = await fetch(`${joinGameEndpoint}/${gameId}/${user_id}`, {
+		method: "GET",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		credentials: "include"
+	});
+
+	if (!response.ok) {
+		throw new Error(`${response.status}`);
+	}
+}
+
 export async function joinGameandRedirect(gameId, senderId) {
 	try {
 			const userInfo = await getUserInfo(senderId);
@@ -13,18 +29,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 				localStorage.setItem('right', localStorage.getItem('nickname'));
 			}
 
-			const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
-			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				credentials: "include"
-			});
-
-			if (!response.ok) {
-				throw new Error(`${response.status}`);
-			}
+			await joinGame(gameId);
 
 			const new_url = `/remote-twoplayer/${gameId}`;
 			urlRoute(new_url);

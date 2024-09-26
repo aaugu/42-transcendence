@@ -6,6 +6,7 @@ import { Tournament } from './gameplay-tournament/tournamentClass.js';
 import { getTournamentDetails } from '../tournament/getTournaments.js';
 import { error500 } from "../errorpage/error500.js";
 import { updateProfile } from '../user/updateProfile.js';
+import { joinGame } from './remote/joinGameandRedirect.js';
 
 export async function newlocalgameEvent(e) {
 	try {
@@ -22,7 +23,6 @@ export async function newlocalgameEvent(e) {
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		}
 	}
-
 }
 
 export async function newremotegameEvent(e) {
@@ -65,6 +65,50 @@ export async function newtournamentgameEvent(tourn_id) {
 			const new_url = `/tournament/${newGameId}`;
 			hideModal('single-t-modal');
 			urlRoute(new_url);
+		}
+		catch (e) {
+			if (e.message === "500" || e.message === "502") {
+				errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+
+			} else if (e.message === "403") {
+				updateProfile(false, null);
+				errormsg('You were redirected to the landing page', 'homepage-errormsg');
+			}
+			else {
+				errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+			}
+		}
+	}
+	errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+}
+
+export async function newtournamentremoteEvent(tourn_id) {
+	if (tourn_id) {
+		try {
+			let tournament;
+			// localStorage.setItem('tourn_id', tourn_id);
+			const t_details = await getTournamentDetails(tourn_id);
+
+			if (t_details.status === 'In Progress') {
+				// tournament = new Tournament(tourn_id, 'In Progress');
+				// await tournament.continueTournament();
+				errormsg("This tournament is already in progress", 'single-t-modal-errormsg');
+			}
+			else if (t_details.status === 'Created') {
+				tournament = new Tournament(tourn_id, 'Created');
+				await tournament.launchTournament();
+			}
+
+			const player1_id = tournament.current_match.player_1.user_id;
+			const player2_id = tournament.current_match.player_2.user_id;
+			//create new tournament remote game
+			const response = await createTournamentGame(player1_id, player2_id);
+			const newGameId = response.game_id;
+			const new_url = `/tournament-remote/${newGameId}`;
+			await joinGame(newGameId, player2_id);
+
+			//send notification to both players with new url & tourn_id
+			hideModal('single-t-modal');
 		}
 		catch (e) {
 			if (e.message === "500" || e.message === "502") {

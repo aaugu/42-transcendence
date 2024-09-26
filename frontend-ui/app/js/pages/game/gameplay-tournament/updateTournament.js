@@ -37,3 +37,15 @@ export async function newMatchCycle(tournament) {
 	hideModal('t-match-modal');
 	urlRoute(new_url);
 }
+
+export async function newMatchCycleremote(tournament) {
+	localStorage.setItem('tourn_id', tournament.tourn_id);
+
+	const player1_id = tournament.current_match.player_1.user_id;
+	const player2_id = tournament.current_match.player_2.user_id;
+	const response = await createTournamentGame(player1_id, player2_id);
+	const newGameId = response.game_id;
+	const new_url = `/tournament/${newGameId}`;
+	//send notification to both players
+	hideModal('t-match-modal');
+}
