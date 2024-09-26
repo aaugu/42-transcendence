@@ -12,7 +12,7 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 
     const throttleSend = throttle((direction) => {
       socket.send(JSON.stringify(direction));
-    }, 50);
+    }, 1);
 
     const gameMode = window.location.pathname.split("/")[1];
     const isRemoteGame =

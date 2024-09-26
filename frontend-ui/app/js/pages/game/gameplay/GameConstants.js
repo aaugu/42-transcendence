@@ -6,9 +6,9 @@
 export const canvasHeight = 400;
 export const canvasWidth = 800;
 // console.log("canvasHeight, canvasWidth: ", canvasHeight, canvasWidth);
-export const ballRadius = 5;
+export const ballRadius = 4;
 export const paddleWidth = 5;
-export const paddleHeight = 70;
+export const paddleHeight = 90;
 
 export const controllerRightUp = "j";
 export const controllerRightDown = "n";

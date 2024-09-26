@@ -20,13 +20,4 @@ export default function handleButtons(socket) {
   } else {
     console.error("GAME LOG: Stop button not found");
   }
-
-  if (resetButton) {
-    resetButton.addEventListener("click", () => {
-      console.log("GAME LOG: Reset button clicked");
-      socket.send(JSON.stringify({ action: "reset" }));
-    });
-  } else {
-    console.error("GAME LOG: Reset button not found");
-  }
 }
