@@ -19,7 +19,6 @@ export class Tournament {
 
     async updateMatchCycle(winner_id) {
         try {
-			console.log("winner_id", winner_id);
             await this.#endMatch(winner_id);
             const response = await this.#generateMatches('GET');
 
@@ -28,6 +27,9 @@ export class Tournament {
         } catch (e) {
             console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
             this.all_matches = null;
+			if (e.message == '500' || e.message == '502') {
+				throw new Error(`${e.message}`);
+			}
         }
     }
 
@@ -35,9 +37,7 @@ export class Tournament {
 		if (!this.all_matches)
 			throw new Error('No matches available');
 		this.#nextMatch();
-		console.log("current_match in startNextMatch: ", this.current_match);
 		if (!this.current_match) {
-			console.log("setting status to finished")
 			this.game_status = 'Finished';
 			return ;
 		}
@@ -69,12 +69,15 @@ export class Tournament {
         try {
 			console.log("TOURNAMENT LOG: Continue Tournament");
             const response = await this.#generateMatches('GET');
-			//check if status === finished
 
 			this.all_matches = response.matches;
 			this.#startNextMatch();
     	}
 		catch (e) {
+			if (e.message == '500' || e.message == '502') {
+				urlRoute("/tournament-creation");
+				errormsg('Tournament could not be properly continued due to a server error', 'homepage-errormsg');
+			}
 			console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
             this.all_matches = null;
 		}
@@ -93,6 +96,8 @@ export class Tournament {
 			}),
 			credentials: 'include'
 		});
+		if (response.status == 500 || response.status == 502)
+			throw new Error(`${response.status}`);
 		const responseData = await response.json();
 		if (!response.ok) {
 			if (responseData.errors)
@@ -101,8 +106,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log(`TOURNAMENT LOG: ${responseData.message}`);
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -120,6 +123,8 @@ export class Tournament {
 			},
 			credentials: 'include'
 		});
+		if (response.status == 500 || response.status == 502)
+			throw new Error(`${response.status}`);
 		const responseData = await response.json();
 		if (!response.ok) {
 			if (responseData.errors)
@@ -129,8 +134,6 @@ export class Tournament {
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: GENERATE MATCHES SUCCESSFUL');
 			return responseData;
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -148,6 +151,8 @@ export class Tournament {
 			}),
 			credentials: 'include'
 		});
+		if (response.status == 500 || response.status == 502)
+			throw new Error(`${response.status}`);
 		const responseData = await response.json();
 		if (!response.ok) {
 			if (responseData.errors)
@@ -156,8 +161,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: START TOURNAMENT SUCCESSFUL');
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 
@@ -178,6 +181,8 @@ export class Tournament {
 			}),
 			credentials: 'include'
 		});
+		if (response.status == 500 || response.status == 502)
+			throw new Error(`${response.status}`);
 		const responseData = await response.json();
 		if (!response.ok) {
 			if (responseData.errors)
@@ -186,8 +191,6 @@ export class Tournament {
 		}
 		if (responseData !== null) {
 			console.log('TOURNAMENT LOG: END MATCH SUCCESSFUL');
-		} else {
-			throw new Error('No response from server');
 		}
 	}
 }

@@ -257,8 +257,8 @@ class StartMatchView(View):
             return JsonResponse({'errors': [str(e)]}, status=500)
 
 
-        if player1 is not None and player2 is not None:
-            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
+        # if player1 is not None and player2 is not None:
+        #     response = StartMatchView.send_match_start_notif(match.tournament, player1, player2)
 
         return JsonResponse(MatchUtils.match_to_json(match), status=200)
 

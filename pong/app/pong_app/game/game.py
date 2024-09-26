@@ -5,6 +5,7 @@ from .constants import *
 
 # https://gamedev.stackexchange.com/questions/4253/in-pong-how-do-you-calculate-the-balls-direction-when-it-bounces-off-the-paddl
 
+COLLISION_TRESHOLD = 2
 
 class Ball:
     def __init__(self, position, velocity, radius):
@@ -42,7 +43,7 @@ def check_collision_with_paddlesBall(ball, paddles):
     )
     # Right paddle collision
     if (
-        ball.position[0] + PARAMS["ball_radius"] >= paddles[1].position[0]
+        ball.position[0] + PARAMS["ball_radius"] >= paddles[1].position[0] - COLLISION_TRESHOLD
         and ball.position[1] >= paddles[1].position[1]
         and ball.position[1] <= paddles[1].position[1] + paddles[1].height
     ):
@@ -58,7 +59,7 @@ def check_collision_with_paddlesBall(ball, paddles):
     # Left paddle collision
     if (
         ball.position[0] - PARAMS["ball_radius"]
-        <= paddles[0].position[0] + paddles[0].width
+        <= paddles[0].position[0] + paddles[0].width + COLLISION_TRESHOLD
         and ball.position[1] >= paddles[0].position[1]
         and ball.position[1] <= paddles[0].position[1] + paddles[0].height
     ):
@@ -177,9 +178,11 @@ class GameState:
             self.paused = False
 
     def reset_score(self):
+        print(f"Resetting score")
         self.ballReset(1)
         self.score = [0, 0]
         self.finished = False
+        self.paused = False
 
     def ballReset(self, pos):
         self.ball.position[0] = PARAMS["canvas_width"] / 2

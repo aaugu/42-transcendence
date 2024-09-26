@@ -3,7 +3,6 @@ import { getCookie } from './cookie.js';
 import { logout } from './logout.js';
 import { urlRoute } from '../../dom/router.js'
 
-// export var userIsConnected = (localStorage.getItem("userIsConnected") === "true");
 export var userID = null;
 
 export function setUserID() {
@@ -16,29 +15,24 @@ export function setUserID() {
 	}
 }
 
-//change user state (log in or log out)
-// update profile view, store username & avatar in local storage
 export const updateProfile = async (isConnected, token) => {
-	const navProfileElements = document.getElementById('nav-profile-elements');
-	const navLogoLink = document.getElementById('logo');
-
 	if (isConnected) {
-		// navProfileElements.classList.remove('hidden');
-		navLogoLink.href = "/profile";
+		document.getElementById('nav-profile-elements').classList.remove('hidden');
+		document.getElementById('logo').href = "/profile";
 		const expirationDate = new Date();
 		expirationDate.setTime(expirationDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // 1 week
 		document.cookie = `csrf_token=${token}; path=/; SameSite=None; Secure=true; expires=${expirationDate.toUTCString()}`;
 		setUserID();
 	}
 	else {
-		// navProfileElements.classList.add('hidden');
 		try {
 			await logout();
 		}
 		catch (e) {
 			console.log(`USER LOG: ${e.message}`);
 		}
-		navLogoLink.href = "/";
+		document.getElementById('nav-profile-elements').classList.add('hidden');
+		document.getElementById('logo').href = "/";
 		localStorage.setItem('nickname', 'guest');
 		localStorage.setItem('avatar', defaultAvatar);
 		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;

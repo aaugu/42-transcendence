@@ -35,8 +35,7 @@ export async function convHistory(e) {
         const targetElement = e.target.closest('.list-group-item').querySelector('[data-convid]');
         const secondTargetElement = e.target.closest('.list-group-item').querySelector('[data-ctcid]');
         const conv_id = targetElement ? targetElement.dataset.convid : null;
-        const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
-
+		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
 		const ctc_nickname = secondTargetElement.innerText;
 
 		const response = await getConvHistory(conv_id);

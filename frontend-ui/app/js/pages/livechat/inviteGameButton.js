@@ -2,6 +2,7 @@ import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
+import { getUserInfo } from "../user/getUserInfo.js";
 
 async function sendGameInvite(game_id, ctc_id) {
 	const response = await fetch('https://localhost:10443/api/livechat/notification/', {
@@ -29,6 +30,12 @@ async function sendGameInvite(game_id, ctc_id) {
 
 export async function inviteGameButton(ctc_id) {
 	try {
+		const userInfo = await getUserInfo(ctc_id);
+		if (userInfo) {
+			localStorage.setItem('right', userInfo.nickname);
+			localStorage.setItem('left', localStorage.getItem('nickname'));
+		}
+		
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGame(mode);
 		const game_id = game.game_id;
@@ -41,7 +48,11 @@ export async function inviteGameButton(ctc_id) {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}
-		console.log(`USER LOG: ${e.message}`);
+		else if (e.message === "403") {
+            updateProfile(false, null);
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
+            return '';
+        }
 	}
 
 }
