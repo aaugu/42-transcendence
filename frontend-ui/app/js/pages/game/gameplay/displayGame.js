@@ -8,9 +8,6 @@ export function displayGame() {
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 
-	const right_player = localStorage.getItem('right');
-	const left_player = localStorage.getItem('left');
-
 	canvas.classList.remove("hidden");
 	infoCtn.innerHTML = '';
 	infoCtn.innerHTML = `<div>
@@ -26,24 +23,14 @@ export function displayGame() {
 						</div>
 						</br>
 						<div>
-							<span id="player1"></span>
+							<span id="player1">Player 1</span>
 							<span> VS </span>
-							<span id="player2"></span>
+							<span id="player2">Player 2</span>
 						</div>
 						<div class="justify-content-between">
 							<span>(F - V)</span>
 							<span>(N - J)</span>
 						</div>`;
-
-	console.log("right player and left player: ", right_player, left_player);
-
-	if (right_player && left_player) {
-		document.getElementById('player1').innerText = left_player;
-		document.getElementById('player2').innerText = right_player;
-	}
-	else {
-		return null;
-	}
 
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
