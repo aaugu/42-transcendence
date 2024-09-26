@@ -23,7 +23,7 @@ export function displayGame() {
 						</div>
 						</br>
 						<div>
-							<span id="player1">Player 1</span>
+							<span id="player1">You</span>
 							<span> VS </span>
 							<span id="player2">Player 2</span>
 						</div>

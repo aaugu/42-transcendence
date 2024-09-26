@@ -80,6 +80,7 @@ services:
             service: nginx
         ports:
             - "10443:443"
+
     # Elasticsearch / Kibana
     elasticsearch:
         extends:
