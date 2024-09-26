@@ -2,11 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import requests
-
 from login.models import *
 from login.serializers import *
-from login.utils import dprint
 
 from .utils import *
 from .serializer import *
@@ -150,7 +147,7 @@ class ChangePasswordView(APIView):
     def post(self, request, user_id, *args, **kwargs):
         if check_authentication(request):
             data = request.data.copy()
-            data['user_id'] = user_id  # Ajoute l'ID de l'utilisateur au data pour le serializer
+            data['user_id'] = user_id
             serializer = ChangePasswordSerializer(data=data, context={'request': request})
             if serializer.is_valid():
                 serializer.save()

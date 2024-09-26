@@ -7,6 +7,7 @@ import { inviteGameButton } from "./inviteGameButton.js";
 import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
 import { userID } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
+import { inviteGameButtonLocal } from "./inviteGameButton.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -24,6 +25,8 @@ export async function livechatEvent(e) {
 		target = target.parentElement;
 	}
 	else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game') {
+		target = target.parentElement;
+	} else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game-local') {
 		target = target.parentElement;
 	}
 
@@ -62,6 +65,10 @@ export async function livechatEvent(e) {
 		case "chat-invite-game":
 			const ctc_id = target.dataset.ctcid;
 			inviteGameButton(ctc_id);
+			break;
+		case "chat-invite-game-local":
+			const ctc_id_local = target.dataset.ctcid;
+			inviteGameButtonLocal(ctc_id_local);
 			break;
 		case "chat-invite-game-link":
 			const game_id = target.dataset.gameid;

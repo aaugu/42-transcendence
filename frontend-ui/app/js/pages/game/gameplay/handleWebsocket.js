@@ -12,7 +12,14 @@ export function handleWebsocketGame(socket, canvas, gameState) {
   };
 
   socket.onclose = function (event) {
+	if (event.wasClean === false) {
+		errormsg("Service temporarily unavailable", "homepage-errormsg");
+		setTimeout(() => {
+			urlRoute("/profile");
+		}, 3000);
+	}
     console.log("WebSocket connection closed:", event);
+	
   };
 
   socket.onerror = function (error) {
@@ -47,6 +54,16 @@ export function handleWebsocketGame(socket, canvas, gameState) {
       if (data.game_finished) {
         console.log("Game Finished: ", data.game_finished);
 		await endGame(data.winner_id, data.loser_id, data.game.game_id);
+		if (parseInt(data.winner_id) === userID) {
+			document.getElementById('homepage-errormsg').classList.add("bg-success");
+			errormsg("Congratulations, you won !", 'homepage-errormsg');
+		}
+		else
+			errormsg("Sorry, you lost...", 'homepage-errormsg');
+		setTimeout(() => {
+			document.getElementById('homepage-errormsg').classList.remove("bg-success");
+			urlRoute("/profile");
+		}, 3000);
       }
     } catch (error) {
       console.error("Error parsing message:", error.message);
@@ -68,6 +85,13 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 	};
 
 	socket.onclose = function (event) {
+		console.log("WebSocket connection closed:", event);
+		if (event.wasClean === false) {
+			errormsg("Service temporarily unavailable", "homepage-errormsg");
+			setTimeout(() => {
+				urlRoute("/profile");
+			}, 3000);
+		}
 		console.log("WebSocket connection closed:", event);
 	};
 

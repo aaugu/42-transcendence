@@ -1,10 +1,14 @@
 import { userID } from "../user/updateProfile.js";
 
 export var contact_blacklisted = false;
-export var is_blacklist = false
+export var is_blacklisted = false;
 
 export function set_contact_blacklisted(value) {
 	contact_blacklisted = value;
+}
+
+export function set_is_blacklisted(value) {
+	is_blacklisted = value;
 }
 
 export function colorBlockButton() {

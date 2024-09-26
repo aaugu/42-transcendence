@@ -15,7 +15,7 @@ export async function newlocalgameEvent() {
 		urlRoute(new_url);
 	} catch (e) {
 		if (e.message === "500" || e.message === "502") {
-			const error = document.getElementById('error-500-text');
+			const error = document.getElementById('main-content');
 			error.innerHTML = error500();
 		}
 		else if (e.message === "403") {
