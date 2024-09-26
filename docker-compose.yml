@@ -20,8 +20,8 @@ volumes:
     livechat_postgres_volume:
         driver: local
     # elk volumes
-    # elastic_data_volume:
-    #     driver: local
+    elastic_data_volume:
+        driver: local
 
 services:
     aetheryte-postgres:
@@ -85,15 +85,15 @@ services:
         ports:
             - "10443:443"
     # Elasticsearch / Kibana
-    # elasticsearch:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: elasticsearch
-    # init-elasticsearch:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: init-elasticsearch
-    # kibana:
-    #     extends:
-    #         file: elk/docker/docker-compose.yml
-    #         service: kibana
+    elasticsearch:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: elasticsearch
+    init-elasticsearch:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: init-elasticsearch
+    kibana:
+        extends:
+            file: elk/docker/docker-compose.yml
+            service: kibana

@@ -1,5 +1,6 @@
 export async function tournamentPage() {
-
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+	document.getElementById('logo').href = "/profile";
 	return `
     <div class="two-column-container d-none" id="tournament-page">
         <div class="column-left" style="flex: 1 1 40%;">

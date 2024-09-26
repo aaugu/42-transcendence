@@ -69,8 +69,6 @@ export async function livechatEvent(e) {
 			joinGameandRedirect(game_id, sender_id);
 			break;
 		case "ctc-nickname":
-			const other_person_ctc_id = target.dataset.otherctcid;
-			localStorage.setItem('ctc_id', other_person_ctc_id);
 			const nickname = target.textContent;
 			urlRoute(`/profile/${nickname}`);
 			break;
