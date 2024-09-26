@@ -167,15 +167,3 @@ class getUserByNickname(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-        
-class getUserById(APIView):
-    def get(self, request, user_id):
-        if check_authentication(request):
-            try:
-                user = CustomUser.objects.get(id=user_id)
-            except CustomUser.DoesNotExist:
-                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
-            serializer = CustomUserSerializer(user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
