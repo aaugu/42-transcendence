@@ -24,7 +24,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 
 	  } catch(error) {
 		if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", "livechat-conversation-error");
+			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg");
 		}
 		console.error("JOIN GAME ERROR:", error);
 	  }

@@ -3,6 +3,7 @@ import { editUserInfo } from './editUserInfo.js';
 export const defaultAvatar = "/images/default_avatar.png"
 
 export function readAvatarFile(file) {
+    console.log("file: ", file);
     return new Promise((resolve, reject) => {
         var reader = new FileReader();
         reader.onload = function(event) {
@@ -11,7 +12,11 @@ export function readAvatarFile(file) {
         reader.onerror = function(error) {
             reject(error);
         };
-        reader.readAsDataURL(file);
+        if (!file) {
+            throw new Error("Blank");
+        } else {
+            reader.readAsDataURL(file);
+        }
     });
 }
 

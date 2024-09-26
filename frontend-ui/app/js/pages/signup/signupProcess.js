@@ -33,11 +33,15 @@ export async function signupProcess() {
     if (document.getElementById('uploadAvatar').checked) {
         console.log("avatar file uploaded");
         var avatarFile = document.getElementById('avatar-upload-file').files[0];
+        if (!avatarFile) {
+        }
         try {
             avatar = await readAvatarFile(avatarFile);
         } catch (error) {
-            console.error("USER LOG: Error reading avatar file,", error);
-            avatar = defaultAvatar;
+            errormsg("Field cannot be blank", "signup-errormsg");
+            return;
+            // console.error("USER LOG: Error reading avatar file,", error);
+            // avatar = defaultAvatar;
         }
     }
     else

@@ -6,7 +6,7 @@ export async function livechatPage() {
             <div class="col-lg-4 d-flex flex-column">
                 <div id="livechat-menu" class="w-100 rounded-end rounded-3">
                     <div class="input-group m-2 justify-content-center">
-                        <input id="chat-search-input" type="text" class="form-control rounded-end" placeholder="New contact" aria-label="Search" style="font-size: 10px;">
+                        <input id="chat-search-input" type="text" class="form-control rounded-end" value="" placeholder="New contact" aria-label="Search" style="font-size: 10px;">
                         <div class="input-group-append">
                             <button id="chat-search-btn" class="btn btn-dark" type="button" style="font-size: 10px;">Search</button>
                         </div>

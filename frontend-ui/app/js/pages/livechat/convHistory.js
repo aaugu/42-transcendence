@@ -4,6 +4,7 @@ import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { error500 } from "../errorpage/error500.js";
+import { set_is_blacklisted } from "./blacklist.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -41,6 +42,7 @@ export async function convHistory(e) {
 
 		const response = await getConvHistory(conv_id);
 		set_contact_blacklisted(response.contact_blacklisted);
+        set_is_blacklisted(response.is_blacklisted);
 		displayChatInterface(ctc_id, ctc_nickname);
 		displayMessages(response);
 

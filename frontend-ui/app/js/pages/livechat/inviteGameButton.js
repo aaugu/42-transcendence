@@ -2,6 +2,8 @@ import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
+import { contact_blacklisted } from './blacklist.js';
+import { is_blacklisted } from './blacklist.js';
 
 async function sendGameInvite(game_id, ctc_id) {
 	const response = await fetch('https://localhost:10443/api/livechat/notification/', {
@@ -28,6 +30,15 @@ async function sendGameInvite(game_id, ctc_id) {
 }
 
 export async function inviteGameButton(ctc_id) {
+	if (is_blacklisted) {
+		errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
+		return;
+	}
+	if (contact_blacklisted) {
+		errormsg("You blacklisted this contact, you cannot play pong", "livechat-conversation-errormsg");
+		return;
+	}
+
 	try {
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGame(mode);
