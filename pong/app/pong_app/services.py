@@ -33,9 +33,17 @@ class GameService:
                 mode="LOCAL_TWO_PLAYERS",
             )
 
+        elif mode == GameMode.TOURNAMENT_REMOTE:
+            print(f"Creating TOURNAMENT REMOTE game with id {game_id}")
+            Games.objects.create(
+                game_id=game_id,
+                creator_id=creator_id,
+                status="WAITING",
+                mode="TOURNAMENT-REMOTE",
+            )
+
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
-        # print(f"Created game {game_id} with user {creator_id}")
 
         print(
             f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}"
@@ -48,28 +56,6 @@ class GameService:
         print(f" Service create game: ${game_instance.game_id}, {game_instance.mode}")
 
         return game_instance
-
-    # @staticmethod
-    # def create_game_tournament(creator_id, mode: GameMode, tournament_id):
-    #     tournament_id = str(uuid.uuid4())
-
-    #     Games.objects.create(
-    #         game_id=tournament_id,
-    #         creator_id=creator_id,
-    #         status="IN_PROGRESS",
-    #         mode="TOURNAMENT",
-    #     )
-    #     game_instance = Game(mode=mode, game_id=tournament_id)
-    #     game_instance.game_state.paddles[0].player_id = 1
-    #     game_instance.game_state.paddles[1].player_id = 2
-    #     from .consumers.consumers import PongConsumer
-
-    #     print(
-    #         f" Service create game tournament: ${game_instance.game_id}, {game_instance.mode}"
-    #     )
-
-    #     PongConsumer.games[tournament_id] = game_instance
-    #     return game_instance
 
     @staticmethod
     def create_game_tournament(player_one_id, player_two_id, mode: GameMode):
@@ -154,14 +140,6 @@ class GameService:
         games = Games.objects.all()
 
         return games
-
-    # @staticmethod
-    # def get_user_games(user_id, x):
-    #     games = Games.objects.filter(
-    #         Q(creator_id=user_id) | Q(joiner_id=user_id)
-    #     ).order_by("-created_at")[:x]
-
-    #     return games
 
     @staticmethod
     def get_user_games(user_id):
