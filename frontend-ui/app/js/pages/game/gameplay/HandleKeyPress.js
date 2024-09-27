@@ -30,8 +30,8 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 
       let playerIndex = null;
       if (userID == gameState.current.paddles[0].player_id) {
-        console.log("CREATOR DETECTED", playerIndex);
         playerIndex = 0;
+        console.log("CREATOR DETECTED", playerIndex);
       } else if (userID == gameState.current.paddles[1].player_id) {
         playerIndex = 1;
         console.log("JOINER DETECTED", playerIndex);

@@ -150,14 +150,9 @@ class PongConsumer(AsyncWebsocketConsumer):
     async def game_loop(self):
         while True:
             if (
-<<<<<<< HEAD
                 PongConsumer.games[self.game_id].mode == GameMode.REMOTE
                 or PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT_REMOTE
             ) and PongConsumer.user_per_room[self.game_id] == 2:
-=======
-                (PongConsumer.games[self.game_id].mode == GameMode.REMOTE or PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT_REMOTE)
-                and PongConsumer.user_per_room[self.game_id] == 2):
->>>>>>> origin/ck_new
                 # await asyncio.sleep(2)
                 PongConsumer.games[self.game_id].game_state.start()
 
