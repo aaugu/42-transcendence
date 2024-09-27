@@ -1,14 +1,10 @@
 import { userID } from "../user/updateProfile.js";
 
 export var contact_blacklisted = false;
-export var is_blacklisted = false;
+
 
 export function set_contact_blacklisted(value) {
 	contact_blacklisted = value;
-}
-
-export function set_is_blacklisted(value) {
-	is_blacklisted = value;
 }
 
 export function colorBlockButton() {
@@ -43,7 +39,7 @@ export async function blockUser(target_id) {
 		throw new Error('Did not find userID or target_id invalid');
 	}
 
-	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/blacklist/', {
+	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/blacklist/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
@@ -68,7 +64,7 @@ export async function unblockUser(target_id) {
 		throw new Error('Did not find userID or target_id invalid');
 	}
 
-	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/blacklist/' + target_id, {
+	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/blacklist/' + target_id, {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',
@@ -82,5 +78,31 @@ export async function unblockUser(target_id) {
 		throw new Error(`${response.status}`);
 	}
 	console.log('USER LOG: UNBLOCK USER SUCCESSFUL');
+	
+}
+
+export async function isBlacklisted(target_id) {
+    if (target_id === null || target_id === undefined || userID === null ) {
+		throw new Error('Did not find userID or target_id invalid');
+	}
+
+	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/blacklist/' + target_id, {
+		method: 'GET',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	});
+	if (!response.ok) {
+		if (response.status === 409)
+			throw new Error('User already unblocked');
+		throw new Error(`${response.status}`);
+	}
+	const responseData = await response.json();
+	if (responseData !== null) {
+		console.log('USER LOG: BLACKLIST STATUS : ' + responseData.is_blacklisted);
+		return responseData.is_blacklisted;
+	}
 	
 }

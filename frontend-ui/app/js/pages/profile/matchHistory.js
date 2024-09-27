@@ -9,7 +9,7 @@ export async function matchHistory (id = null) {
         throw new Error('Could not find user ID');
     }
 
-    const response = await fetch('https://localhost:10443/api/pong/get-user-games/' + user_id + '/', {
+    const response = await fetch('https://' + window.location.host + '/api/pong/get-user-games/' + user_id + '/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',

@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '10.12.x.x']
 
 
 # Application definition
@@ -149,10 +149,7 @@ EMAIL_HOST_USER = os.environ.get('AETHERYTE_MAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('AETHERYTE_MAIL_PASS')
 
 # Cors parameters
-CORS_ALLOWED_ORIGINS = [
-    "https://localhost:10443"
-]
-
+CORS_ALLOWED_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_SAMESITE = 'None'

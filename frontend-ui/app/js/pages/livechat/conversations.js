@@ -13,7 +13,7 @@ async function allConversations() {
 		throw new Error('403');
 	}
 
-	const response = await fetch('https://localhost:10443/api/livechat/' + userID + '/conversations/', {
+	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/conversations/', {
 		method: 'GET',
 		headers: {
 			'Accept': 'application/json',

@@ -3,7 +3,7 @@ import { updateProfile } from "../../user/updateProfile.js";
 import { urlRoute } from "../../../dom/router.js";
 
 export async function endGame(winner_id, loser_id, game_id) {
-  let url = "https://localhost:10443/api/pong/end-game/";
+  let url = "https://" + window.location.host + "/api/pong/end-game/";
 
   let formData = new FormData();
   if (winner_id !== null) {
