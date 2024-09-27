@@ -19,7 +19,7 @@ export async function startLivechat (conv_id, response) {
 		const data = JSON.parse(e.data);
 
 		if( data.blacklist == true) {
-			errormsg("Could not send message, you are blacklisted", 'livechat-conversation-errormsg');
+			errormsg("Could not send message", 'livechat-conversation-errormsg');
 			return;
 		}
 
@@ -62,6 +62,7 @@ export async function startLivechat (conv_id, response) {
 			}
 		}
 		else {
+			console.log("ici");
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 		}
 		messageInput.value = '';	
