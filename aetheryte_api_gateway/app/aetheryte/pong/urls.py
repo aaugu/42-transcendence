@@ -8,4 +8,5 @@ urlpatterns = [
     path("end-game/", views.end_game, name='end_game'),
     path("get-game/<game_id>/", views.get_game, name='get_game'),
     path("get-user-games/<user_id>/", views.get_user_games, name='get_user_games'),
+    path("get-pong-constants/", views.get_pong_constants, name='get_pong_constants'),
 ]

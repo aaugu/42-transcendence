@@ -1,14 +1,14 @@
 import math
 
 PARAMS = {
-    "canvas_width": 800,
-    "canvas_height": 400,
+    "canvas_width": 1100,
+    "canvas_height": 550,
     "ball_x": 200,
     "ball_y": 200,
-    "ball_radius": 4,
-    "ball_velocity_x": 4.5,
+    "ball_radius": 10,
+    "ball_velocity_x": 6,
     "ball_velocity_y": 0,
-    "paddle_width": 5,
+    "paddle_width": 15,
     "paddle_height": 100,
     "paddle_velocity_x": 5,
     "paddle_velocity_y": 9,
