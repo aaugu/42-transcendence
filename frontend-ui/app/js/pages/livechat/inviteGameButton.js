@@ -44,14 +44,10 @@ export async function inviteGameButton(ctc_id) {
 
 	try {
 		const is_blacklisted = await isBlacklisted(ctc_id);
-		console.log("ici0");
-		console.log("is blacklisted : ", is_blacklisted, typeof(is_blacklisted));
 		if (is_blacklisted === true) {
-			console.log("ici1");
 			errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
 			return;
 		}
-		console.log("ici");
 		const userInfo = await getUserInfo(ctc_id);
 		if (userInfo) {
 			localStorage.setItem('right', userInfo.nickname);
@@ -87,14 +83,10 @@ export async function inviteGameButtonLocal(ctc_id) {
 	}
 	try {
 		const is_blacklisted = await isBlacklisted(ctc_id);
-		console.log("ici0");
-		console.log("is blacklisted : ", is_blacklisted, typeof(is_blacklisted));
 		if (is_blacklisted === true) {
-			console.log("ici1");
 			errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
 			return;
 		}
-		console.log("ici2");
 		const userInfo = await getUserInfo(ctc_id);
 		if (userInfo) {
 			localStorage.setItem('right', userInfo.nickname);
