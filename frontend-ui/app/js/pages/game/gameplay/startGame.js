@@ -8,17 +8,28 @@ import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
 import { errormsg } from "../../../dom/errormsg.js";
 import { urlRoute } from "../../../dom/router.js";
+import { error500 } from '../../errorpage/error500.js';
+import { error404Page } from '../../errorpage/error404Page.js';
 
 export var g_socket;
 
 export async function startGame() {
 	document.getElementById('tournament-table').classList.add('hidden');
 	const gameId = window.location.href.split("/")[4];
+	if (!gameId) {
+		document.getElementById("main-content").innerHTML = error404Page();
+		return ;
+	}
+
   	let gameState = { current: null };
 	  const right_player = localStorage.getItem('right');
 	  const left_player = localStorage.getItem('left');
 
 	g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
+	if (g_socket.readyState !== 1) {
+		document.getElementById("main-content").innerHTML = error404Page();
+		return ;
+	}
 
 	const canvas = displayGame();
 	if (right_player && left_player) {

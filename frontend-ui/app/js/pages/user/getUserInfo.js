@@ -52,18 +52,7 @@ export async function getNicknameUserInfo(nickname) {
     });
 
     if (!response.ok) {
-        if (response.status === 502) {
-            throw new Error(`${response.status}`)
-        }
-        const error = await response.json();
-        if (response.status === 401 || response.status === 404) {
-            if (error.detail) {
-                throw new Error (error.detail);
-            }
-        }
-        if (response.status === 403)
-            throw new Error(`${response.status}`)
-        throw new Error('Could not get user info');
+        throw new Error(`${response.status}`)
     }
 
     const responseData = await response.json();
