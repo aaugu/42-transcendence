@@ -42,6 +42,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 			// console.log("GameID", data.game_id);
 
 			await endGame(data.remaining_player, data.player_id, data.game_id);
+
 			urlRoute("/profile");
 			errormsg("The game was interrupted due to the disconnection of your opponent", "homepage-errormsg");
 			}
@@ -234,6 +235,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					document.getElementById("t-match-text").innerText =
 						`This was the last match of this tournament. Congratulations ${winner.nickname}, you won!`;
 				}
+
 				t_matchmodal.show();
 				setTimeout(() => {
 					hideModal("t-match-modal");
@@ -242,6 +244,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				}, 3000);
 			}
 		} catch (error) {
+			console.error("Error in socket  onmessage:", error.message);
 			hideModal("t-match-modal");
 			if (error.message === "500" || error.message === "502") {
 				urlRoute("/tournament-creation");
@@ -253,13 +256,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			if (error.message === "403") {
 				urlRoute("/profile");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
-			}
-			if (error.message === "409") {
-				if (error.message === "409") {
-					setTimeout(() => {
-						urlRoute("/profile");
-					}, 2000);
-				}
 			}
 		}
 	};
