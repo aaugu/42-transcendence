@@ -3,8 +3,8 @@ import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';
-import { is_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
+import { isBlacklisted } from './blacklist.js';
 
 async function sendGameInvite(game_id, ctc_id, mode) {
 	let link;
@@ -37,16 +37,21 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 }
 
 export async function inviteGameButton(ctc_id) {
-	if (is_blacklisted) {
-		errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
-		return;
-	}
 	if (contact_blacklisted) {
 		errormsg("You blacklisted this contact, you cannot play pong", "livechat-conversation-errormsg");
 		return;
 	}
 
 	try {
+		const is_blacklisted = await isBlacklisted(ctc_id);
+		console.log("ici0");
+		console.log("is blacklisted : ", is_blacklisted, typeof(is_blacklisted));
+		if (is_blacklisted === true) {
+			console.log("ici1");
+			errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
+			return;
+		}
+		console.log("ici");
 		const userInfo = await getUserInfo(ctc_id);
 		if (userInfo) {
 			localStorage.setItem('right', userInfo.nickname);
@@ -61,6 +66,7 @@ export async function inviteGameButton(ctc_id) {
 		urlRoute(new_url);
 	}
 	catch (e) {
+		console.log("error caught in invite button");
 		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
@@ -75,15 +81,20 @@ export async function inviteGameButton(ctc_id) {
 }
 
 export async function inviteGameButtonLocal(ctc_id) {
-	if (is_blacklisted) {
-		errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
-		return;
-	}
 	if (contact_blacklisted) {
 		errormsg("You blacklisted this contact, you cannot play pong", "livechat-conversation-errormsg");
 		return;
 	}
 	try {
+		const is_blacklisted = await isBlacklisted(ctc_id);
+		console.log("ici0");
+		console.log("is blacklisted : ", is_blacklisted, typeof(is_blacklisted));
+		if (is_blacklisted === true) {
+			console.log("ici1");
+			errormsg("Cannot invite contact to play pong", "livechat-conversation-errormsg");
+			return;
+		}
+		console.log("ici2");
 		const userInfo = await getUserInfo(ctc_id);
 		if (userInfo) {
 			localStorage.setItem('right', userInfo.nickname);
@@ -98,6 +109,7 @@ export async function inviteGameButtonLocal(ctc_id) {
 		urlRoute(new_url);
 	}
 	catch (e) {
+		console.log("error caught in invite button");
 		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
