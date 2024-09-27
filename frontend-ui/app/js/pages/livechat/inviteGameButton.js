@@ -31,9 +31,6 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 			throw new Error('User does not exist');
 		throw new Error(`${response.status}`);
 	}
-
-	console.log('USER LOG: SEND GAME INVITE SUCCESSFUL');
-
 }
 
 export async function inviteGameButton(ctc_id) {

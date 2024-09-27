@@ -48,9 +48,6 @@ class TournamentUtils {
 				throw new Error(`${responseData.errors}`);
 			throw new Error(`${response.status}`);
 		}
-		// if (responseData !== null) {
-		// 	console.log(`TOURNAMENT LOG: ${responseData.message}`);
-		// }
 	}
 
 	async _generateMatches(fetch_method) {
@@ -76,7 +73,6 @@ class TournamentUtils {
 			throw new Error(`${response.status}`);
 		}
 		if (responseData !== null) {
-			// console.log('TOURNAMENT LOG: GENERATE MATCHES SUCCESSFUL');
 			return responseData;
 		}
 	}
@@ -103,9 +99,6 @@ class TournamentUtils {
 			if (responseData.errors)
 				throw new Error(`${responseData.errors}`);
 			throw new Error(`${response.status}`);
-		}
-		if (responseData !== null) {
-			// console.log('TOURNAMENT LOG: START TOURNAMENT SUCCESSFUL');
 		}
 	}
 
@@ -135,9 +128,6 @@ class TournamentUtils {
 			if (responseData.errors)
 				throw new Error(`${responseData.errors}`);
 			throw new Error(`${response.status}`);
-		}
-		if (responseData !== null) {
-			// console.log('TOURNAMENT LOG: END MATCH SUCCESSFUL');
 		}
 	}
 }

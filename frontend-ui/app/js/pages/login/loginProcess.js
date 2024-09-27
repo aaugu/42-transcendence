@@ -55,9 +55,7 @@ export async function loginProcess() {
                     twoFAmodal.show();
                 }
                 else {
-                    // console.log("login response: ", JSON.stringify(responseData));
                     updateProfile(true, responseData.access);
-                    console.log("USER LOG: LOGIN SUCCESSFUL");
                     urlRoute("/profile");
                 }
             }

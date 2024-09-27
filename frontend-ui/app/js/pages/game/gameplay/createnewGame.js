@@ -3,7 +3,6 @@ import { userID } from "../../user/updateProfile.js";
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
 export async function createGame(mode, id = 0) {
-	console.log("in createGame");
   if (userID === null)
     throw new Error('403');
 
@@ -23,7 +22,6 @@ export async function createGame(mode, id = 0) {
 
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
 		return responseData;
 	}
 }
@@ -45,7 +43,6 @@ export async function createTournamentGame(player1_id, player2_id) {
 
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: CREATE NEW GAME ID SUCCESSFUL');
 		return responseData;
 	}
 }

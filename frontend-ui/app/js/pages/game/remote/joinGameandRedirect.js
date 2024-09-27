@@ -4,7 +4,6 @@ import { errormsg } from "../../../dom/errormsg.js";
 import { getUserInfo } from "../../user/getUserInfo.js";
 
 export async function joinGame(gameId, id = null) {
-	console.log("called join game");
 	const user_id = id || userID;
 	const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
 	const response = await fetch(`${joinGameEndpoint}/${gameId}/${user_id}`, {

@@ -27,7 +27,6 @@ export async function matchHistory (id = null) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData;
 	}
 }

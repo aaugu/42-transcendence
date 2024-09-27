@@ -23,7 +23,4 @@ export async function logout() {
 			throw new Error(`${responseData.Detail}`);
 		throw new Error('LOGOUT FAILED');
 	}
-	if (responseData !== null) {
-		console.log('LOGOUT SUCCESSFUL');
-	}
 }

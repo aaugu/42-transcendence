@@ -30,7 +30,6 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 
 	// const responseData = await response.json();
 	if (responseData !== null) {
-		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
 		return responseData;
 	}
 }
@@ -44,9 +43,7 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-success");
 			twoFAbtn.classList.add("btn-outline-danger");
 			twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
-			console.log("USER LOG: 2FA ACTIVATION SUCCESSFUL");
 			updateProfile(false, null);
-			console.log('USER LOG: LOGOUT');
 			hideModal('activate-2fa-modal');
 			urlRoute('/');
 		}
@@ -66,7 +63,6 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-danger");
 			twoFAbtn.classList.add("btn-outline-success");
 			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
-			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
 			if (e.message === "502")
@@ -90,7 +86,6 @@ export async function twoFactorAuthLoginButton() {
 		}
 		const response = await verifyTwoFactorAuth(twoFaAuthCode);
 
-		console.log("USER LOG: LOGIN SUCCESSFUL");
 		hideModal('login-2fa-modal');
 		updateProfile(true, response.access);
 		urlRoute('/profile');

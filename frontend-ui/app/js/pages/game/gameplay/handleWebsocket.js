@@ -7,96 +7,94 @@ import { endGame } from "../gameplay/endGame.js";
 import { userID } from "../../user/updateProfile.js";
 
 export function handleWebsocketGame(socket, canvas, gameState) {
-  socket.onopen = function (event) {
-    console.log("WebSocket connection opened:", event);
-  };
-
-  socket.onclose = function (event) {
-	if (event.wasClean === false) {
-		errormsg("Service temporarily unavailable", "homepage-errormsg");
-		setTimeout(() => {
-			urlRoute("/profile");
-		}, 3000);
-	}
-    console.log("WebSocket connection closed:", event);
-
-  };
-
-  socket.onerror = function (error) {
-    console.error("WebSocket error:", error);
-    urlRoute("/profile");
-    errormsg(
-      "Connection to game could not be established",
-      "homepage-errormsg"
-    );
-  };
-
-  socket.onmessage = async function (event) {
-    try {
-      const data = JSON.parse(event.data);
-
-      if (data.game_state) {
-        gameState.current = data.game_state;
-        updateGameState(data.game_state, canvas);
-      }
-
-      if (data.player_disconnect) {
-        console.log(data.message);
-        console.log("Remaining player:", data.remaining_player);
-        console.log("Disconnected player:", data.player_id);
-        console.log("GameID", data.game_id);
-
-		await endGame(data.remaining_player, data.player_id, data.game_id);
-		urlRoute("/profile");
-		errormsg("The game was interrupted due to the disconnection of your opponent", "homepage-errormsg");
-      }
-
-      if (data.game_finished) {
-        console.log("Game Finished: ", data.game_finished);
-		await endGame(data.winner_id, data.loser_id, data.game.game_id);
-		if (parseInt(data.winner_id) === userID) {
-			document.getElementById('homepage-errormsg').classList.add("bg-success");
-			errormsg("Congratulations, you won !", 'homepage-errormsg');
-		}
-		else
-			errormsg("Sorry, you lost...", 'homepage-errormsg');
-		setTimeout(() => {
-			document.getElementById('homepage-errormsg').classList.remove("bg-success");
-			urlRoute("/profile");
-		}, 3000);
-      }
-    } catch (error) {
-      console.error("Error parsing message:", error.message);
-      console.log("Raw message that caused error:", event.data);
-    }
-  };
-}
-
-export function handleWebsocketTournament(socket, tournament, canvas, gameState) {
-	const player1html = document.getElementById("player1");
-	const player2html = document.getElementById("player2");
-
-	socket.onopen = function (event) {
-		console.log("WebSocket connection opened:", event);
-		console.log("current_match", tournament.current_match);
-		player1html.innerText = tournament.current_match.player_1.nickname;
-		player2html.innerText = tournament.current_match.player_2.nickname;
-		updateTournamentTable(tournament.all_matches);
-	};
+	socket.onopen = function (event){};
 
 	socket.onclose = function (event) {
-		console.log("WebSocket connection closed:", event);
 		if (event.wasClean === false) {
 			errormsg("Service temporarily unavailable", "homepage-errormsg");
 			setTimeout(() => {
 				urlRoute("/profile");
 			}, 3000);
 		}
-		console.log("WebSocket connection closed:", event);
 	};
 
 	socket.onerror = function (error) {
-		console.error("WebSocket error:", error);
+		urlRoute("/profile");
+		errormsg(
+			"Connection to game could not be established",
+			"homepage-errormsg"
+		);
+	};
+
+	socket.onmessage = async function (event) {
+		try {
+			const data = JSON.parse(event.data);
+
+			if (data.game_state) {
+			gameState.current = data.game_state;
+			updateGameState(data.game_state, canvas);
+			}
+
+			if (data.player_disconnect) {
+			// console.log(data.message);
+			console.log("Remaining player:", data.remaining_player);
+			console.log("Disconnected player:", data.player_id);
+			// console.log("GameID", data.game_id);
+
+			await endGame(data.remaining_player, data.player_id, data.game_id);
+			urlRoute("/profile");
+			errormsg("The game was interrupted due to the disconnection of your opponent", "homepage-errormsg");
+			}
+
+			if (data.game_finished) {
+			console.log("Game Finished: ", data.game_finished);
+			await endGame(data.winner_id, data.loser_id, data.game.game_id);
+			if (parseInt(data.winner_id) === userID) {
+				document.getElementById('homepage-errormsg').classList.add("bg-success");
+				errormsg("Congratulations, you won !", 'homepage-errormsg');
+			}
+			else
+				errormsg("Sorry, you lost...", 'homepage-errormsg');
+			setTimeout(() => {
+				document.getElementById('homepage-errormsg').classList.remove("bg-success");
+				urlRoute("/profile");
+			}, 3000);
+			}
+		} catch (error) {
+			console.error("Error in socket.onmessage:", error.message);
+			if (error.message === "409") {
+				setTimeout(() => {
+					urlRoute("/profile");
+				}, 2000);
+			}
+		};
+	}
+}
+
+
+export function handleWebsocketTournament(socket, tournament, canvas, gameState) {
+	const player1html = document.getElementById("player1");
+	const player2html = document.getElementById("player2");
+
+	socket.onopen = function (event) {
+		// console.log("WebSocket connection opened:", event);
+		// console.log("current_match", tournament.current_match);
+		player1html.innerText = tournament.current_match.player_1.nickname;
+		player2html.innerText = tournament.current_match.player_2.nickname;
+		updateTournamentTable(tournament.all_matches);
+	};
+
+	socket.onclose = function (event) {
+		// console.log("WebSocket connection closed:", event);
+		if (event.wasClean === false) {
+			errormsg("Service temporarily unavailable", "homepage-errormsg");
+			setTimeout(() => {
+				urlRoute("/profile");
+			}, 3000);
+		}
+	};
+
+	socket.onerror = function (error) {
 		urlRoute("/tournament-creation");
 		errormsg(
 			"Connection to game could not be established",
@@ -114,7 +112,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 			}
 
 			if (data.game_finished) {
-				console.log("Game Finished", data.game_finished);
+				// console.log("Game Finished", data.game_finished);
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
 
@@ -172,7 +170,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 		const pos = is_exec_player ? "left" : "right";
 		socket.send(JSON.stringify({ position: pos }));
 
-		// console.log("WebSocket connection opened:", event);
 		console.log("current_match", tournament.current_match);
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
@@ -184,7 +181,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 	};
 
 	socket.onerror = function (error) {
-		// console.error("WebSocket error:", error);
 		urlRoute("/tournament-creation");
 		errormsg(
 			"Connection to game could not be established",
@@ -194,7 +190,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 	socket.onmessage = async function (event) {
 		try {
-			// console.log("Event data: ", event);
 			const data = JSON.parse(event.data);
 
 			if (data.game_state) {
@@ -212,11 +207,10 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				tournament.updateMatchCycle_remote();
 				await newMatchCycle_remote(tournament);
 				urlRoute("/profile");
-				// errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
+				errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
 			}
 
 			if (data.game_finished) {
-				// console.log("Game Finished", data.game_finished);
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
 
@@ -261,7 +255,11 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
 			}
 			if (error.message === "409") {
-				urlRoute("/profile");
+				if (error.message === "409") {
+					setTimeout(() => {
+						urlRoute("/profile");
+					}, 2000);
+				}
 			}
 		}
 	};

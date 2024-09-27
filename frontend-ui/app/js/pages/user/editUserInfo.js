@@ -21,7 +21,7 @@ export async function editUserInfo(infoType, newInfo) {
             }),
             credentials: 'include',
         });
-        
+
         if (!response.ok && response.status === 502) {
             throw new Error(`${response.status}`);
         }
@@ -37,7 +37,6 @@ export async function editUserInfo(infoType, newInfo) {
         }
         const responseData = await response.json();
         if (responseData !== null) {
-            console.log("USER LOG: USER EDIT SUCCESSFUL");
         }
     } catch (e) {
         console.log(e);

@@ -59,8 +59,6 @@ export async function blockUser(target_id) {
 			throw new Error('User already blocked');
 		throw new Error(`${response.status}`);
 	}
-	console.log('USER LOG: BLOCK USER SUCCESSFUL');
-
 }
 
 export async function unblockUser(target_id) {
@@ -81,6 +79,4 @@ export async function unblockUser(target_id) {
 			throw new Error('User already unblocked');
 		throw new Error(`${response.status}`);
 	}
-	console.log('USER LOG: UNBLOCK USER SUCCESSFUL');
-	
 }

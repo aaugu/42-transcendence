@@ -32,7 +32,6 @@ export async function getUserInfo(id = null) {
 
     const responseData = await response.json();
     if (responseData !== null) {
-        console.log("USER LOG: GET USER INFO SUCCESSFUL");
         return responseData;
     }
 }
@@ -68,7 +67,6 @@ export async function getNicknameUserInfo(nickname) {
 
     const responseData = await response.json();
     if (responseData !== null) {
-        console.log("USER LOG: GET USER INFO SUCCESSFUL");
         return responseData;
     }
 }

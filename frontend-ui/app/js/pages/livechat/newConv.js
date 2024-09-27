@@ -31,7 +31,6 @@ async function newConv(conv_nickname) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: CREATE NEW CONV SUCCESSFUL');
 		return responseData;
 	}
 }
