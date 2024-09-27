@@ -20,7 +20,7 @@ export async function getTournaments() {
 		throw new Error(`${response.status}`);
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
+		// console.log('USER LOG: GET TOURNAMENTS SUCCESSFUL');
 		return responseData;
 	}
 }
@@ -47,7 +47,7 @@ export async function getTournamentDetails(tournament_id) {
 		throw new Error('GET TOURNAMENT DETAILS FAILED');
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
+		// console.log('USER LOG: GET TOURNAMENT DETAILS SUCCESSFUL');
 		return responseData;
 	}
 }
@@ -78,7 +78,7 @@ export async function getMyTournaments() {
 		throw new Error('GET MY TOURNAMENTS FAILED');
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
+		// console.log('USER LOG: GET MY TOURNAMENTS SUCCESSFUL');
 		return responseData;
 	}
 }

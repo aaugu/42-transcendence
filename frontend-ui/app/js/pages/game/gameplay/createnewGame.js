@@ -3,6 +3,7 @@ import { userID } from "../../user/updateProfile.js";
 const gatewayEndpoint = "https://localhost:10443/api/pong";
 
 export async function createGame(mode, id = 0) {
+	console.log("in createGame");
   if (userID === null)
     throw new Error('403');
 

@@ -172,7 +172,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 		const pos = is_exec_player ? "left" : "right";
 		socket.send(JSON.stringify({ position: pos }));
 
-		console.log("WebSocket connection opened:", event);
+		// console.log("WebSocket connection opened:", event);
 		console.log("current_match", tournament.current_match);
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
@@ -184,7 +184,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 	};
 
 	socket.onerror = function (error) {
-		console.error("WebSocket error:", error);
+		// console.error("WebSocket error:", error);
 		urlRoute("/tournament-creation");
 		errormsg(
 			"Connection to game could not be established",
@@ -204,9 +204,9 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 			if (data.player_disconnect) {
 				// console.log(data.message);
-				console.log("Remaining player:", data.remaining_player);
-				console.log("Disconnected player:", data.player_id);
-				console.log("GameID", data.game_id);
+				// console.log("Remaining player:", data.remaining_player);
+				// console.log("Disconnected player:", data.player_id);
+				// console.log("GameID", data.game_id);
 
 				await endGame(data.remaining_player, data.player_id, data.game_id);
 				await tournament.endMatch(data.remaining_player);
@@ -217,7 +217,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			}
 
 			if (data.game_finished) {
-				console.log("Game Finished", data.game_finished);
+				// console.log("Game Finished", data.game_finished);
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
 
