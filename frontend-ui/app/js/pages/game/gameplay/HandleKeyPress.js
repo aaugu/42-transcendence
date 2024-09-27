@@ -29,6 +29,8 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
     //   console.log(`UserID ${userID}, Left paddle: ${gameState.current.paddles[0].player_id} Right paddle: ${gameState.current.paddles[1].player_id}`);
 
       let playerIndex = null;
+      // console.log(`${gameState.current.}`);
+      // console.log(` INFOS : ${gameState.current.paddles[0].player_id, gameState.current.paddles[1].player_id}`);
       if (userID == gameState.current.paddles[0].player_id) {
         playerIndex = 0;
         console.log("CREATOR DETECTED", playerIndex);
@@ -38,7 +40,8 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
       }
 
       if (playerIndex != null) {
-        console.log("PLAYER INDEX", playerIndex);
+        console.log("PLAYER INDEX", playerIndex)
+
         const controller =
           playerIndex == 0
             ? [controllerLeftUp, controllerLeftDown]

@@ -66,13 +66,23 @@ class GameService:
     def create_game_tournament(player_one_id, player_two_id, mode: GameMode):
         game_id = str(uuid.uuid4())
 
-        Games.objects.create(
-            game_id=game_id,
-            creator_id=player_one_id,
-            joiner_id=player_two_id,
-            status="IN_PROGRESS",
-            mode="TOURNAMENT",
-        )
+        if mode == GameMode.TOURNAMENT:
+            Games.objects.create(
+                game_id=game_id,
+                creator_id=player_one_id,
+                joiner_id=player_two_id,
+                status="IN_PROGRESS",
+                mode="TOURNAMENT",
+            )
+
+        elif mode == GameMode.TOURNAMENT_REMOTE:
+            Games.objects.create(
+                game_id=game_id,
+                creator_id=player_one_id,
+                status="WAITING",
+                mode="TOURNAMENT-REMOTE",
+            )
+
         print(f"{player_one_id} and {player_two_id}")
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = player_one_id
