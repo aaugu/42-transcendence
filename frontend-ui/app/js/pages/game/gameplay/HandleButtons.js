@@ -15,9 +15,10 @@ export default function handleButtons(socket) {
 				errormsg("Service temporarily unavailable", 'homepage-errormsg');
 			}
 		});
-	} else {
-		console.error("GAME LOG: Start button not found");
 	}
+	// else {
+	// 	console.error("GAME LOG: Start button not found");
+	// }
 
 	if (stopButton) {
 		stopButton.addEventListener("click", () => {
@@ -28,9 +29,10 @@ export default function handleButtons(socket) {
 				errormsg("Service temporarily unavailable", 'homepage-errormsg');
 			}
 		});
-	} else {
-		console.error("GAME LOG: Stop button not found");
 	}
+	// else {
+	// 	console.error("GAME LOG: Stop button not found");
+	// }
 
 //   if (resetButton) {
 //     resetButton.addEventListener("click", () => {

@@ -41,22 +41,12 @@ export async function newMatchCycle(tournament) {
 }
 
 export async function newMatchCycle_remote(tournament) {
-	// try {
-		const newGameId = await getGameID("tournament-remote");
-		const new_url = `/tournament-remote/${newGameId}`;
+	const player2_id = tournament.current_match.player_2.user_id;
+	await joinGame(newGameId, player2_id);
+	const newGameId = await getGameID("tournament-remote");
+	const new_url = `/tournament-remote/${newGameId}`;
 
-		tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
-										class="btn btn-primary" href='#'>Join the match</button>`;
-		tournament.startNextMatch();
-		if (current_match) {
-			const player2_id = tournament.current_match.player_2.user_id;
-			await joinGame(newGameId, player2_id);
-		}
-	// } catch (e) {
-	// 	if (e.message === "500" || e.message === "502" || e.message === "403") {
-	// 		throw new Error(e.message);
-	// 	}
-	// }
-
-
+	tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
+									class="btn btn-primary" href='#'>Join the match</button>`;
+	tournament.startMatch();
 }

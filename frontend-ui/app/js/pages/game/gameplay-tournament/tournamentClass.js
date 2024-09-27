@@ -17,15 +17,13 @@ class TournamentUtils {
 	}
 
 	async startNextMatch() {
-		// if (!this.all_matches)
-		// 	throw new Error('No matches available');
 		this._nextMatch();
 		if (!this.current_match) {
 			this.game_status = 'Finished';
 			return ;
 		}
 		if (this.current_match.status === "Not Played") {
-			await this._startMatch();
+			await this.startMatch();
 		}
     }
 
@@ -83,7 +81,7 @@ class TournamentUtils {
 		}
 	}
 
-	async _startMatch() {
+	async startMatch() {
 		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/start/';
 		const response = await fetch(url, {
 			method: 'POST',
@@ -112,6 +110,8 @@ class TournamentUtils {
 	}
 
 	async endMatch(winner_id) {
+		console.log("winner id in endMatch: ", winner_id);
+
 		if (this.tourn_id === undefined || winner_id === undefined) {
 			throw new Error('Invalid parameters to end match');
 		}
@@ -215,8 +215,8 @@ export class RemoteTournament extends Tournament {
 			this.all_matches = response.matches;
 			this._nextMatch();
 			this.game_status = 'In Progress';
-			if (!this.current_match)
-				this.game_status = 'Finished';
+			// if (!this.current_match)
+			// 	this.game_status = 'Finished';
     	}
 		catch (e) {
 			console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);

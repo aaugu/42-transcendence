@@ -19,6 +19,7 @@ class GameService:
     @staticmethod
     def create_game(creator_id, mode: GameMode):
         game_id = str(uuid.uuid4())
+        game_instance = Game(mode=mode, game_id=game_id)
 
         if mode == GameMode.REMOTE:
             Games.objects.create(
@@ -42,7 +43,6 @@ class GameService:
                 mode="TOURNAMENT-REMOTE",
             )
 
-        game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = creator_id
 
         print(

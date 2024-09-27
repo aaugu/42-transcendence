@@ -19,7 +19,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 		}, 3000);
 	}
     console.log("WebSocket connection closed:", event);
-	
+
   };
 
   socket.onerror = function (error) {
@@ -169,6 +169,9 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 	const is_exec_player = tournament.current_match.player_1.user_id === userID;
 
 	socket.onopen = function (event) {
+		const pos = is_exec_player ? "left" : "right";
+		socket.send(JSON.stringify({ position: pos }));
+
 		console.log("WebSocket connection opened:", event);
 		console.log("current_match", tournament.current_match);
 		player1html.innerText = tournament.current_match.player_1.nickname;
@@ -191,6 +194,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 	socket.onmessage = async function (event) {
 		try {
+			// console.log("Event data: ", event);
 			const data = JSON.parse(event.data);
 
 			if (data.game_state) {
@@ -200,15 +204,16 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 			if (data.player_disconnect) {
 				// console.log(data.message);
-				// console.log("Remaining player:", data.remaining_player);
-				// console.log("Disconnected player:", data.player_id);
-				// console.log("GameID", data.game_id);
+				console.log("Remaining player:", data.remaining_player);
+				console.log("Disconnected player:", data.player_id);
+				console.log("GameID", data.game_id);
 
 				await endGame(data.remaining_player, data.player_id, data.game_id);
-				tournament.updateMatchCycle_remote(data.remaining_player);
+				await tournament.endMatch(data.remaining_player);
+				tournament.updateMatchCycle_remote();
 				await newMatchCycle_remote(tournament);
 				urlRoute("/profile");
-				errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
+				// errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
 			}
 
 			if (data.game_finished) {
@@ -243,6 +248,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				}, 3000);
 			}
 		} catch (error) {
+			hideModal("t-match-modal");
 			if (error.message === "500" || error.message === "502") {
 				urlRoute("/tournament-creation");
 				errormsg(

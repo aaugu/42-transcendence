@@ -16,7 +16,7 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 
     const gameMode = window.location.pathname.split("/")[1];
     const isRemoteGame =
-      gameMode === "remote-twoplayer" || gameMode === "join-game";
+      gameMode === "remote-twoplayer" || gameMode === "join-game" || gameMode === "tournament-remote";
 
     const keyActionMap = {
       [controllerLeftUp]: { direction_left_paddle: "up" },

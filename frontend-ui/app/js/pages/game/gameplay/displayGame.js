@@ -26,7 +26,6 @@ export function displayGame() {
 							${buttonsHTML}
 						</div>
 						<div>
-							<span id="player1"></span>
 							<span id="score-p-1">0</span>
 							<span>:</span>
 							<span id="score-p-2">0</span>
