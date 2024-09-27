@@ -155,6 +155,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             ) and PongConsumer.user_per_room[self.game_id] == 2:
                 # await asyncio.sleep(2)
                 PongConsumer.games[self.game_id].game_state.start()
+                # PongConsumer.games[self.game_id].game_state.pause()
 
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()

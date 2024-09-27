@@ -5,7 +5,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { Tournament, RemoteTournament } from './gameplay-tournament/tournamentClass.js';
 import { getTournamentDetails } from '../tournament/getTournaments.js';
 import { error500 } from "../errorpage/error500.js";
-import { updateProfile } from '../user/updateProfile.js';
+import { updateProfile, userID } from '../user/updateProfile.js';
 import { joinGame } from './remote/joinGameandRedirect.js';
 
 export async function newlocalgameEvent() {
@@ -103,7 +103,14 @@ export async function newtournamentremoteEvent(tourn_id) {
 										class="btn btn-primary" href='#'>Join the match</button>`;
 
 			const player2_id = tournament.current_match.player_2.user_id;
-			await joinGame(newGameId, player2_id);
+      const player1_id = tournament.current_match.player_1.user_id;
+      const sendtojoin = player1_id === userID ? player2_id : player1_id;
+			await joinGame(newGameId, sendtojoin);
+
+      console.log("player1 in newtournamentremoteEvent: ", tournament.current_match.player_1.nickname);
+      console.log("player starting the game: ", player1_id === userID ? tournament.current_match.player_1.nickname : tournament.current_match.player_2.nickname)
+      console.log("sent to join: ", player1_id === userID ? tournament.current_match.player_2.nickname : tournament.current_match.player_1.nickname)
+      console.log("player2 in newtournamentremoteEvent: ", tournament.current_match.player_2.nickname);
 
 			tournament.startNextMatch();
 
