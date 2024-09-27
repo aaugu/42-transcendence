@@ -2,6 +2,7 @@ from argparse import ArgumentParser, Namespace
 import subprocess, sys
 import readline
 import json
+import requests
 
 
 class NonExitingArgumentParser(ArgumentParser):
