@@ -26,8 +26,8 @@ export async function createGame(mode, id = 0) {
 	}
 }
 
-export async function createTournamentGame(player1_id, player2_id) {
-  const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/TOURNAMENT/`;
+export async function createTournamentGame(player1_id, player2_id, mode) {
+  const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/${mode}/`;
 
   const response = await fetch(url,
   {

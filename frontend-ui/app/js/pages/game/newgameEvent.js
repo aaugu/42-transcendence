@@ -60,7 +60,7 @@ export async function newtournamentgameEvent(tourn_id) {
 
 			const player1_id = tournament.current_match.player_1.user_id;
 			const player2_id = tournament.current_match.player_2.user_id;
-			const response = await createTournamentGame(player1_id, player2_id);
+			const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT");
 			const newGameId = response.game_id;
 			const new_url = `/tournament/${newGameId}`;
 			hideModal('single-t-modal');
@@ -97,14 +97,21 @@ export async function newtournamentremoteEvent(tourn_id) {
 				tournament = new RemoteTournament(tourn_id, 'Created');
 				await tournament.launchTournament_remote();
 			}
-			const newGameId = await getGameID("tournament-remote");
+			const player2_id = tournament.current_match.player_2.user_id;
+			const player1_id = tournament.current_match.player_1.user_id;
+
+			const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
+			const newGameId = response.game_id;
+
+			console.log("newGameId for remote tournament: ", newGameId);
+
+			// const newGameId = await getGameID("tournament-remote");
 			const new_url = `/tournament-remote/${newGameId}`;
 			tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tourn_id}"
 										class="btn btn-primary" href='#'>Join the match</button>`;
 
-			const player2_id = tournament.current_match.player_2.user_id;
-			const player1_id = tournament.current_match.player_1.user_id;
-			await joinGame(newGameId, player1_id === userID ? player2_id : player1_id);
+
+			// await joinGame(newGameId, player1_id === userID ? player2_id : player1_id);
 
 			//call new endpoint with player1 and player2 ids instead of getGameID
 

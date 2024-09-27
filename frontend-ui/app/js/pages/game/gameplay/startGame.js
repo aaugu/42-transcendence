@@ -1,4 +1,3 @@
-import createWebSocketConnection from './WebSocketConnection.js'
 import handleButtons from './HandleButtons.js';
 import handleKeyPress from './HandleKeyPress.js';
 import updateGameState from './GameDraw.js';

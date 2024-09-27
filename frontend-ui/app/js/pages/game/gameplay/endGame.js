@@ -18,15 +18,10 @@ export async function endGame(winner_id, loser_id, game_id) {
 
 	const response = await fetch(url, {
 		method: "POST",
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
 		body: formData,
 		credentials: "include",
 	});
 	if (!response.ok) {
 		throw new Error(`${response.status}`);
 	}
-	console.log("GAME LOG: match successfully ended, ", data);
 }

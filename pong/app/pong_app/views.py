@@ -59,8 +59,8 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
 def end_game(request):
     print(f'Received request to end game')
 
-    if not request.POST:
-        return JsonResponse({"error": "Missing required parameters"}, status=400)
+    # if not request.POST:
+    #     return JsonResponse({"error": "Missing required parameters"}, status=400)
 
     try:
         data = GameService.end_game(request)
@@ -95,4 +95,3 @@ def get_pong_constants(request):
     print(f'Received request to get pong constants')
 
     return JsonResponse(PARAMS)
-  

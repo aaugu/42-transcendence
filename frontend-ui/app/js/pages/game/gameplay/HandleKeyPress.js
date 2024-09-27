@@ -30,17 +30,17 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 
       let playerIndex = null;
       // console.log(`${gameState.current.}`);
-      // console.log(` INFOS : ${gameState.current.paddles[0].player_id, gameState.current.paddles[1].player_id}`);
+    //   console.log(` INFOS : paddle 0: ${gameState.current.paddles[0].player_id}, padde 1: ${gameState.current.paddles[1].player_id}`);
       if (userID == gameState.current.paddles[0].player_id) {
         playerIndex = 0;
-        console.log("CREATOR DETECTED", playerIndex);
+        // console.log("CREATOR DETECTED", playerIndex);
       } else if (userID == gameState.current.paddles[1].player_id) {
         playerIndex = 1;
-        console.log("JOINER DETECTED", playerIndex);
+        // console.log("JOINER DETECTED", playerIndex);
       }
 
       if (playerIndex != null) {
-        console.log("PLAYER INDEX", playerIndex)
+        // console.log("PLAYER INDEX", playerIndex)
 
         const controller =
           playerIndex == 0

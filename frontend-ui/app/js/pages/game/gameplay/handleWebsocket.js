@@ -173,6 +173,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
 		updateTournamentTable(tournament.all_matches);
+		console.log("current match: ", tournament.current_match);
 	};
 
 	socket.onclose = function (event) {
@@ -196,16 +197,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				updateGameState(data.game_state, canvas);
 			}
 
-			if (data.player_disconnect) {
-				console.log("Player disconnected: ", data.player_id);
-				await endGame(data.remaining_player, data.player_id, data.game_id);
-				await tournament.endMatch(data.remaining_player[0]);
-				tournament.updateMatchCycle_remote();
-				await newMatchCycle_remote(tournament);
-				urlRoute("/profile");
-				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
-			}
-
 			if (data.game_finished) {
 				console.log("WinnerID", data.winner_id);
 				console.log("LoserID", data.loser_id);
@@ -218,13 +209,18 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					await endGame(data.winner_id, data.loser_id, data.game.game_id);
 					await tournament.endMatch(data.winner_id);
 				}
+				// console.log("calling update match cycle remote for player: ", localStorage.getItem("nickname"));
 				await tournament.updateMatchCycle_remote();
 
 				const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
 				if (tournament.game_status === "In Progress" && tournament.current_match) {
 					document.getElementById("t-match-text").innerText = `Congratulations ${winner.nickname}, you won this match!`;
-					if (is_exec_player)
+					if (is_exec_player) {
+						// console.log("calling new match cycle for player: ", localStorage.getItem("nickname"));
 						await newMatchCycle_remote(tournament);
+					}
+					else
+						console.log("this player is NOT the exec player");
 				}
 				else if (tournament.game_status === "Finished") {
 					document.getElementById("t-match-text").innerText =
@@ -236,10 +232,22 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					hideModal("t-match-modal");
 					urlRoute("/profile");
 					return ;
-				}, 3000);
+				}, 5000);
 			}
+
+			if (data.player_disconnect) {
+				console.log("in disconnection, data:", data);
+				// console.log("Player disconnected: ", data.player_id);
+				await endGame(data.remaining_player, data.player_id, data.game_id);
+				await tournament.endMatch(data.remaining_player[0]);
+				tournament.updateMatchCycle_remote();
+				await newMatchCycle_remote(tournament);
+				urlRoute("/profile");
+				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
+			}
+
 		} catch (error) {
-			console.error("Error in socket  onmessage:", error.message);
+			// console.error("Error in socket  onmessage:", error.message);
 			hideModal("t-match-modal");
 			if (error.message === "500" || error.message === "502") {
 				urlRoute("/tournament-creation");
