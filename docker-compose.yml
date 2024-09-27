@@ -56,8 +56,6 @@ services:
         extends:
             file: tournament/docker/docker-compose.yml
             service: tournament-python
-        ports:
-            - "10000:10000"
         depends_on:
             aetheryte-postgres:
                 condition: service_healthy
