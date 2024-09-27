@@ -2,12 +2,13 @@ import { getGameID, createTournamentGame } from './gameplay/createnewGame.js'
 import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { errormsg } from '../../dom/errormsg.js';
-import { Tournament } from './gameplay-tournament/tournamentClass.js';
+import { Tournament, RemoteTournament } from './gameplay-tournament/tournamentClass.js';
 import { getTournamentDetails } from '../tournament/getTournaments.js';
 import { error500 } from "../errorpage/error500.js";
 import { updateProfile } from '../user/updateProfile.js';
+import { joinGame } from './remote/joinGameandRedirect.js';
 
-export async function newlocalgameEvent(e) {
+export async function newlocalgameEvent() {
 	try {
 		const newGameId = await getGameID();
 		const new_url = `/local-twoplayer/${newGameId}`;
@@ -22,10 +23,9 @@ export async function newlocalgameEvent(e) {
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		}
 	}
-
 }
 
-export async function newremotegameEvent(e) {
+export async function newremotegameEvent() {
 	try {
 		const newGameId = await getGameID();
 		const new_url = `/remote-twoplayer/${newGameId}`;
@@ -79,5 +79,51 @@ export async function newtournamentgameEvent(tourn_id) {
 			}
 		}
 	}
-	errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+	else {
+		errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+	}
+}
+
+export async function newtournamentremoteEvent(tourn_id) {
+	if (tourn_id) {
+		try {
+			let tournament;
+			const t_details = await getTournamentDetails(tourn_id);
+
+			if (t_details.status === 'In Progress') {
+				throw new Error("This tournament is already in progress");
+			}
+			else if (t_details.status === 'Created') {
+				tournament = new RemoteTournament(tourn_id, 'Created');
+				await tournament.launchTournament_remote();
+			}
+			const newGameId = await getGameID("tournament-remote");
+			const new_url = `/tournament-remote/${newGameId}`;
+			tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tourn_id}"
+										class="btn btn-primary" href='#'>Join the match</button>`;
+
+			const player2_id = tournament.current_match.player_2.user_id;
+			await joinGame(newGameId, player2_id);
+
+			tournament.startNextMatch();
+
+			hideModal('single-t-modal');
+		}
+		catch (e) {
+			if (e.message === "500" || e.message === "502") {
+				errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+
+			} else if (e.message === "403") {
+				updateProfile(false, null);
+				errormsg('You were redirected to the landing page', 'homepage-errormsg');
+			}
+			else {
+				console.log("error during remote tournament start: ", e.message);
+				errormsg(e.message, 'single-t-modal-errormsg');
+			}
+		}
+	}
+	else {
+		errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+	}
 }

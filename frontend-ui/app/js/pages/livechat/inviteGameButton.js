@@ -1,4 +1,4 @@
-import { createGame, getGameMode } from '../game/gameplay/createnewGame.js';
+import { getGameID } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
@@ -52,11 +52,9 @@ export async function inviteGameButton(ctc_id) {
 			localStorage.setItem('right', userInfo.nickname);
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
-		
-		const mode = getGameMode("remote-twoplayer");
-		const game = await createGame(mode);
-		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id, mode);
+
+		const game_id = await getGameID("remote-twoplayer");
+		await sendGameInvite(game_id, ctc_id);
 		const new_url = `/remote-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}
@@ -89,7 +87,7 @@ export async function inviteGameButtonLocal(ctc_id) {
 			localStorage.setItem('right', userInfo.nickname);
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
-		
+
 		const mode = getGameMode("local-twoplayer");
 		const game = await createGame(mode, ctc_id);
 		const game_id = game.game_id;

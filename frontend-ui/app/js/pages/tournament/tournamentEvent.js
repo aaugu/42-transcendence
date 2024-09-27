@@ -3,7 +3,7 @@ import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
 import { urlRoute } from "../../dom/router.js";
 import { hideModal } from "../../dom/modal.js";
-import { newtournamentgameEvent } from "../game/newgameEvent.js";
+import { newtournamentgameEvent, newtournamentremoteEvent } from "../game/newgameEvent.js";
 import { deleteTournament } from "./deleteTournament.js";
 import { updateTournLists } from "./updateTournLists.js";
 import { errormsg } from "../../dom/errormsg.js";
@@ -26,7 +26,13 @@ export async function tournamentEvent(e) {
 			break;
 		case "t-start":
 			const tourn_id_start = document.getElementById('t-start').dataset.tournid;
-			newtournamentgameEvent(tourn_id_start);
+			const t_mode = document.getElementById('t-start').dataset.mode;
+			if (t_mode === "Remote") {
+				console.log("t_start button pressed");
+				newtournamentremoteEvent(tourn_id_start);
+			}
+			else if (t_mode === "Local")
+				newtournamentgameEvent(tourn_id_start);
 			break;
 		case "t-delete":
 			const tourn_id_delete = document.getElementById('t-delete').dataset.tournid;
@@ -37,6 +43,10 @@ export async function tournamentEvent(e) {
 			} catch (e) {
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
+					break ;
+				}
+				if (e.message === "403") {
+					errormsg(e.message, "single-t-modal-errormsg");
 					break ;
 				}
 				console.error("USER LOG: ", e.message);

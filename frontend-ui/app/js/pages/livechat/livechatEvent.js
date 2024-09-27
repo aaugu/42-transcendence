@@ -79,6 +79,12 @@ export async function livechatEvent(e) {
 			const nickname = target.textContent;
 			urlRoute(`/profile/${nickname}`);
 			break;
+		case "t-remote-match-link":
+			const gameurl = target.dataset.gameurl;
+			const tourn_id = target.dataset.tournid;
+			localStorage.setItem('tourn_id', tourn_id);
+			urlRoute(gameurl);
+			break;
 		default:
 			break;
 	}

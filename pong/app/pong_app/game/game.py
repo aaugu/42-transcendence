@@ -101,7 +101,6 @@ class GameMode(Enum):
     REMOTE = 3
     TOURNAMENT_REMOTE = 4
     
-
 class Game:
     def __init__(self, game_id, mode):
         self.game_state = GameState()

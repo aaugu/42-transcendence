@@ -3,6 +3,8 @@ import { errormsg } from '../../../dom/errormsg.js';
 import { createTournamentGame } from '../gameplay/createnewGame.js';
 import { urlRoute } from '../../../dom/router.js';
 import { hideModal } from '../../../dom/modal.js';
+import { joinGame } from '../remote/joinGameandRedirect.js';
+import { getGameID } from '../gameplay/createnewGame.js';
 
 export function updateTournamentTable(matches) {
 	const tourn_table = document.getElementById('tournament-table-body');
@@ -36,4 +38,15 @@ export async function newMatchCycle(tournament) {
 	const new_url = `/tournament/${newGameId}`;
 	hideModal('t-match-modal');
 	urlRoute(new_url);
+}
+
+export async function newMatchCycle_remote(tournament) {
+	const player2_id = tournament.current_match.player_2.user_id;
+	await joinGame(newGameId, player2_id);
+	const newGameId = await getGameID("tournament-remote");
+	const new_url = `/tournament-remote/${newGameId}`;
+
+	tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
+									class="btn btn-primary" href='#'>Join the match</button>`;
+	tournament.startMatch();
 }
