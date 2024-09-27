@@ -4,7 +4,10 @@ from .models import Games
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import time
+from django.http import JsonResponse
 
+class GameAlreadyFinishedException(Exception):
+    pass
 
 class GameService:
     """
@@ -107,8 +110,9 @@ class GameService:
     def end_game(request):
         print(f"Received request to end game")
         game_id = request.POST.get("game_id")
-        if Game.objects.get_game(game_id).status == "FINISHED":
-            return (JsonReponse({"error": "Game already finished"}, status=409))
+        game = Games.objects.get(game_id=game_id)
+        if game.status == "FINISHED":
+          raise GameAlreadyFinishedException("Game is already finished")
         winner_id = request.POST.get("winner_id")
         loser_id = request.POST.get("loser_id")
 
@@ -118,7 +122,7 @@ class GameService:
           if loser_id == 'null':
             loser_id = None
 
-        game = Games.objects.get(game_id=game_id)
+        # game = Games.objects.get(game_id=game_id)
         game.status = "FINISHED"
         game.winner_id = winner_id
         game.loser_id = loser_id

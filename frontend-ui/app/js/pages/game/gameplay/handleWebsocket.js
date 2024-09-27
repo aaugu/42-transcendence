@@ -197,7 +197,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				updateGameState(data.game_state, canvas);
 			}
 
-			if (data.player_disconnect && gameState.current.status != "Finished") {
+			if (data.player_disconnect) {
 				// console.log(data.message);
 				console.log("Remaining player:", data.remaining_player);
 				console.log("Disconnected player:", data.player_id);
