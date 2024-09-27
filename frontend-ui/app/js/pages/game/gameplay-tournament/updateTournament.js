@@ -13,8 +13,6 @@ export function updateTournamentTable(matches) {
 
 	matches.forEach(match => {
 		if (match.status !== 'Finished') {
-			console.log("Match: ", match);
-
 			match_html += `
 				<tr>
 					<th scope="row">${match.id}</th>
@@ -41,6 +39,8 @@ export async function newMatchCycle(tournament) {
 }
 
 export async function newMatchCycle_remote(tournament) {
+	//call new endpoint with player1 and player2 ids instead of getGameID
+
 	const player2_id = tournament.current_match.player_2.user_id;
 	await joinGame(newGameId, player2_id);
 	const newGameId = await getGameID("tournament-remote");

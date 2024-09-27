@@ -103,14 +103,10 @@ export async function newtournamentremoteEvent(tourn_id) {
 										class="btn btn-primary" href='#'>Join the match</button>`;
 
 			const player2_id = tournament.current_match.player_2.user_id;
-      const player1_id = tournament.current_match.player_1.user_id;
-      const sendtojoin = player1_id === userID ? player2_id : player1_id;
-			await joinGame(newGameId, sendtojoin);
+			const player1_id = tournament.current_match.player_1.user_id;
+			await joinGame(newGameId, player1_id === userID ? player2_id : player1_id);
 
-      console.log("player1 in newtournamentremoteEvent: ", tournament.current_match.player_1.nickname);
-      console.log("player starting the game: ", player1_id === userID ? tournament.current_match.player_1.nickname : tournament.current_match.player_2.nickname)
-      console.log("sent to join: ", player1_id === userID ? tournament.current_match.player_2.nickname : tournament.current_match.player_1.nickname)
-      console.log("player2 in newtournamentremoteEvent: ", tournament.current_match.player_2.nickname);
+			//call new endpoint with player1 and player2 ids instead of getGameID
 
 			tournament.startNextMatch();
 

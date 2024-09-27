@@ -6,7 +6,7 @@ class TournamentUtils {
 	constructor(tourn_id, game_status) {
         this.tourn_id = tourn_id;
         this.current_match = null;
-        this.game_status = game_status; // 'Created', 'In Progress', 'Finished'
+        this.game_status = game_status;
 		this.all_matches = null;
 		this.notif_link = null;
     }

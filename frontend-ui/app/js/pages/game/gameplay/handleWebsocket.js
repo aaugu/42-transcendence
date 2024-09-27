@@ -122,10 +122,6 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 							: tournament.current_match.player_2;
 
 				await tournament.updateMatchCycle(winner.user_id);
-
-				console.log("current game status: ", tournament.game_status);
-				console.log("current match: ", tournament.current_match);
-
 				await endGame(data.winner_id, data.loser_id, data.game.game_id);
 
 				const t_matchmodal = new bootstrap.Modal(document.getElementById("t-match-modal"));
@@ -167,11 +163,13 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 	const player2html = document.getElementById("player2");
 	const is_exec_player = tournament.current_match.player_1.user_id === userID;
 
-	socket.onopen = function (event) {
-		const pos = is_exec_player ? "left" : "right";
-		socket.send(JSON.stringify({ position: pos }));
+	if (is_exec_player)
+		console.log("this player is the exec player");
 
-		console.log("current_match", tournament.current_match);
+	socket.onopen = function (event) {
+		// const pos = is_exec_player ? "left" : "right";
+		// socket.send(JSON.stringify({ position: pos }));
+
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
 		updateTournamentTable(tournament.all_matches);
@@ -199,16 +197,13 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			}
 
 			if (data.player_disconnect) {
-				// console.log(data.message);
-				console.log("Remaining player:", data.remaining_player);
-				console.log("Disconnected player:", data.player_id);
-				// console.log("GameID", data.game_id);
+				console.log("Player disconnected: ", data.player_id);
 				await endGame(data.remaining_player, data.player_id, data.game_id);
 				await tournament.endMatch(data.remaining_player[0]);
 				tournament.updateMatchCycle_remote();
 				await newMatchCycle_remote(tournament);
 				urlRoute("/profile");
-				errormsg("Your opponent disconnected, you won this game", "homepage-errormsg");
+				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
 
 			if (data.game_finished) {
@@ -219,7 +214,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 							tournament.current_match.player_1
 							: tournament.current_match.player_2;
 
-				if (is_exec_player){
+				if (is_exec_player) {
 					await endGame(data.winner_id, data.loser_id, data.game.game_id);
 					await tournament.endMatch(data.winner_id);
 				}
@@ -254,8 +249,11 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				);
 			}
 			if (error.message === "403") {
-				urlRoute("/profile");
+				urlRoute("/");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
+			}
+			if (error.message === "409") {
+				urlRoute("/profile");
 			}
 		}
 	};
