@@ -62,7 +62,6 @@ export async function createTournamentButton() {
 			type = 'remote';
 		}
 		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, type);
-		console.log("new-tournament: ", new_tournament);
 		await createTournament(new_tournament);
 		updateTournLists();
 		hideModal('create-t-modal');

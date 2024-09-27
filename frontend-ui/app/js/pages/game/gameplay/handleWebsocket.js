@@ -199,11 +199,11 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 			if (data.player_disconnect && gameState.current.status != "Finished") {
 				// console.log(data.message);
-				// console.log("Remaining player:", data.remaining_player);
-				// console.log("Disconnected player:", data.player_id);
+				console.log("Remaining player:", data.remaining_player);
+				console.log("Disconnected player:", data.player_id);
 				// console.log("GameID", data.game_id);
 				await endGame(data.remaining_player, data.player_id, data.game_id);
-				await tournament.endMatch(data.remaining_player);
+				await tournament.endMatch(data.remaining_player[0]);
 				tournament.updateMatchCycle_remote();
 				await newMatchCycle_remote(tournament);
 				urlRoute("/profile");

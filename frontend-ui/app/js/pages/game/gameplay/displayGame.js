@@ -8,7 +8,6 @@ export function displayGame() {
 	const url = window.location.href;
 
 	const mode = url.split("/")[3];
-	console.log("MODE IN DISPLAY GAME: ", mode);
 
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");

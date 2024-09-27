@@ -28,7 +28,6 @@ export async function tournamentEvent(e) {
 			const tourn_id_start = document.getElementById('t-start').dataset.tournid;
 			const t_mode = document.getElementById('t-start').dataset.mode;
 			if (t_mode === "Remote") {
-				console.log("t_start button pressed for remote tournament");
 				newtournamentremoteEvent(tourn_id_start);
 			}
 			else if (t_mode === "Local")

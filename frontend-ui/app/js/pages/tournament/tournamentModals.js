@@ -34,7 +34,6 @@ export async function openSingleTournamentModal(e) {
 			throw new Error('Could not find tournament');
 		}
 		const t_details = await getTournamentDetails(t_id);
-		console.log("t_details: ", t_details);
 		const has_started = (t_details.status !== 'Created');
 		const is_admin = (t_details['admin-id'] === userID);
 		const players = t_details.players;
@@ -95,7 +94,7 @@ export async function openSingleTournamentModal(e) {
 			errormsg("Service temporarily unavailable", "join-and-tournament-errormsg");
 		} else {
 			errormsg(e.message, "join-and-tournament-errormsg");
-		} 
+		}
 		console.log("USER LOG: ", e.message);
 	}
 }
