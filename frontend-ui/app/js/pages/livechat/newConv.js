@@ -52,7 +52,7 @@ export async function newConvButton() {
 		else {
 			displayChatInterface(users[0].id, conv_nickname);
 		}
-		startLivechat(conv_id, response);
+		startLivechat(conv_id, history);
 		displayMessages(history);
 		document.getElementById('chat-search-input').value = '';
 
