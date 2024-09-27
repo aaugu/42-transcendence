@@ -25,8 +25,9 @@ export async function startGame() {
 	  const right_player = localStorage.getItem('right');
 	  const left_player = localStorage.getItem('left');
 
+
 	g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
-	if (g_socket.readyState !== 1) {
+	if (!g_socket) {
 		document.getElementById("main-content").innerHTML = error404Page();
 		return ;
 	}
