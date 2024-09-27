@@ -151,7 +151,7 @@ export async function profilePage() {
                     <p>Total wins: ${match_wins}</p>
                     <p>Total losses: ${match_losses}</p>
                 </div>
-				<table class="table custom-scrollbar">
+				<table class="table">
 					<thead>
 						<tr>
 						<th scope="col">Date</th>
@@ -160,7 +160,7 @@ export async function profilePage() {
 						<th scope="col">Result</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody class="custom-scrollbar">
 						${matches_html}
 					</tbody>
 				</table>
