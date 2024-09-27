@@ -3,7 +3,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { hideModal } from '../../dom/modal.js';
 
 async function joinTournament(nickname, tournament_id) {
-	const response = await fetch('https://localhost:10443/api/tournament/' + tournament_id + '/players/', {
+	const response = await fetch('https://' + window.location.host + '/api/tournament/' + tournament_id + '/players/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

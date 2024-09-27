@@ -82,15 +82,12 @@ WSGI_APPLICATION = 'livechatProject.wsgi.application'
 ASGI_APPLICATION = "livechatProject.asgi.application"
 
 CORS_ALLOWED_ORIGINS = [
-  "https://localhost:10443",
+  "https://localhost:443",
 ]
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-        # 'CONFIG': {
-        #     "hosts": [('172.20.4.4', 10443)],
-        # },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     },
 }
 

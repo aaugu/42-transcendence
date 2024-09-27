@@ -65,10 +65,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-  "https://localhost:10443",
+  "https://localhost:443",
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://localhost:10443']
+CSRF_TRUSTED_ORIGINS = ['https://localhost:443']
 
 ROOT_URLCONF = "pong_project.urls"
 

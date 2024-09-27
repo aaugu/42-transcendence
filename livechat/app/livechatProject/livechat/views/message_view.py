@@ -28,7 +28,6 @@ class MessageView(APIView):
 			target = User.objects.get(user_id=conversation.user_1)
 
 		contact_blacklisted = self.is_blacklist(initiator, target)
-		is_blacklisted = self.is_blacklist(target, initiator)
 
 		messages = Message.objects.filter(conversation_id=conversation_id)
 		msg_serializer = MessageSerializer(messages, many=True)
@@ -37,7 +36,6 @@ class MessageView(APIView):
 							"messages": msg_serializer.data,
 							"conversation": conv_serializer.data,
 							"contact_blacklisted": contact_blacklisted,
-							"is_blacklisted": is_blacklisted
 						},
 						status=status.HTTP_200_OK)
 

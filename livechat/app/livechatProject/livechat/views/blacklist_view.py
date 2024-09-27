@@ -11,6 +11,20 @@ from livechat.models import User, Blacklist
 from livechat.serializers import BlacklistSerializer
 
 class BlacklistView(APIView):
+	# GET :
+	def get(self, request, user_id, target_id):
+		initiator = User.objects.filter(user_id=target_id)[0]
+		target = User.objects.filter(user_id=user_id)[0]
+		if not initiator or not target:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+
+		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
+
+		if blacklist:
+			return Response({"is_blacklisted": True}, status=status.HTTP_200_OK)
+		else:
+			return Response({"is_blacklisted": False}, status=status.HTTP_200_OK)
+
 	# POST:
 	def post(self, request, user_id):
 		serializer = BlacklistSerializer(data=request.data)
