@@ -31,6 +31,8 @@ export async function endGame(winner_id, loser_id, game_id) {
 				throw new Error("502");
 			else if (response.status == 403)
 				throw new Error("403");
+			else if (response.status == 409)
+				throw new Error("409");
 			return response.text().then((text) => {
 			throw new Error(
 				`Request failed with status ${response.status}: ${text}`

@@ -202,12 +202,11 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				updateGameState(data.game_state, canvas);
 			}
 
-			if (data.player_disconnect) {
+			if (data.player_disconnect && gameState.current.status != "Finished") {
 				// console.log(data.message);
 				// console.log("Remaining player:", data.remaining_player);
 				// console.log("Disconnected player:", data.player_id);
 				// console.log("GameID", data.game_id);
-
 				await endGame(data.remaining_player, data.player_id, data.game_id);
 				await tournament.endMatch(data.remaining_player);
 				tournament.updateMatchCycle_remote();
@@ -245,6 +244,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				setTimeout(() => {
 					hideModal("t-match-modal");
 					urlRoute("/profile");
+					return ;
 				}, 3000);
 			}
 		} catch (error) {
@@ -259,6 +259,9 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			if (error.message === "403") {
 				urlRoute("/profile");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
+			}
+			if (error.message === "409") {
+				urlRoute("/profile");
 			}
 		}
 	};

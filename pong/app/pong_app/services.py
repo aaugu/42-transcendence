@@ -107,6 +107,8 @@ class GameService:
     def end_game(request):
         print(f"Received request to end game")
         game_id = request.POST.get("game_id")
+        if Game.objects.get_game(game_id).status == "FINISHED":
+            return (JsonReponse({"error": "Game already finished"}, status=409))
         winner_id = request.POST.get("winner_id")
         loser_id = request.POST.get("loser_id")
 
