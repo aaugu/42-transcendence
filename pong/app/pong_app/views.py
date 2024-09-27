@@ -6,6 +6,7 @@ from .services import GameService
 from .models import Games
 import json
 from .game.constants import PARAMS
+from .services import GameAlreadyFinishedException
 
 def join_game(request, joiner_id, game_id):
     print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
@@ -64,6 +65,8 @@ def end_game(request):
     try:
         data = GameService.end_game(request)
         return JsonResponse({"message": "Game ended", "data": data})
+    except GameAlreadyFinishedException as e:
+        return JsonResponse({"error": str(e)}, status=409)
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
