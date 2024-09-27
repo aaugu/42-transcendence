@@ -5,7 +5,7 @@ export async function logout() {
 		throw new Error('No user ID found');
 	}
 
-    const response = await fetch('https://localhost:10443/api/login/token/logout/' + userID + '/', {
+    const response = await fetch('https://' + window.location.host + '/api/login/token/logout/' + userID + '/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

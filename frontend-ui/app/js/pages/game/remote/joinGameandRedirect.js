@@ -13,7 +13,7 @@ export async function joinGameandRedirect(gameId, senderId) {
 				localStorage.setItem('right', localStorage.getItem('nickname'));
 			}
 
-			const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
+			const joinGameEndpoint = "https://" + window.location.host + "/api/pong/join-game";
 			const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 				method: "GET",
 				headers: {

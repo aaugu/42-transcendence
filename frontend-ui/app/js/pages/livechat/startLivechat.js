@@ -4,7 +4,7 @@ import { contact_blacklisted } from "./blacklist.js";
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
-	chatSocket = new WebSocket(`wss://localhost:10443/ws/chat/${conv_id}`);
+	chatSocket = new WebSocket('wss://' + window.location.host + `/ws/chat/${conv_id}`);
 
 	const messageInput = document.getElementById("chat-textarea");
 	const messageSubmitBtn = document.getElementById("chat-send");

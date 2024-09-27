@@ -4,7 +4,7 @@ export async function getUserInfo(id = null) {
     const user_id = id || userID;
     if (user_id === null)
         throw new Error ("403");
-	const url = 'https://localhost:10443/api/user/';
+	const url = 'https://' + window.location.host + '/api/user/';
 
     const response = await fetch(url + user_id + '/', {
         method: 'GET',
@@ -40,7 +40,7 @@ export async function getUserInfo(id = null) {
 export async function getNicknameUserInfo(nickname) {
     if (nickname === null || nickname === "")
         throw new Error ("403");
-	const url = 'https://localhost:10443/api/user/getuser/nickname/';
+	const url = 'https://' + window.location.host + '/api/user/getuser/nickname/';
 
     const response = await fetch(url + nickname, {
         method: 'GET',

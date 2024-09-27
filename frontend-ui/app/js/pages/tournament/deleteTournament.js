@@ -1,7 +1,7 @@
 import { userID } from '../user/updateProfile.js';
 
 export async function deleteTournament(tourn_id) {
-	const response = await fetch('https://localhost:10443/api/tournament/' + tourn_id + '/', {
+	const response = await fetch('https://' + window.location.host + '/api/tournament/' + tourn_id + '/', {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',

@@ -13,7 +13,7 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 	else
 		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" class="btn btn-primary" href='#'>Join the game</button>`
 
-	const response = await fetch('https://localhost:10443/api/livechat/notification/', {
+	const response = await fetch('https://' + window.location.host + '/api/livechat/notification/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',
