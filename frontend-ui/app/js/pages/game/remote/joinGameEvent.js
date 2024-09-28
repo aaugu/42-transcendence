@@ -1,5 +1,4 @@
 import { userID } from "../../user/updateProfile.js";
-import createWebSocketConnection from "../gameplay/WebSocketConnection.js";
 import { displayGame } from "../gameplay/displayGame.js";
 import { handleWebsocketGame } from "../gameplay/handleWebsocket.js";
 import handleButtons from "../gameplay/HandleButtons.js";
