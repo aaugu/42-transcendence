@@ -93,13 +93,12 @@ class PongConsumer(AsyncWebsocketConsumer):
         print("Consumer disconnected")
         PongConsumer.games[self.game_id].game_state.pause()
 
-        PongConsumer.games[self.game_id].game_state.finished = True
-
         # Decrement user count for the room
         if self.game_id in PongConsumer.user_per_room:
             PongConsumer.user_per_room[self.game_id] -= 1
 
         if hasattr(self, "player_id") and not PongConsumer.games[self.game_id].finished:
+            PongConsumer.games[self.game_id].game_state.finished = True
             print(f"Player {self.player_id} disconnected")
             disconnection_message = {
                 "type": "player_disconnect",
