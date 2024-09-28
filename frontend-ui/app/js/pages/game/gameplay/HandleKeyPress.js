@@ -24,13 +24,15 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
   if (isRemoteGame) {
     let playerIndex = null;
 
-    if (userID === gameState.current.paddles[0].player_id) {
+    if (userID == gameState.current.paddles[0].player_id) {
       playerIndex = 0;
-    } else if (userID === gameState.current.paddles[1].player_id) {
+    } else if (userID == gameState.current.paddles[1].player_id) {
       playerIndex = 1;
     }
+    console.log(`userID: ${userID}, Paddle 1: ${gameState.current.paddles[0].player_id}, Paddle 2: ${gameState.current.paddles[1].player_id} Player Index: ${playerIndex}`);
 
-    if (playerIndex !== null) {
+    if (playerIndex != null) {
+      console.log("playerIndex: ", playerIndex);
       const controller =
         playerIndex === 0
           ? [controllerLeftUp, controllerLeftDown]
@@ -38,7 +40,9 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 
       for (const key of controller) {
         if (keysPressed[key]) {
+          console.log("keyActionMap[key]: ", keyActionMap[key]);
           socket.send(JSON.stringify(keyActionMap[key]));
+          return;
         }
       }
     }
