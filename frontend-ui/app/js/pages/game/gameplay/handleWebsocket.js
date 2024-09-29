@@ -248,6 +248,10 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
 
+      if (data.only_player_disconnect) {
+        console.log(data);
+      }
+
 		} catch (error) {
 			// console.error("Error in socket  onmessage:", error.message);
 			hideModal("t-match-modal");
