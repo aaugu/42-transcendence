@@ -1,5 +1,4 @@
 import updateGameState from './GameDraw.js';
-import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 import HandleButtons from './HandleButtons.js';
 import handleKeyPress from './HandleKeyPress.js';

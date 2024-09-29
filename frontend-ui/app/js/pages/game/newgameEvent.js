@@ -75,7 +75,7 @@ export async function newtournamentgameEvent(tourn_id) {
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			}
 			else {
-				errormsg("This tournament cannot be started, try again later", 'single-t-modal-errormsg');
+				errormsg(e.message, 'single-t-modal-errormsg');
 			}
 		}
 	}

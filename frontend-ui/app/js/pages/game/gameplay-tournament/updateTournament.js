@@ -26,7 +26,7 @@ export function updateTournamentTable(matches) {
 	tourn_table.innerHTML = match_html;
 }
 
-export async function newMatchCycle(tournament) {
+export async function startNewMatchCycle(tournament) {
 	localStorage.setItem('tourn_id', tournament.tourn_id);
 
 	const player1_id = tournament.current_match.player_1.user_id;
@@ -38,7 +38,7 @@ export async function newMatchCycle(tournament) {
 	urlRoute(new_url);
 }
 
-export async function newMatchCycle_remote(tournament) {
+export async function startNewMatchCycle_remote(tournament) {
 	//call new endpoint with player1 and player2 ids instead of getGameID
 
 	const player1_id = tournament.current_match.player_1.user_id;
@@ -48,6 +48,10 @@ export async function newMatchCycle_remote(tournament) {
 	const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
 	const newGameId = response.game_id;
 	const new_url = `/tournament-remote/${newGameId}`;
+
+	console.log("newGameId in startNewMatchCycle_remote: ", newGameId);
+	console.log("Player1 in NewMatchCycle_remote: ", tournament.current_match.player_1.nickname);
+	console.log("Player2 in NewMatchCycle_remote: ", tournament.current_match.player_2.nickname);
 
 	tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
 									class="btn btn-primary" href='#'>Join the match</button>`;

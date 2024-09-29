@@ -3,8 +3,8 @@
 // console.log("window.innerHeight: ", window.innerHeight);
 // console.log("window.innerWidth: ", window.innerWidth);
 
-export const canvasHeight = 550;
-export const canvasWidth = 1100;
+export const canvasHeight = 400;
+export const canvasWidth = 800;
 // console.log("canvasHeight, canvasWidth: ", canvasHeight, canvasWidth);
 export const ballRadius = 10;
 export const paddleWidth = 15;
