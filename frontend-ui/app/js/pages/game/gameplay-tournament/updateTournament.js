@@ -1,10 +1,6 @@
-import { Tournament } from './tournamentClass.js';
-import { errormsg } from '../../../dom/errormsg.js';
 import { createTournamentGame } from '../gameplay/createnewGame.js';
 import { urlRoute } from '../../../dom/router.js';
 import { hideModal } from '../../../dom/modal.js';
-import { joinGame } from '../remote/joinGameandRedirect.js';
-import { getGameID } from '../gameplay/createnewGame.js';
 
 export function updateTournamentTable(matches) {
 	const tourn_table = document.getElementById('tournament-table-body');
@@ -34,7 +30,7 @@ export async function startNewMatchCycle(tournament) {
 	const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT");
 	const newGameId = response.game_id;
 	const new_url = `/tournament/${newGameId}`;
-	hideModal('t-match-modal');
+	hideModal('match-modal');
 	urlRoute(new_url);
 }
 
@@ -43,15 +39,13 @@ export async function startNewMatchCycle_remote(tournament) {
 
 	const player1_id = tournament.current_match.player_1.user_id;
 	const player2_id = tournament.current_match.player_2.user_id;
-	// await joinGame(newGameId, player2_id);
-	// const newGameId = await getGameID("tournament-remote");
 	const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
 	const newGameId = response.game_id;
 	const new_url = `/tournament-remote/${newGameId}`;
 
-	console.log("newGameId in startNewMatchCycle_remote: ", newGameId);
-	console.log("Player1 in NewMatchCycle_remote: ", tournament.current_match.player_1.nickname);
-	console.log("Player2 in NewMatchCycle_remote: ", tournament.current_match.player_2.nickname);
+	// console.log("newGameId in startNewMatchCycle_remote: ", newGameId);
+	// console.log("Player1 in NewMatchCycle_remote: ", tournament.current_match.player_1.nickname);
+	// console.log("Player2 in NewMatchCycle_remote: ", tournament.current_match.player_2.nickname);
 
 	tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
 									class="btn btn-primary" href='#'>Join the match</button>`;

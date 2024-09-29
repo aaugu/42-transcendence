@@ -5,7 +5,7 @@ import { urlRoute } from "../../../dom/router.js";
 export async function endGame(winner_id, loser_id, game_id) {
 	let url = "https://localhost:10443/api/pong/end-game/";
 
-	console.log("in endGame");
+	// console.log("in endGame");
 	let formData = new FormData();
 	if (winner_id !== null) {
 		formData.append("winner_id", winner_id);

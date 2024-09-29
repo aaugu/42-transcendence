@@ -103,7 +103,7 @@ class TournamentUtils {
 	}
 
 	async endMatch(winner_id) {
-		console.log("winner id in endMatch: ", winner_id);
+		// console.log("winner id in endMatch: ", winner_id);
 
 		if (this.tourn_id === undefined || winner_id === undefined) {
 			throw new Error('Invalid parameters to end match');

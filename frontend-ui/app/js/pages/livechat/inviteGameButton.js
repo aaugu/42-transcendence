@@ -1,4 +1,4 @@
-import { getGameID } from '../game/gameplay/createnewGame.js';
+import { getGameID, getGameMode } from '../game/gameplay/createnewGame.js';
 import { userID } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
@@ -85,9 +85,8 @@ export async function inviteGameButtonLocal(ctc_id) {
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
 
+		const game_id = await getGameID("local-twoplayer");
 		const mode = getGameMode("local-twoplayer");
-		const game = await createGame(mode, ctc_id);
-		const game_id = game.game_id;
 		await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/local-twoplayer/${game_id}`;
 		urlRoute(new_url);

@@ -20,14 +20,15 @@ export async function livechatPage() {
             <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto">
                 <div id="chat-welcome">
                     <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
-                    <div class="h6 text-center">Select a contact to start a conversation or invite someone for a Pong Game</div>
+                    <div class="h6 text-center">Select a contact to start a conversation or invite someone to a local (<i class="bi bi-joystick
+                    text-black"></i>) or a remote (<i class="bi bi-controller text-black"></i>) Pong Game</div>
                 </div>
                 <a id="ctc-nickname" class="hidden" href=""></a>
                 <ul id="chat-msgs"class="row list-unstyled custom-scrollbar flex-grow-1 text-white
                         w-100 mb-2"></ul>
                 <div class="d-flex align-items-center">
                     <button id="chat-invite-game-local" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
-                        <i class="bi bi-dpad text-white"></i>
+                        <i class="bi bi-joystick text-white"></i>
                     </button>
                     <button id="chat-invite-game" type="button" class="btn btn-dark btn-sm btn-rounded hidden">
                         <i class="bi bi-controller text-white"></i>

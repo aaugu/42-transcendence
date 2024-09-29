@@ -19,12 +19,12 @@ let html = `
 			</table>
 		</div>
 	</div>
-	<div class="modal fade" id="t-match-modal" tabindex="-1" aria-labelledby="t-match-modal" aria-hidden="true">
+	<div class="modal fade" id="match-modal" tabindex="-1" aria-labelledby="match-modal" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-body">
-					<div id="t-match-text"></div>
-					<p class="hidden m-2 text-danger" id="t-match-modal-errormsg"></p>
+					<div id="match-modal-text"></div>
+					<p class="hidden m-2 text-danger" id="match-modal-errormsg"></p>
 				</div>
 			</div>
 		</div>

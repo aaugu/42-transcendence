@@ -3,10 +3,11 @@ import { urlRoute } from "../../../dom/router.js";
 import { errormsg } from "../../../dom/errormsg.js";
 import { getUserInfo } from "../../user/getUserInfo.js";
 
-export async function joinGame(gameId, id = null) {
-	const user_id = id || userID;
+export async function joinGame(gameId) {
+	if (userID === null)
+		throw new Error("403");
 	const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
-	const response = await fetch(`${joinGameEndpoint}/${gameId}/${user_id}`, {
+	const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 		method: "GET",
 		headers: {
 			"Content-Type": "application/json"
@@ -23,7 +24,6 @@ export async function joinGameandRedirect(gameId, senderId) {
 	try {
 			const userInfo = await getUserInfo(senderId);
 
-			console.log("user info: ", userInfo);
 			if (userInfo) {
 				localStorage.setItem('left', userInfo.nickname);
 				localStorage.setItem('right', localStorage.getItem('nickname'));
@@ -37,6 +37,10 @@ export async function joinGameandRedirect(gameId, senderId) {
 		} catch(e) {
 			if (e.message == "500" || e.message == "502") {
 				errormsg("Service temporarily unavailable", "homepage-errormsg");
+			}
+			else if (e.message === "403") {
+				updateProfile(false, null);
+				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			}
 		}
 }
