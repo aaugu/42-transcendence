@@ -167,9 +167,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 		console.log("this player is player1, they update the match & game cycle");
 
 	socket.onopen = function (event) {
-		// const pos = is_player1 ? "left" : "right";
-		// socket.send(JSON.stringify({ position: pos }));
-
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
 		updateTournamentTable(tournament.all_matches);
@@ -179,7 +176,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 	socket.onclose = function (event) {
 		console.log("WebSocket connection closed:", event);
 
-		// need 
+		// need
 	};
 
 	socket.onerror = function (error) {
@@ -240,10 +237,11 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				console.log("in disconnection, data:", data);
 				await endGame(data.remaining_player[0], data.player_id, data.game_id);
 				await tournament.endMatch(data.remaining_player[0]);
-				tournament.updateMatchCycle_remote();
+				await tournament.updateMatchCycle_remote();
 				if (tournament.game_status === "In Progress" && tournament.current_match) {
 					await startNewMatchCycle_remote(tournament);
 				}
+				console.log("before route change to profile in disconnection");
 				urlRoute("/profile");
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}

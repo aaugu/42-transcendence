@@ -67,19 +67,21 @@ export async function publicProfilePage() {
                     <p>Total wins: ${match_wins}</p>
                     <p>Total losses: ${match_losses}</p>
                 </div>
-				<table class="table custom-scrollbar">
-					<thead>
-						<tr>
-						<th scope="col">Date</th>
-						<th scope="col">Opponent</th>
-						<th scope="col">Mode</th>
-						<th scope="col">Result</th>
-						</tr>
-					</thead>
-					<tbody>
-						${matches_html}
-					</tbody>
-				</table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Opponent</th>
+                            <th scope="col">Mode</th>
+                            <th scope="col">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-scrollbar">
+                            ${matches_html}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="content-box">
                 <h5 class="m-2">Friends</h5>

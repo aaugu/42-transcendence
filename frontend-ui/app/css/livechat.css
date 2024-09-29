@@ -11,11 +11,11 @@
 }
 
 .custom-scrollbar {
-    max-height: 500px;
+    max-height: 300px;
     min-height: 50px;
     overflow-y: auto;
     overflow-x: hidden;
-    scrollbar-width: thin; /* Firefox */
+    scrollbar-width: thin ; /* Firefox */
     scrollbar-color: #acacac #878787; /* Firefox */
 }
 
@@ -32,7 +32,6 @@
     background-color: #acacac; /* color of the scrollbar thumb */
     border-radius: 10px; /* roundness of the scrollbar thumb */
     border: 2px solid #878787; /* adds space around the scrollbar thumb */
-
 }
 
 button:hover i {
