@@ -79,6 +79,7 @@ class GameService:
             Games.objects.create(
                 game_id=game_id,
                 creator_id=player_one_id,
+                joiner_id=player_two_id,
                 status="WAITING",
                 mode="TOURNAMENT-REMOTE",
             )
