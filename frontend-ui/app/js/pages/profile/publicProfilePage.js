@@ -9,6 +9,9 @@ export async function publicProfilePage() {
 	if (nickname === null || nickname === "")
 		return error404Page();
 
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+    document.getElementById('logo').href = "/profile";
+
     try {
         const userinfo = await getNicknameUserInfo(nickname);
         var username = userinfo.username;
