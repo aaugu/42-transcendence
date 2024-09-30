@@ -9,7 +9,7 @@ from .game.constants import PARAMS
 from .services import GameAlreadyFinishedException
 
 def join_game(request, joiner_id, game_id):
-    print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
+    # print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
 
     if not joiner_id or not game_id:
       return JsonResponse({"error": "Missing required parameters"}, status=400)
@@ -22,7 +22,7 @@ def join_game(request, joiner_id, game_id):
 
 
 def create_game(request, creator_id, mode, joiner_id):
-    print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
+    # print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
     # Vérification des paramètres
     if not creator_id or not mode:
@@ -39,7 +39,7 @@ def create_game(request, creator_id, mode, joiner_id):
     return JsonResponse(game.to_dict())
 
 def create_game_tournament(request, player_one_id, player_two_id, mode):
-    print(f'Received request to create tournament game with player_one_id: {player_one_id}, player_two_id: {player_two_id} and mode: {mode}')
+    # print(f'Received request to create tournament game with player_one_id: {player_one_id}, player_two_id: {player_two_id} and mode: {mode}')
 
     # Vérification des paramètres
     if not player_one_id or not player_two_id or not mode:
@@ -57,7 +57,7 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
 
 # @csrf_exempt
 def end_game(request):
-    print(f'Received request to end game')
+    # print(f'Received request to end game')
 
     # if not request.POST:
     #     return JsonResponse({"error": "Missing required parameters"}, status=400)
@@ -71,7 +71,7 @@ def end_game(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 def get_user_games(request, user_id):
-    print(f'Received request to get games for user: {user_id}')
+    # print(f'Received request to get games for user: {user_id}')
 
     games = GameService.get_user_games(user_id=user_id)
     datas = [game.to_dict() for game in games]
@@ -83,7 +83,7 @@ def get_user_games(request, user_id):
     return JsonResponse(datas, safe=False)
 
 def get_game(request, game_id):
-    print(f'Received request to get game with id: {game_id}')
+    # print(f'Received request to get game with id: {game_id}')
 
     game = GameService.get_game(game_id=game_id)
     if not game:
@@ -92,6 +92,6 @@ def get_game(request, game_id):
     return JsonResponse(game.to_dict())
 
 def get_pong_constants(request):
-    print(f'Received request to get pong constants')
+    # print(f'Received request to get pong constants')
 
     return JsonResponse(PARAMS)

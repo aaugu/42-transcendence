@@ -41,10 +41,12 @@ class PongConsumer(AsyncWebsocketConsumer):
         
         if user_id == game.game_state.paddles[0].player_id:
             self.player_id = game.game_state.paddles[0].player_id
-            print(f"User {user_id} is player one in game {self.game_id}")
+            self.player_id = user_id
+            print(f"Player ID {self.player_id} Paddle Left: {self.player_id}")
         elif user_id == game.game_state.paddles[1].player_id:
             self.player_id = game.game_state.paddles[1].player_id
-            print(f"User {user_id} is player two in game {self.game_id}")
+            self.player_id = user_id
+            print(f"Player ID {self.player_id} Paddle Right: {self.player_id}")
         
         # Initialize user count if not exists
         if self.game_id not in PongConsumer.user_per_room:
@@ -73,32 +75,21 @@ class PongConsumer(AsyncWebsocketConsumer):
                 return
 
         # Increment user count for the game
-        if PongConsumer.user_per_room[self.game_id] == 0 and (
-            GameMode.REMOTE or GameMode.TOURNAMENT_REMOTE
-        ):
-            self.player_id = game.game_state.paddles[
-                0
-            ].player_id  # Track the player in self
-            PongConsumer.players_in_game.setdefault(self.game_id, []).append(
-                game.game_state.paddles[0].player_id
-            )
-        elif PongConsumer.user_per_room[self.game_id] == 1 and (
-            GameMode.REMOTE or GameMode.TOURNAMENT_REMOTE
-        ):
-            self.player_id = game.game_state.paddles[
-                1
-            ].player_id  # Track the player in self
-            PongConsumer.players_in_game.setdefault(self.game_id, []).append(
-                game.game_state.paddles[1].player_id
-            )
+        # PongConsumer.players_in_game[self.game_id] += 1
+        if game_mode == GameMode.REMOTE or game_mode == GameMode.TOURNAMENT_REMOTE:
+          PongConsumer.user_per_room[self.game_id] += 1
 
-        PongConsumer.user_per_room[self.game_id] += 1
+          # Check if the game already exists in players_in_game
+          if self.game_id in PongConsumer.players_in_game:
+              # If it does, append the new player to the existing list
+              PongConsumer.players_in_game[self.game_id].append(self.player_id)
+          else:
+              # If it doesn't, create a new list with the new player
+              PongConsumer.players_in_game[self.game_id] = [self.player_id]
 
-        print(
-            f"User count for game {self.game_id}: {PongConsumer.user_per_room[self.game_id]}"
-        )
-
-        print(f"Consumer players in game: {PongConsumer.players_in_game}")
+          print(f"Players in game: {PongConsumer.players_in_game}")
+          print(f"User count for game {self.game_id}: {PongConsumer.user_per_room[self.game_id]}")
+          print(f"Consumer players in game: {PongConsumer.players_in_game}")
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
@@ -117,7 +108,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             PongConsumer.user_per_room[self.game_id] -= 1
 
         if hasattr(self, "player_id") and not PongConsumer.games[self.game_id].game_state.finished:
-            print(f"Player {self.player_id} disconnected")
+            print(f"User: {self.player_id} disconnected")
             disconnection_message = {
                 "type": "player_disconnect",
                 "player_id": self.player_id,
@@ -177,59 +168,30 @@ class PongConsumer(AsyncWebsocketConsumer):
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()
 
+            game_mode = PongConsumer.games[self.game_id].mode
+            user_count = PongConsumer.user_per_room[self.game_id]
+            
+            
+
             if PongConsumer.games[self.game_id].game_state.finished:
                 print(
                     f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"
                 )
 
-                winner_id, loser_id = self.determine_winner_loser()
+                should_finish_game = game_mode not in [GameMode.REMOTE, GameMode.TOURNAMENT_REMOTE] or user_count == 2
+                if should_finish_game:
 
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "game_finished",
-                        "winner_id": winner_id,
-                        "loser_id": loser_id,
-                        "game": PongConsumer.games[self.game_id].to_dict(),
-                    },
-                )
+                  winner_id, loser_id = self.determine_winner_loser()
 
-                break
-
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    "type": "game_state_update",
-                    "game_state": PongConsumer.games[self.game_id].game_state.to_dict(),
-                },
-            )
-
-            await asyncio.sleep(1 / 120)
-
-    async def game_loop(self):
-        while True:
-            game_mode = PongConsumer.games[self.game_id].mode
-            user_count = PongConsumer.user_per_room[self.game_id]
-
-            # add the new conditions here
-            should_finish_game = game_mode not in [GameMode.REMOTE, GameMode.TOURNAMENT_REMOTE] or user_count == 2
-
-            if should_finish_game and PongConsumer.games[self.game_id].game_state.finished:
-                print(
-                    f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"
-                )
-
-                winner_id, loser_id = self.determine_winner_loser()
-
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        "type": "game_finished",
-                        "winner_id": winner_id,
-                        "loser_id": loser_id,
-                        "game": PongConsumer.games[self.game_id].to_dict(),
-                    },
-                )
+                  await self.channel_layer.group_send(
+                      self.room_group_name,
+                      {
+                          "type": "game_finished",
+                          "winner_id": winner_id,
+                          "loser_id": loser_id,
+                          "game": PongConsumer.games[self.game_id].to_dict(),
+                      },
+                  )
 
                 break
 
