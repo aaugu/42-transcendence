@@ -11,7 +11,9 @@ export async function loginProcess() {
         return ;
     }
 
-    const loginBtn = document.getElementById('login-submit').disabled = true;
+    const loginBtn = document.getElementById('login-submit')
+    if (loginBtn)
+        loginBtn.disabled = true;
 
     if (userID !== null){
         errormsg("You are already logged in, redirecting to profile page...", "homepage-errormsg");
@@ -42,15 +44,18 @@ export async function loginProcess() {
                 const error = await response.json();
                 if (error.username) {
                     errormsg(error.username, "homepage-errormsg");
-                    const loginBtn = document.getElementById('login-submit').disabled = false;
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else if (error.password) {
                     errormsg(error.password, "homepage-errormsg");
-                    const loginBtn = document.getElementById('login-submit').disabled = false;
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else if (error.detail) {
                     errormsg(error.detail + ", are your username and password correct?", "homepage-errormsg");
-                    const loginBtn = document.getElementById('login-submit').disabled = false;
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }
@@ -62,7 +67,8 @@ export async function loginProcess() {
                     console.log("USER LOG: TWO FACTOR AUTHENTICATION REQUIRED");
                     var twoFAmodal = new bootstrap.Modal(document.getElementById('login-2fa-modal'));
                     twoFAmodal.show();
-                    const loginBtn = document.getElementById('login-submit').disabled = false;
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else {
                     // console.log("login response: ", JSON.stringify(responseData));
