@@ -11,6 +11,7 @@ class PongConsumer(AsyncWebsocketConsumer):
     games = {}
     user_per_room = {}
     players_in_game = {}
+    disconnected_players = {}
 
     async def connect(self):
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
@@ -32,6 +33,18 @@ class PongConsumer(AsyncWebsocketConsumer):
         if self.game_id not in PongConsumer.user_per_room:
             print(f"In connect method, user_per_room: {PongConsumer.user_per_room}")
             PongConsumer.user_per_room[self.game_id] = 0
+
+        # Check if a player previously disconnected from the game
+        if self.game_id in PongConsumer.disconnected_players:
+            disconnected_player = PongConsumer.disconnected_players[self.game_id]
+            # Inform the new player that someone had previously disconnected
+            await self.send(
+                text_data=json.dumps({
+                    "type": "player_disconnect",
+                    "player_id": disconnected_player,
+                    "message": f"Player {disconnected_player} disconnected earlier"
+                })
+            )
 
         # Check connection limits based on game mode
         if game_mode == GameMode.LOCAL_TWO_PLAYERS:
@@ -118,14 +131,13 @@ class PongConsumer(AsyncWebsocketConsumer):
             )
 
             if (
-                self.game_id in PongConsumer.players_in_game
-                and self.player_id in PongConsumer.players_in_game[self.game_id]
-            ):
-                PongConsumer.players_in_game[self.game_id].remove(self.player_id)
+            self.game_id in PongConsumer.players_in_game
+            and self.player_id in PongConsumer.players_in_game[self.game_id]
+        ):
+              PongConsumer.players_in_game[self.game_id].remove(self.player_id)
 
         print(f"Remaining players in game: {PongConsumer.players_in_game}")
 
-        # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
@@ -257,6 +269,23 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "message": message,
                     "player_disconnect": True,
                     "remaining_player": remaining_player,  # Include
+                }
+            )
+        )
+
+    async def only_player_disconnect(self, event):
+        loser_id = event["loser_id"]
+        message = event["message"]
+        game_id = self.game_id
+
+        # Send a message to the client including the remaining player IDs
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "loser_id": loser_id,
+                    "game_id": game_id,
+                    "message": message,
+                    "only_player_disconnect": True,
                 }
             )
         )

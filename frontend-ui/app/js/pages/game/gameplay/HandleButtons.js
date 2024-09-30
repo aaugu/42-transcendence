@@ -7,8 +7,6 @@ export default function handleButtons(socket) {
 
 	if (startButton) {
 		startButton.addEventListener("click", () => {
-			console.log("GAME LOG: Start button clicked");
-
 			if (socket && socket.readyState === WebSocket.OPEN) {
 				socket.send(JSON.stringify({ action: "start" }));
 			} else {
@@ -16,13 +14,9 @@ export default function handleButtons(socket) {
 			}
 		});
 	}
-	// else {
-	// 	console.error("GAME LOG: Start button not found");
-	// }
 
 	if (stopButton) {
 		stopButton.addEventListener("click", () => {
-			console.log("GAME LOG: Stop button clicked");
 			if (socket && socket.readyState === WebSocket.OPEN) {
 				socket.send(JSON.stringify({ action: "pause" }));
 			} else {
@@ -30,7 +24,4 @@ export default function handleButtons(socket) {
 			}
 		});
 	}
-	// else {
-	// 	console.error("GAME LOG: Stop button not found");
-	// }
 }

@@ -21,12 +21,9 @@ export async function livechatEvent(e) {
       }
 
 	let target = e.target;
-	if (target.tagName === 'I' && target.parentElement.id === 'chat-block-btn') {
-		target = target.parentElement;
-	}
-	else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game') {
-		target = target.parentElement;
-	} else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game-local') {
+	if (target.tagName === 'I' && (target.parentElement.id === 'chat-invite-game'
+		|| target.parentElement.id === 'chat-invite-game-local'
+		|| target.parentElement.id === 'chat-block-btn')) {
 		target = target.parentElement;
 	}
 

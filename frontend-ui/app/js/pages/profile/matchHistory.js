@@ -42,7 +42,7 @@ export async function matchHistoryList(nickname, id) {
 			<tr>
 					<th scope="row">${date}</th>
 					<td>${match.winner_id == nickname ? match.loser_id : match.winner_id}</td>
-					<td>${match.mode}</td>
+					<td>${match.mode == "LOCAL_TWO_PLAYERS" ? "LOCAL" : match.mode}</td>
 					<td>${match.winner_id == nickname ? "WON" : "LOST"}</td>
 				</tr>`
 		});
