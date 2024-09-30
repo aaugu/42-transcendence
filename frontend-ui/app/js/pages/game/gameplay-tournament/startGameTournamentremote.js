@@ -6,8 +6,10 @@ import { handleWebsocketTournament_remote } from '../gameplay/handleWebsocket.js
 import { getTournamentDetails } from '../../tournament/getTournaments.js';
 import { urlRoute } from '../../../dom/router.js';
 import { errormsg } from '../../../dom/errormsg.js';
+import { userID } from '../../user/updateProfile.js';
 
 export var t_remote_socket;
+
 
 export async function startGameTournamentremote() {
 	let tournament;
@@ -38,7 +40,7 @@ export async function startGameTournamentremote() {
 		return;
 	}
 
-	t_remote_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
+	t_remote_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}/?user_id=${userID}`);
 
 	const canvas = displayGame();
 	handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);

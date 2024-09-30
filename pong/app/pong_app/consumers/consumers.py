@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from ..ai.ai import *
 import asyncio
+from urllib.parse import parse_qs
 
 # from .services import GameService
 
@@ -11,11 +12,19 @@ class PongConsumer(AsyncWebsocketConsumer):
     games = {}
     user_per_room = {}
     players_in_game = {}
-    disconnected_players = {}
 
     async def connect(self):
         self.game_id = self.scope["url_route"]["kwargs"]["game_id"]
         self.room_group_name = f"pong_{self.game_id}"
+
+        query_string = self.scope["query_string"].decode("utf-8")
+        query_params = parse_qs(query_string)
+        
+        user_id = query_params.get("user_id", [None])[0]
+
+
+        self.user_id = user_id
+        print(f"User ID: {user_id}")
 
         # Check if the game exists
         if self.game_id not in PongConsumer.games:
@@ -29,22 +38,18 @@ class PongConsumer(AsyncWebsocketConsumer):
             print(f"Game {self.game_id} is already finished. Rejecting new connection.")
             await self.close()
 
+        
+        if user_id == game.game_state.paddles[0].player_id:
+            self.player_id = game.game_state.paddles[0].player_id
+            print(f"User {user_id} is player one in game {self.game_id}")
+        elif user_id == game.game_state.paddles[1].player_id:
+            self.player_id = game.game_state.paddles[1].player_id
+            print(f"User {user_id} is player two in game {self.game_id}")
+        
         # Initialize user count if not exists
         if self.game_id not in PongConsumer.user_per_room:
             print(f"In connect method, user_per_room: {PongConsumer.user_per_room}")
             PongConsumer.user_per_room[self.game_id] = 0
-
-        # Check if a player previously disconnected from the game
-        if self.game_id in PongConsumer.disconnected_players:
-            disconnected_player = PongConsumer.disconnected_players[self.game_id]
-            # Inform the new player that someone had previously disconnected
-            await self.send(
-                text_data=json.dumps({
-                    "type": "player_disconnect",
-                    "player_id": disconnected_player,
-                    "message": f"Player {disconnected_player} disconnected earlier"
-                })
-            )
 
         # Check connection limits based on game mode
         if game_mode == GameMode.LOCAL_TWO_PLAYERS:
@@ -77,7 +82,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             PongConsumer.players_in_game.setdefault(self.game_id, []).append(
                 game.game_state.paddles[0].player_id
             )
-            print(f"Player {self.player_id} connected")
         elif PongConsumer.user_per_room[self.game_id] == 1 and (
             GameMode.REMOTE or GameMode.TOURNAMENT_REMOTE
         ):
@@ -87,7 +91,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             PongConsumer.players_in_game.setdefault(self.game_id, []).append(
                 game.game_state.paddles[1].player_id
             )
-            print(f"Player {self.player_id} connected")
 
         PongConsumer.user_per_room[self.game_id] += 1
 
@@ -106,20 +109,14 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         print("Consumer disconnected")
-        # PongConsumer.games[self.game_id].game_state.pause()
+        if self.game_id in PongConsumer.games:
+            PongConsumer.games[self.game_id].game_state.pause()
 
         # Decrement user count for the room
         if self.game_id in PongConsumer.user_per_room:
             PongConsumer.user_per_room[self.game_id] -= 1
-            PongConsumer.players_in_game[self.game_id].remove(self.player_id)
 
-
-        if (
-            hasattr(self, "player_id")
-            and not PongConsumer.games[self.game_id].game_state.finished
-            and PongConsumer.user_per_room[self.game_id] == 1
-        ):
-            # PongConsumer.games[self.game_id].game_state.finished = True
+        if hasattr(self, "player_id") and not PongConsumer.games[self.game_id].game_state.finished:
             print(f"Player {self.player_id} disconnected")
             disconnection_message = {
                 "type": "player_disconnect",
@@ -131,13 +128,14 @@ class PongConsumer(AsyncWebsocketConsumer):
             )
 
             if (
-            self.game_id in PongConsumer.players_in_game
-            and self.player_id in PongConsumer.players_in_game[self.game_id]
-        ):
-              PongConsumer.players_in_game[self.game_id].remove(self.player_id)
+                self.game_id in PongConsumer.players_in_game
+                and self.player_id in PongConsumer.players_in_game[self.game_id]
+            ):
+                PongConsumer.players_in_game[self.game_id].remove(self.player_id)
 
         print(f"Remaining players in game: {PongConsumer.players_in_game}")
 
+        # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
@@ -168,30 +166,55 @@ class PongConsumer(AsyncWebsocketConsumer):
 
     async def game_loop(self):
         while True:
-            # print(f"User per room: {PongConsumer.user_per_room}")
             if (
                 PongConsumer.games[self.game_id].mode == GameMode.REMOTE
                 or PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT_REMOTE
             ) and PongConsumer.user_per_room[self.game_id] == 2:
+                # await asyncio.sleep(2)
                 PongConsumer.games[self.game_id].game_state.start()
                 # PongConsumer.games[self.game_id].game_state.pause()
 
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()
 
+            if PongConsumer.games[self.game_id].game_state.finished:
+                print(
+                    f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"
+                )
+
+                winner_id, loser_id = self.determine_winner_loser()
+
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        "type": "game_finished",
+                        "winner_id": winner_id,
+                        "loser_id": loser_id,
+                        "game": PongConsumer.games[self.game_id].to_dict(),
+                    },
+                )
+
+                break
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "game_state_update",
+                    "game_state": PongConsumer.games[self.game_id].game_state.to_dict(),
+                },
+            )
+
+            await asyncio.sleep(1 / 120)
+
+    async def game_loop(self):
+        while True:
             game_mode = PongConsumer.games[self.game_id].mode
             user_count = PongConsumer.user_per_room[self.game_id]
 
             # add the new conditions here
-            should_finish_game = (
-                game_mode not in [GameMode.REMOTE, GameMode.TOURNAMENT_REMOTE]
-                or user_count == 2
-            )
+            should_finish_game = game_mode not in [GameMode.REMOTE, GameMode.TOURNAMENT_REMOTE] or user_count == 2
 
-            if (
-                should_finish_game
-                and PongConsumer.games[self.game_id].game_state.finished
-            ):
+            if should_finish_game and PongConsumer.games[self.game_id].game_state.finished:
                 print(
                     f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"
                 )
@@ -268,24 +291,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                     "game_id": game_id,
                     "message": message,
                     "player_disconnect": True,
-                    "remaining_player": remaining_player,  # Include
-                }
-            )
-        )
-
-    async def only_player_disconnect(self, event):
-        loser_id = event["loser_id"]
-        message = event["message"]
-        game_id = self.game_id
-
-        # Send a message to the client including the remaining player IDs
-        await self.send(
-            text_data=json.dumps(
-                {
-                    "loser_id": loser_id,
-                    "game_id": game_id,
-                    "message": message,
-                    "only_player_disconnect": True,
+                    "remaining_player": remaining_player, # Include
                 }
             )
         )
