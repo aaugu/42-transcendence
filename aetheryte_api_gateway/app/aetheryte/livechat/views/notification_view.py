@@ -30,7 +30,7 @@ class NotificationView(APIView):
 		target_nickname = CustomUser.objects.filter(id=target_id).first().nickname
 		link = body['link']
 
-		user_message = "You invited " + target_nickname + " to play with you" + link
+		user_message = "You invited " + target_nickname + " to play with you\n" + link
 		target_message = user_nickname + " invites you play to play a pong game\n" + link
 
 		url = "http://172.20.5.2:8000/livechat/notification/"
