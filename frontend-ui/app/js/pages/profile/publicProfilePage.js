@@ -1,38 +1,31 @@
+import { error404Page } from "../errorpage/error404Page.js";
 import { error500 } from "../errorpage/error500.js";
 import { getNicknameUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
 import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
 export async function publicProfilePage() {
-    var username = "Guest";
-    var nickname = "Guest-nickname";
-    var email = "Guest-email";
-    var avatar = "images/default_avatar.png";
-	var user_id = "";
-    var friends_html = '';
-	var matches_html = '';
-	var match_wins = '';
-	var match_losses = '';
-
-	nickname = window.location.href.split("/")[4];
+	var nickname = window.location.href.split("/")[4];
 	if (nickname === null || nickname === "")
-		return error500();
+		return error404Page();
 
     try {
         const userinfo = await getNicknameUserInfo(nickname);
-        username = userinfo.username;
-        email = userinfo.email;
-        avatar = userinfo.avatar;
-		user_id = userinfo.id;
+        var username = userinfo.username;
+        var email = userinfo.email;
+        var avatar = userinfo.avatar;
+		var user_id = userinfo.id;
 
-        friends_html = await updateFriendList(user_id);
-		matches_html = await matchHistoryList(nickname, user_id);
+        var friends_html = await updateFriendList(user_id);
+		var matches_html = await matchHistoryList(nickname, user_id);
 
 		const match_wins_losses = matchWinsLosses(nickname);
-		match_wins = match_wins_losses.wins;
-		match_losses = match_wins_losses.losses;
+		var match_wins = match_wins_losses.wins;
+		var match_losses = match_wins_losses.losses;
     }
     catch (e) {
+        if (e.message === "404")
+            return error404Page();
         if (e.message == "502")
             return error500();
         console.log("USER LOG: ", e.message);

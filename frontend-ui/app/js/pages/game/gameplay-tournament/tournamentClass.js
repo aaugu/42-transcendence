@@ -1,6 +1,4 @@
 import { userID } from '../../user/updateProfile.js'
-import { urlRoute } from '../../../dom/router.js';
-import { errormsg } from '../../../dom/errormsg.js';
 
 class TournamentUtils {
 	constructor(tourn_id, game_status) {
@@ -28,7 +26,7 @@ class TournamentUtils {
     }
 
 	async _startTournament() {
-		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/start/';
+		const url = 'https://' + window.location.host + '/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {
 			method: 'PATCH',
 			headers: {
@@ -55,7 +53,7 @@ class TournamentUtils {
 			throw new Error('Invalid fetch method');
 		}
 
-		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/matches/generate/';
+		const url = 'https://' + window.location.host + '/api/tournament/' + this.tourn_id + '/matches/generate/';
 		const response = await fetch(url, {
 			method: fetch_method,
 			headers: {
@@ -78,7 +76,7 @@ class TournamentUtils {
 	}
 
 	async startMatch() {
-		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/start/';
+		const url = 'https://' + window.location.host + '/api/tournament/' + this.tourn_id + '/match/start/';
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: {
@@ -109,7 +107,7 @@ class TournamentUtils {
 			throw new Error('Invalid parameters to end match');
 		}
 
-		const url = 'https://localhost:10443/api/tournament/' + this.tourn_id + '/match/end/';
+		const url = 'https://' + window.location.host + '/api/tournament/' + this.tourn_id + '/match/end/';
 		const response = await fetch(url, {
 			method: 'POST',
 			headers: {

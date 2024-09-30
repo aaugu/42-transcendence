@@ -6,7 +6,7 @@ import { updateTournLists } from './updateTournLists.js';
 
 //type can  be local or remote
 async function createTournament(new_tournament) {
-	const response = await fetch('https://localhost:10443/api/tournament/', {
+	const response = await fetch('https://' + window.location.host + '/api/tournament/', {
 		method: 'POST',
 		headers: {
 			'Accept': 'application/json',

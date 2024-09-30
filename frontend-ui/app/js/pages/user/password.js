@@ -23,7 +23,7 @@ export async function editPassword(newPassword, repeatNewPassword, oldPassword) 
 	if (userID === null)
 		throw new Error("Could not identify user");
 
-	const url = 'https://localhost:10443/api/user/';
+	const url = 'https://' + window.location.host + '/api/user/';
 	const response = await fetch(url + userID + '/changepass/', {
 		method: 'POST',
 		headers: {

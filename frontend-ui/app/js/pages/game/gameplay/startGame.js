@@ -3,6 +3,7 @@ import handleKeyPress from './HandleKeyPress.js';
 import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
 import { userID } from '../../user/updateProfile.js';
+import { error404Page } from '../../errorpage/error404Page.js';
 
 export var g_socket;
 
@@ -11,15 +12,23 @@ export async function startGame() {
 	const gameId = window.location.href.split("/")[4];
 	const mode = window.location.href.split("/")[3];
 
-	console.log("mode: ", mode);
+	if (!gameId) {
+		document.getElementById("main-content").innerHTML = error404Page();
+		return ;
+	}
+
   	let gameState = { current: null };
 	  const right_player = localStorage.getItem('right');
 	  const left_player = localStorage.getItem('left');
 
 	if (mode == 'local-twoplayer')
-		g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}`);
+		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
 	else
-		g_socket = new WebSocket(`wss://localhost:10443/wsn/pong/${gameId}?user_id=${userID}`);
+		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
+	if (!g_socket && g_socket.readyState !== WebSocket.OPEN) {
+		document.getElementById("main-content").innerHTML = error404Page();
+		return ;
+	}
 
 	const canvas = displayGame();
 	if (right_player && left_player) {

@@ -79,7 +79,7 @@ services:
             file: nginx/docker/docker-compose.yml
             service: nginx
         ports:
-            - "10443:443"
+            - "443:443"
 
     # Elasticsearch / Kibana
     # elasticsearch:

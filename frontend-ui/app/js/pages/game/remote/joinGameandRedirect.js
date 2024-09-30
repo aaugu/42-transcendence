@@ -6,7 +6,7 @@ import { getUserInfo } from "../../user/getUserInfo.js";
 export async function joinGame(gameId) {
 	if (userID === null)
 		throw new Error("403");
-	const joinGameEndpoint = "https://localhost:10443/api/pong/join-game";
+	const joinGameEndpoint = "https://" + window.location.host + "/api/pong/join-game";
 	const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
 		method: "GET",
 		headers: {

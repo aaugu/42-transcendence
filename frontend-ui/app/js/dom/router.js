@@ -22,10 +22,9 @@ import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
-import { userID } from "../pages/user/updateProfile.js"
 import { startGameTournamentremote, t_remote_socket } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
 
 let urlRoute;
