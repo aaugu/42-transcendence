@@ -9,7 +9,7 @@ import { errormsg } from '../../../dom/errormsg.js';
 
 export var t_socket;
 
-export async function startGameTournament() {
+export async function startGameTournamentlocal() {
 	let tournament;
 	let gameState = { current: null };
 	let t_details;

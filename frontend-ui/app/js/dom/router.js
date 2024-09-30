@@ -9,7 +9,7 @@ import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
 import { startGame,  g_socket } from "../pages/game/gameplay/startGame.js"
-import { startGameTournament, t_socket } from "../pages/game/gameplay-tournament/startGameTournament.js"
+import { startGameTournamentlocal, t_socket } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/tournament/:gameId" : {
 			content: gamePage,
-			startFunction: startGameTournament,
+			startFunction: startGameTournamentlocal,
 			description: "local tournament game page"
 		},
 		"/tournament-remote/:gameId" : {

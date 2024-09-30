@@ -36,12 +36,9 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 			}
 
 			if (data.player_disconnect) {
-				// console.log("data: ", data);
-				// console.log("Remaining player:", data.remaining_player[0]);
-				// console.log("Disconnected player:", data.player_id);
-
 				await endGame(data.remaining_player[0], data.player_id, data.game_id);
-
+				localStorage.removeItem('right');
+				localStorage.removeItem('left');
 				urlRoute("/profile");
 				errormsg("The game was interrupted due to the disconnection of your opponent", "homepage-errormsg");
 			}
@@ -56,6 +53,8 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 				else
 					document.getElementById("match-modal-text").innerText = `Sorry, you lost!`;
 				matchmodal.show();
+				localStorage.removeItem('right');
+				localStorage.removeItem('left');
 				setTimeout(() => {
 					hideModal("match-modal");
 					urlRoute("/profile");
@@ -164,11 +163,9 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 		player1html.innerText = tournament.current_match.player_1.nickname;
 		player2html.innerText = tournament.current_match.player_2.nickname;
 		updateTournamentTable(tournament.all_matches);
-		// console.log("current match: ", tournament.current_match);
 	};
 
 	socket.onclose = function (event) {
-		// console.log("WebSocket connection closed:", event);
 	};
 
 	socket.onerror = function (error) {
@@ -190,8 +187,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 
 			if (data.game_finished) {
 				console.log("in game_finished, data:", data);
-				// console.log("WinnerID", data.winner_id);
-				// console.log("LoserID", data.loser_id);
 
 				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
 							tournament.current_match.player_1
@@ -209,8 +204,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					if (is_player1) {
 						await startNewMatchCycle_remote(tournament);
 					}
-					// else
-					// 	console.log("this player is NOT player1, they do NOT update the match & game cycle");
 				}
 				else if (tournament.game_status === "Finished") {
 					document.getElementById("match-modal-text").innerText =
@@ -226,14 +219,12 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			}
 
 			if (data.player_disconnect) {
-				console.log("in disconnection, data:", data);
 				await endGame(data.remaining_player[0], data.player_id, data.game_id);
 				await tournament.endMatch(data.remaining_player[0]);
 				await tournament.updateMatchCycle_remote();
 				if (tournament.game_status === "In Progress" && tournament.current_match) {
 					await startNewMatchCycle_remote(tournament);
 				}
-				console.log("before route change to profile in disconnection");
 				urlRoute("/profile");
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
@@ -243,7 +234,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
       }
 
 		} catch (error) {
-			// console.error("Error in socket  onmessage:", error.message);
 			hideModal("match-modal");
 			if (error.message === "500" || error.message === "502") {
 				urlRoute("/tournament-creation");
