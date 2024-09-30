@@ -3,7 +3,7 @@ import { displayGame } from "../gameplay/displayGame.js";
 import { handleWebsocketGame } from "../gameplay/handleWebsocket.js";
 import handleButtons from "../gameplay/HandleButtons.js";
 import handleKeyPress from "../gameplay/HandleKeyPress.js";
-import { joinGameandRedirect } from "./joinGameandRedirect.js";
+import { joinRemoteGame } from "../../livechat/joinRemoteGame.js";
 
 export function joinGameEvent(event) {
     switch (event.target.id){
@@ -12,9 +12,7 @@ export function joinGameEvent(event) {
         const game_id = document.getElementById("game-id").value;
         const sender_id = 0;
 
-        // console.log("game_id in event:", game_id);
-        // console.log("sender_id in event:", sender_id);
-        joinGameandRedirect(game_id, sender_id);
+        joinRemoteGame(game_id, sender_id);
         break;
       default :
           break;

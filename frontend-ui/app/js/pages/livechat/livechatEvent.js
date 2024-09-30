@@ -4,7 +4,7 @@ import { blockUser, colorBlockButton, contact_blacklisted, set_contact_blacklist
 import { errormsg } from "../../dom/errormsg.js";
 import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
-import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
+import { joinRemoteGame } from "./joinRemoteGame.js";
 import { userID } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
 import { inviteGameButtonLocal } from "./inviteGameButton.js";
@@ -70,7 +70,7 @@ export async function livechatEvent(e) {
 		case "chat-invite-game-link":
 			const game_id = target.dataset.gameid;
 			const sender_id = target.dataset.senderid;
-			joinGameandRedirect(game_id, sender_id);
+			joinRemoteGame(game_id, sender_id);
 			break;
 		case "ctc-nickname":
 			const nickname = target.textContent;

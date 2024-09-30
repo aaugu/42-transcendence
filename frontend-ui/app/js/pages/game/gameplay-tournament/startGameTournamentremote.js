@@ -40,7 +40,7 @@ export async function startGameTournamentremote() {
 		return;
 	}
 
-  t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
+	t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
 
 	const canvas = displayGame();
 	handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);

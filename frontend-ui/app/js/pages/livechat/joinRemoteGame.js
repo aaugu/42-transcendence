@@ -1,7 +1,7 @@
-import { userID } from "../../user/updateProfile.js";
-import { urlRoute } from "../../../dom/router.js";
-import { errormsg } from "../../../dom/errormsg.js";
-import { getUserInfo } from "../../user/getUserInfo.js";
+import { userID } from "../user/updateProfile.js";
+import { urlRoute } from "../../dom/router.js";
+import { errormsg } from "../../dom/errormsg.js";
+import { getUserInfo } from "../user/getUserInfo.js";
 
 export async function joinGame(gameId) {
 	if (userID === null)
@@ -20,16 +20,15 @@ export async function joinGame(gameId) {
 	}
 }
 
-export async function joinGameandRedirect(gameId, senderId) {
+export async function joinRemoteGame(gameId, senderId) {
 	try {
 			const userInfo = await getUserInfo(senderId);
 
-			if (userInfo) {
+			if (userInfo && senderId !== userID) {
 				localStorage.setItem('left', userInfo.nickname);
 				localStorage.setItem('right', localStorage.getItem('nickname'));
+				await joinGame(gameId);
 			}
-
-			await joinGame(gameId);
 
 			const new_url = `/remote-twoplayer/${gameId}`;
 			urlRoute(new_url);
