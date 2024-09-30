@@ -9,6 +9,8 @@ export async function publicProfilePage() {
 	if (nickname === null || nickname === "")
 		return error404Page();
 
+    if ( user_id === null )
+        throw new Error('403');
     document.getElementById('nav-profile-elements').classList.remove('hidden');
     document.getElementById('logo').href = "/profile";
 
@@ -29,8 +31,12 @@ export async function publicProfilePage() {
     catch (e) {
         if (e.message === "404")
             return error404Page();
-        if (e.message == "502")
+        if (e.message === "502")
             return error500();
+        if (e.message === "403") {
+            updateProfile(false, null);
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
+        }
         console.log("USER LOG: ", e.message);
     }
 
