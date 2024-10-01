@@ -46,7 +46,7 @@ export async function openSingleTournamentModal(e) {
 		document.getElementById("single-t-modal-title").innerText = `${t_name}`;
 
 		if (has_started === false && has_joined === false) {
-			t_modalText.innerText = `You have not joined this ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament yet. Want to join?`;
+			t_modalText.innerText = `You have not joined this ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament n°${t_details.id} yet. Want to join?`;
 			document.getElementById('t-player-name-label').classList.remove('hidden');
 			document.getElementById('t-player-name').classList.remove('hidden');
 			const joinButton = document.getElementById('t-join');
@@ -57,6 +57,8 @@ export async function openSingleTournamentModal(e) {
 			if (is_admin === true && ((has_started === false && t_details.type == "Remote") || t_details.type == "Local")) {
 				t_modalText.innerHTML = `<span>You are the admin. You can go play this ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament or delete it.</span>
 										</br>
+										</br>
+										<span>Tournament n°${t_details.id}</span>
 										</br>
 										<span>Status: ${t_details.status}</span>
 										</br>
@@ -74,12 +76,12 @@ export async function openSingleTournamentModal(e) {
 				deleteButton.dataset.tournid = t_id;
 			}
 			else if (has_started === false)
-				t_modalText.innerText = `You are already a participant of this ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament but it has not started yet.`;
+				t_modalText.innerText = `You are already a participant of the ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament n°${t_details.id} but it has not started yet.`;
 			else if (has_started === true && t_details.type === 'Remote')
-				t_modalText.innerText = `This REMOTE tournament has already started.
+				t_modalText.innerText = `REMOTE tournament n°${t_details.id} has already started.
 											You'll receive a notification in the livechat when it's your turn.`;
 			else if (has_started === true && t_details.type === 'Local')
-				t_modalText.innerText = `This tournament has already started, go play on ${t_details.players[0].nickname}'s computer!`;
+				t_modalText.innerText = `The tournament n°${t_details.id} has already started, go play on ${t_details.players[0].nickname}'s computer!`;
 		}
 
 		else {
