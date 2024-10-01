@@ -28,7 +28,6 @@ async function allConversations() {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: FETCH GET ALL CONVERSATIONS SUCCESSFUL');
 		return responseData;
 	}
 }

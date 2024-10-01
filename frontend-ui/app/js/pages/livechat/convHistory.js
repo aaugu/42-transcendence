@@ -25,7 +25,6 @@ export async function getConvHistory(conv_id) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: FETCH CONVERSATION HISTORY SUCCESSFUL');
 		return responseData;
 	}
 }

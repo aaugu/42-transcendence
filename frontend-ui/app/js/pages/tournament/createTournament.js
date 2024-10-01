@@ -24,15 +24,12 @@ async function createTournament(new_tournament) {
 
 	if (!response.ok && ( response.status === 502 || response.status === 500))
 		throw new Error(`${response.status}`);
-	
+
 	const responseData = await response.json();
 	if (!response.ok) {
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${response.status}`);
-	}
-	if (responseData !== null) {
-		console.log('USER LOG: CREATE TOURNAMENT SUCCESSFUL');
 	}
 }
 
@@ -65,7 +62,6 @@ export async function createTournamentButton() {
 			type = 'remote';
 		}
 		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, type);
-		console.log("new-tournament: ", new_tournament);
 		await createTournament(new_tournament);
 		updateTournLists();
 		hideModal('create-t-modal');

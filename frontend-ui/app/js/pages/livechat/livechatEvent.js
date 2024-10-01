@@ -4,7 +4,7 @@ import { blockUser, colorBlockButton, contact_blacklisted, set_contact_blacklist
 import { errormsg } from "../../dom/errormsg.js";
 import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
-import { joinGameandRedirect } from "../game/remote/joinGameandRedirect.js";
+import { joinRemoteGame } from "./joinRemoteGame.js";
 import { userID } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
 import { inviteGameButtonLocal } from "./inviteGameButton.js";
@@ -21,12 +21,9 @@ export async function livechatEvent(e) {
       }
 
 	let target = e.target;
-	if (target.tagName === 'I' && target.parentElement.id === 'chat-block-btn') {
-		target = target.parentElement;
-	}
-	else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game') {
-		target = target.parentElement;
-	} else if (target.tagName === 'I' && target.parentElement.id === 'chat-invite-game-local') {
+	if (target.tagName === 'I' && (target.parentElement.id === 'chat-invite-game'
+		|| target.parentElement.id === 'chat-invite-game-local'
+		|| target.parentElement.id === 'chat-block-btn')) {
 		target = target.parentElement;
 	}
 
@@ -58,7 +55,6 @@ export async function livechatEvent(e) {
 					errormsg("Service temporarily unavailable", "livechat-conversation-errormsg");
 					return ;
 				}
-				console.log(`USER LOG: ${e.message}`);
 				errormsg(e.message, 'livechat-errormsg');
 			}
 			break;
@@ -73,11 +69,18 @@ export async function livechatEvent(e) {
 		case "chat-invite-game-link":
 			const game_id = target.dataset.gameid;
 			const sender_id = target.dataset.senderid;
-			joinGameandRedirect(game_id, sender_id);
+			const receiver_id = target.dataset.receiverid;
+			joinRemoteGame(game_id, sender_id, receiver_id);
 			break;
 		case "ctc-nickname":
 			const nickname = target.textContent;
 			urlRoute(`/profile/${nickname}`);
+			break;
+		case "t-remote-match-link":
+			const gameurl = target.dataset.gameurl;
+			const tourn_id = target.dataset.tournid;
+			localStorage.setItem('tourn_id', tourn_id);
+			urlRoute(gameurl);
 			break;
 		default:
 			break;

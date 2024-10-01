@@ -24,7 +24,7 @@ export async function notifications() {
             document.getElementById('chat-search-input').value = localStorage.getItem('nickname');
             await newConvButton();
         }
-        updateConvList(); 
+        updateConvList();
         document.getElementById("livechat-page").classList.remove("d-none");
     } catch (e) {
         if (e.message === "500" || e.message === "502") {
@@ -37,13 +37,17 @@ export async function startNotificationsRefresh() {
     if (!notificationsRefreshInterval) {
         notificationsRefreshInterval = setInterval(async () => {
             try {
-                const notif= document.getElementById('notifications');
+                const notif = document.getElementById('notifications');
                 const response = await getConvHistory(notif.dataset.convid);
-                displayChatInterface(notif.dataset.ctcid);
+                displayChatInterface(notif.dataset.ctcid, "Notifications");
 		        displayMessages(response);
             } catch (e) {
-                console.log("USER LOG: Failed to refresh notifications list:", e.message);
-            }
+				if (e.message === "500" || e.message === "502") {
+					errormsg("Service temporarily unavailable", "homepage-errormsg");
+					return;
+				}
+				errormsg(e.message, "homepage-errormsg");
+			}
         }, 3000);
     }
 }

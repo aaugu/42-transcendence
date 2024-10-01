@@ -1,21 +1,28 @@
 import updateGameState from './GameDraw.js';
-import throttle from './Throttle.js';
 import { canvasWidth, canvasHeight } from './GameConstants.js';
 import HandleButtons from './HandleButtons.js';
 import handleKeyPress from './HandleKeyPress.js';
 
 export function displayGame() {
+	const url = window.location.href;
+
+	const mode = url.split("/")[3];
+
 	const canvas = document.getElementById("pongCanvas");
 	const infoCtn = document.querySelector(".info-ctn");
 
 	canvas.classList.remove("hidden");
+
+	let buttonsHTML = '';
+	if (mode != 'remote-twoplayer' && mode != 'tournament-remote') {
+		buttonsHTML = `<button class="btn btn-dark" id="start-button">Start</button>
+									 <button class="btn btn-dark" id="stop-button">Stop</button>`;
+	}
+
 	infoCtn.innerHTML = '';
 	infoCtn.innerHTML = `<div>
-							<button class="btn btn-dark" id="start-button">Start</button>
-							<button class="btn btn-dark" id="stop-button">Stop</button>
-							<button class="btn btn-light" id="reset-button">Reset</button>
+							${buttonsHTML}
 						</div>
-						</br>
 						<div>
 							<span id="score-p-1">0</span>
 							<span>:</span>

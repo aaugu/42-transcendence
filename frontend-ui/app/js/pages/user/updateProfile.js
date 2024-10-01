@@ -28,9 +28,7 @@ export const updateProfile = async (isConnected, token) => {
 		try {
 			await logout();
 		}
-		catch (e) {
-			console.log(`USER LOG: ${e.message}`);
-		}
+		catch (e) {}
 		document.getElementById('nav-profile-elements').classList.add('hidden');
 		document.getElementById('logo').href = "/";
 		localStorage.setItem('nickname', 'guest');

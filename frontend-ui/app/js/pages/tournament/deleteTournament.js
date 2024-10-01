@@ -22,7 +22,4 @@ export async function deleteTournament(tourn_id) {
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${response.status}`);
 	}
-	if (responseData !== null) {
-		console.log('USER LOG: DELETE TOURNAMENT SUCCESSFUL');
-	}
 }

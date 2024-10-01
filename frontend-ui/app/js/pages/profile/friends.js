@@ -27,7 +27,6 @@ export async function getFriendList(id = null) {
 		throw new Error('GET FRIEND LIST FAILED');
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData.online_statuses;
 	}
 }
@@ -59,9 +58,6 @@ export async function addFriend(friend_nickname) {
 			throw new Error(`${responseData.details}`);
 		throw new Error('ADD FRIEND FAILED');
 	}
-	if (responseData !== null) {
-		console.log('USER LOG: ADD FRIEND SUCCESSFUL');
-	}
 }
 
 export async function deleteFriend(friend_id) {
@@ -87,9 +83,6 @@ export async function deleteFriend(friend_id) {
 		if (responseData.details)
 			throw new Error(`${responseData.details}`);
 		throw new Error('DELETE FRIEND FAILED');
-	}
-	if (responseData !== null) {
-		console.log('USER LOG: DELETE FRIEND SUCCESSFUL');
 	}
 
 }

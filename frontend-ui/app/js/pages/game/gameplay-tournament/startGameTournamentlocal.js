@@ -9,7 +9,7 @@ import { errormsg } from '../../../dom/errormsg.js';
 
 export var t_socket;
 
-export async function startGameTournament() {
+export async function startGameTournamentlocal() {
 	let tournament;
 	let gameState = { current: null };
 	let t_details;
@@ -44,15 +44,18 @@ export async function startGameTournament() {
 	handleWebsocketTournament(t_socket, tournament, canvas, gameState);
 	handleButtons(t_socket);
 
-	let keysPressed = {}
+	document.addEventListener("keydown", keyDownEventTournamentLocal);
+	document.addEventListener("keyup", keyUpEventTournamentLocal);
+}
 
-	document.addEventListener("keydown", function (event) {
-		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, t_socket, gameState);
-	});
+export function keyDownEventTournamentLocal(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = true;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
+}
 
-	document.addEventListener("keyup", function (event) {
-		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, t_socket, gameState);
-	});
+export function keyUpEventTournamentLocal(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = false;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
 }
