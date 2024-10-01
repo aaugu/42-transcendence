@@ -2,18 +2,25 @@ import { errormsg } from "../../dom/errormsg.js";
 import { urlRoute } from "../../dom/router.js"
 import { userID } from "../user/updateProfile.js";
 import { updateProfile } from "../user/updateProfile.js";
+import { setUserID } from "../user/updateProfile.js";
+import { defaultAvatar } from "../user/avatar.js";
+import { logout } from "../user/logout.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
     if (userID !== null){
-        errormsg("You are already logged in, redirecting to profile page...", "homepage-errormsg");
-        console.log("USER LOG: ALREADY LOGGED IN");
-        setTimeout(() => {
-            urlRoute("/profile");
-        }, 3000);
-        return;
+		try {
+			await logout();
+		}
+		catch (e) {}
+		localStorage.setItem('nickname', 'guest');
+		localStorage.setItem('avatar', defaultAvatar);
+		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		setUserID();
     }
 
     const sendLoginDataToAPI = async (username, password) => {
@@ -50,7 +57,6 @@ export async function loginProcess() {
         .then(responseData => {
             if (responseData !== null) {
                 if (responseData.detail) {
-                    console.log("USER LOG: TWO FACTOR AUTHENTICATION REQUIRED");
                     var twoFAmodal = new bootstrap.Modal(document.getElementById('login-2fa-modal'));
                     twoFAmodal.show();
                 }
@@ -65,10 +71,8 @@ export async function loginProcess() {
                 errormsg("Service temporarily unavailable", "login-errormsg");
                 return;
             }
-            console.error('USER LOG: LOGIN FETCH FAILURE, '+ e)
         });
     }
 
     await sendLoginDataToAPI(username, password);
-
 }

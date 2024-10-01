@@ -15,7 +15,7 @@ def connect_to_pong_project():
     username = input("Enter your username: ")
     password = getpass.getpass("Enter your password: ")
 
-    url = "https://localhost:10443/api/login/token/"
+    url = "https://" + window.location.host + "/api/login/token/"
     headers = {"Accept": "application/json", "Content-Type": "application/json"}
     data = {"username": username, "password": password}
     response = requests.post(url, headers=headers, data=json.dumps(data), verify=False)
@@ -32,7 +32,7 @@ def connect_to_pong_project():
 
 
 def create_game(user_connected, token):
-    url = f"https://localhost:10443/api/pong/create-game/{user_connected}/LOCAL_TWO_PLAYERS/0/"
+    url = f"https://" + window.location.host + "/api/pong/create-game/{user_connected}/LOCAL_TWO_PLAYERS/0/"
     headers = {"Accept": "application/json", "Content-Type": "application/json"}
     response = requests.get(
         url, headers=headers, verify=False, cookies={"csrftoken": token}
