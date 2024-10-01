@@ -47,13 +47,11 @@ function updateEventListeners(newClickListener = null, newKeyupListener = null, 
 
 	if (currentKeyupListener !== null) {
 		document.removeEventListener('keyup', currentKeyupListener);
-		console.log("keyup removed");
 	}
 	currentKeyupListener = newKeyupListener;
 
 	if (currentKeydownListener !== null) {
 		document.removeEventListener('keydown', currentKeydownListener);
-		console.log("keydown removed");
 	}
 	currentKeydownListener = newKeydownListener;
 }

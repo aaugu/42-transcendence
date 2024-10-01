@@ -46,8 +46,6 @@ export async function startGameTournamentremote() {
 	handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);
 	handleButtons(t_remote_socket);
 
-	let keysPressed = {}
-
 	document.addEventListener("keydown", keyDownEventTournamentRemote);
 	document.addEventListener("keyup", keyUpEventTournamentRemote);
 }

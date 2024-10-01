@@ -11,8 +11,8 @@ PONG_SERVICE_URL = "http://172.20.3.2:9000"
 
 
 def create_game(request, creator_id, mode, joiner_id):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(
         f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/"
     )
@@ -20,16 +20,16 @@ def create_game(request, creator_id, mode, joiner_id):
 
 
 def create_game_tournament(request, player_one_id, player_two_id, mode):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(
         f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
     )
     return JsonResponse(response.json(), status=response.status_code)
 
 def create_game_remote(request, player_one_id, player_two_id, mode):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(
         f"{PONG_SERVICE_URL}/create-game-remote/{player_one_id}/{player_two_id}/{mode}/"
     )
@@ -37,16 +37,16 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
 
 
 def join_game(request, joiner_id, game_id):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
     return JsonResponse(response.json(), status=response.status_code)
 
 
 @csrf_exempt
 def end_game(request):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
     if response.text:  # Check if the response is not empty
         return JsonResponse(response.json(), status=response.status_code)
@@ -55,8 +55,8 @@ def end_game(request):
 
 
 def get_user_games(request, user_id):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
     games = response.json()
     for game in games:
@@ -90,8 +90,8 @@ def get_game(request, game_id):
     return JsonResponse(response.json(), status=response.status_code)
 
 def get_pong_constants(request):
-    # if not check_authentication(request):
-    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_authentication(request):
+      return JsonResponse({'detail': 'Unauthorized'}, status=401)
     try:
         response = requests.get(f"{PONG_SERVICE_URL}/get_pong_constants/")
         return JsonResponse(response.json(), status=response.status_code)

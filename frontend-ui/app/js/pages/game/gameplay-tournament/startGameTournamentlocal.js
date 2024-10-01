@@ -44,8 +44,6 @@ export async function startGameTournamentlocal() {
 	handleWebsocketTournament(t_socket, tournament, canvas, gameState);
 	handleButtons(t_socket);
 
-	let keysPressed = {}
-
 	document.addEventListener("keydown", keyDownEventTournamentLocal);
 	document.addEventListener("keyup", keyUpEventTournamentLocal);
 }

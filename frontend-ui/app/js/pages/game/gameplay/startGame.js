@@ -39,7 +39,6 @@ export async function startGame() {
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
 
-	// let keysPressed = {};
 	document.addEventListener("keydown", keyDownEventTwoPlayer);
 	document.addEventListener("keyup", keyUpEventTwoPlayer);
 }
