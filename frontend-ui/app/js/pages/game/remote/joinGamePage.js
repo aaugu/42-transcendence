@@ -1,5 +1,3 @@
-import { joinGameandRedirect } from "./joinGameandRedirect.js";
-
 export async function joinGamePage() {
   return `
         <div>

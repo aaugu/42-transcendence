@@ -97,11 +97,10 @@ def check_collision_with_edges_paddle(paddle):
 
 class GameMode(Enum):
     LOCAL_TWO_PLAYERS = 1
-    LOCAL_VS_IA = 2
-    TOURNAMENT = 3
-    REMOTE = 4
+    TOURNAMENT = 2
+    REMOTE = 3
+    TOURNAMENT_REMOTE = 4
     
-
 class Game:
     def __init__(self, game_id, mode):
         self.game_state = GameState()
@@ -127,14 +126,14 @@ class GameState:
         self.paddles = [
             Paddle(
                 player_id=None,
-                position=[0, 50],
+                position=[20, 155],
                 velocity=[PARAMS["paddle_velocity_x"], PARAMS["paddle_velocity_y"]],
                 width=PARAMS["paddle_width"],
                 height=PARAMS["paddle_height"],
             ),
             Paddle(
                 player_id=None,
-                position=[PARAMS["canvas_width"] - 5, 50],
+                position=[PARAMS["canvas_width"] - 45, 155],
                 velocity=[PARAMS["paddle_velocity_x"], PARAMS["paddle_velocity_y"]],
                 width=PARAMS["paddle_width"],
                 height=PARAMS["paddle_height"],

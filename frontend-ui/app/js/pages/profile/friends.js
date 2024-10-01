@@ -27,7 +27,6 @@ export async function getFriendList(id = null) {
 		throw new Error('GET FRIEND LIST FAILED');
 	}
 	if (responseData !== null) {
-		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData.online_statuses;
 	}
 }
@@ -59,23 +58,20 @@ export async function addFriend(friend_nickname) {
 			throw new Error(`${responseData.details}`);
 		throw new Error('ADD FRIEND FAILED');
 	}
-	if (responseData !== null) {
-		console.log('USER LOG: ADD FRIEND SUCCESSFUL');
-	}
 }
 
 export async function deleteFriend(friend_id) {
-    if (userID === null || friend_id === null) {
-        throw new Error('Could not find user ID');
-    }
+	if (userID === null || friend_id === null) {
+		throw new Error('Could not find user ID');
+	}
 
-    const response = await fetch('https://' + window.location.host + '/api/user/' + userID + '/friends/delete/' + friend_id + '/', {
+	const response = await fetch('https://' + window.location.host + '/api/user/' + userID + '/friends/delete/' + friend_id + '/', {
 		method: 'DELETE',
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json',
 		},
-        body: JSON.stringify({"friend_id": friend_id}),
+		body: JSON.stringify({"friend_id": friend_id}),
 		credentials: 'include'
 	});
 
@@ -87,9 +83,6 @@ export async function deleteFriend(friend_id) {
 		if (responseData.details)
 			throw new Error(`${responseData.details}`);
 		throw new Error('DELETE FRIEND FAILED');
-	}
-	if (responseData !== null) {
-		console.log('USER LOG: DELETE FRIEND SUCCESSFUL');
 	}
 
 }
@@ -122,13 +115,12 @@ export async function updateFriendList(id = null) {
 				`;
 			});
 		}
-    }
-    catch (e) {
+	}
+	catch (e) {
 		clearFriendListRefresh();
-        console.log("USER LOG: ", e.message);
 		friends_html = error500();
-    }
-    return friends_html;
+	}
+	return friends_html;
 }
 
 export async function startFriendListRefresh() {
@@ -143,8 +135,8 @@ export async function startFriendListRefresh() {
 }
 
 export function clearFriendListRefresh() {
-    if (friendListRefreshInterval) {
-        clearInterval(friendListRefreshInterval);
-        friendListRefreshInterval = null;
-    }
+	if (friendListRefreshInterval) {
+		clearInterval(friendListRefreshInterval);
+		friendListRefreshInterval = null;
+	}
 }

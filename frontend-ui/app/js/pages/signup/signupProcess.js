@@ -1,11 +1,12 @@
-import { urlRoute } from "../../dom/router.js"
 import { errormsg } from "../../dom/errormsg.js"
-import { updateProfile } from "../user/updateProfile.js"
 import { defaultAvatar } from "../user/avatar.js";
 import { signupFieldsValidity } from "./signupFieldsValidity.js";
 import { userID } from "../user/updateProfile.js";
 import { readAvatarFile } from "../user/avatar.js";
 import { loginProcess } from "../login/loginProcess.js";
+import { setUserID } from "../user/updateProfile.js";
+import { logout } from "../user/logout.js";
+
 
 export async function signupProcess() {
     const userData = document.getElementsByClassName('form-control');
@@ -16,22 +17,24 @@ export async function signupProcess() {
     const repeatPassword = userData[4].value;
     var avatar;
 
-    if (userID !== null){
-        errormsg("Please log out first before signing up as a new user...", "homepage-errormsg");
-        console.log("USER LOG: ALREADY LOGGED IN");
-        setTimeout(() => {
-            urlRoute("/profile");
-        }, 3000);
-        return;
+	if (userID !== null){
+		try {
+			await logout();
+		}
+		catch (e) {}
+		localStorage.setItem('nickname', 'guest');
+		localStorage.setItem('avatar', defaultAvatar);
+		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+		setUserID();
     }
 
     if (!signupFieldsValidity(username, nickname, email, password, repeatPassword)) {
-        console.log("USER LOG: SIGNUP FAILED");
         return;
     }
 
     if (document.getElementById('uploadAvatar').checked) {
-        console.log("avatar file uploaded");
         var avatarFile = document.getElementById('avatar-upload-file').files[0];
         if (!avatarFile) {
         }
@@ -40,14 +43,10 @@ export async function signupProcess() {
         } catch (error) {
             errormsg("Field cannot be blank", "signup-errormsg");
             return;
-            // console.error("USER LOG: Error reading avatar file,", error);
-            // avatar = defaultAvatar;
         }
     }
     else
         avatar = defaultAvatar;
-
-    // console.log("SIGNUP avatar: ", avatar);
 
     var userdata = {
         "username": username,
@@ -56,8 +55,6 @@ export async function signupProcess() {
         "password": password,
         "avatar": avatar
     };
-
-    // console.log("USER LOG: SIGNUP DATA: ", userdata);
 
     const sendSignupDataToAPI = async (userdata) => {
         await fetch('https://' + window.location.host + '/api/user/', {
@@ -82,13 +79,12 @@ export async function signupProcess() {
                 else if (error.nickname) {
                     errormsg(error.nickname, "homepage-errormsg");
                 }
-                throw new Error(`HTTP status code ${response.status}`);
+                throw new Error(`${response.status}`);
             }
             return response.json();
         })
         .then(responseData => {
             if (responseData !== null) {
-                console.log("USER LOG: SIGNUP SUCCESSFUL, LOGGING IN...");
                 loginProcess();
             }
         })
@@ -97,9 +93,7 @@ export async function signupProcess() {
                 errormsg("Service temporarily unavailable", "signup-errormsg");
                 return;
             }
-            console.error('USER LOG: SIGNUP FETCH FAILURE, '+ e)
         });
-
     }
 
 	await sendSignupDataToAPI(userdata);

@@ -24,13 +24,10 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	if (!response.ok) {
 		if (responseData.detail)
 		    throw new Error(`${responseData.detail}`);
-		console.log("response in 2fa: ", response);
 		throw new Error(`${response.status}`);
 	}
 
-	// const responseData = await response.json();
 	if (responseData !== null) {
-		console.log("USER LOG: TWO FACTOR AUTHENTICATION SUCCESSFUL");
 		return responseData;
 	}
 }
@@ -44,14 +41,11 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-success");
 			twoFAbtn.classList.add("btn-outline-danger");
 			twoFAbtn.setAttribute('data-bs-target', '#deactivate-2fa-modal');
-			console.log("USER LOG: 2FA ACTIVATION SUCCESSFUL");
 			updateProfile(false, null);
-			console.log('USER LOG: LOGOUT');
 			hideModal('activate-2fa-modal');
 			urlRoute('/');
 		}
 		catch (e) {
-			console.log(`USER LOG: ${e.message}`);
 			if (e.message === "502")
 				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
 			else
@@ -66,14 +60,12 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			twoFAbtn.classList.remove("btn-outline-danger");
 			twoFAbtn.classList.add("btn-outline-success");
 			twoFAbtn.setAttribute('data-bs-target', '#activate-2fa-modal');
-			console.log("USER LOG: 2FA DE-ACTIVATION SUCCESSFUL");
 		}
 		catch (e) {
 			if (e.message === "502")
 				errormsg("Service temporarily unavailable", "deactivate2fa-errormsg");
 			else
 				errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
-			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');
 	}
@@ -90,7 +82,6 @@ export async function twoFactorAuthLoginButton() {
 		}
 		const response = await verifyTwoFactorAuth(twoFaAuthCode);
 
-		console.log("USER LOG: LOGIN SUCCESSFUL");
 		hideModal('login-2fa-modal');
 		updateProfile(true, response.access);
 		urlRoute('/profile');
@@ -101,6 +92,5 @@ export async function twoFactorAuthLoginButton() {
 		} else {
 			errormsg('Invalid verification code', 'login-twoFA-errormsg');
 		}
-		console.log(`USER LOG: ${e.message}`);
 	}
 }

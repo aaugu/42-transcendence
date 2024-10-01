@@ -27,7 +27,6 @@ export async function matchHistory (id = null) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: GET FRIEND LIST SUCCESSFUL');
 		return responseData;
 	}
 }
@@ -43,13 +42,12 @@ export async function matchHistoryList(nickname, id) {
 			<tr>
 					<th scope="row">${date}</th>
 					<td>${match.winner_id == nickname ? match.loser_id : match.winner_id}</td>
-					<td>${match.mode}</td>
+					<td>${match.mode == "LOCAL_TWO_PLAYERS" ? "LOCAL" : match.mode}</td>
 					<td>${match.winner_id == nickname ? "WON" : "LOST"}</td>
 				</tr>`
 		});
     }
     catch (e) {
-        console.log("USER LOG: ", e.message);
 		matches_html = error500();
     }
     return matches_html;

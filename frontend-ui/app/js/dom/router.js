@@ -8,8 +8,8 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
-import { startGame,  g_socket } from "../pages/game/gameplay/startGame.js"
-import { startGameTournament, t_socket } from "../pages/game/gameplay-tournament/startGameTournament.js"
+import { startGameTwoPlayers,  g_socket } from "../pages/game/gameplay/startGameTwoPlayers.js"
+import { startGameTournamentlocal, t_socket } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
 import { reset_all_tournaments } from "../pages/tournament/tournament.js"
@@ -22,38 +22,52 @@ import { updateTournLists } from "../pages/tournament/updateTournLists.js"
 import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
 import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
-import { newlocalgameEvent, newremotegameEvent } from "../pages/game/newgameEvent.js"
+import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
-import { userID } from "../pages/user/updateProfile.js"
+import { startGameTournamentremote, t_remote_socket } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
+import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGameTwoPlayers.js"
+import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
+import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
 
 let urlRoute;
-let currentEventListener = null;
+let currentClickListener = null;
+let currentKeyupListener = null;
+let currentKeydownListener = null;
 
-function updateEventListenerMainCont(newEventListener = null) {
+function updateEventListeners(newClickListener = null, newKeyupListener = null, newKeydownListener = null) {
 	const mainCont = document.getElementById('main-content');
-	if (currentEventListener !== null) {
-		mainCont.removeEventListener('click', currentEventListener);
+	if (currentClickListener !== null) {
+		mainCont.removeEventListener('click', currentClickListener);
 	}
-	currentEventListener = newEventListener;
-	if (currentEventListener !== null) {
-		mainCont.addEventListener('click', currentEventListener);
+	currentClickListener = newClickListener;
+	if (currentClickListener !== null) {
+		mainCont.addEventListener('click', currentClickListener);
 	}
+
+	if (currentKeyupListener !== null) {
+		document.removeEventListener('keyup', currentKeyupListener);
+	}
+	currentKeyupListener = newKeyupListener;
+
+	if (currentKeydownListener !== null) {
+		document.removeEventListener('keydown', currentKeydownListener);
+	}
+	currentKeydownListener = newKeydownListener;
 }
 
 function resetDataRouteChange() {
 	if (g_socket && g_socket.readyState === WebSocket.OPEN) {
 		g_socket.close();
-		console.log('GAME LOG: Websocket connection closed');
 	}
 	if (t_socket && t_socket.readyState === WebSocket.OPEN) {
 		t_socket.close();
-		console.log('GAME LOG: Websocket connection closed');
 	}
-	if (chatSocket) {
-		if (chatSocket.readyState == 1) {
-			chatSocket.close();
-		}
+	if (chatSocket && chatSocket.readyState == WebSocket.OPEN) {
+		chatSocket.close();
+	}
+	if (t_remote_socket && t_remote_socket.readyState == WebSocket.OPEN) {
+		t_remote_socket.close();
 	}
 	reset_all_tournaments();
 	reset_all_conv();
@@ -102,71 +116,72 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/login" : {
 			content: loginPage,
-			eventListener: loginEvent,
+			clickListener: loginEvent,
 			description: "login page"
 		},
         "/signup" : {
 			content: signupPage,
-			eventListener: signupEvent,
+			clickListener: signupEvent,
 			description: "signup page"
 		},
         "/local-twoplayer" : {
 			content: newgamePage,
-			eventListener: newlocalgameEvent,
+			clickListener: newlocalgameEvent,
 			description: "local two player game page"
 		},
 		"/local-twoplayer/:gameId" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: startGameTwoPlayers,
+			keyup: keyUpEventTwoPlayer,
+			keydown: keyDownEventTwoPlayer,
 			description: "local two player game page"
 		},
-		// "/remote-twoplayer" : {
-		// 	content: newgamePage,
-		// 	eventListener: newremotegameEvent,
-		// 	description: "remote two player game page"
-		// },
 		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: startGameTwoPlayers,
+			keyup: keyUpEventTwoPlayer,
+			keydown: keyDownEventTwoPlayer,
 			description: "remote two player game page"
 		},
 		"/tournament-creation" : {
 			content: tournamentPage,
-			eventListener: tournamentEvent,
+			clickListener: tournamentEvent,
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
-		"/tournament/:tournId" : {
+		"/tournament/:gameId" : {
 			content: gamePage,
-			startFunction: startGameTournament,
+			startFunction: startGameTournamentlocal,
+			keyup: keyUpEventTournamentLocal,
+			keydown: keyDownEventTournamentLocal,
 			description: "local tournament game page"
 		},
-		"/tournament-remote" : {
+		"/tournament-remote/:gameId" : {
 			content: gamePage,
-			startFunction: startGameTournament,
+			startFunction: startGameTournamentremote,
+			keyup: keyUpEventTournamentRemote,
+			keydown: keyDownEventTournamentRemote,
 			description: "remote tournament game page"
 		},
         "/profile" : {
 			content: profilePage,
-			eventListener: profileEvent,
+			clickListener: profileEvent,
 			startFunction: startFriendListRefresh,
 			description: "profile page"
 		},
 		"/profile/:id" : {
 			content: publicProfilePage,
-			// eventListener: profileEvent,
-			// startFunction: startFriendListRefresh,
 			description: "someone else's profile page"
 		},
 		"/livechat" : {
 			content: livechatPage,
-			eventListener: livechatEvent,
+			clickListener: livechatEvent,
 			startFunction: notifications,
 			description: "stats page"
 		},
 		"/join-game": {
 			content: joinGamePage,
-			eventListener: joinGameEvent,
+			clickListener: joinGameEvent,
 			description: "join an existing game",
 		},
     }
@@ -182,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
         goToRoute();
     }
 
-	//add in the end: || ((currentRoute !== "/" && currentRoute !== "/login" && currentRoute !== "/signup") && userID !== null)
     const goToRoute = async () => {
 		resetDataRouteChange();
 		setUserID();
@@ -207,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentRouteDetails = matchedRoute || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
 
-		updateEventListenerMainCont(currentRouteDetails.eventListener);
+		updateEventListeners(currentRouteDetails.clickListener, currentRouteDetails.keyup, currentRouteDetails.keydown);
 
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;

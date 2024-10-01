@@ -15,9 +15,9 @@ SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
 # SECRET_KEY = 'django-insecure-^d7ouzku=r@(7xd(^@#q+jie8(*lwlu_iznln-b_qlcbj8v1u0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '10.12.x.x']
+ALLOWED_HOSTS = ['localhost', '10.13.1.3']
 
 
 # Application definition
@@ -133,8 +133,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # JWT Paramaeters
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'SIGNING_KEY': os.environ.get('AETHERYTE_DJANGO_JWT_PASS'),
 }
 

@@ -47,7 +47,6 @@ export async function profilePage() {
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
             return '';
         }
-        console.log("USER LOG: ", e.message);
     }
 
 
@@ -89,7 +88,7 @@ export async function profilePage() {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editForm"></form>
+                        <div id="editForm"></div>
                         <p class="hidden m-2 text-danger" id="editmodal-errormsg"></p>
                     </div>
                     <div class="modal-footer">
@@ -151,19 +150,21 @@ export async function profilePage() {
                     <p>Total wins: ${match_wins}</p>
                     <p>Total losses: ${match_losses}</p>
                 </div>
-				<table class="table custom-scrollbar">
-					<thead>
-						<tr>
-						<th scope="col">Date</th>
-						<th scope="col">Opponent</th>
-						<th scope="col">Mode</th>
-						<th scope="col">Result</th>
-						</tr>
-					</thead>
-					<tbody>
-						${matches_html}
-					</tbody>
-				</table>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Opponent</th>
+                            <th scope="col">Mode</th>
+                            <th scope="col">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-scrollbar">
+                            ${matches_html}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="content-box">
                 <h5 class="m-2">Friends</h5>

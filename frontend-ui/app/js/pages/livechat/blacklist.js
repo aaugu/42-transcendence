@@ -55,8 +55,6 @@ export async function blockUser(target_id) {
 			throw new Error('User already blocked');
 		throw new Error(`${response.status}`);
 	}
-	console.log('USER LOG: BLOCK USER SUCCESSFUL');
-
 }
 
 export async function unblockUser(target_id) {
@@ -77,8 +75,6 @@ export async function unblockUser(target_id) {
 			throw new Error('User already unblocked');
 		throw new Error(`${response.status}`);
 	}
-	console.log('USER LOG: UNBLOCK USER SUCCESSFUL');
-	
 }
 
 export async function isBlacklisted(target_id) {
@@ -101,8 +97,6 @@ export async function isBlacklisted(target_id) {
 	}
 	const responseData = await response.json();
 	if (responseData !== null) {
-		console.log('USER LOG: BLACKLIST STATUS : ' + responseData.is_blacklisted);
 		return responseData.is_blacklisted;
 	}
-	
 }

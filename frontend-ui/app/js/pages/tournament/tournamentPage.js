@@ -65,7 +65,7 @@ export async function tournamentPage() {
                 </ul>
             </div>
             <div class="content-box clearfix">
-                <h5 class="m-2">My tournaments</h5>
+                <h5 class="m-2">My created tournaments</h5>
                 <ul id="my-tournament-list" class="list-group d-flex flex-grow-1 custom-scrollbar m-2">
                 </ul>
             </div>
@@ -89,7 +89,6 @@ export async function tournamentPage() {
                         <button type="button" class="btn btn-danger hidden" id="t-delete">Delete</button>
                         <button type="button" class="btn btn-dark hidden" id="t-join">Join</button>
                         <button type="button" class="btn btn-dark hidden" id="t-start">Go</button>
-                        <button type="button" class="btn btn-dark hidden" id="t-play">Play</button>
                     </div>
                 </div>
             </div>

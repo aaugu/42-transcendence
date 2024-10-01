@@ -51,6 +51,8 @@ export function displayMessages(response) {
     }, {});
 
     var ul_convo = document.getElementById('chat-msgs');
+	if (!ul_convo)
+		return ;
     ul_convo.innerHTML = '';
 
     var html_convo = '';
@@ -76,14 +78,19 @@ export function displayMessages(response) {
 
 export function displayChatInterface (ctc_id, ctc_nickname) {
     const welcomeMessages = document.getElementById('chat-welcome');
-    welcomeMessages.innerHTML = '';
-
-    document.getElementById('chat-div-textarea').classList.remove('hidden');
-    document.getElementById('chat-send').classList.remove('hidden');
-    const play_button_local = document.getElementById('chat-invite-game-local');
+	const chatTextarea = document.getElementById('chat-div-textarea');
+	const chatSend = document.getElementById('chat-send');
+	const play_button_local = document.getElementById('chat-invite-game-local');
     const play_button = document.getElementById('chat-invite-game');
     const block_button = document.getElementById('chat-block-btn');
     const nickname = document.getElementById('ctc-nickname');
+
+	if (!welcomeMessages || !chatTextarea || !chatSend || !play_button || !block_button || !nickname)
+		return ;
+
+    welcomeMessages.innerHTML = '';
+    chatTextarea.classList.remove('hidden');
+    chatSend.classList.remove('hidden');
     play_button_local.classList.remove("hidden");
     play_button.classList.remove('hidden');
     block_button.classList.remove('hidden');

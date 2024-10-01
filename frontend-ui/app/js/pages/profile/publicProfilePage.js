@@ -9,6 +9,11 @@ export async function publicProfilePage() {
 	if (nickname === null || nickname === "")
 		return error404Page();
 
+    if ( user_id === null )
+        throw new Error('403');
+    document.getElementById('nav-profile-elements').classList.remove('hidden');
+    document.getElementById('logo').href = "/profile";
+
     try {
         const userinfo = await getNicknameUserInfo(nickname);
         var username = userinfo.username;
@@ -26,9 +31,12 @@ export async function publicProfilePage() {
     catch (e) {
         if (e.message === "404")
             return error404Page();
-        if (e.message == "502")
+        if (e.message === "502")
             return error500();
-        console.log("USER LOG: ", e.message);
+        if (e.message === "403") {
+            updateProfile(false, null);
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
+        }
     }
 
     return `
@@ -60,19 +68,21 @@ export async function publicProfilePage() {
                     <p>Total wins: ${match_wins}</p>
                     <p>Total losses: ${match_losses}</p>
                 </div>
-				<table class="table custom-scrollbar">
-					<thead>
-						<tr>
-						<th scope="col">Date</th>
-						<th scope="col">Opponent</th>
-						<th scope="col">Mode</th>
-						<th scope="col">Result</th>
-						</tr>
-					</thead>
-					<tbody>
-						${matches_html}
-					</tbody>
-				</table>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Opponent</th>
+                            <th scope="col">Mode</th>
+                            <th scope="col">Result</th>
+                            </tr>
+                        </thead>
+                        <tbody class="custom-scrollbar">
+                            ${matches_html}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="content-box">
                 <h5 class="m-2">Friends</h5>
