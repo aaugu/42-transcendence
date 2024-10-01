@@ -63,6 +63,28 @@ class GameService:
         return game_instance
 
     @staticmethod
+    def create_game_remote(player_one_id, player_two_id, mode: GameMode):
+      game_id = str(uuid.uuid4())
+      
+      if mode == GameMode.REMOTE:
+        Games.objects.create(
+          game_id=game_id,
+          creator_id=player_one_id,
+          joiner_id=player_two_id,
+          status="IN_PROGRESS",
+          mode="REMOTE"
+        )
+        
+      game_instance = Game(mode=mode, game_id=game_id)
+      game_instance.game_state.paddles[0].player_id = player_one_id
+      game_instance.game_state.paddles[1].player_id = player_two_id
+      
+      from .consumers.consumers import PongConsumer
+      
+      PongConsumer.games[game_id] = game_instance
+      return game_instance
+
+    @staticmethod
     def create_game_tournament(player_one_id, player_two_id, mode: GameMode):
         game_id = str(uuid.uuid4())
 

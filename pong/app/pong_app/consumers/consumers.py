@@ -171,8 +171,6 @@ class PongConsumer(AsyncWebsocketConsumer):
             game_mode = PongConsumer.games[self.game_id].mode
             user_count = PongConsumer.user_per_room[self.game_id]
             
-            
-
             if PongConsumer.games[self.game_id].game_state.finished:
                 print(
                     f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"

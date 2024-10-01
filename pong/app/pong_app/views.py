@@ -55,6 +55,23 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
 
     return JsonResponse(game.to_dict())
 
+def create_game_remote(request, player_one_id, player_two_id, mode):
+    # print(f'Received request to create remote game with player_one_id: {player_one_id}, player_two_id: {player_two_id} and mode: {mode}')
+
+    # Vérification des paramètres
+    if not player_one_id or not player_two_id or not mode:
+        return JsonResponse({"error": "Missing required parameters"}, status=400)
+
+    try:
+        mode = GameMode[mode.upper()]
+    except KeyError:
+        return JsonResponse({"error": "Invalid game mode"}, status=400)
+
+    # Création du jeu via un service (hypothétique)
+    game = GameService.create_game_remote(player_one_id, player_two_id, mode)
+
+    return JsonResponse(game.to_dict())
+
 # @csrf_exempt
 def end_game(request):
     # print(f'Received request to end game')

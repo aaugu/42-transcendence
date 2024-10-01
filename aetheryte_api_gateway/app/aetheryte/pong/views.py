@@ -27,6 +27,14 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
     )
     return JsonResponse(response.json(), status=response.status_code)
 
+def create_game_remote(request, player_one_id, player_two_id, mode):
+    # if not check_authentication(request):
+    #   return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    response = requests.get(
+        f"{PONG_SERVICE_URL}/create-game-remote/{player_one_id}/{player_two_id}/{mode}/"
+    )
+    return JsonResponse(response.json(), status=response.status_code)
+
 
 def join_game(request, joiner_id, game_id):
     # if not check_authentication(request):
