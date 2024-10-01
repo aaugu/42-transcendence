@@ -22,9 +22,6 @@ export async function joinGame(gameId) {
 
 export async function joinRemoteGame(gameId, senderId, receiverId) {
 	try {
-
-			// console.log("userInfo of senderId in joinRemoteGame (player 1): ", userInfo);
-
 			if (senderId != userID) {
 				const userInfo = await getUserInfo(senderId);
 				localStorage.setItem('left', userInfo.nickname);

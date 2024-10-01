@@ -24,11 +24,9 @@ export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	if (!response.ok) {
 		if (responseData.detail)
 		    throw new Error(`${responseData.detail}`);
-		console.log("response in 2fa: ", response);
 		throw new Error(`${response.status}`);
 	}
 
-	// const responseData = await response.json();
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -48,7 +46,6 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 			urlRoute('/');
 		}
 		catch (e) {
-			console.log(`USER LOG: ${e.message}`);
 			if (e.message === "502")
 				errormsg("Service temporarily unavailable", "activate2fa-errormsg");
 			else
@@ -69,7 +66,6 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 				errormsg("Service temporarily unavailable", "deactivate2fa-errormsg");
 			else
 				errormsg("Unable to change 2FA", "deactivate2fa-errormsg");
-			console.log(`USER LOG: ${e.message}`);
 		}
 		hideModal('deactivate-2fa-modal');
 	}
@@ -96,6 +92,5 @@ export async function twoFactorAuthLoginButton() {
 		} else {
 			errormsg('Invalid verification code', 'login-twoFA-errormsg');
 		}
-		console.log(`USER LOG: ${e.message}`);
 	}
 }

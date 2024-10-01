@@ -14,9 +14,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 			urlRoute("/profile");
 			errormsg("Connection lost or could not be established", "homepage-errormsg");
 		}
-		console.log("WebSocket connection closed:", event);
-
-	  };
+	};
 
 	socket.onerror = function (error) {
 		urlRoute("/profile");

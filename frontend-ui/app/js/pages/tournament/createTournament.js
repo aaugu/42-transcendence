@@ -75,6 +75,5 @@ export async function createTournamentButton() {
 		} else {
 			errormsg (e.message, "t-modal-errormsg");
 		}
-		console.log(`USER LOG: CREATE TOURNAMENT FAILED, STATUS: ${e.message}`);
 	}
 }
