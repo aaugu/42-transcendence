@@ -40,7 +40,7 @@ export async function convHistory(e) {
 		const response = await getConvHistory(conv_id);
 		set_contact_blacklisted(response.contact_blacklisted);
 		displayChatInterface(ctc_id, ctc_nickname);
-		displayMessages(response);
+		displayMessages(response, false);
 
         if (conv_id && response.users.length == 2)
             startLivechat(conv_id, response);

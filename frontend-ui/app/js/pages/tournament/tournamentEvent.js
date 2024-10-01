@@ -22,7 +22,12 @@ export async function tournamentEvent(e) {
 			createTournamentButton();
 			break;
 		case "t-join":
+			const joinBtn = document.getElementById('t-join');
+			if (joinBtn)
+				joinBtn.disable = true;
 			joinTournamentButton();
+			if (joinBtn)
+				joinBtn.disable = false;
 			break;
 		case "t-start":
 			const tourn_id_start = document.getElementById('t-start').dataset.tournid;

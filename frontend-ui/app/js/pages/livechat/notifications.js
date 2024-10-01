@@ -40,7 +40,7 @@ export async function startNotificationsRefresh() {
                 const notif = document.getElementById('notifications');
                 const response = await getConvHistory(notif.dataset.convid);
                 displayChatInterface(notif.dataset.ctcid, "Notifications");
-		        displayMessages(response);
+		        displayMessages(response, true);
             } catch (e) {
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "homepage-errormsg");
