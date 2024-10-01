@@ -38,7 +38,7 @@ function newMsg (avatar, time, msgText, id) {
 
 }
 
-export function displayMessages(response) {
+export function displayMessages(response, notifications) {
     if (response === null || response === undefined) {
         throw new Error('Messages cannot be displayed');
     }
@@ -73,7 +73,8 @@ export function displayMessages(response) {
     ul_convo.innerHTML = html_convo;
 
     const chatContainer = document.getElementById('chat-msgs');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    if (!notifications)
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 export function displayChatInterface (ctc_id, ctc_nickname) {
