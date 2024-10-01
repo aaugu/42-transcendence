@@ -8,7 +8,7 @@ import { error404Page } from '../../errorpage/error404Page.js';
 export var g_socket;
 let gameState = { current: null };
 
-export async function startGame() {
+export async function startGameTwoPlayers() {
 	document.getElementById('tournament-table').classList.add('hidden');
 	const gameId = window.location.href.split("/")[4];
 	const mode = window.location.href.split("/")[3];

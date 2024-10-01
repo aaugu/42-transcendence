@@ -8,7 +8,7 @@ import { loginEvent } from "../pages/login/loginEvent.js"
 import { profileEvent } from "../pages/profile/profileEvent.js"
 import { homePage } from "../pages/homePage.js"
 import { setUserID } from "../pages/user/updateProfile.js"
-import { startGame,  g_socket } from "../pages/game/gameplay/startGame.js"
+import { startGameTwoPlayers,  g_socket } from "../pages/game/gameplay/startGameTwoPlayers.js"
 import { startGameTournamentlocal, t_socket } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { tournamentPage } from "../pages/tournament/tournamentPage.js"
 import { tournamentEvent } from "../pages/tournament/tournamentEvent.js"
@@ -26,7 +26,7 @@ import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
 import { startGameTournamentremote, t_remote_socket } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
-import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGame.js"
+import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGameTwoPlayers.js"
 import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
 
@@ -131,14 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/local-twoplayer/:gameId" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: startGameTwoPlayers,
 			keyup: keyUpEventTwoPlayer,
 			keydown: keyDownEventTwoPlayer,
 			description: "local two player game page"
 		},
 		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
-			startFunction: startGame,
+			startFunction: startGameTwoPlayers,
 			keyup: keyUpEventTwoPlayer,
 			keydown: keyDownEventTwoPlayer,
 			description: "remote two player game page"

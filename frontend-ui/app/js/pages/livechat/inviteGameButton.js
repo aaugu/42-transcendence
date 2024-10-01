@@ -51,9 +51,6 @@ export async function inviteGameButton(ctc_id) {
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
 
-		// const game_id = await getGameID("remote-twoplayer");
-		console.log("type of userID: ", typeof(userID));
-
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGameRemote(userID, ctc_id, mode);
 		const game_id = game.game_id;

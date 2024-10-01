@@ -16,15 +16,12 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 	[controllerRightDown]: { direction_right_paddle: "down" },
 	};
 
-	console.log("gameState: ", gameState);
 	if (isRemoteGame) {
 		let playerIndex = null;
 
 		if (userID == gameState.current.paddles[0].player_id) {
-			console.log("userId is player 1")
 			playerIndex = 0;
 		} else if (userID == gameState.current.paddles[1].player_id) {
-			console.log("userId is player 2");
 			playerIndex = 1;
 		}
 
