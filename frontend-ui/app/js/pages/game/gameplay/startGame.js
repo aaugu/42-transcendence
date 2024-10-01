@@ -26,7 +26,7 @@ export async function startGame() {
 	else
 		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
 	if (!g_socket && g_socket.readyState !== WebSocket.OPEN) {
-		document.getElementById("main-content").innerHTML = error404Page();
+		document.getElementById("main-content").innerHTML = error500();
 		return ;
 	}
 
@@ -41,12 +41,12 @@ export async function startGame() {
 
 	let keysPressed = {};
 	document.addEventListener("keydown", function (event) {
-	  keysPressed[event.key] = true;
-	  handleKeyPress(keysPressed, g_socket, gameState);
+		keysPressed[event.key] = true;
+		handleKeyPress(keysPressed, g_socket, gameState);
 	});
 
 	document.addEventListener("keyup", function (event) {
-	  keysPressed[event.key] = false;
-	  handleKeyPress(keysPressed, g_socket, gameState);
+		keysPressed[event.key] = false;
+		handleKeyPress(keysPressed, g_socket, gameState);
 	});
 }

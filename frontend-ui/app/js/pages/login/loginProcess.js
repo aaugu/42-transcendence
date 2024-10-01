@@ -9,6 +9,14 @@ import { logout } from "../user/logout.js";
 export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    if (!password || !username) {
+        errormsg("Username or password field cannot be blank", "homepage-errormsg");
+        return ;
+    }
+
+    const loginBtn = document.getElementById('login-submit')
+    if (loginBtn)
+        loginBtn.disabled = true;
 
     if (userID !== null){
 		try {
@@ -43,12 +51,18 @@ export async function loginProcess() {
                 const error = await response.json();
                 if (error.username) {
                     errormsg(error.username, "homepage-errormsg");
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else if (error.password) {
                     errormsg(error.password, "homepage-errormsg");
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else if (error.detail) {
                     errormsg(error.detail + ", are your username and password correct?", "homepage-errormsg");
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 throw new Error(`HTTP status code ${response.status}`);
             }
@@ -59,6 +73,8 @@ export async function loginProcess() {
                 if (responseData.detail) {
                     var twoFAmodal = new bootstrap.Modal(document.getElementById('login-2fa-modal'));
                     twoFAmodal.show();
+                    if (loginBtn)
+                        loginBtn.disabled = false;
                 }
                 else {
                     updateProfile(true, responseData.access);
@@ -69,6 +85,7 @@ export async function loginProcess() {
         .catch(e => {
             if (e.message === "502") {
                 errormsg("Service temporarily unavailable", "login-errormsg");
+                const loginBtn = document.getElementById('login-submit').disabled = false;
                 return;
             }
         });

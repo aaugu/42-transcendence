@@ -51,6 +51,10 @@ export async function createTournamentGame(player1_id, player2_id, mode) {
 }
 
 export async function createGameRemote(player1_id, player2_id, mode) {
+	console.log("player1_id: ", player1_id);
+	console.log("player2_id: ", player2_id);
+	console.log("mode: ", mode);
+
 	const url = `${gatewayEndpoint}/create-game-remote/${player1_id}/${player2_id}/${mode}/`;
 
 	const response = await fetch(url,
