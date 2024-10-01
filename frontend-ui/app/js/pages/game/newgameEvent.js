@@ -21,6 +21,9 @@ export async function newlocalgameEvent() {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		}
+		else {
+			errormsg(e.message, 'homepage-errormsg');
+		}
 	}
 }
 
@@ -37,6 +40,9 @@ export async function newremotegameEvent() {
 		else if (e.message === "403") {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
+		}
+		else {
+			errormsg(e.message, 'homepage-errormsg');
 		}
 	}
 }
@@ -118,7 +124,6 @@ export async function newtournamentremoteEvent(tourn_id) {
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			}
 			else {
-				console.log("error during remote tournament start: ", e.message);
 				errormsg(e.message, 'single-t-modal-errormsg');
 			}
 		}

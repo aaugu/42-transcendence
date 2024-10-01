@@ -44,7 +44,6 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 			}
 
 			if (data.game_finished) {
-				// console.log("Game data: ", data);
 				if ((data.game.mode == "REMOTE" && data.winner_id == userID) || data.game.mode == "LOCAL_TWO_PLAYERS")
 					await endGame(data.winner_id, data.loser_id, data.game.game_id);
 				const matchmodal = new bootstrap.Modal(document.getElementById("match-modal"));
@@ -110,9 +109,6 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 			}
 
 			if (data.game_finished) {
-				console.log("WinnerID", data.winner_id);
-				console.log("LoserID", data.loser_id);
-
 				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
 							tournament.current_match.player_1
 							: tournament.current_match.player_2;
@@ -186,8 +182,6 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 			}
 
 			if (data.game_finished) {
-				console.log("in game_finished, data:", data);
-
 				const winner = data.winner_id == tournament.current_match.player_1.user_id ?
 							tournament.current_match.player_1
 							: tournament.current_match.player_2;
@@ -229,9 +223,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
 
-      if (data.only_player_disconnect) {
-        console.log(data);
-      }
+      if (data.only_player_disconnect) {}
 
 		} catch (error) {
 			hideModal("match-modal");

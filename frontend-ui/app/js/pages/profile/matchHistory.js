@@ -48,7 +48,6 @@ export async function matchHistoryList(nickname, id) {
 		});
     }
     catch (e) {
-        console.log("USER LOG: ", e.message);
 		matches_html = error500();
     }
     return matches_html;

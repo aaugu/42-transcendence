@@ -98,6 +98,7 @@ export function editUserInfoModal(e) {
                 case 'Nickname':
                     await editUserInfo('nickname', newValue);
                     userInfoID.innerText = newValue;
+					localStorage.setItem('nickname', newValue);
                     break;
                 case 'Email':
                     await editUserInfo('email', newValue);

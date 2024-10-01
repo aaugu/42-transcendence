@@ -101,8 +101,6 @@ class TournamentUtils {
 	}
 
 	async endMatch(winner_id) {
-		// console.log("winner id in endMatch: ", winner_id);
-
 		if (this.tourn_id === undefined || winner_id === undefined) {
 			throw new Error('Invalid parameters to end match');
 		}
@@ -144,7 +142,6 @@ export class Tournament extends TournamentUtils{
 			this.all_matches = response.matches;
 			this.startNextMatch();
         } catch (e) {
-            // console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
             this.all_matches = null;
 			if (e.message == '500' || e.message == '502') {
 				throw new Error(`${e.message}`);
@@ -154,7 +151,6 @@ export class Tournament extends TournamentUtils{
 
     async launchTournament() {
         try {
-			// console.log("TOURNAMENT LOG: Launch Tournament");
             const response = await this._generateMatches('POST');
             await this._startTournament();
 			this.all_matches = response.matches;
@@ -162,7 +158,6 @@ export class Tournament extends TournamentUtils{
 			this.game_status = 'In Progress';
     	}
 		catch (e) {
-			// console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
 			this.all_matches = null;
 			if (this.game_status !== 'Finished')
 				this.game_status = 'Created';
@@ -172,14 +167,12 @@ export class Tournament extends TournamentUtils{
 
 	async continueTournament() {
         try {
-			// console.log("TOURNAMENT LOG: Continue Tournament");
             const response = await this._generateMatches('GET');
 
 			this.all_matches = response.matches;
 			this._nextMatch();
     	}
 		catch (e) {
-			// console.error(`TOURNAMENT LOG: ERROR CONTINUING TOURNAMENT: ${e.message}`);
             this.all_matches = null;
 			if (e.message == '500' || e.message == '502') {
 				throw new Error('Tournament could not be properly continued due to a server error');
@@ -197,17 +190,13 @@ export class RemoteTournament extends Tournament {
 
 	async launchTournament_remote() {
         try {
-			// console.log("TOURNAMENT LOG: Launch Tournament");
             const response = await this._generateMatches('POST');
             await this._startTournament();
 			this.all_matches = response.matches;
 			this._nextMatch();
 			this.game_status = 'In Progress';
-			// if (!this.current_match)
-			// 	this.game_status = 'Finished';
     	}
 		catch (e) {
-			// console.error(`TOURNAMENT LOG: ERROR STARTING TOURNAMENT: ${e.message}`);
 			this.all_matches = null;
 			if (this.game_status !== 'Finished')
 				this.game_status = 'Created';
@@ -223,7 +212,6 @@ export class RemoteTournament extends Tournament {
 			if (!this.current_match)
 				this.game_status = 'Finished';
         } catch (e) {
-            // console.error(`TOURNAMENT LOG: ERROR UPDATING MATCHES: ${e.message}`);
             this.all_matches = null;
 			if (e.message == '500' || e.message == '502') {
 				throw new Error(`${e.message}`);

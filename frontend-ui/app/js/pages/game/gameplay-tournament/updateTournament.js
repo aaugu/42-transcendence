@@ -35,17 +35,11 @@ export async function startNewMatchCycle(tournament) {
 }
 
 export async function startNewMatchCycle_remote(tournament) {
-	//call new endpoint with player1 and player2 ids instead of getGameID
-
 	const player1_id = tournament.current_match.player_1.user_id;
 	const player2_id = tournament.current_match.player_2.user_id;
 	const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
 	const newGameId = response.game_id;
 	const new_url = `/tournament-remote/${newGameId}`;
-
-	// console.log("newGameId in startNewMatchCycle_remote: ", newGameId);
-	// console.log("Player1 in NewMatchCycle_remote: ", tournament.current_match.player_1.nickname);
-	// console.log("Player2 in NewMatchCycle_remote: ", tournament.current_match.player_2.nickname);
 
 	tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tournament.tourn_id}"
 									class="btn btn-primary" href='#'>Join the match</button>`;

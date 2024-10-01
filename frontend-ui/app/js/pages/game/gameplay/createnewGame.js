@@ -47,19 +47,40 @@ export async function createTournamentGame(player1_id, player2_id, mode) {
 	}
 }
 
+export async function createGameRemote(player1_id, player2_id, mode) {
+	const url = `${gatewayEndpoint}/create-game-remote/${player1_id}/${player2_id}/${mode}/`;
+
+	const response = await fetch(url,
+	{
+		headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+		},
+		credentials: 'include'
+	});
+
+	if (!response.ok) {
+		throw new Error(`${response.status}`);
+	}
+
+	const responseData = await response.json();
+	if (responseData !== null) {
+		return responseData;
+	}
+}
+
 export function getGameMode(mode) {
-  switch (mode) {
-    case "local-twoplayer":
-      return "LOCAL_TWO_PLAYERS";
-    case "remote-twoplayer":
-      return "REMOTE";
-    case "tournament-creation":
-      return "TOURNAMENT";
-	  case "tournament-remote":
-		return "TOURNAMENT_REMOTE";
-    default:
-      console.log("Invalid mode");
-      return null;
+	switch (mode) {
+		case "local-twoplayer":
+			return "LOCAL_TWO_PLAYERS";
+		case "remote-twoplayer":
+			return "REMOTE";
+		case "tournament-creation":
+			return "TOURNAMENT";
+		case "tournament-remote":
+			return "TOURNAMENT_REMOTE";
+		default:
+			return null;
   }
 
 }
@@ -70,7 +91,9 @@ export async function getGameID (game_mode = null) {
 	let gameData;
 
 	mode = getGameMode(mode);
-
+	if (mode === null) {
+		throw new Error("404");
+	}
 	gameData = await createGame(mode);
 	if (gameData === null) {
 		throw new Error("500");
