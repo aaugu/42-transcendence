@@ -9,11 +9,11 @@ import { errormsg } from '../../../dom/errormsg.js';
 import { userID } from '../../user/updateProfile.js';
 
 export var t_remote_socket;
+let gameState = { current: null };
 
 
 export async function startGameTournamentremote() {
 	let tournament;
-	let gameState = { current: null };
 	let t_details;
 
 	document.getElementById('tournament-table').classList.remove('hidden');
@@ -48,13 +48,18 @@ export async function startGameTournamentremote() {
 
 	let keysPressed = {}
 
-	document.addEventListener("keydown", function (event) {
-		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, t_remote_socket, gameState);
-	});
+	document.addEventListener("keydown", keyDownEventTournamentRemote);
+	document.addEventListener("keyup", keyUpEventTournamentRemote);
+}
 
-	document.addEventListener("keyup", function (event) {
-		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, t_remote_socket, gameState);
-	});
+export function keyDownEventTournamentRemote(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = true;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
+}
+
+export function keyUpEventTournamentRemote(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = false;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
 }

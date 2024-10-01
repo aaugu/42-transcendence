@@ -19,7 +19,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
         query_string = self.scope["query_string"].decode("utf-8")
         query_params = parse_qs(query_string)
-        
+
         user_id = query_params.get("user_id", [None])[0]
 
 
@@ -38,16 +38,14 @@ class PongConsumer(AsyncWebsocketConsumer):
             print(f"Game {self.game_id} is already finished. Rejecting new connection.")
             await self.close()
 
-        
+
         if user_id == game.game_state.paddles[0].player_id:
             self.player_id = game.game_state.paddles[0].player_id
-            self.player_id = user_id
             print(f"Player ID {self.player_id} Paddle Left: {self.player_id}")
         elif user_id == game.game_state.paddles[1].player_id:
             self.player_id = game.game_state.paddles[1].player_id
-            self.player_id = user_id
             print(f"Player ID {self.player_id} Paddle Right: {self.player_id}")
-        
+
         # Initialize user count if not exists
         if self.game_id not in PongConsumer.user_per_room:
             print(f"In connect method, user_per_room: {PongConsumer.user_per_room}")
@@ -170,7 +168,7 @@ class PongConsumer(AsyncWebsocketConsumer):
 
             game_mode = PongConsumer.games[self.game_id].mode
             user_count = PongConsumer.user_per_room[self.game_id]
-            
+
             if PongConsumer.games[self.game_id].game_state.finished:
                 print(
                     f"Game {self.game_id} finished, mode: {PongConsumer.games[self.game_id].mode}"

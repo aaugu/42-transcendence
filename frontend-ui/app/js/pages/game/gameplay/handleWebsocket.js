@@ -58,7 +58,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 					hideModal("match-modal");
 					urlRoute("/profile");
 					return ;
-				}, 5000);
+				}, 2000);
 			}
 		} catch (error) {
 			console.error("Error in socket.onmessage:", error.message);

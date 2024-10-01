@@ -20,16 +20,20 @@ export async function joinGame(gameId) {
 	}
 }
 
-export async function joinRemoteGame(gameId, senderId) {
+export async function joinRemoteGame(gameId, senderId, receiverId) {
 	try {
-			const userInfo = await getUserInfo(senderId);
 
-			console.log("userInfo of senderId in joinRemoteGame (player 1): ", userInfo);
+			// console.log("userInfo of senderId in joinRemoteGame (player 1): ", userInfo);
 
-			if (userInfo && senderId !== userID) {
+			if (senderId != userID) {
+				const userInfo = await getUserInfo(senderId);
 				localStorage.setItem('left', userInfo.nickname);
 				localStorage.setItem('right', localStorage.getItem('nickname'));
-				// await joinGame(gameId);
+			}
+			else if (senderId == userID) {
+				const userInfo = await getUserInfo(receiverId);
+				localStorage.setItem('left', localStorage.getItem('nickname'));
+				localStorage.setItem('right', userInfo.nickname);
 			}
 
 			const new_url = `/remote-twoplayer/${gameId}`;

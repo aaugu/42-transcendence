@@ -46,13 +46,18 @@ export async function startGameTournamentlocal() {
 
 	let keysPressed = {}
 
-	document.addEventListener("keydown", function (event) {
-		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, t_socket, gameState);
-	});
+	document.addEventListener("keydown", keyDownEventTournamentLocal);
+	document.addEventListener("keyup", keyUpEventTournamentLocal);
+}
 
-	document.addEventListener("keyup", function (event) {
-		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, t_socket, gameState);
-	});
+export function keyDownEventTournamentLocal(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = true;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
+}
+
+export function keyUpEventTournamentLocal(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = false;
+	handleKeyPress(keysPressed, t_remote_socket, gameState);
 }

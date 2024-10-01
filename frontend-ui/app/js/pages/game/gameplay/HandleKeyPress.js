@@ -35,10 +35,10 @@ export default function handleKeyPress(keysPressed, socket, gameState) {
 				: [controllerRightUp, controllerRightDown];
 
 			for (const key of controller) {
-			if (keysPressed[key]) {
-				socket.send(JSON.stringify(keyActionMap[key]));
-				return;
-			}
+				if (keysPressed[key]) {
+					socket.send(JSON.stringify(keyActionMap[key]));
+					return;
+				}
 			}
 		}
 	} else {

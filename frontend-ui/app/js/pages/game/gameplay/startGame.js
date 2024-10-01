@@ -6,6 +6,7 @@ import { userID } from '../../user/updateProfile.js';
 import { error404Page } from '../../errorpage/error404Page.js';
 
 export var g_socket;
+let gameState = { current: null };
 
 export async function startGame() {
 	document.getElementById('tournament-table').classList.add('hidden');
@@ -17,9 +18,8 @@ export async function startGame() {
 		return ;
 	}
 
-  	let gameState = { current: null };
-	  const right_player = localStorage.getItem('right');
-	  const left_player = localStorage.getItem('left');
+	const right_player = localStorage.getItem('right');
+	const left_player = localStorage.getItem('left');
 
 	if (mode == 'local-twoplayer')
 		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
@@ -39,14 +39,19 @@ export async function startGame() {
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
 
-	let keysPressed = {};
-	document.addEventListener("keydown", function (event) {
-		keysPressed[event.key] = true;
-		handleKeyPress(keysPressed, g_socket, gameState);
-	});
+	// let keysPressed = {};
+	document.addEventListener("keydown", keyDownEventTwoPlayer);
+	document.addEventListener("keyup", keyUpEventTwoPlayer);
+}
 
-	document.addEventListener("keyup", function (event) {
-		keysPressed[event.key] = false;
-		handleKeyPress(keysPressed, g_socket, gameState);
-	});
+export function keyDownEventTwoPlayer(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = true;
+	handleKeyPress(keysPressed, g_socket, gameState);
+}
+
+export function keyUpEventTwoPlayer(event) {
+	let keysPressed = {};
+	keysPressed[event.key] = false;
+	handleKeyPress(keysPressed, g_socket, gameState);
 }

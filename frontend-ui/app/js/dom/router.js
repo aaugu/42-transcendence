@@ -26,19 +26,36 @@ import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
 import { publicProfilePage } from "../pages/profile/publicProfilePage.js"
 import { startGameTournamentremote, t_remote_socket } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
+import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGame.js"
+import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
+import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
 
 let urlRoute;
-let currentEventListener = null;
+let currentClickListener = null;
+let currentKeyupListener = null;
+let currentKeydownListener = null;
 
-function updateEventListenerMainCont(newEventListener = null) {
+function updateEventListeners(newClickListener = null, newKeyupListener = null, newKeydownListener = null) {
 	const mainCont = document.getElementById('main-content');
-	if (currentEventListener !== null) {
-		mainCont.removeEventListener('click', currentEventListener);
+	if (currentClickListener !== null) {
+		mainCont.removeEventListener('click', currentClickListener);
 	}
-	currentEventListener = newEventListener;
-	if (currentEventListener !== null) {
-		mainCont.addEventListener('click', currentEventListener);
+	currentClickListener = newClickListener;
+	if (currentClickListener !== null) {
+		mainCont.addEventListener('click', currentClickListener);
 	}
+
+	if (currentKeyupListener !== null) {
+		document.removeEventListener('keyup', currentKeyupListener);
+		console.log("keyup removed");
+	}
+	currentKeyupListener = newKeyupListener;
+
+	if (currentKeydownListener !== null) {
+		document.removeEventListener('keydown', currentKeydownListener);
+		console.log("keydown removed");
+	}
+	currentKeydownListener = newKeydownListener;
 }
 
 function resetDataRouteChange() {
@@ -101,48 +118,56 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/login" : {
 			content: loginPage,
-			eventListener: loginEvent,
+			clickListener: loginEvent,
 			description: "login page"
 		},
         "/signup" : {
 			content: signupPage,
-			eventListener: signupEvent,
+			clickListener: signupEvent,
 			description: "signup page"
 		},
         "/local-twoplayer" : {
 			content: newgamePage,
-			eventListener: newlocalgameEvent,
+			clickListener: newlocalgameEvent,
 			description: "local two player game page"
 		},
 		"/local-twoplayer/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,
+			keyup: keyUpEventTwoPlayer,
+			keydown: keyDownEventTwoPlayer,
 			description: "local two player game page"
 		},
 		"/remote-twoplayer/:gameId" : {
 			content: gamePage,
 			startFunction: startGame,
+			keyup: keyUpEventTwoPlayer,
+			keydown: keyDownEventTwoPlayer,
 			description: "remote two player game page"
 		},
 		"/tournament-creation" : {
 			content: tournamentPage,
-			eventListener: tournamentEvent,
+			clickListener: tournamentEvent,
 			startFunction: updateTournLists,
 			description: "create or join tournament page"
 		},
 		"/tournament/:gameId" : {
 			content: gamePage,
 			startFunction: startGameTournamentlocal,
+			keyup: keyUpEventTournamentLocal,
+			keydown: keyDownEventTournamentLocal,
 			description: "local tournament game page"
 		},
 		"/tournament-remote/:gameId" : {
 			content: gamePage,
 			startFunction: startGameTournamentremote,
+			keyup: keyUpEventTournamentRemote,
+			keydown: keyDownEventTournamentRemote,
 			description: "remote tournament game page"
 		},
         "/profile" : {
 			content: profilePage,
-			eventListener: profileEvent,
+			clickListener: profileEvent,
 			startFunction: startFriendListRefresh,
 			description: "profile page"
 		},
@@ -152,13 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 		"/livechat" : {
 			content: livechatPage,
-			eventListener: livechatEvent,
+			clickListener: livechatEvent,
 			startFunction: notifications,
 			description: "stats page"
 		},
 		"/join-game": {
 			content: joinGamePage,
-			eventListener: joinGameEvent,
+			clickListener: joinGameEvent,
 			description: "join an existing game",
 		},
     }
@@ -198,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentRouteDetails = matchedRoute || urlRoutes[404];
         const html = await (currentRouteDetails.content)();
 
-		updateEventListenerMainCont(currentRouteDetails.eventListener);
+		updateEventListeners(currentRouteDetails.clickListener, currentRouteDetails.keyup, currentRouteDetails.keydown);
 
 		const mainCont = document.getElementById('main-content');
         mainCont.innerHTML = html;

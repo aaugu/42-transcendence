@@ -69,7 +69,8 @@ export async function livechatEvent(e) {
 		case "chat-invite-game-link":
 			const game_id = target.dataset.gameid;
 			const sender_id = target.dataset.senderid;
-			joinRemoteGame(game_id, sender_id);
+			const receiver_id = target.dataset.receiverid;
+			joinRemoteGame(game_id, sender_id, receiver_id);
 			break;
 		case "ctc-nickname":
 			const nickname = target.textContent;
