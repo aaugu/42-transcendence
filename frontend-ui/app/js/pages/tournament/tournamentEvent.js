@@ -23,11 +23,8 @@ export async function tournamentEvent(e) {
 			break;
 		case "t-join":
 			const joinBtn = document.getElementById('t-join');
-			if (joinBtn)
-				joinBtn.disable = true;
+			joinBtn.setAttribute("disabled","disabled");
 			joinTournamentButton();
-			if (joinBtn)
-				joinBtn.disable = false;
 			break;
 		case "t-start":
 			const tourn_id_start = document.getElementById('t-start').dataset.tournid;
@@ -50,7 +47,7 @@ export async function tournamentEvent(e) {
 					break ;
 				}
 				if (e.message === "403") {
-					errormsg(e.message, "single-t-modal-errormsg");
+					errormsg("Could not delete tournament : you don't have the rights or it has already started", "single-t-modal-errormsg");
 					break ;
 				}
 				console.error("USER LOG: ", e.message);

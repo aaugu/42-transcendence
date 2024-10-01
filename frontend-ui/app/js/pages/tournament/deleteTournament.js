@@ -13,13 +13,6 @@ export async function deleteTournament(tourn_id) {
 		credentials: 'include'
 	});
 
-	if (!response.ok && ( response.status === 502 || response.status === 500))
+	if (!response.ok)
 		throw new Error(`${response.status}`);
-
-	const responseData = await response.json();
-	if (!response.ok) {
-		if (responseData.errors)
-			throw new Error(`${responseData.errors}`);
-		throw new Error(`${response.status}`);
-	}
 }
