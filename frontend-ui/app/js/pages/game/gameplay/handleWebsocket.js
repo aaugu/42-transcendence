@@ -13,10 +13,8 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 
   socket.onclose = function (event) {
 	if (event.wasClean === false) {
-		errormsg("Service temporarily unavailable", "homepage-errormsg");
-		setTimeout(() => {
-			urlRoute("/profile");
-		}, 3000);
+		urlRoute("/profile");
+		errormsg("Connection lost or could not be established", "homepage-errormsg");
 	}
     console.log("WebSocket connection closed:", event);
 	
@@ -25,10 +23,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
   socket.onerror = function (error) {
     console.error("WebSocket error:", error);
     urlRoute("/profile");
-    errormsg(
-      "Connection to game could not be established",
-      "homepage-errormsg"
-    );
+		errormsg("Connection to game could not be established", "homepage-errormsg");
   };
 
   socket.onmessage = async function (event) {

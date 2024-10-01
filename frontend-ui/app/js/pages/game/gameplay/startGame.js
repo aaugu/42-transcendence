@@ -25,10 +25,9 @@ export async function startGame() {
 	  const right_player = localStorage.getItem('right');
 	  const left_player = localStorage.getItem('left');
 
-
 	g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
 	if (!g_socket) {
-		document.getElementById("main-content").innerHTML = error404Page();
+		document.getElementById("main-content").innerHTML = error500();
 		return ;
 	}
 
@@ -42,15 +41,15 @@ export async function startGame() {
 
 	handleWebsocketGame(g_socket, canvas, gameState);
 	handleButtons(g_socket);
-
+	
 	let keysPressed = {};
 	document.addEventListener("keydown", function (event) {
-	  keysPressed[event.key] = true;
-	  handleKeyPress(keysPressed, g_socket, gameState);
+		keysPressed[event.key] = true;
+		handleKeyPress(keysPressed, g_socket, gameState);
 	});
 
 	document.addEventListener("keyup", function (event) {
-	  keysPressed[event.key] = false;
-	  handleKeyPress(keysPressed, g_socket, gameState);
+		keysPressed[event.key] = false;
+		handleKeyPress(keysPressed, g_socket, gameState);
 	});
 }
