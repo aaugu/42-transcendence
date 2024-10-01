@@ -95,6 +95,5 @@ export async function openSingleTournamentModal(e) {
 		} else {
 			errormsg(e.message, "join-and-tournament-errormsg");
 		}
-		console.log("USER LOG: ", e.message);
 	}
 }

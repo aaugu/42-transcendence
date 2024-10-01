@@ -14,7 +14,6 @@ export async function profileEvent(e) {
 	switch (e.target.id) {
 		case "logout":
 			updateProfile(false, null);
-			console.log('USER LOG: LOGOUT');
 			urlRoute('/');
 			break;
 		case "confirm-2fa-activation":
@@ -24,7 +23,7 @@ export async function profileEvent(e) {
 			twoFactorAuthProfileButton(true);
 			break;
 		case "add-friend-btn":
-			try { 
+			try {
 				const friend_nickname = document.getElementById('friend-input').value;
 				document.getElementById('friend-input').value = '';
 				await addFriend(friend_nickname);
@@ -37,7 +36,6 @@ export async function profileEvent(e) {
 					errormsg("Service temporarily unavailable", "friendlist-errormsg");
 					break;
 				}
-				console.log("USER LOG: ", e.message);
 				errormsg(e.message, 'friendlist-errormsg');
 			}
 			break;
@@ -54,7 +52,6 @@ export async function profileEvent(e) {
 					errormsg("Service temporarily unavailable", "friendlist-errormsg");
 					break;
 				}
-				console.log("USER LOG: ", e.message);
 			}
 		default:
 			break;

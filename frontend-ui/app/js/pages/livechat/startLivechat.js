@@ -10,9 +10,7 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	const chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function () {
-		console.log("LIVECHAT LOG: Websocket connection established");
-	};
+	chatSocket.onopen = function () {};
 
 	// When receiving message from server
 	chatSocket.onmessage = function(e) {
@@ -36,15 +34,13 @@ export async function startLivechat (conv_id, response) {
 			id = response.users[0].id;
 		else
 			id = response.users[1].id;
-		
+
 		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
 		chatArea.appendChild(messageElement);
 		chatArea.scrollTop = chatArea.scrollHeight;
 	};
 
-	chatSocket.onclose = function(e) {
-		console.log('LIVECHAT LOG : Websocket connection closed');
-	};
+	chatSocket.onclose = function(e) {};
 
 	// Message listeners
 	messageSubmitBtn.addEventListener('click', function (event) {
@@ -62,11 +58,10 @@ export async function startLivechat (conv_id, response) {
 			}
 		}
 		else {
-			console.log("ici");
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 		}
-		messageInput.value = '';	
-	});	
+		messageInput.value = '';
+	});
 }
 
 function sendMessage(message) {
@@ -90,7 +85,7 @@ function createMsgElement(id, userLookup, time, message) {
 	} else {
 		avatar = userLookup[id].avatar;
 	}
-	
+
 	const newMessage = newChatMsg(avatar, time, message, id);
 	messageElement.innerHTML = newMessage;
 

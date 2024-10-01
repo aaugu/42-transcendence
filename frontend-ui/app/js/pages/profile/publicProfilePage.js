@@ -37,7 +37,6 @@ export async function publicProfilePage() {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
         }
-        console.log("USER LOG: ", e.message);
     }
 
     return `
