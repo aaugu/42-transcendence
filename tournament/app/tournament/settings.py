@@ -38,7 +38,7 @@ MIN_PLAYERS = 2
 SECRET_KEY = os.environ.get('TOURNAMENT_DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '172.20.2.2']
 
