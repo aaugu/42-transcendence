@@ -67,7 +67,7 @@ def get_user_games(request, user_id):
                 try:
                     game["winner_id"] = CustomUser.objects.get(
                         id=game["winner_id"]
-                    ).username
+                    ).nickname
                 except CustomUser.DoesNotExist:
                     game["winner_id"] = "Unknown user"
         if game["loser_id"] is not None:
@@ -77,7 +77,7 @@ def get_user_games(request, user_id):
                 try:
                     game["loser_id"] = CustomUser.objects.get(
                         id=game["loser_id"]
-                    ).username
+                    ).nickname
                 except CustomUser.DoesNotExist:
                     game["loser_id"] = "Unknown user"
     return JsonResponse(games, safe=False, status=response.status_code)

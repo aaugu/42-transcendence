@@ -27,7 +27,7 @@ export async function joinRemoteGame(gameId, senderId) {
 			if (userInfo && senderId !== userID) {
 				localStorage.setItem('left', userInfo.nickname);
 				localStorage.setItem('right', localStorage.getItem('nickname'));
-				await joinGame(gameId);
+				// await joinGame(gameId);
 			}
 
 			const new_url = `/remote-twoplayer/${gameId}`;

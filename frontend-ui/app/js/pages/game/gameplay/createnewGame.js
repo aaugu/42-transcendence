@@ -27,17 +27,20 @@ export async function createGame(mode, id = 0) {
 }
 
 export async function createTournamentGame(player1_id, player2_id, mode) {
-  const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/${mode}/`;
+	if (player1_id === null)
+		throw new Error('403');
 
-  const response = await fetch(url,
-  {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include'
-  });
-  if (!response.ok) {
+	const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/${mode}/`;
+
+	const response = await fetch(url,
+	{
+	headers: {
+		'Accept': 'application/json',
+		'Content-Type': 'application/json',
+	},
+	credentials: 'include'
+	});
+	if (!response.ok) {
 		throw new Error(`${response.status}`);
 	}
 
