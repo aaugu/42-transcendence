@@ -85,9 +85,10 @@ export async function loginProcess() {
         .catch(e => {
             if (e.message === "502") {
                 errormsg("Service temporarily unavailable", "login-errormsg");
-                const loginBtn = document.getElementById('login-submit').disabled = false;
-                return;
+            } else {
+                errormsg(e.message, "login-errormsg");
             }
+            document.getElementById('login-submit').disabled = false;
         });
     }
 
