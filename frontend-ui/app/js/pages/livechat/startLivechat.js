@@ -65,7 +65,6 @@ export async function startLivechat (conv_id, response) {
 
 function sendMessage(message) {
 	const safeMsgText = escapeHTML(message);
-	console.log(safeMsgText);
 
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
