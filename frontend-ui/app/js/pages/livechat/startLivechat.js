@@ -64,10 +64,13 @@ export async function startLivechat (conv_id, response) {
 }
 
 function sendMessage(message) {
+	const safeMsgText = escapeHTML(message);
+	console.log(safeMsgText);
+
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
-			'message': message
+			'message': safeMsgText
 		}));
 	}
 }
@@ -91,12 +94,13 @@ function createMsgElement(id, userLookup, time, message) {
 	return messageElement
 }
 
-function newChatMsg (avatar, time, msgText, id) {
+function newChatMsg(avatar, time, msgText, id) {
+    const safeMsgText = escapeHTML(msgText);
     if (id === userID) {
         return `<div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            ${safeMsgText}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -112,7 +116,7 @@ function newChatMsg (avatar, time, msgText, id) {
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            ${safeMsgText}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -120,5 +124,10 @@ function newChatMsg (avatar, time, msgText, id) {
         </div>
         </div>`;
     }
+}
 
+export function escapeHTML(unsafeText) {
+    const div = document.createElement('div');
+    div.textContent = unsafeText;
+    return div.innerHTML;
 }

@@ -3,6 +3,7 @@ import { editPassword } from "./password.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { hideModal } from "../../dom/modal.js";
 import { userID } from "./updateProfile.js";
+import { escapeHTML } from "../livechat/startLivechat.js";
 
 export async function editUserInfo(infoType, newInfo) {
 	if (userID === null)
@@ -87,9 +88,9 @@ export function editUserInfoModal(e) {
 					await editAvatar(editInput);
 					break;
 				case 'Nickname':
-					await editUserInfo('nickname', newValue);
+					await editUserInfo('nickname', escapeHTML(newValue));
 					userInfoID.innerText = newValue;
-					localStorage.setItem('nickname', newValue);
+					localStorage.setItem('nickname', escapeHTML(newValue));
 					break;
 				case 'Email':
 					await editUserInfo('email', newValue);
