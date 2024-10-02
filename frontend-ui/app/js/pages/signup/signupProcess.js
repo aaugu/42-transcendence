@@ -21,7 +21,9 @@ export async function signupProcess() {
 		try {
 			await logout();
 		}
-		catch (e) {}
+		catch (e) {
+			errormsg("Previous user was not properly logged out", "homepage-errormsg");
+		}
 		localStorage.setItem('nickname', 'guest');
 		localStorage.setItem('avatar', defaultAvatar);
 		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
@@ -31,6 +33,7 @@ export async function signupProcess() {
     }
 
     if (!signupFieldsValidity(username, nickname, email, password, repeatPassword)) {
+		document.getElementById('signup-submit').disabled = false;
         return;
     }
 
@@ -40,6 +43,7 @@ export async function signupProcess() {
             avatar = await readAvatarFile(avatarFile);
         } catch (error) {
             errormsg("Field cannot be blank", "signup-errormsg");
+			document.getElementById('signup-submit').disabled = false;
             return;
         }
     }
@@ -69,29 +73,35 @@ export async function signupProcess() {
                     throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
-                    errormsg(error.username, "homepage-errormsg");
+					document.getElementById('signup-submit').disabled = false;
+					throw new Error(error.username);
                 }
                 else if (error.email) {
-                    errormsg(error.email, "homepage-errormsg");
+					document.getElementById('signup-submit').disabled = false;
+					throw new Error(error.email);
                 }
                 else if (error.nickname) {
-                    errormsg(error.nickname, "homepage-errormsg");
+					document.getElementById('signup-submit').disabled = false;
+					throw new Error(error.nickname);
                 }
-                throw new Error(`${response.status}`);
+				throw new Error(`${response.status}`);
             }
+			document.getElementById('signup-submit').disabled = false;
             return response.json();
         })
         .then(responseData => {
             if (responseData !== null) {
                 loginProcess();
+				document.getElementById('signup-submit').disabled = false;
             }
         })
         .catch(e => {
             if (e.message === "502") {
                 errormsg("Service temporarily unavailable", "signup-errormsg");
             } else {
-                errormsg(e.message, "signup-errormsg");
+                errormsg(e.message, "homepage-errormsg");
             }
+			document.getElementById('signup-submit').disabled = false;
         });
     }
 

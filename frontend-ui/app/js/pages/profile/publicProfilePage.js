@@ -6,6 +6,9 @@ import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
 
 export async function publicProfilePage() {
 	var nickname = window.location.href.split("/")[4];
+	var matches_html = '';
+	var match_wins = '';
+	var match_losses = '';
 	if (nickname === null || nickname === "")
 		return error404Page();
 
@@ -16,17 +19,16 @@ export async function publicProfilePage() {
 
     try {
         const userinfo = await getNicknameUserInfo(nickname);
-        var username = userinfo.username;
         var email = userinfo.email;
         var avatar = userinfo.avatar;
 		var user_id = userinfo.id;
 
         var friends_html = await updateFriendList(user_id);
-		var matches_html = await matchHistoryList(nickname, user_id);
+		matches_html = await matchHistoryList(nickname, user_id);
 
 		const match_wins_losses = matchWinsLosses(nickname);
-		var match_wins = match_wins_losses.wins;
-		var match_losses = match_wins_losses.losses;
+		match_wins = match_wins_losses.wins;
+		match_losses = match_wins_losses.losses;
     }
     catch (e) {
         if (e.message === "404")
@@ -52,9 +54,6 @@ export async function publicProfilePage() {
                         <img id="profile-avatar" src="${avatar}" alt="User Avatar" class="avatar-img">
                     </div>
                     <div class="usermanagement-item">
-                        <p id="profile-username">${username}</p>
-                    </div>
-                    <div class="usermanagement-item">
                         <p id="profile-nickname">${nickname}</p>
                     </div>
                     <div class="usermanagement-item">
@@ -71,7 +70,7 @@ export async function publicProfilePage() {
                     <p>Total losses: ${match_losses}</p>
                 </div>
                 <div class="table-responsive">
-                    <table>
+                    <table class="table">
                         <thead>
                             <tr>
                             <th scope="col">Date</th>

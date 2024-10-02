@@ -2,6 +2,7 @@ import { defaultAvatar } from './avatar.js';
 import { getCookie } from './cookie.js';
 import { logout } from './logout.js';
 import { urlRoute } from '../../dom/router.js'
+import { errormsg } from '../../dom/errormsg.js';
 
 export var userID = null;
 
@@ -28,7 +29,9 @@ export const updateProfile = async (isConnected, token) => {
 		try {
 			await logout();
 		}
-		catch (e) {}
+		catch (e) {
+			errormsg("Previous user was not properly logged out", "homepage-errormsg");
+		}
 		document.getElementById('nav-profile-elements').classList.add('hidden');
 		document.getElementById('logo').href = "/";
 		localStorage.setItem('nickname', 'guest');

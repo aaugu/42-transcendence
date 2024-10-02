@@ -3,6 +3,7 @@ import { signupProcess } from "./signupProcess.js"
 export async function signupEvent(e) {
 	switch (e.target.id) {
 		case "signup-submit":
+			document.getElementById('signup-submit').setAttribute('disabled', 'true');
 			signupProcess();
 			break;
 		case "uploadAvatar":

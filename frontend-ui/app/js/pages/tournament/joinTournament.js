@@ -34,7 +34,9 @@ export async function joinTournamentButton() {
 	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
 		await joinTournament(nickname, tourn_id);
-		hideModal('single-t-modal');
+		setTimeout(() => {
+			hideModal('single-t-modal');
+        }, 500);
 	}
 	catch (e) {
 		if (e.message === "500" || e.message === "502") {
@@ -45,6 +47,6 @@ export async function joinTournamentButton() {
 		}
 		setTimeout(() => {
 			hideModal('single-t-modal');
-		}, 1000);
+		}, 500);
 	}
 }

@@ -9,7 +9,7 @@ import { isBlacklisted } from './blacklist.js';
 async function sendGameInvite(game_id, ctc_id, mode) {
 	let link;
 	if (mode === "LOCAL_TWO_PLAYERS")
-		  link = "go join them on their computer!";
+		  link = "!";
 	else
 		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary" href='#'>Join the game</button>`
 
