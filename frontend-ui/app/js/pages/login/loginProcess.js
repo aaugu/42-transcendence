@@ -22,7 +22,9 @@ export async function loginProcess() {
 		try {
 			await logout();
 		}
-		catch (e) {}
+		catch (e) {
+			errormsg("Previous user was not properly logged out", "homepage-errormsg");
+		}
 		localStorage.setItem('nickname', 'guest');
 		localStorage.setItem('avatar', defaultAvatar);
 		document.cookie = `csrf_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
@@ -50,21 +52,22 @@ export async function loginProcess() {
                     throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
-                    errormsg(error.username, "homepage-errormsg");
                     if (loginBtn)
                         loginBtn.disabled = false;
+					throw new Error(error.username);
                 }
                 else if (error.password) {
-                    errormsg(error.password, "homepage-errormsg");
                     if (loginBtn)
                         loginBtn.disabled = false;
+					throw new Error(error.password);
                 }
                 else if (error.detail) {
-                    errormsg(error.detail + ", are your username and password correct?", "homepage-errormsg");
-                    if (loginBtn)
+					if (loginBtn)
                         loginBtn.disabled = false;
+					throw new Error(error.detail + ", are your username and password correct?");
                 }
-                throw new Error(`HTTP status code ${response.status}`);
+				else
+               		throw new Error(`${response.status}`);
             }
             return response.json()
         })
@@ -86,7 +89,7 @@ export async function loginProcess() {
             if (e.message === "502") {
                 errormsg("Service temporarily unavailable", "login-errormsg");
             } else {
-                errormsg(e.message, "login-errormsg");
+                errormsg(e.message, "homepage-errormsg");
             }
             document.getElementById('login-submit').disabled = false;
         });

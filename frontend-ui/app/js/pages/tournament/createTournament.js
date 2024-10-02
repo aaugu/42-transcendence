@@ -64,7 +64,9 @@ export async function createTournamentButton() {
 		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, type);
 		await createTournament(new_tournament);
 		updateTournLists();
-		hideModal('create-t-modal');
+		setTimeout(() => {
+			hideModal('create-t-modal');
+        }, 500);
 		document.getElementById("t-nr-players").value = 2;
 		document.getElementById('tournament-name').value = "";
 	}

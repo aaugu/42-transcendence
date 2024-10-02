@@ -22,8 +22,6 @@ export async function tournamentEvent(e) {
 			createTournamentButton();
 			break;
 		case "t-join":
-			const joinBtn = document.getElementById('t-join');
-			joinBtn.setAttribute("disabled","disabled");
 			joinTournamentButton();
 			break;
 		case "t-start":
