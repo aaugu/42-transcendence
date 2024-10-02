@@ -120,7 +120,7 @@ class GenerateMatchesView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=500)
         if len(players) < settings.MIN_PLAYERS:
-            return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=403)
+            return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=422)
 
         matches = GenerateMatchesView.generate_matches(players, tournament)
 
@@ -605,16 +605,16 @@ class TournamentPlayersView(View):
             return False, [f'An unexpected error occurred : {e}', 500]
 
         if tournament.status != Tournament.CREATED:
-            return False, ['The registration phase is over', 403]
+            return False, ['The registration phase is over', 409]
 
         for player in tournament_players:
             if player.user_id == new_player.user_id:
-                return False, [f'You are already registered as `{player.nickname}` for the tournament', 403]
+                return False, [f'You are already registered as `{player.nickname}` for the tournament', 409]
             elif player.nickname == new_player.nickname:
                 return False, [f'nickname `{player.nickname}` already taken', 400]
 
         if tournament.max_players <= len(tournament_players):
-            return False, ['This tournament is fully booked', 403]
+            return False, ['This tournament is already full', 409]
 
         return True, None
 
