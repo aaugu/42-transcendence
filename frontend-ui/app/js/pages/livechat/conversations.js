@@ -47,7 +47,6 @@ export async function get_all_conv() {
 			const user1Details = userLookup[conversation.user_1];
     		const user2Details = userLookup[conversation.user_2];
 			if (!user1Details || !user2Details) {
-				console.error(`USER LOG: User details not found for conversation ID: ${conversation.id}`);
 				return null;
 			}
 			return {
@@ -71,12 +70,12 @@ export async function get_all_conv() {
 		if (e.message === "403") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
-			return ;
         }
-		if (e.message === "500" || e.message === "502") {
+		else if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();
-			return ;
+		} else {
+			errormsg(e.message, 'homepage-errormsg');
 		}
-		console.error("USER LOG: ", e.message);
+
 	}
 }

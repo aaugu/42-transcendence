@@ -59,7 +59,6 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 				}, 2000);
 			}
 		} catch (error) {
-			console.error("Error in socket.onmessage:", error.message);
 			if (error.message === "409") {
 				setTimeout(() => {
 					urlRoute("/profile");
