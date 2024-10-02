@@ -31,11 +31,13 @@ export async function publicProfilePage() {
     catch (e) {
         if (e.message === "404")
             return error404Page();
-        if (e.message === "502")
+        else if (e.message === "502")
             return error500();
-        if (e.message === "403") {
+        else if (e.message === "403") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
+        } else {
+            errormsg(e.message, 'homepage-errormsg');
         }
     }
 

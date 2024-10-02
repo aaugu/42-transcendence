@@ -58,13 +58,10 @@ export async function newConvButton() {
 	} catch (e) {
 		if (e.message === '403') {
             updateProfile(false, null);
-			return ;
-        }
-		if (e.message === "500" || e.message === "502") {
+        } else if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", 'livechat-errormsg');;
-			return ;
+		} else {
+			errormsg(e.message, 'livechat-errormsg');
 		}
-		console.error(`USER LOG: ${e.message}`);
-		errormsg(e.message, 'livechat-errormsg');
 	}
 }

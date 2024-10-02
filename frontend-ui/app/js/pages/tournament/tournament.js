@@ -12,11 +12,8 @@ export async function get_all_tournaments() {
 		all_tournaments = response.tournaments;
 	}
 	catch (e) {
-		console.error("USER LOG: ", e.message);
 		all_tournaments = {};
-		if (e.message === "500" || e.message === "502") {
-			throw new Error(`${e.message}`);
-		}
+		throw new Error(`${e.message}`);
 	}
 }
 

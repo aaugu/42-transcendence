@@ -49,15 +49,13 @@ export async function convHistory(e) {
         if (e.message === "403") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
-            return ;
         }
-        if (e.message === "500" || e.message === "502") {
+        else if (e.message === "500" || e.message === "502") {
             conversationArea = document.getElementById('conversation');
             if (conversationArea)
                 conversationArea.innerHTML = error500();
-            return ;
+        } else {
+            errormsg(e.message, 'livechat-errormsg');
         }
-        console.error("USER LOG: ", e.message);
-        errormsg(e.message, 'livechat-errormsg');
     }
 }

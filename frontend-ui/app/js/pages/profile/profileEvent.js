@@ -34,9 +34,9 @@ export async function profileEvent(e) {
 			} catch (e) {
 				if (e.message === "502") {
 					errormsg("Service temporarily unavailable", "friendlist-errormsg");
-					break;
+				} else {
+					errormsg(e.message, 'friendlist-errormsg');
 				}
-				errormsg(e.message, 'friendlist-errormsg');
 			}
 			break;
 		case "unfriend-btn":
@@ -50,9 +50,11 @@ export async function profileEvent(e) {
 			catch (e) {
 				if (e.message === "502") {
 					errormsg("Service temporarily unavailable", "friendlist-errormsg");
-					break;
+				} else {
+					errormsg(e.message, "friendlist-errormsg");
 				}
 			}
+			break;
 		default:
 			break;
 	}

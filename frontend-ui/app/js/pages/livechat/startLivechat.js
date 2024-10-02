@@ -51,7 +51,6 @@ export async function startLivechat (conv_id, response) {
 		}
 		else if ( chatSocket && chatSocket.readyState === 1) {
 			if (contact_blacklisted == true) {
-				console.error("USER LOG: ", "Contact is blacklisted");
 				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
 			} else {
 				sendMessage(messageInput.value);

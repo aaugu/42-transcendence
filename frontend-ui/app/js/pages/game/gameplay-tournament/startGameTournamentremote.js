@@ -35,9 +35,13 @@ export async function startGameTournamentremote() {
 		else if (t_details.status === 'Finished')
 			throw new Error("This tournament is already finished");
 	} catch (e) {
-		urlRoute('/tournament-creation');
-		errormsg(e.message, "homepage-errormsg");
-		return;
+		if (e.message === "500" || e.message === "502") {
+			urlRoute('/profile')
+			errormsg("Service temporarily unavailable", "homepage-errormsg");
+		} else {
+			urlRoute('/tournament-creation');
+			errormsg(e.message, "homepage-errormsg");
+		}
 	}
 
 	t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);

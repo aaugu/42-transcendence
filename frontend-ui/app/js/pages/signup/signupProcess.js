@@ -36,8 +36,6 @@ export async function signupProcess() {
 
     if (document.getElementById('uploadAvatar').checked) {
         var avatarFile = document.getElementById('avatar-upload-file').files[0];
-        if (!avatarFile) {
-        }
         try {
             avatar = await readAvatarFile(avatarFile);
         } catch (error) {
@@ -91,7 +89,8 @@ export async function signupProcess() {
         .catch(e => {
             if (e.message === "502") {
                 errormsg("Service temporarily unavailable", "signup-errormsg");
-                return;
+            } else {
+                errormsg(e.message, "signup-errormsg");
             }
         });
     }
