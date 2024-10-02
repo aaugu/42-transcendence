@@ -59,11 +59,15 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 				}, 2000);
 			}
 		} catch (error) {
-			console.error("Error in socket.onmessage:", error.message);
-			if (error.message === "409") {
+			if (error.message === "500" || error.message === "502") {
+				errormsg("Service temporarily unavailable", "homepage-errormsg");
+			} else if (error.message === "409") {
+				errormsg("Game conflict", "homepage-errormsg");
 				setTimeout(() => {
 					urlRoute("/profile");
 				}, 2000);
+			} else {
+				errormsg(error.message, "homepage-errormsg");
 			}
 		};
 	}
@@ -143,6 +147,8 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 					"Tournament could not be properly continued due to a server error",
 					"homepage-errormsg"
 				);
+			} else {
+				errormsg(error.message, "homepage-errormsg");
 			}
 		}
 	};
@@ -221,7 +227,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
 
-      if (data.only_player_disconnect) {}
+      		if (data.only_player_disconnect) {}
 
 		} catch (error) {
 			hideModal("match-modal");
@@ -231,13 +237,14 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					"Tournament could not be properly continued due to a server error",
 					"homepage-errormsg"
 				);
-			}
-			if (error.message === "403") {
+			} else if (error.message === "403") {
 				urlRoute("/");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
-			}
-			if (error.message === "409") {
+			} else if (error.message === "409") {
 				urlRoute("/profile");
+			} else {
+				urlRoute("/profile");
+				errormsg(error.message, "homepage-errormsg");
 			}
 		}
 	};

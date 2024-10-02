@@ -71,7 +71,6 @@ export async function createTournamentButton() {
 	catch (e) {
 		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", "t-modal-errormsg");
-			return;
 		} else {
 			errormsg (e.message, "t-modal-errormsg");
 		}

@@ -143,9 +143,7 @@ export class Tournament extends TournamentUtils{
 			this.startNextMatch();
         } catch (e) {
             this.all_matches = null;
-			if (e.message == '500' || e.message == '502') {
-				throw new Error(`${e.message}`);
-			}
+			throw new Error(`${e.message}`);
         }
     }
 
@@ -176,6 +174,8 @@ export class Tournament extends TournamentUtils{
             this.all_matches = null;
 			if (e.message == '500' || e.message == '502') {
 				throw new Error('Tournament could not be properly continued due to a server error');
+			} else {
+				throw new Error(`${e.message}`);
 			}
 		}
 	}
@@ -213,9 +213,7 @@ export class RemoteTournament extends Tournament {
 				this.game_status = 'Finished';
         } catch (e) {
             this.all_matches = null;
-			if (e.message == '500' || e.message == '502') {
-				throw new Error(`${e.message}`);
-			}
+			throw new Error(`${e.message}`);
         }
     }
 }

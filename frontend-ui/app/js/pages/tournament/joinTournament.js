@@ -41,7 +41,6 @@ export async function joinTournamentButton() {
 			errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
 		}
 		else {
-			console.error(`USER LOG: ${nickname} COULD NOT JOIN TOURNAMENT ${tournament_name}, STATUS: ${e.message}`);
 			errormsg(e.message, "single-t-modal-errormsg");
 		}
 		setTimeout(() => {
