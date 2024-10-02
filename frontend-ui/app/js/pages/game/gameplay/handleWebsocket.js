@@ -62,6 +62,7 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 			if (error.message === "500" || error.message === "502") {
 				errormsg("Service temporarily unavailable", "homepage-errormsg");
 			} else if (error.message === "409") {
+				errormsg("Game conflict", "homepage-errormsg");
 				setTimeout(() => {
 					urlRoute("/profile");
 				}, 2000);
