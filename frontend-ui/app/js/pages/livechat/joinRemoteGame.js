@@ -43,6 +43,8 @@ export async function joinRemoteGame(gameId, senderId, receiverId) {
 			else if (e.message === "403") {
 				updateProfile(false, null);
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
+			} else {
+				errormsg(e.message, 'homepage-errormsg');
 			}
 		}
 }

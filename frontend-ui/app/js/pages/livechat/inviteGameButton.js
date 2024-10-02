@@ -108,6 +108,8 @@ export async function inviteGameButtonLocal(ctc_id) {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return '';
+		} else {
+			errormsg(e.message, "livechat-conversation-errormsg")
 		}
 	}
 
