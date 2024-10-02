@@ -41,13 +41,11 @@ export async function updateTournLists() {
     catch (e) {
         if (e.message === "500" || e.message === "502") {
             document.getElementById('main-content').innerHTML = error500();
-            return ;
-        }
-        if (e.message === "403") {
+        } else if (e.message === "403") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
-            return ;
+        } else {
+            errormsg(e.message, 'homepage-errormsg');
         }
-        console.error('USER LOG: ', e.message);
     }
 }
