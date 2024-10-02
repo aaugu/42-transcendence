@@ -5,6 +5,7 @@ import { getConvHistory } from "./convHistory.js";
 import { userID, updateProfile } from "../user/updateProfile.js";
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { error500 } from "../errorpage/error500.js"
+import { errormsg } from "../../dom/errormsg.js";
 
 let notificationsRefreshInterval;
 let current_ctc_id;
@@ -29,7 +30,9 @@ export async function notifications() {
     } catch (e) {
         if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();
-		}
+		} else {
+            errormsg(e.message, "homepage-errormsg");
+        }
     }
 }
 
@@ -44,9 +47,9 @@ export async function startNotificationsRefresh() {
             } catch (e) {
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "homepage-errormsg");
-					return;
-				}
-				errormsg(e.message, "homepage-errormsg");
+				} else {
+                    errormsg(e.message, "homepage-errormsg");
+                }
 			}
         }, 3000);
     }
