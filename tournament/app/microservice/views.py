@@ -614,7 +614,7 @@ class TournamentPlayersView(View):
                 return False, [f'nickname `{player.nickname}` already taken', 400]
 
         if tournament.max_players <= len(tournament_players):
-            return False, ['This tournament is fully booked', 409]
+            return False, ['This tournament is already full', 409]
 
         return True, None
 
