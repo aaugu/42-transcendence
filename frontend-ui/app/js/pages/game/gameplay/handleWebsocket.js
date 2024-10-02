@@ -89,7 +89,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 			errormsg("Service temporarily unavailable", "homepage-errormsg");
 			setTimeout(() => {
 				urlRoute("/profile");
-			}, 3000);
+			}, 2000);
 		}
 	};
 
@@ -127,7 +127,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 												vs ${tournament.current_match.player_2.nickname}</span>`;
 					t_matchmodal.show();
 					setTimeout(async () => {
-					await startNewMatchCycle(tournament);
+						await startNewMatchCycle(tournament);
 					}, 3000);
 				}
 				else if (tournament.game_status === "Finished") {
@@ -137,7 +137,7 @@ export function handleWebsocketTournament(socket, tournament, canvas, gameState)
 					setTimeout(() => {
 						hideModal("match-modal");
 						urlRoute("/tournament-creation");
-					}, 3000);
+					}, 2000);
 				}
 			}
 		} catch (error) {
@@ -213,7 +213,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					hideModal("match-modal");
 					urlRoute("/profile");
 					return ;
-				}, 5000);
+				}, 2000);
 			}
 
 			if (data.player_disconnect) {

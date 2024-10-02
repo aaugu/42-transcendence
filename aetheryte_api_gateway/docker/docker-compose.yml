@@ -38,6 +38,7 @@ services:
             AETHERYTE_DJANGO_JWT_PASS: ${AETHERYTE_DJANGO_JWT_PASS}
             AETHERYTE_MAIL: ${AETHERYTE_MAIL}
             AETHERYTE_MAIL_PASS: ${AETHERYTE_MAIL_PASS}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS}
 
         healthcheck:
             test: curl --fail http://localhost:8000/api/user || exit 1

@@ -11,7 +11,7 @@
 }
 
 .custom-scrollbar {
-    max-height: 300px;
+    max-height: 500px;
     min-height: 50px;
     overflow-y: auto;
     overflow-x: hidden;
