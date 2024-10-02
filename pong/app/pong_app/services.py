@@ -24,12 +24,7 @@ class GameService:
         game_id = str(uuid.uuid4())
         game_instance = Game(mode=mode, game_id=game_id)
 
-        if mode == GameMode.REMOTE:
-            Games.objects.create(
-                game_id=game_id, creator_id=creator_id, status="WAITING", mode="REMOTE"
-            )
-
-        elif mode == GameMode.LOCAL_TWO_PLAYERS:
+        if mode == GameMode.LOCAL_TWO_PLAYERS:
             Games.objects.create(
                 game_id=game_id,
                 creator_id=creator_id,
@@ -38,15 +33,6 @@ class GameService:
                 mode="LOCAL_TWO_PLAYERS",
             )
             game_instance.game_state.paddles[1].player_id = joiner_id
-
-        elif mode == GameMode.TOURNAMENT_REMOTE:
-            print(f"Creating TOURNAMENT REMOTE game with id {game_id}")
-            Games.objects.create(
-                game_id=game_id,
-                creator_id=creator_id,
-                status="WAITING",
-                mode="TOURNAMENT-REMOTE",
-            )
 
         game_instance.game_state.paddles[0].player_id = creator_id
 

@@ -11,7 +11,7 @@ from .services import GameAlreadyFinishedException
 def join_game(request, joiner_id, game_id):
     # print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
 
-    if not joiner_id or not game_id:
+    if not joiner_id or not  game_id:
       return JsonResponse({"error": "Missing required parameters"}, status=400)
 
     GameService.join_game(joiner_id=joiner_id, game_id=game_id)
@@ -25,7 +25,7 @@ def create_game(request, creator_id, mode, joiner_id):
     # print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
     # Vérification des paramètres
-    if not creator_id or not mode:
+    if not creator_id or not joiner_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
 
     try:
