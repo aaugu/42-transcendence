@@ -8,10 +8,10 @@ import { urlRoute } from '../../../dom/router.js';
 import { errormsg } from '../../../dom/errormsg.js';
 
 export var t_socket;
+let gameState = { current: null };
 
 export async function startGameTournamentlocal() {
 	let tournament;
-	let gameState = { current: null };
 	let t_details;
 
 	document.getElementById('tournament-table').classList.remove('hidden');
@@ -51,11 +51,11 @@ export async function startGameTournamentlocal() {
 export function keyDownEventTournamentLocal(event) {
 	let keysPressed = {};
 	keysPressed[event.key] = true;
-	handleKeyPress(keysPressed, t_remote_socket, gameState);
+	handleKeyPress(keysPressed, t_socket, gameState);
 }
 
 export function keyUpEventTournamentLocal(event) {
 	let keysPressed = {};
 	keysPressed[event.key] = false;
-	handleKeyPress(keysPressed, t_remote_socket, gameState);
+	handleKeyPress(keysPressed, t_socket, gameState);
 }
