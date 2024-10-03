@@ -6,11 +6,9 @@ from asgiref.sync import sync_to_async
 
 class ApiChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
-		# # Vérification de l'authentification (par exemple via JWT ou session)
-		# user = self.scope["user"]
-		# if user.is_authenticated:
 		# try:
 		# 	csrf_token = self.scope['headers'].get('x-csrftoken', None)
+			
 		# except Exception:
 		# 	await self.close(3000, "Unauthorized")
 		# 	return
