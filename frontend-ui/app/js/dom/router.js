@@ -179,11 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			startFunction: notifications,
 			description: "stats page"
 		},
-		"/join-game": {
-			content: joinGamePage,
-			clickListener: joinGameEvent,
-			description: "join an existing game",
-		},
     }
 
     urlRoute = (url) => {
