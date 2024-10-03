@@ -35,14 +35,6 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     )
     return JsonResponse(response.json(), status=response.status_code)
 
-
-def join_game(request, joiner_id, game_id):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
-    return JsonResponse(response.json(), status=response.status_code)
-
-
 @csrf_exempt
 def end_game(request):
     if not check_authentication(request):

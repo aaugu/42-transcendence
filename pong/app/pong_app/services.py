@@ -92,12 +92,9 @@ class GameService:
                 mode="TOURNAMENT-REMOTE",
             )
 
-        print(f"{player_one_id} and {player_two_id}")
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = player_one_id
-        print(f"Created game {game_id} with user {player_one_id}")
         game_instance.game_state.paddles[1].player_id = player_two_id
-        print(f"Created game {game_id} with user {player_two_id}")
         from .consumers.consumers import PongConsumer
 
         print(
@@ -106,24 +103,6 @@ class GameService:
 
         PongConsumer.games[game_id] = game_instance
         return game_instance
-
-    @staticmethod
-    def join_game(game_id, joiner_id):
-        print(f"Joining game {game_id} with user {joiner_id}")
-        game = Games.objects.get(game_id=game_id)
-        game.joiner_id = joiner_id
-        game.status = "IN_PROGRESS"
-        from .consumers.consumers import PongConsumer
-
-        PongConsumer.games[game_id].game_state.paddles[1].player_id = joiner_id
-        print(
-            f"Joined game {game_id} with user {joiner_id} Left Paddle ID = {PongConsumer.games[game_id].game_state.paddles[0].player_id} and Right Paddle ID = {PongConsumer.games[game_id].game_state.paddles[1].player_id}"
-        )
-        # PongConsumer.games[game_id].GameState.paused = False # Start the state of the game
-
-        game.save()
-
-        return game
 
     @staticmethod
     def end_game(request):

@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from ..ai.ai import *
 import asyncio
 from urllib.parse import parse_qs
+from ..game.game import *
 
 # from .services import GameService
 
