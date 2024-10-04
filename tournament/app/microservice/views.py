@@ -16,7 +16,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from tournament import settings
 from microservice import error_message as error
-from microservice import utils
 from microservice.models import Match, Player, Tournament
 
 
