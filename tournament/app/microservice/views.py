@@ -115,12 +115,21 @@ class GenerateMatchesView(View):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
+            body = json.loads(request.body.decode('utf-8'))
+        except Exception:
+            return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
+        user_id = body.get('user_id')
+        try:
             tournament = Tournament.objects.get(id=tournament_id)
             players = list(tournament.players.all())
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
+        if tournament.admin_id != user_id:
+            return JsonResponse({
+                'errors': [f'you cannot generate `{tournament.name}` because you are not the owner of the tournament']
+            }, status=403)
         try:
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
@@ -218,7 +227,6 @@ class GenerateMatchesView(View):
 class StartMatchView(View):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
-
         try:
             body = json.loads(request.body.decode('utf-8'))
         except Exception:

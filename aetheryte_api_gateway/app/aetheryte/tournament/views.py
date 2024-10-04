@@ -29,10 +29,12 @@ class GenerateMatchesView(APIView):
     def post(request: HttpRequest, tournament_id: int) -> Response:
         try:
             utils.check_authentication(request) == True
+            utils.check_user_jwt_vs_user_body(request, 'user_id') == True
         except Exception:
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
-        response = requests.post(url = request_url)
+        json_request = json.loads(request.body.decode('utf-8'))
+        response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
             return Response(response_json, status=response.status_code)

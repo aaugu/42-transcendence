@@ -43,7 +43,9 @@ def get_user_from_jwt(request):
 def check_user_jwt_vs_user_body(request: HttpRequest, user_id_name: str):
     json_request = json.loads(request.body.decode('utf-8'))
     user_id_body = json_request.get(user_id_name)
+    print(user_id_body)
     user_id_jwt = get_user_from_jwt(request)
+    print(user_id_jwt)
     if user_id_body == user_id_jwt:
         return True
     else:
