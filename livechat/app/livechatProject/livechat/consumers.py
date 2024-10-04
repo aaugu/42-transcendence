@@ -7,42 +7,50 @@ from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
-		# Récupérer l'ID de la conversation depuis l'URL
 		self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-		
-		# Créer un groupe WebSocket unique pour cette conversation
+		try:
+			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
+			return
+
 		self.room_group_name = f'chat_{self.conversation_id}'
 
-		# Rejoindre le groupe correspondant à cette conversation
 		await self.channel_layer.group_add(
 			self.room_group_name,
 			self.channel_name
 		)
-		# Accepter la connexion WebSocket
 		await self.accept()
 
 	async def disconnect(self, close_code):
-		# Quitter le groupe de chat lors de la déconnexion
 		await self.channel_layer.group_discard(
 			self.room_group_name,
 			self.channel_name
 		)
 
-    # Recevoir un message depuis WebSocket
 	async def receive(self, text_data):
-		text_data_json = json.loads(text_data)
-		message_content = text_data_json['message']
-		author_id = text_data_json['author']
+		try:
+			text_data_json = json.loads(text_data)
+			message_content = text_data_json['message']
+			author_id = text_data_json['author']
+		except:
+			await self.close(4000, "Empty")
+			return
+
 		current_date = datetime.now().strftime("%Y-%m-%d")
 		current_time = datetime.now().strftime("%H:%M")
 
-		# Check if conversation exists
 		try:
 			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
 		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
 			return
 		
-		# Get target of that conversation
+		# user_id = self.scope['headers'].get('user_id', None)
+		# if user_id != author_id:
+		# 	await self.close(3000, "Unauthorized")
+		# 	return
+
 		if (conversation.user_1 == author_id):
 			target_id = conversation.user_2
 		else:
@@ -54,11 +62,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		except User.DoesNotExist:
 			return
 
-		# Check if target did blacklist author
 		try:
-			blacklist = await self.get_backlist(target, author)
+			blacklist = await self.get_blacklist(target, author)
 		except Blacklist.DoesNotExist:
-			# Save message in database
+
 			await sync_to_async(Message.objects.create)(
 				conversation=conversation,
 				author=author_id,
@@ -67,7 +74,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				time=current_time
 			)
 
-			# Send message to all users of group via WebSocket
 			await self.channel_layer.group_send(
 				self.room_group_name,
 				{
@@ -84,14 +90,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			'blacklist': True,
 		}))
 
-	# # Receive message from chat group
 	async def chat_message(self, event):
 		message = event['message']
 		author = event['author']
 		date = event['date']
 		time = event['time']
 
-		# # Send message to connected clients via WebSocket
 		await self.send(text_data=json.dumps({
 			'author': author,
 			'message': message,
@@ -100,7 +104,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		}))
 
 	@database_sync_to_async
-	def get_backlist(self, initiator, target):
+	def get_blacklist(self, initiator, target):
 		return Blacklist.objects.get(initiator=initiator, target=target)
 	
 	@database_sync_to_async
