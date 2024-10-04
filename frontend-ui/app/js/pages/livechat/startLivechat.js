@@ -11,42 +11,48 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	const chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function (e) { console.log("Hello", e);};
-
+	chatSocket.onopen = function (e) { console.log("Hello", e); };
+	chatSocket.onclose = function(e) { console.log("Bye bye", e); };
+	chatSocket.onerror = function(e) { console.error("WebSocket error observed:", e); };
+	console.log("socket : ", chatSocket);
+	
 	chatSocket.onmessage = function(e) {
-		// const data = JSON.parse(e.data);
-		try {
-			const data = JSON.parse(e.data);
-			console.log(data);
-	
-			if( data.blacklist == true) {
-				errormsg("Could not send message", 'livechat-conversation-errormsg');
-				return;
+		if ( chatSocket && chatSocket.readyState === 1) {
+			try {
+				console.log(chatSocket);
+				const data = JSON.parse(e.data);
+				console.log(data);
+		
+				if( data.blacklist == true) {
+					errormsg("Could not send message", 'livechat-conversation-errormsg');
+					return;
+				}
+		
+				const userLookup = response.users.reduce((acc, user) => {
+					acc[user.id] = {
+						nickname: user.nickname,
+						avatar: user.avatar
+					};
+					return acc;
+				}, {});
+		
+				let id;
+				if (response.users[0].id === data.author)
+					id = response.users[0].id;
+				else
+					id = response.users[1].id;
+		
+				const messageElement = createMsgElement(id, userLookup, data.time, data.message);
+				chatArea.appendChild(messageElement);
+				chatArea.scrollTop = chatArea.scrollHeight;	
+			} catch (error) {
+				console.error("Error parsing message:", error)
+				errormsg("Could not send message", "livechat-conversation-errormsg");
 			}
-	
-			const userLookup = response.users.reduce((acc, user) => {
-				acc[user.id] = {
-					nickname: user.nickname,
-					avatar: user.avatar
-				};
-				return acc;
-			}, {});
-	
-			let id;
-			if (response.users[0].id === data.author)
-				id = response.users[0].id;
-			else
-				id = response.users[1].id;
-	
-			const messageElement = createMsgElement(id, userLookup, data.time, data.message);
-			chatArea.appendChild(messageElement);
-			chatArea.scrollTop = chatArea.scrollHeight;	
-		} catch (error) {
-			errormsg("Could not send message", "livechat-conversation-errormsg");
+		} else {
+			console.log("not ready");
 		}
 	};
-
-	chatSocket.onclose = function(e) {console.log("Bye bye", e);};
 
 	if (messageSubmitBtn) {
 		messageSubmitBtn.addEventListener('click', function (event) {

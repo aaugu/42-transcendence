@@ -3,41 +3,38 @@ import websockets
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
+from livechat.utils import get_jwt_user_id
 
 class ApiChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
-		# try:
-		# 	csrf_token = self.scope['headers'].get('x-csrftoken', None)
-
-		# except Exception:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
+		try:
+			headers = dict(self.scope['headers'])
+			token = headers[b'cookie'].decode().split('=')[1]
+			self.user_id = get_jwt_user_id(token)
+			if not self.user_id:
+				await self.close(3000, "Unauthorized")
+				return
+		except:
+			await self.close(4000, "Not authorized")
+			return
 
 		try:
-			print(self.scope['headers'])
-			print("-------------")
-			headers = dict(self.scope['headers'])
-			print(headers)
-			token = headers[b'cookie'].decode().split('=')[1]
-			print(type(token))
-			print("-------------")
-			print(token)
-			# print(self.scope['headers'].get('x-csrftoken', None))
-			# print(self.scope['headers'].get('user_id', None))
 			conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
+			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}?user_id={self.user_id}"
 			self.livechat_ws = await websockets.connect(url)
 			await self.accept()
-		except Exception:
+		except:
 			await self.close(4000, "Service unavailable or conversation does not exists")
 
 	async def receive(self, text_data):
 		try:
 			await self.livechat_ws.send(text_data)
-			response = await self.livechat_ws.recv()
-			await self.send(text_data=response)
-		except Exception:
-			await self.close(3000, "Service unavailable or you're unauthorized to proceed")
+			response_text_data = await self.livechat_ws.recv()
+			print(response_text_data)
+			await self.send(response_text_data)
+			print(f"Aetheryte return to user {self.user_id} in room")
+		except:
+			await self.close(3000, "Service unavailable or you are not authorized to proceed")
 
 
 	async def disconnect(self, close_code):

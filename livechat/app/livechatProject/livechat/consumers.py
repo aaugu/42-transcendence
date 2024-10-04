@@ -4,23 +4,37 @@ from channels.db import database_sync_to_async
 from livechat.models import Message, Conversation, Blacklist, User
 from datetime import datetime
 from asgiref.sync import sync_to_async
+from urllib.parse import parse_qs
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-		try:
-			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
-		except Conversation.DoesNotExist:
-			await self.close(4000, "Conversation does not exists")
-			return
-
 		self.room_group_name = f'chat_{self.conversation_id}'
 
 		await self.channel_layer.group_add(
 			self.room_group_name,
 			self.channel_name
 		)
-		await self.accept()
+		try:
+			conversation = await self.get_conversation(self.conversation_id)
+		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
+			return
+
+		try:
+			query_string = self.scope["query_string"].decode("utf-8")
+			query_params = parse_qs(query_string)
+			self.user_id = int(query_params.get("user_id", [None])[0])
+			user = await sync_to_async(User.objects.get)(user_id=self.user_id)
+		except User.DoesNotExist:
+			await self.close(3000, "Unauthorized")
+			return
+		print(f"User {self.user_id} joined room group {self.room_group_name}")
+		if conversation.user_1 == self.user_id or conversation.user_2 == self.user_id:
+			await self.accept()
+		else:
+			await self.close(3000, "Unauthorized")
+
 
 	async def disconnect(self, close_code):
 		await self.channel_layer.group_discard(
@@ -41,15 +55,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		current_time = datetime.now().strftime("%H:%M")
 
 		try:
-			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+			conversation = await self.get_conversation(self.conversation_id)
 		except Conversation.DoesNotExist:
 			await self.close(4000, "Conversation does not exists")
 			return
 		
-		# user_id = self.scope['headers'].get('user_id', None)
-		# if user_id != author_id:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
+		if self.user_id != author_id:
+			await self.close(3000, "Unauthorized")
+			return
 
 		if (conversation.user_1 == author_id):
 			target_id = conversation.user_2
@@ -84,6 +97,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'time': current_time
 				}
 			)
+			print(f"Message sent to group {self.room_group_name}: {message_content}")
 			return
 	
 		await self.send(text_data=json.dumps({
@@ -96,12 +110,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		date = event['date']
 		time = event['time']
 
+
 		await self.send(text_data=json.dumps({
 			'author': author,
 			'message': message,
 			'date': date,
 			'time': time
 		}))
+		print(f"Sending message to user {self.user_id} in room {self.room_group_name}")
 
 	@database_sync_to_async
 	def get_blacklist(self, initiator, target):
@@ -110,3 +126,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 	@database_sync_to_async
 	def get_user(self, id):
 		return User.objects.get(user_id=id)
+
+	@database_sync_to_async
+	def get_conversation(self, conversation_id):
+		return Conversation.objects.get(id=conversation_id)
