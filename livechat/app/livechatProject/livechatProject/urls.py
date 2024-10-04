@@ -23,5 +23,4 @@ from livechat.views.user_view import *
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("livechat/", include("livechat.urls")),
-    path('users/', ListUsers.as_view())
 ]
