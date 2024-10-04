@@ -3,6 +3,7 @@ import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
 import { updateTournLists } from './updateTournLists.js';
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 //type can  be local or remote
 async function createTournament(new_tournament) {
@@ -46,13 +47,13 @@ function newTournamentData(tournamentName, max_players, adminNickname, type) {
 
 export async function createTournamentButton() {
 	const local = document.getElementById("t-local").checked;
-	const tournamentName = document.getElementById('tournament-name').value;
-	const max_players = document.getElementById('t-nr-players').value;
+	const tournamentName = escapeHTML(document.getElementById('tournament-name').value);
+	const max_players = escapeHTML(document.getElementById('t-nr-players').value);
 	var adminNickname;
 	if (document.getElementById('t-admin-nickname').value === '')
 		adminNickname = localStorage.getItem('nickname');
 	else
-		adminNickname = document.getElementById('t-admin-nickname').value;
+		adminNickname = escapeHTML(document.getElementById('t-admin-nickname').value);
 	try {
 		var type;
 		if (local) {

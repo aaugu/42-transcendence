@@ -1,6 +1,7 @@
 import { userID } from '../user/updateProfile.js';
 import { errormsg } from '../../dom/errormsg.js';
 import { hideModal } from '../../dom/modal.js';
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 async function joinTournament(nickname, tournament_id) {
 	const response = await fetch('https://' + window.location.host + '/api/tournament/' + tournament_id + '/players/', {
@@ -29,8 +30,8 @@ async function joinTournament(nickname, tournament_id) {
 
 export async function joinTournamentButton() {
 	const nicknameTarget = document.getElementById('t-player-name');
-	const nickname = nicknameTarget.value.trim() !== '' ? nicknameTarget.value : localStorage.getItem('nickname');
-	const tournament_name = document.getElementById("single-t-modal-title").innerText;
+	const nickname = escapeHTML(nicknameTarget.value.trim()) !== '' ? nicknameTarget.value : localStorage.getItem('nickname');
+	const tournament_name = escapeHTML(document.getElementById("single-t-modal-title").innerText);
 	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
 		await joinTournament(nickname, tourn_id);

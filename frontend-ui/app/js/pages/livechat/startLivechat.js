@@ -59,7 +59,7 @@ export async function startLivechat (conv_id, response) {
 			if (contact_blacklisted == true) {
 				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
 			} else {
-				sendMessage(messageInput.value);
+				sendMessage(escapeHTML(messageInput.value));
 			}
 		}
 		else {

@@ -1,9 +1,10 @@
 import { errormsg } from "../../dom/errormsg.js";
 import { getTournamentDetails } from "./getTournaments.js";
 import { userID } from "../user/updateProfile.js";
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 export function openCreateTournamentModal() {
-	if (document.getElementById('tournament-name').value == "") {
+	if (escapeHTML(document.getElementById('tournament-name').value) == "") {
 		errormsg('Name cannot be empty', 't-create-errormsg');
 		return;
 	}

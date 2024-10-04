@@ -5,10 +5,11 @@ import { updateProfile } from "../user/updateProfile.js";
 import { setUserID } from "../user/updateProfile.js";
 import { defaultAvatar } from "../user/avatar.js";
 import { logout } from "../user/logout.js";
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 export async function loginProcess() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = escapeHTML(document.getElementById('username').value);
+    const password = escapeHTML(document.getElementById('password').value);
     if (!password || !username) {
         errormsg("Username or password field cannot be blank", "homepage-errormsg");
         return ;

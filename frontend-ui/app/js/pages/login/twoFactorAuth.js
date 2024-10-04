@@ -3,6 +3,7 @@ import { urlRoute } from "../../dom/router.js"
 import { editUserInfo } from "../user/editUserInfo.js";
 import { updateProfile } from "../user/updateProfile.js";
 import { hideModal } from "../../dom/modal.js";
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 export async function verifyTwoFactorAuth(twoFactorAuthCode) {
 	const response = await fetch('https://' + window.location.host + '/api/login/token/verify-2fa/', {
@@ -73,7 +74,7 @@ export async function twoFactorAuthProfileButton(user_2fa_enabled) {
 
 export async function twoFactorAuthLoginButton() {
 	const input = document.getElementById('2fa-code');
-	const twoFaAuthCode = input.value;
+	const twoFaAuthCode = escapeHTML(input.value);
 	input.value = '';
 	try {
 		if (twoFaAuthCode == '') {

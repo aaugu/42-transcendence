@@ -6,15 +6,16 @@ import { readAvatarFile } from "../user/avatar.js";
 import { loginProcess } from "../login/loginProcess.js";
 import { setUserID } from "../user/updateProfile.js";
 import { logout } from "../user/logout.js";
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 
 export async function signupProcess() {
     const userData = document.getElementsByClassName('form-control');
-    const username = userData[0].value;
-    const nickname = userData[1].value;
-    const email = userData[2].value;
-    const password = userData[3].value;
-    const repeatPassword = userData[4].value;
+    const username = escapeHTML(userData[0].value);
+    const nickname = escapeHTML(userData[1].value);
+    const email = escapeHTML(userData[2].value);
+    const password = escapeHTML(userData[3].value);
+    const repeatPassword = escapeHTML(userData[4].value);
     var avatar;
 
 	if (userID !== null){

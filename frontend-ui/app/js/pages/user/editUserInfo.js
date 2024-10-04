@@ -3,6 +3,7 @@ import { editPassword } from "./password.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { hideModal } from "../../dom/modal.js";
 import { userID } from "./updateProfile.js";
+import { escapeHTML } from "../../livechat/startLivechat.js";
 
 export async function editUserInfo(infoType, newInfo) {
 	if (userID === null)
@@ -74,7 +75,7 @@ export function editUserInfoModal(e) {
 
 	document.getElementById('edit-save').onclick = async function() {
 		const editInput = document.getElementById('edit-input');
-		const newValue = editInput.value;
+		const newValue = escapeHTML(editInput.value);
 		const userInfoID = document.getElementById("profile-" + currentField.toLowerCase());
 
 		if (newValue === '') {
@@ -96,8 +97,8 @@ export function editUserInfoModal(e) {
 					userInfoID.innerText = newValue;
 					break;
 				case 'Password':
-					await editPassword(newValue, document.getElementById('edit-input-repeat').value,
-						document.getElementById('edit-input-old-pass').value);
+					await editPassword(newValue, escapeHTML(document.getElementById('edit-input-repeat').value),
+						escapeHTML(document.getElementById('edit-input-old-pass').value));
 					break;
 				default:
 				break;
