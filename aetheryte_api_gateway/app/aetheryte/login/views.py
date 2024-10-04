@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from .models import UserVerification, CustomUser
-from .utils import generate_verification_code, get_user_from_jwt
+from .utils import *
 from .serializers import *
 
 
@@ -17,8 +17,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-
-        # TODO remove this print 
         response = super().post(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             user = CustomUser.objects.get(username=request.data['username'])
@@ -76,24 +74,9 @@ class Verify2FACodeView(APIView):
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "No session id found"}, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateUser(APIView):
-    def get_object(self, user_id):
-        return get_object_or_404(CustomUser, id=user_id)
-
-    def patch(self, request):
-        user_id = get_user_from_jwt(request)
-        user = self.get_object(user_id)
-        serializer = CustomUserSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 class logout_user(APIView):
     
     def post(self, request, user_id):
-        
-        print(request.user)
         try:
             user_id = int(user_id)
         except ValueError:
@@ -109,4 +92,3 @@ class logout_user(APIView):
                 return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
-
