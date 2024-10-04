@@ -6,25 +6,17 @@ from asgiref.sync import sync_to_async
 
 class ApiChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
-		# try:
-		# 	csrf_token = self.scope['headers'].get('x-csrftoken', None)
-
-		# except Exception:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
-
 		try:
-			print(self.scope['headers'])
-			print("-------------")
-			headers = dict(self.scope['headers'])
-			print(headers)
 			token = headers[b'cookie'].decode().split('=')[1]
-			print(type(token))
-			print("-------------")
-			print(token)
+			# user_id = get_user_id(token)
+			# if not user_id:
+			# 	await self.close(3000, "Unauthorized")
+			# 	return
 
 			conversation_id = self.scope['url_route']['kwargs']['conversation_id']
 			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
+			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
+			
 			self.livechat_ws = await websockets.connect(url)
 			await self.accept()
 		except Exception:
