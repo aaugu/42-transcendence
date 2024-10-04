@@ -60,9 +60,6 @@ class TournamentUtils {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
-				"user_id": userID
-			}),
 			credentials: 'include'
 		});
 		if (response.status == 500 || response.status == 502)
