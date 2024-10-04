@@ -48,24 +48,26 @@ export async function startLivechat (conv_id, response) {
 
 	chatSocket.onclose = function(e) {console.log("Bye bye", e);};
 
-	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();
-		if (!response) {
-			close(chatSocket);
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		else if ( chatSocket && chatSocket.readyState === 1) {
-			if (contact_blacklisted == true) {
-				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
-			} else {
-				sendMessage(messageInput.value);
+	if (messageSubmitBtn) {
+		messageSubmitBtn.addEventListener('click', function (event) {
+			event.preventDefault();
+			if (!response) {
+				close(chatSocket);
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 			}
-		}
-		else {
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		messageInput.value = '';
-	});
+			else if ( chatSocket && chatSocket.readyState === 1) {
+				if (contact_blacklisted == true) {
+					errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
+				} else {
+					sendMessage(messageInput.value);
+				}
+			}
+			else {
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
+			}
+			messageInput.value = '';
+		});
+	}
 }
 
 function sendMessage(message) {

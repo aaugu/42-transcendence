@@ -51,7 +51,7 @@ export async function convHistory(e) {
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
         }
         else if (e.message === "500" || e.message === "502") {
-            conversationArea = document.getElementById('conversation');
+            const conversationArea = document.getElementById('conversation');
             if (conversationArea)
                 conversationArea.innerHTML = error500();
         } else {
