@@ -13,6 +13,7 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from livechat.routing import chat_websocket_urlpatterns
+from pong.routing import pong_websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'aetheryte.settings')
 
@@ -20,7 +21,7 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            chat_websocket_urlpatterns
+            chat_websocket_urlpatterns + pong_websocket_urlpatterns,
         )
     ),
 })

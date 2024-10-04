@@ -1,6 +1,5 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from ..ai.ai import *
 import asyncio
 from urllib.parse import parse_qs
 from ..game.game import *
@@ -160,9 +159,7 @@ class PongConsumer(AsyncWebsocketConsumer):
                 PongConsumer.games[self.game_id].mode == GameMode.REMOTE
                 or PongConsumer.games[self.game_id].mode == GameMode.TOURNAMENT_REMOTE
             ) and PongConsumer.user_per_room[self.game_id] == 2:
-                # await asyncio.sleep(2)
                 PongConsumer.games[self.game_id].game_state.start()
-                # PongConsumer.games[self.game_id].game_state.pause()
 
             # Update de the game_state
             PongConsumer.games[self.game_id].game_state.update()

@@ -46,10 +46,13 @@ def end_game(request):
 
 
 def get_user_games(request, user_id):
+    print("Salut in get_user_games")
+
     if not check_authentication(request):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)
     response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
     games = response.json()
+
     for game in games:
         if game["winner_id"] is not None:
             if game["winner_id"] == 0:
@@ -79,13 +82,3 @@ def get_game(request, game_id):
         return JsonResponse({"detail": "Unauthorized"}, status=401)
     response = requests.get(f"{PONG_SERVICE_URL}/get-game/{game_id}/")
     return JsonResponse(response.json(), status=response.status_code)
-
-def get_pong_constants(request):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    try:
-        response = requests.get(f"{PONG_SERVICE_URL}/get_pong_constants/")
-        return JsonResponse(response.json(), status=response.status_code)
-    except json.JSONDecodeError:
-        print(f"Failed to parse JSON: {response.content}")
-        return JsonResponse({'detail': 'Failed to parse JSON'}, status=500)

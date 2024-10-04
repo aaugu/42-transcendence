@@ -7,6 +7,10 @@ from .models import Games
 import json
 from .game.constants import PARAMS
 from .services import GameAlreadyFinishedException
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 def join_game(request, joiner_id, game_id):
     # print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
@@ -83,7 +87,7 @@ def end_game(request):
         return JsonResponse({"error": str(e)}, status=400)
 
 def get_user_games(request, user_id):
-    # print(f'Received request to get games for user: {user_id}')
+    print(f'Received request to get games for user: {user_id}')
 
     games = GameService.get_user_games(user_id=user_id)
     datas = [game.to_dict() for game in games]
@@ -92,7 +96,8 @@ def get_user_games(request, user_id):
     else:
         'Entries in the db'
 
-    return JsonResponse(datas)
+    print(f"Games: {datas}")
+    return JsonResponse(datas, safe=False)
 
 def get_game(request, game_id):
     # print(f'Received request to get game with id: {game_id}')
@@ -102,8 +107,3 @@ def get_game(request, game_id):
         return JsonResponse({"error": "Game not found"}, status=404)
 
     return JsonResponse(game.to_dict())
-
-def get_pong_constants(request):
-    # print(f'Received request to get pong constants')
-
-    return JsonResponse(PARAMS)
