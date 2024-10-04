@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from tournament import settings
 from microservice import error_message as error
+from microservice import utils
 from microservice.models import Match, Player, Tournament
 
 
@@ -71,6 +72,12 @@ class MatchUtils:
         match_status_msg = ["Not Played", "In Progress", "Finished"]
 
         return match_status_msg[status]
+    
+    def check_jwt_user_in_player(match: Match, user_jwt: int): 
+        if user_jwt == match.player_1 or user_jwt == match.player_2 or user_jwt == match.tournament.admin_id:
+            return True
+        else:
+            return False
 
 class TournamentUtils:
     @staticmethod
@@ -311,21 +318,23 @@ class EndMatchView(View):
             return JsonResponse({'errors': [f'Tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
-
         winner = body.get('winner')
+        user_jwt = body.get('user_jwt')
         try:
             winner = Player.objects.get(tournament=tournament, user_id=winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_PLAYER_NOT_EXIST]}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
-
         try:
             match = EndMatchView.get_match(tournament, winner)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_NOT_FOUND]}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
+        
+        if MatchUtils.check_jwt_user_in_player(match, user_jwt) == False:
+            return JsonResponse('errors: access denied', status=401)
 
         nb_matches = match.tournament.matches.count()
         try:
