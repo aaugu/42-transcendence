@@ -19,6 +19,7 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 			headers = dict(self.scope['headers'])
 			print(headers)
 			token = headers[b'cookie'].decode().split('=')[1]
+			print(type(token))
 			print("-------------")
 			print(token)
 			# print(self.scope['headers'].get('x-csrftoken', None))
