@@ -2,6 +2,7 @@ import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
 import { newMsg } from "./messages.js";
+import { encodeHTML } from '../../dom/preventXSS.js';
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -9,7 +10,7 @@ export async function startLivechat (conv_id, response) {
 
 	const messageInput = document.getElementById("chat-textarea");
 	const messageSubmitBtn = document.getElementById("chat-send");
-	const chatArea = document.getElementById("chat-msgs");
+	var chatArea = document.getElementById("chat-msgs");
 
 	chatSocket.onopen = function () {};
 
@@ -37,7 +38,7 @@ export async function startLivechat (conv_id, response) {
 			id = response.users[1].id;
 
 		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
-		chatArea.appendChild(messageElement);
+		chatArea.innerHTML += messageElement;
 		chatArea.scrollTop = chatArea.scrollHeight;
 	};
 
@@ -77,26 +78,20 @@ function sendMessage(message) {
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
-			'message': message
+			'message': encodeHTML(message)
 		}));
 	}
 }
 
 function createMsgElement(id, userLookup, time, message) {
-	const messageElement = document.createElement("li");
-	messageElement.classList.add("d-flex");
-	messageElement.classList.add("mb-4");
-
 	let avatar;
 	if (id == userID) {
 		avatar = localStorage.getItem('avatar');
-		messageElement.classList.add("justify-content-end");
 	} else {
 		avatar = userLookup[id].avatar;
 	}
 
 	const newMessage = newMsg(avatar, time, message, id);
-	messageElement.innerHTML = newMessage;
 
-	return messageElement
+	return newMessage
 }
