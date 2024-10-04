@@ -22,8 +22,7 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 			print(type(token))
 			print("-------------")
 			print(token)
-			# print(self.scope['headers'].get('x-csrftoken', None))
-			# print(self.scope['headers'].get('user_id', None))
+
 			conversation_id = self.scope['url_route']['kwargs']['conversation_id']
 			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
 			self.livechat_ws = await websockets.connect(url)
