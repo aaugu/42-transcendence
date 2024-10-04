@@ -17,6 +17,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
+
+        # TODO remove this print 
         response = super().post(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             user = CustomUser.objects.get(username=request.data['username'])
@@ -36,6 +38,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 return Response({"detail": "Verification code sent to email"}, status=status.HTTP_200_OK)
             else:
                 tokens = response.data
+
                 access_token = tokens.get('access')
 
                 response.set_cookie(
@@ -89,6 +92,8 @@ class UpdateUser(APIView):
 class logout_user(APIView):
     
     def post(self, request, user_id):
+        
+        print(request.user)
         try:
             user_id = int(user_id)
         except ValueError:
