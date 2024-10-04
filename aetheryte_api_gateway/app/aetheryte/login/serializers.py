@@ -38,19 +38,16 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'nickname', 'email', 'is_2fa_enabled', 'avatar', 'online']
 
     def validate_username(self, value):
-        # Vérification si le nickname contient seulement des caractères alphanumériques
         if not re.match(r'^[\w.@+-]+$', value):
             raise serializers.ValidationError("Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.")
         return value
     
     def validate_nickname(self, value):
-        # Vérification si le nickname contient seulement des caractères alphanumériques
         if not re.match(r'^[\w.@+-]+$', value):
             raise serializers.ValidationError("Enter a valid nickname. This value may contain only letters, numbers, and @/./+/-/_ characters.")
         return value
     
     def validate_email(self, value):
-        # Vérification si le nickname contient seulement des caractères alphanumériques
         if not re.match(r'^[\w.@+-]+$', value):
             raise serializers.ValidationError("Enter a valid email. This value may contain only letters, numbers, and @/./+/-/_ characters.")
         return value
