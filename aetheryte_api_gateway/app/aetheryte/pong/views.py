@@ -9,7 +9,6 @@ from usermanager.utils import check_authentication
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
 
-
 def create_game(request, creator_id, mode, joiner_id):
     if not check_authentication(request):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)

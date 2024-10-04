@@ -74,18 +74,13 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
 
 # @csrf_exempt
 def end_game(request):
-    # print(f'Received request to end game')
-
-    # if not request.POST:
-    #     return JsonResponse({"error": "Missing required parameters"}, status=400)
-
     try:
         data = GameService.end_game(request)
         return JsonResponse({"message": "Game ended", "data": data})
     except GameAlreadyFinishedException as e:
         return JsonResponse({"error": str(e)}, status=409)
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return JsonResponse({"error": str(e)}, status=400)
 
 def get_user_games(request, user_id):
     # print(f'Received request to get games for user: {user_id}')
@@ -97,7 +92,7 @@ def get_user_games(request, user_id):
     else:
         'Entries in the db'
 
-    return JsonResponse(datas, safe=False)
+    return JsonResponse(datas)
 
 def get_game(request, game_id):
     # print(f'Received request to get game with id: {game_id}')
