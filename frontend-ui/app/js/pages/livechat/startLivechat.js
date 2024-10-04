@@ -5,14 +5,7 @@ import { getCookie } from "../user/cookie.js";
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
-	const token = getCookie('csrf_token');
-	
-	chatSocket = new WebSocket('wss://' + window.location.host + `/ws/chat/${conv_id}`, [], {
-		headers: {
-			"x-csrftoken": `${token}`,
-			"user_id": jwt_decode(token).user_id
-		}
-	});
+	chatSocket = new WebSocket('wss://' + window.location.host + `/ws/chat/${conv_id}`);
 
 	const messageInput = document.getElementById("chat-textarea");
 	const messageSubmitBtn = document.getElementById("chat-send");

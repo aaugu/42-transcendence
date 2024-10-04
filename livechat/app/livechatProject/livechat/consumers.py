@@ -8,7 +8,12 @@ from asgiref.sync import sync_to_async
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-		
+		try:
+			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
+			return
+
 		self.room_group_name = f'chat_{self.conversation_id}'
 
 		await self.channel_layer.group_add(
@@ -24,17 +29,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		)
 
 	async def receive(self, text_data):
-		text_data_json = json.loads(text_data)
-		message_content = text_data_json['message']
-		author_id = text_data_json['author']
+		try:
+			text_data_json = json.loads(text_data)
+			message_content = text_data_json['message']
+			author_id = text_data_json['author']
+		except:
+			await self.close(4000, "Empty")
+			return
+
 		current_date = datetime.now().strftime("%Y-%m-%d")
 		current_time = datetime.now().strftime("%H:%M")
 
 		try:
 			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
 		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
 			return
 		
+		# user_id = self.scope['headers'].get('user_id', None)
+		# if user_id != author_id:
+		# 	await self.close(3000, "Unauthorized")
+		# 	return
 
 		if (conversation.user_1 == author_id):
 			target_id = conversation.user_2
