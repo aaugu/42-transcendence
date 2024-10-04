@@ -1,13 +1,15 @@
 import { userID } from './updateProfile.js';
 
 export function passwordValidity (password) {
+
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasDigit = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*,.?":|<>]/.test(password);
+	const hasForbiddenChar = /[<>(){}]/.test(password);
     const isLongEnough = password.length >= 8 && password.length <= 25;
 
-    return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough;
+    return hasUpperCase && hasLowerCase && hasDigit && hasSpecialChar && isLongEnough && !hasForbiddenChar;
 }
 
 export async function editPassword(newPassword, repeatNewPassword, oldPassword) {

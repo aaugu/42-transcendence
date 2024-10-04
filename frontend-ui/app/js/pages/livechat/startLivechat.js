@@ -1,6 +1,7 @@
 import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
+import { newMsg } from "./messages.js";
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -42,9 +43,7 @@ export async function startLivechat (conv_id, response) {
 
 	chatSocket.onclose = function(e) {};
 
-	// Message listeners
-	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();
+	const onSend = () => {
 		if (!response) {
 			close(chatSocket);
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
@@ -60,6 +59,17 @@ export async function startLivechat (conv_id, response) {
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 		}
 		messageInput.value = '';
+	}
+
+	// Message listeners
+	messageSubmitBtn.addEventListener('click', onSend);
+	messageInput.addEventListener('keydown', function(event) {
+		if (event.key === 'Enter' && event.shiftKey)
+			return;
+		else if (event.key === 'Enter') {
+			event.preventDefault();
+			onSend();
+		}
 	});
 }
 
@@ -85,40 +95,8 @@ function createMsgElement(id, userLookup, time, message) {
 		avatar = userLookup[id].avatar;
 	}
 
-	const newMessage = newChatMsg(avatar, time, message, id);
+	const newMessage = newMsg(avatar, time, message, id);
 	messageElement.innerHTML = newMessage;
 
 	return messageElement
-}
-
-function newChatMsg (avatar, time, msgText, id) {
-    if (id === userID) {
-        return `<div class="card">
-        <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
-            </p>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-            <p class="small mb-0" style="font-size: 7px;">${time}</p>
-        </div>
-        </div>
-        <img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="30">`;
-    }
-    else {
-        return `<img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
-        <div class="card">
-        <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
-            </p>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-            <p class="small mb-0" style="font-size: 7px;">${time}</p>
-        </div>
-        </div>`;
-    }
-
 }

@@ -3,10 +3,15 @@ import { editPassword } from "./password.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { hideModal } from "../../dom/modal.js";
 import { userID } from "./updateProfile.js";
+import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
 
 export async function editUserInfo(infoType, newInfo) {
 	if (userID === null)
 		throw new Error ("Could not identify user");
+
+	if (containsForbiddenCharacters(newInfo))
+		throw new Error ("Forbidden characters present in user input");
+
 	const url = 'https://' + window.location.host + '/api/user/';
 
 	const response = await fetch(url + userID + '/', {

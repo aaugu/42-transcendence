@@ -3,6 +3,7 @@ import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
 import { updateTournLists } from './updateTournLists.js';
+import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
 //type can  be local or remote
 async function createTournament(new_tournament) {
@@ -61,6 +62,8 @@ export async function createTournamentButton() {
 		else {
 			type = 'remote';
 		}
+		if (containsForbiddenCharacters(tournamentName) || containsForbiddenCharacters(adminNickname))
+			throw new Error("Forbidden characters present in tournament creation");
 		const new_tournament = newTournamentData(tournamentName, parseInt(max_players), adminNickname, type);
 		await createTournament(new_tournament);
 		updateTournLists();

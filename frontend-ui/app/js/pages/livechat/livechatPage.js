@@ -17,7 +17,7 @@ export async function livechatPage() {
                     <ul id="chat-contact-list" class="list-group d-flex custom-scrollbar flex-grow-1 w-100 mt-2">
                     </ul>
             </div>
-            <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto">
+            <div id="conversation" class="col d-lg-flex w-100 flex-column d-none overflow-auto" style="height: 450px;">
                 <div id="chat-welcome">
                     <div class="h2 text-center mb-5 mt-4">Welcome to Live Chat</div>
                     <div class="h6 text-center">Select a contact to start a conversation or invite someone to a local (<i class="bi bi-joystick
@@ -42,7 +42,7 @@ export async function livechatPage() {
                         </div>
                         <span class="hidden mt-1 text-danger" id="livechat-conversation-errormsg" style="font-size: 10px;"></span>
                     </div>
-                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
+                    <button id="chat-send" type="submit" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
                 </div>
              </div>
         </div>

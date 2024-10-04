@@ -5,6 +5,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
 import { isBlacklisted } from './blacklist.js';
+import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
 async function sendGameInvite(game_id, ctc_id, mode) {
 	let link;
