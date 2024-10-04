@@ -101,7 +101,7 @@ class logout_user(APIView):
                 user.save()
                 return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
             except Exception as e:
-                return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_404_NOT_FOUND)
         else:
             return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
 

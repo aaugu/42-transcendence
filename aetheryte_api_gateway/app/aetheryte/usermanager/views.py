@@ -51,17 +51,6 @@ class detailed_user(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
-
-    def delete(self, request, pk):
-        if check_authentication(request):
-            try:
-                user = CustomUser.objects.get(pk=pk)
-            except CustomUser.DoesNotExist:
-                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
-            user.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         
 class friends_list_user(APIView):
     def get(self, request, pk):
