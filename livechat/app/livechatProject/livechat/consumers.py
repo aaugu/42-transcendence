@@ -9,17 +9,6 @@ from urllib.parse import parse_qs
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-		self.room_group_name = f'chat_{self.conversation_id}'
-
-		await self.channel_layer.group_add(
-			self.room_group_name,
-			self.channel_name
-		)
-		try:
-			conversation = await self.get_conversation(self.conversation_id)
-		except Conversation.DoesNotExist:
-			await self.close(4000, "Conversation does not exists")
-			return
 
 		try:
 			query_string = self.scope["query_string"].decode("utf-8")
@@ -29,7 +18,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		except User.DoesNotExist:
 			await self.close(3000, "Unauthorized")
 			return
-		print(f"User {self.user_id} joined room group {self.room_group_name}")
+		
+		try:
+			conversation = await self.get_conversation(self.conversation_id)
+		except Conversation.DoesNotExist:
+			await self.close(4000, "Conversation does not exists")
+			return
 		if conversation.user_1 == self.user_id or conversation.user_2 == self.user_id:
 			await self.accept()
 		else:
@@ -37,16 +31,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 	async def disconnect(self, close_code):
-		await self.channel_layer.group_discard(
-			self.room_group_name,
-			self.channel_name
-		)
+		pass
 
 	async def receive(self, text_data):
 		try:
 			text_data_json = json.loads(text_data)
 			message_content = text_data_json['message']
 			author_id = text_data_json['author']
+			print(f"Received message from user {self.user_id}: {text_data_json['message']}")
 		except:
 			await self.close(4000, "Empty")
 			return
@@ -75,10 +67,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		except User.DoesNotExist:
 			return
 
-		try:
-			blacklist = await self.get_blacklist(target, author)
-		except Blacklist.DoesNotExist:
+		blacklist = await self.get_blacklist(target, author)
 
+		if not blacklist:
 			await sync_to_async(Message.objects.create)(
 				conversation=conversation,
 				author=author_id,
@@ -87,41 +78,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				time=current_time
 			)
 
-			await self.channel_layer.group_send(
-				self.room_group_name,
+			await self.send(text_data=json.dumps(
 				{
 					'type': 'chat_message',
 					'message': message_content,
 					'author': author_id,
 					'date': current_date,
-					'time': current_time
-				}
+					'time': current_time,
+					'blacklist': False
+				})
 			)
-			print(f"Message sent to group {self.room_group_name}: {message_content}")
-			return
-	
-		await self.send(text_data=json.dumps({
-			'blacklist': True,
-		}))
+		else:
+			await self.send(text_data=json.dumps({
+				'blacklist': True,
+			}))
 
-	async def chat_message(self, event):
-		message = event['message']
-		author = event['author']
-		date = event['date']
-		time = event['time']
-
-
-		await self.send(text_data=json.dumps({
-			'author': author,
-			'message': message,
-			'date': date,
-			'time': time
-		}))
-		print(f"Sending message to user {self.user_id} in room {self.room_group_name}")
 
 	@database_sync_to_async
 	def get_blacklist(self, initiator, target):
-		return Blacklist.objects.get(initiator=initiator, target=target)
+		try:
+			data = Blacklist.objects.get(initiator=initiator, target=target)
+		except:
+			data = None
+		return data
 	
 	@database_sync_to_async
 	def get_user(self, id):

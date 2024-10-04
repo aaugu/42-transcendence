@@ -1,7 +1,6 @@
 import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
-import { getCookie } from "../user/cookie.js";
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
