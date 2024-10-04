@@ -14,10 +14,6 @@ def dprint(msg):
 
 def check_authentication(request):
     access_token = request.COOKIES.get('csrf_token')
-    print("blaasdahkfdjlkgsdas")
-    print("access token" + access_token)
-    print("dsjf")
-    print(type(access_token))
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token
     else:
