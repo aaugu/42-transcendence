@@ -15,7 +15,7 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 
 			conversation_id = self.scope['url_route']['kwargs']['conversation_id']
 			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
-			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
+			# url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}?user_id=${user_id}"
 			
 			self.livechat_ws = await websockets.connect(url)
 			await self.accept()
