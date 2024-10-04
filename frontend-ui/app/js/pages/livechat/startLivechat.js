@@ -1,7 +1,7 @@
 import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
-import { getCookie } from "../user/cookie.js";
+import { escapeHTML} from "./startLivechat.js"
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -59,7 +59,7 @@ export async function startLivechat (conv_id, response) {
 			if (contact_blacklisted == true) {
 				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
 			} else {
-				sendMessage(escapeHTML(messageInput.value));
+				sendMessage((messageInput.value));
 			}
 		}
 		else {

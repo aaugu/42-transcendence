@@ -10,18 +10,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		try:
 			self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
 			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+
 		except Conversation.DoesNotExist:
 			await self.close(4000, "Conversation does not exists")
 			return
 
-		# try:
-		# 	query_string = self.scope["query_string"].decode("utf-8")
-		# 	query_params = parse_qs(query_string)
-		# 	self.user_id = query_params.get("user_id", [None])[0]
-		# 	user = await sync_to_async(User.objects.get)(user_id=self.user_id)
-		# except User.DoesNotExist:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
+		try:
+			query_string = self.scope["query_string"].decode("utf-8")
+			query_params = parse_qs(query_string)
+			self.user_id = query_params.get("user_id", [None])[0]
+			user = await sync_to_async(User.objects.get)(user_id=self.user_id)
+		except User.DoesNotExist:
+			await self.close(3000, "Unauthorized")
+			return
+
+		if conversation.user_1 != self.user_id and conversation.user_2 != self.user_id:
+			await self.close(3000, "Unauthorized")
+			return
+
 
 		self.room_group_name = f'chat_{self.conversation_id}'
 
@@ -55,9 +61,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			await self.close(4000, "Conversation does not exists")
 			return
 		
-		# if self.user_id != author_id:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
+		if self.user_id != author_id:
+			await self.close(3000, "Unauthorized")
+			return
 
 		if (conversation.user_1 == author_id):
 			target_id = conversation.user_2
