@@ -14,7 +14,6 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 		# 	return
 
 		try:
-			# print("debut")
 			print(self.scope['headers'])
 			print("-------------")
 			headers = dict(self.scope['headers'])
