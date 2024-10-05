@@ -13,7 +13,10 @@ from usermanager.utils import check_authentication
 # Notifications  
 class NotificationView(APIView):
 	def post(self, request):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		body_unicode = request.body.decode('utf-8')
@@ -25,6 +28,13 @@ class NotificationView(APIView):
 		target_id = body['target_id']
 		if not user_valid(user_id) or not user_valid(target_id):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+		try:			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
+			return Response(status=status.HTTP_401_UNAUTHORIZED)
 		
 		user_nickname = CustomUser.objects.filter(id=user_id).first().nickname
 		target_nickname = CustomUser.objects.filter(id=target_id).first().nickname

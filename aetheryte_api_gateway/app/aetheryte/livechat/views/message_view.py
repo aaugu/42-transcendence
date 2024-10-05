@@ -14,7 +14,14 @@ from usermanager.utils import check_authentication
 # Messages : get all messages from a conversation
 class MessageView(APIView):
 	def get(self, request, user_id, conversation_id):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversation/" + str(conversation_id) + "/messages/"

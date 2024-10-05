@@ -13,7 +13,14 @@ from usermanager.utils import check_authentication
 class BlacklistView(APIView):
 	# GET : check if user is blacklisted by user
 	def get(self, request, user_id, target):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id) or not user_valid(target):
@@ -34,7 +41,14 @@ class BlacklistView(APIView):
 
 	# POST: add target user to blacklist
 	def post(self, request, user_id):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		body_unicode = request.body.decode('utf-8')

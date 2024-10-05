@@ -19,9 +19,8 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-	if (response.status == 500 || response.status == 502 || response.status == 401)
+	if (response.status == 500 || response.status == 502)
         throw new Error(`${response.status}`);
-    console.log(responseData);
     if (!response.ok) {
 		if (response.errors)
 			throw new Error(`${response.errors}`);

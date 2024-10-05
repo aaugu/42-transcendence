@@ -9,12 +9,20 @@ from login.models import CustomUser
 from login.serializers import *
 from livechat.views.utils import user_valid, user_exists
 from usermanager.utils import check_authentication
+from login.utils import get_user_from_jwt
 
 # Conversations  
 class ConversationView(APIView):
 	# GET: conversations involving current user
 	def get(self, request, user_id):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id):
@@ -36,7 +44,14 @@ class ConversationView(APIView):
 	
 	# POST: create conversation with two users
 	def post(self, request, user_id):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		body_unicode = request.body.decode('utf-8')
