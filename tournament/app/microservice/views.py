@@ -72,11 +72,11 @@ class MatchUtils:
 
         return match_status_msg[status]
     
-    # def check_jwt_user_in_player(match: Match, user_jwt: int): 
-    #     if user_jwt == match.player_1 or user_jwt == match.player_2 or user_jwt == match.tournament.admin_id:
-    #         return True
-    #     else:
-    #         return False
+    def check_jwt_user_in_player(match: Match, user_jwt: int): 
+        if user_jwt == match.player_1.user_id or user_jwt == match.player_2.user_id or user_jwt == match.tournament.admin_id:
+            return True
+        else:
+            return False
 
 class TournamentUtils:
     @staticmethod
@@ -99,7 +99,7 @@ class TournamentUtils:
         return status_string[status]
 
 @method_decorator(csrf_exempt, name='dispatch')
-class GenerateMatchesView(View):
+class GenerateMatchesView(View): 
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
@@ -114,11 +114,6 @@ class GenerateMatchesView(View):
 
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
-        # try:
-        #     body = json.loads(request.body.decode('utf-8'))
-        # except Exception:
-        #     return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-        # user_id = body.get('user_id')
         try:
             tournament = Tournament.objects.get(id=tournament_id)
             players = list(tournament.players.all())
@@ -126,16 +121,14 @@ class GenerateMatchesView(View):
             return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
-        # if tournament.admin_id != user_id:
-        #     return JsonResponse({
-        #         'errors': [f'you cannot generate `{tournament.name}` because you are not the owner of the tournament']
-        #     }, status=403)
         try:
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         if len(players) < settings.MIN_PLAYERS:
             return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=422)
+        if tournament.status != Tournament.CREATED:
+            return JsonResponse({'errors': ['The tournament has already started']}, status=409)
 
         matches = GenerateMatchesView.generate_matches(players, tournament)
 
@@ -251,6 +244,13 @@ class StartMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         try:
+            user_jwt = body.get('user_jwt')
+            user_jwt = Player.objects.get(tournament_id=tournament_id, user_id=user_jwt)
+        except ObjectDoesNotExist:
+            return JsonResponse({'errors: access denied'}, status=401)
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=404)
+        try:
             match = StartMatchView.get_match(tournament_id, player1, player2)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_NOT_FOUND]}, status=404)
@@ -326,7 +326,7 @@ class EndMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         winner = body.get('winner')
-        # user_jwt = body.get('user_jwt')
+        user_jwt = body.get('user_jwt')
         try:
             winner = Player.objects.get(tournament=tournament, user_id=winner)
         except ObjectDoesNotExist:
@@ -340,8 +340,8 @@ class EndMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         
-        # if MatchUtils.check_jwt_user_in_player(match, user_jwt) == False:
-        #     return JsonResponse('errors: access denied', status=401)
+        if MatchUtils.check_jwt_user_in_player(match, user_jwt) == False:
+            return JsonResponse({'errors: access denied'}, status=401)
 
         nb_matches = match.tournament.matches.count()
         try:
