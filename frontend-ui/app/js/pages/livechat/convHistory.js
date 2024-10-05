@@ -50,15 +50,13 @@ export async function convHistory(e) {
             startLivechat(conv_id, response);
     }
     catch (e) {
-        console.log(e.message)
-        if (e.message === "403" || e.message === "401") {
-            updateProfile(false, null);
-            errormsg('You were redirected to the landing page', 'homepage-errormsg');
-        }
-        else if (e.message === "500" || e.message === "502") {
+        if (e.message === "500" || e.message === "502") {
             const conversationArea = document.getElementById('conversation');
             if (conversationArea)
                 conversationArea.innerHTML = error500();
+        } else if (e.message === "403" || e.message === "401") {
+            updateProfile(false, null);
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
         } else {
             errormsg(e.message, 'homepage-errormsg');
         }

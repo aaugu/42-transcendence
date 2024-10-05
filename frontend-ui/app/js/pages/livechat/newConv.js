@@ -57,11 +57,11 @@ export async function newConvButton() {
 		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
-		if (e.message === '403' || e.message === "401") {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", 'homepage-errormsg');;
+		} else if (e.message === '403' || e.message === "401") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
-        } else if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", 'homepage-errormsg');;
 		} else {
 			errormsg(e.message, 'homepage-errormsg');
 		}

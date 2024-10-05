@@ -10,7 +10,7 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	const chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function (e) { console.log("Hello", e); };
+	chatSocket.onopen = function (e) {};
 	
 	chatSocket.onclose = function(e) { 
 		if (e.code === 3000) {
@@ -22,14 +22,11 @@ export async function startLivechat (conv_id, response) {
 		}
 	};
 
-	chatSocket.onerror = function(e) { console.log("WebSocket error observed:", e); };
-	console.log("socket : ", chatSocket);
+	chatSocket.onerror = function(e) {};
 	
 	chatSocket.onmessage = function(e) {
 		try {
-			console.log(chatSocket);
 			const data = JSON.parse(e.data);
-			console.log(data);
 	
 			if( data.blacklist == true) {
 				errormsg("Could not send message", 'livechat-conversation-errormsg');
@@ -54,7 +51,6 @@ export async function startLivechat (conv_id, response) {
 			chatArea.appendChild(messageElement);
 			chatArea.scrollTop = chatArea.scrollHeight;	
 		} catch (error) {
-			console.error("Error parsing message:", error)
 			errormsg("Could not send message", "livechat-conversation-errormsg");
 		}
 	};
