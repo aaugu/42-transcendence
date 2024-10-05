@@ -51,8 +51,8 @@ export async function blockUser(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-		if (response.status === 409)
-			throw new Error('User already blocked');
+		if (response.errors)
+			throw new Error(`${response.errors}`);
 		throw new Error(`${response.status}`);
 	}
 }
@@ -71,8 +71,8 @@ export async function unblockUser(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-		if (response.status === 409)
-			throw new Error('User already unblocked');
+		if (response.errors)
+			throw new Error(`${response.errors}`);
 		throw new Error(`${response.status}`);
 	}
 }
@@ -91,8 +91,8 @@ export async function isBlacklisted(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-		if (response.status === 409)
-			throw new Error('User already unblocked');
+		if (response.errors)
+			throw new Error(`${response.errors}`);
 		throw new Error(`${response.status}`);
 	}
 	const responseData = await response.json();

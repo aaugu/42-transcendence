@@ -23,10 +23,8 @@ async function newConv(conv_nickname) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('User does not exist');
-		else if (response.status === 409)
-			throw new Error('Not possible');
+		if (response.errors)
+			throw new Error(`${response.errors}`);
 		throw new Error(`${response.status}`);
 	}
 	const responseData = await response.json();
@@ -56,12 +54,13 @@ export async function newConvButton() {
 		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
-		if (e.message === '403') {
+		if (e.message === '403' || e.message === "401") {
             updateProfile(false, null);
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
         } else if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", 'livechat-errormsg');;
+			errormsg("Service temporarily unavailable", 'homepage-errormsg');;
 		} else {
-			errormsg(e.message, 'livechat-errormsg');
+			errormsg(e.message, 'homepage-errormsg');
 		}
 	}
 }

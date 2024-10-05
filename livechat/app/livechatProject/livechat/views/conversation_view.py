@@ -18,7 +18,7 @@ class ConversationView(APIView):
 	def get(self, request, user_id):
 		if not user_exists(user_id):
 			if not create_user(user_id):
-				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+				return Response({'errors': "Coud not create conversation"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversations = Conversation.objects.filter(Q(user_1=user_id) | Q(user_2=user_id))
 		serializer = ConversationSerializer(conversations, many=True)
@@ -38,7 +38,7 @@ class ConversationView(APIView):
 		if status_code == status.HTTP_201_CREATED:
 			conversation_id = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))[0].id
 			return Response({ "conversation_id": conversation_id}, status=status_code)
-		return Response({'errors': "Coud not process request"}, status=status_code)
+		return Response({'errors': "Coud not create conversation or conversation already exists"}, status=status_code)
 	
 	# Create conversation
 	def create_conversation(self, user_id, target_id):

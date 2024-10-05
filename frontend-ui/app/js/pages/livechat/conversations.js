@@ -67,7 +67,7 @@ export async function get_all_conv() {
 	}
 	catch (e) {
 		all_conversations = [];
-		if (e.message === "403") {
+		if (e.message === "403" || e.message === "401") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
         }

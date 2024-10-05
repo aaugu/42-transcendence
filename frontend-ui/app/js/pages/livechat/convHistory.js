@@ -4,6 +4,7 @@ import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { error500 } from "../errorpage/error500.js";
+import { updateProfile } from "../user/updateProfile.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -18,15 +19,15 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-	if (response.status == 500 || response.status == 502)
+	if (response.status == 500 || response.status == 502 || response.status == 401)
         throw new Error(`${response.status}`);
-    const responseData = await response.json();
     console.log(responseData);
     if (!response.ok) {
-        if (responseData.errors)
-            throw new Error(`${responseData.errors}`);
-        throw new Error(`${response.status}`);
-    }
+		if (response.errors)
+			throw new Error(`${response.errors}`);
+		throw new Error(`${response.status}`);
+	}
+    const responseData = await response.json();
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -50,7 +51,7 @@ export async function convHistory(e) {
     }
     catch (e) {
         console.log(e.message)
-        if (e.message === "403") {
+        if (e.message === "403" || e.message === "401") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
         }
@@ -59,7 +60,7 @@ export async function convHistory(e) {
             if (conversationArea)
                 conversationArea.innerHTML = error500();
         } else {
-            errormsg(e.message, 'livechat-errormsg');
+            errormsg(e.message, 'homepage-errormsg');
         }
     }
 }

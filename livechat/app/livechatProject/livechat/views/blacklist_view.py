@@ -36,12 +36,12 @@ class BlacklistView(APIView):
 		initiator = User.objects.get(user_id=user_id)
 		target = User.objects.get(user_id=blacklisted_id)
 		if not initiator or not target:
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		status_code = self.create_blacklist(initiator, target)
 		if status_code == status.HTTP_201_CREATED:
 			return Response(status=status_code)
-		return Response( {'errors': "Coud not process request"}, status=status_code )
+		return Response( {'errors': "Could not blacklist or user already blacklisted"}, status=status_code )
 
 	# DELETE :
 	def delete(self, request, user_id, target_id):

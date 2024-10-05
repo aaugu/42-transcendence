@@ -27,8 +27,8 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('User does not exist');
+		if (response.errors)
+			throw new Error(`${response.errors}`);
 		throw new Error(`${response.status}`);
 	}
 }
@@ -63,7 +63,7 @@ export async function inviteGameButton(ctc_id) {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}
-		else if (e.message === "403") {
+		else if (e.message === "403" || e.message === "401") {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return '';
@@ -104,7 +104,7 @@ export async function inviteGameButtonLocal(ctc_id) {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}
-		else if (e.message === "403") {
+		else if (e.message === "403" || e.message === "401") {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return '';
