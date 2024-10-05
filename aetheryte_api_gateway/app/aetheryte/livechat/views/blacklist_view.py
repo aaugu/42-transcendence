@@ -9,6 +9,7 @@ from login.models import CustomUser
 from login.serializers import *
 from livechat.views.utils import user_valid
 from usermanager.utils import check_authentication
+from login.utils import get_user_from_jwt
 
 class BlacklistView(APIView):
 	# GET : check if user is blacklisted by user

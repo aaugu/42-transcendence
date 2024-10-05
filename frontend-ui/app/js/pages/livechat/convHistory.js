@@ -19,14 +19,15 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-	if (response.status == 500 || response.status == 502)
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
         throw new Error(`${response.status}`);
-    if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
-		throw new Error(`${response.status}`);
-	}
+
     const responseData = await response.json();
+    if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
+	}
 	if (responseData !== null) {
 		return responseData;
 	}

@@ -10,6 +10,7 @@ import requests, json
 from login.models import CustomUser
 from login.serializers import *
 from usermanager.utils import check_authentication
+from login.utils import get_user_from_jwt
 
 # Messages : get all messages from a conversation
 class MessageView(APIView):
