@@ -18,7 +18,7 @@ class ConversationView(APIView):
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
 		response = requests.get(url = request_url)
@@ -42,16 +42,16 @@ class ConversationView(APIView):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['nickname']:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		nickname = body['nickname']
 		if not user_exists(nickname):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		target_id = CustomUser.objects.filter(nickname=nickname).first().id
 
 		if not user_valid(user_id) or not user_valid(target_id):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
 		body = {

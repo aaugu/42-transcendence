@@ -19,12 +19,12 @@ class NotificationView(APIView):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['user_id'] or not body['target_id'] or not body['link']:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		user_id = body['user_id']
 		target_id = body['target_id']
 		if not user_valid(user_id) or not user_valid(target_id):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 		
 		user_nickname = CustomUser.objects.filter(id=user_id).first().nickname
 		target_nickname = CustomUser.objects.filter(id=target_id).first().nickname

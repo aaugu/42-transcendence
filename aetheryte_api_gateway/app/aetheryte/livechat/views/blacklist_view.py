@@ -17,7 +17,7 @@ class BlacklistView(APIView):
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id) or not user_valid(target):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 		
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/" + str(target)
 		response = requests.get(url)
@@ -40,11 +40,11 @@ class BlacklistView(APIView):
 		body_unicode = request.body.decode('utf-8')
 		body = json.loads(body_unicode)
 		if not body['target_id']:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		target_id = body['target_id']
 		if not user_valid(user_id) or not user_valid(target_id):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/"
 		body = {
@@ -63,7 +63,7 @@ class BlacklistView(APIView):
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id) or not user_valid(target):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 		
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/" + str(target)
 		response = requests.delete(url)
