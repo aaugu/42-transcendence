@@ -76,7 +76,7 @@ class BlacklistView(APIView):
 
 		if not self.blacklist_exists(initiator, target):
 			return status.HTTP_204_NO_CONTENT
-		return status=status.HTTP_422_UNPROCESSABLE_ENTITY
+		return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 	def blacklist_exists(self, initiator, target):
 		blacklist = Blacklist.objects.filter(initiator=initiator, target=target)
