@@ -40,7 +40,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			author_id = text_data_json['author']
 			print(f"Received message from user {self.user_id}: {text_data_json['message']}")
 		except:
-			await self.close(4000, "Empty")
+			await self.send(text_data=json.dumps({ 'error': 'Empty'}))
 			return
 
 		current_date = datetime.now().strftime("%Y-%m-%d")
@@ -49,11 +49,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		try:
 			conversation = await self.get_conversation(self.conversation_id)
 		except Conversation.DoesNotExist:
-			await self.close(4000, "Conversation does not exists")
+			await self.send(text_data=json.dumps({ 'error': "Conversation does not exists", 'code': 4004}))
 			return
 		
 		if self.user_id != author_id:
-			await self.close(3000, "Unauthorized")
+			await self.send(text_data=json.dumps({ 'error': "Unauthorized", 'code': 3000}))
 			return
 
 		if (conversation.user_1 == author_id):
@@ -65,6 +65,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			target = await self.get_user(target_id)
 			author = await self.get_user(author_id)
 		except User.DoesNotExist:
+			await self.send(text_data=json.dumps({ 'error': "User does not exists", 'code': 4004}))
 			return
 
 		blacklist = await self.get_blacklist(target, author)
@@ -88,6 +89,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 					'blacklist': False
 				})
 			)
+			print(f"Sent message from user {self.user_id}: {message_content}")
 		else:
 			await self.send(text_data=json.dumps({
 				'blacklist': True,

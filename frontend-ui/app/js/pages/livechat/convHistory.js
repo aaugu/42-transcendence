@@ -18,12 +18,15 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('Conversation could not be found');
-		throw new Error(`${response.status}`);
-	}
-	const responseData = await response.json();
+	if (response.status == 500 || response.status == 502)
+        throw new Error(`${response.status}`);
+    const responseData = await response.json();
+    console.log(responseData);
+    if (!response.ok) {
+        if (responseData.errors)
+            throw new Error(`${responseData.errors}`);
+        throw new Error(`${response.status}`);
+    }
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -46,6 +49,7 @@ export async function convHistory(e) {
             startLivechat(conv_id, response);
     }
     catch (e) {
+        console.log(e.message)
         if (e.message === "403") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
