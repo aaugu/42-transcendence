@@ -36,4 +36,8 @@ class MessageView(APIView):
 							},
 							status=status.HTTP_200_OK)
 		else:
-			return Response(status=response.status_code)
+			try:
+				response_json = response.json()
+				return Response(response_json, status=response.status_code)
+			except:
+				return Response(status=response.status_code)

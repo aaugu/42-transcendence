@@ -28,7 +28,11 @@ class ConversationView(APIView):
 		if response.status_code == status.HTTP_200_OK:
 			return Response({ "conversations": response_json['conversations'], "users": users }, status=status.HTTP_200_OK)
 		else:
-			return Response(status=response.status_code)
+			try:
+				response_json = response.json()
+				return Response(response_json, status=response.status_code)
+			except:
+				return Response(status=response.status_code)
 	
 	# POST: create conversation with two users
 	def post(self, request, user_id):
@@ -58,8 +62,12 @@ class ConversationView(APIView):
 		if response.status_code == status.HTTP_201_CREATED:
 			response_json = response.json()
 			return Response({"conversation_id": response_json['conversation_id']}, status=response.status_code)
-		
-		return Response(status=response.status_code)
+		else:
+			try:
+				response_json = response.json()
+				return Response(response_json, status=response.status_code)
+			except:
+				return Response(status=response.status_code)
 	
 	# Get users concerned by conversations
 	def get_users_from_conversations(self, conversations):

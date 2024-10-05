@@ -45,7 +45,11 @@ class NotificationView(APIView):
 			}
 		}
 		response = requests.post( url, json = body)
-		return Response(status=response.status_code)
+		try:
+			response_json = response.json()
+			return Response(response_json, status=response.status_code)
+		except:
+			return Response(status=response.status_code)
 
 # # Body format of the request
 # {

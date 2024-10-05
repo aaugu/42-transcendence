@@ -26,7 +26,11 @@ class BlacklistView(APIView):
 		if response.status_code == status.HTTP_200_OK:
 			return Response({ "is_blacklisted": response_json['is_blacklisted'] }, status=status.HTTP_200_OK)
 		else:
-			return Response(status=response.status_code)
+			try:
+				response_json = response.json()
+				return Response(response_json, status=response.status_code)
+			except:
+				return Response(status=response.status_code)
 
 	# POST: add target user to blacklist
 	def post(self, request, user_id):
@@ -47,8 +51,11 @@ class BlacklistView(APIView):
 			"blacklisted_id": target_id
 		}
 		response = requests.post( url, json = body)
-
-		return Response(status=response.status_code)
+		try:
+            response_json = response.json()
+            return Response(response_json, status=response.status_code)
+        except:
+            return Response(status=response.status_code)
 
 	# DELETE: unblacklist a user
 	def delete(self, request, user_id, target):
@@ -60,5 +67,8 @@ class BlacklistView(APIView):
 		
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/" + str(target)
 		response = requests.delete(url)
-
-		return Response(status=response.status_code)
+		try:
+            response_json = response.json()
+            return Response(response_json, status=response.status_code)
+        except:
+            return Response(status=response.status_code)
