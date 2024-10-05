@@ -21,11 +21,11 @@ class NotificationView(APIView):
 
 		status_code = self.create_notification(body['user_1']['user_id'], body['user_1']['message'])
 		if status_code != status.HTTP_201_CREATED:
-			return Response(status=status_code)
+			return Response({'errors': "Coud not process request"}, status=status_code)
 
 		status_code = self.create_notification(body['user_2']['user_id'], body['user_2']['message'])
 		if status_code != status.HTTP_201_CREATED:
-			return Response(status=status_code)
+			return Response({'errors': "Coud not process request"}, status=status_code)
 
 		return Response(status=status.HTTP_201_CREATED)
 
@@ -34,7 +34,7 @@ class NotificationView(APIView):
 		if not conv:
 			status_code = self.create_self_conversation(user_id)
 			if status_code != status.HTTP_201_CREATED:
-				return status_code
+				return Response({'errors': "Coud not process request"}, status=status_code)
 		
 		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id).first()
 		if not conv:
@@ -57,7 +57,7 @@ class NotificationView(APIView):
 	def create_self_conversation(self, user_id):
 		if not user_exists(user_id):
 			if not create_user(user_id):
-				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+				return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 		conversation = Conversation(
 			user_1 = user_id,
@@ -68,7 +68,7 @@ class NotificationView(APIView):
 		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id)
 		if conv:
 			return status.HTTP_201_CREATED
-		return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+		return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 	def notification_exists(self, conversation, author, message, date, time):
 		message = Message.objects.filter(conversation=conversation, author=author, message=message, date=date, time=time)

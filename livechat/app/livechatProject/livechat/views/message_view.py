@@ -13,13 +13,13 @@ from livechat.serializers import ConversationSerializer, MessageSerializer
 class MessageView(APIView):
 	def get(self, request, user_id, conversation_id):
 		if not self.conversation_exists(conversation_id):
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "Conversation not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		conversation = Conversation.objects.get(id=conversation_id)
 		conv_serializer = ConversationSerializer(conversation)
 
 		if user_id != conversation.user_1 and user_id != conversation.user_2:
-			return Response(status=status.HTTP_404_NOT_FOUND)
+			return Response({'errors': "User not in that conversation"}, status=status.HTTP_404_NOT_FOUND)
 
 		initiator = User.objects.get(user_id=user_id)
 		if (conversation.user_1 == user_id):

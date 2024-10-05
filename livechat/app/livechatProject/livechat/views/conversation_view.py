@@ -32,13 +32,13 @@ class ConversationView(APIView):
 			user_id = serializer.validated_data['user_1']
 			target_id = serializer.validated_data['user_2']
 		else:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 		
 		status_code = self.create_conversation(user_id, target_id)
 		if status_code == status.HTTP_201_CREATED:
 			conversation_id = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))[0].id
 			return Response({ "conversation_id": conversation_id}, status=status_code)
-		return Response(status=status_code)
+		return Response({'errors': "Coud not process request"}, status=status_code)
 	
 	# Create conversation
 	def create_conversation(self, user_id, target_id):
@@ -47,7 +47,7 @@ class ConversationView(APIView):
 
 		if not user_exists(target_id):
 			if not create_user(target_id):
-				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+				return status.HTTP_422_UNPROCESSABLE_ENTITY
 
 		conversation = Conversation(
 			user_1 = user_id,
@@ -56,7 +56,7 @@ class ConversationView(APIView):
 		conversation.save()
 		check_conversation = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
 		if not check_conversation:
-			return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+			return status.HTTP_422_UNPROCESSABLE_ENTITY
 		return status.HTTP_201_CREATED
 
 	# Check if conversation exists
