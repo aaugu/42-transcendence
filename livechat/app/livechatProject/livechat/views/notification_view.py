@@ -38,7 +38,7 @@ class NotificationView(APIView):
 		
 		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id).first()
 		if not conv:
-			return status.HTTP_500_INTERNAL_SERVER_ERROR
+			return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 		
 		actual_timezone = pytz.timezone(self.timezone)
 		now = datetime.now()
@@ -52,12 +52,12 @@ class NotificationView(APIView):
 		if self.notification_exists(conv, user_id, message, date, time):
 			return status.HTTP_201_CREATED
 
-		return status.HTTP_500_INTERNAL_SERVER_ERROR
+		return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 	def create_self_conversation(self, user_id):
 		if not user_exists(user_id):
 			if not create_user(user_id):
-				return status.HTTP_500_INTERNAL_SERVER_ERROR
+				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversation = Conversation(
 			user_1 = user_id,
@@ -68,7 +68,7 @@ class NotificationView(APIView):
 		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id)
 		if conv:
 			return status.HTTP_201_CREATED
-		return status.HTTP_500_INTERNAL_SERVER_ERROR
+		return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 	def notification_exists(self, conversation, author, message, date, time):
 		message = Message.objects.filter(conversation=conversation, author=author, message=message, date=date, time=time)

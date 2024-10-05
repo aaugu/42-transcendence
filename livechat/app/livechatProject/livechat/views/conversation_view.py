@@ -18,7 +18,7 @@ class ConversationView(APIView):
 	def get(self, request, user_id):
 		if not user_exists(user_id):
 			if not create_user(user_id):
-				return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversations = Conversation.objects.filter(Q(user_1=user_id) | Q(user_2=user_id))
 		serializer = ConversationSerializer(conversations, many=True)
@@ -47,7 +47,7 @@ class ConversationView(APIView):
 
 		if not user_exists(target_id):
 			if not create_user(target_id):
-				return status.HTTP_500_INTERNAL_SERVER_ERROR
+				return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 		conversation = Conversation(
 			user_1 = user_id,
@@ -56,7 +56,7 @@ class ConversationView(APIView):
 		conversation.save()
 		check_conversation = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
 		if not check_conversation:
-			return status.HTTP_500_INTERNAL_SERVER_ERROR
+			return Response({'errors': "Coud not process request"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 		return status.HTTP_201_CREATED
 
 	# Check if conversation exists
