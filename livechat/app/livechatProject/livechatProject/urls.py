@@ -17,11 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from livechat.views.user_view import *
-
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("livechat/", include("livechat.urls")),
-    path('users/', ListUsers.as_view())
 ]

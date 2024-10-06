@@ -23,7 +23,7 @@ export async function joinRemoteGame(gameId, senderId, receiverId) {
 			if (e.message == "500" || e.message == "502") {
 				errormsg("Service temporarily unavailable", "homepage-errormsg");
 			}
-			else if (e.message === "403") {
+			else if (e.message === "403" || e.message === "401") {
 				updateProfile(false, null);
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			} else {

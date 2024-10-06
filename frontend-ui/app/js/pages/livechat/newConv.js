@@ -6,7 +6,7 @@ import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
 import { error500 } from '../errorpage/error500.js';
-import { encodeHTML } from '../../dom/preventXSS.js';
+import { escapteHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -23,14 +23,15 @@ async function newConv(conv_nickname) {
 		}),
 		credentials: 'include'
 	});
-	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('User does not exist');
-		else if (response.status === 409)
-			throw new Error('Not possible');
-		throw new Error(`${response.status}`);
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
+        throw new Error(`${response.status}`);
+
+    const responseData = await response.json();
+    if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -38,7 +39,7 @@ async function newConv(conv_nickname) {
 
 export async function newConvButton() {
 	var conv_nickname = document.getElementById('chat-search-input').value;
-	conv_nickname = encodeHTML(conv_nickname);
+	conv_nickname = escapteHTML(conv_nickname);
 	try {
 		const response = await newConv(conv_nickname);
 		const conv_id = response.conversation_id;
@@ -58,12 +59,13 @@ export async function newConvButton() {
 		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
-		if (e.message === '403') {
+		if (e.message === "500" || e.message === "502") {
+			errormsg("Service temporarily unavailable", 'homepage-errormsg');;
+		} else if (e.message === '403' || e.message === "401") {
             updateProfile(false, null);
-        } else if (e.message === "500" || e.message === "502") {
-			errormsg("Service temporarily unavailable", 'livechat-errormsg');;
+			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		} else {
-			errormsg(e.message, 'livechat-errormsg');
+			errormsg(e.message, 'homepage-errormsg');
 		}
 	}
 }

@@ -72,6 +72,8 @@ services:
         depends_on:
             livechat-postgres:
                 condition: service_healthy
+
+    # NGINX
     nginx:
         extends:
             file: nginx/docker/docker-compose.yml

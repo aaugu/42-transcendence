@@ -12,17 +12,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('AETHERYTE_DJANGO_SECRET_KEY')
-# SECRET_KEY = 'django-insecure-^d7ouzku=r@(7xd(^@#q+jie8(*lwlu_iznln-b_qlcbj8v1u0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', os.environ.get('ALLOWED_HOSTS')]
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -73,7 +73,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'aetheryte.wsgi.application'
+ASGI_APPLICATION = "aetheryte.asgi.application"
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

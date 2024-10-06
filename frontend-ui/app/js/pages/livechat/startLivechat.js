@@ -2,7 +2,7 @@ import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
 import { newMsg } from "./messages.js";
-import { encodeHTML } from '../../dom/preventXSS.js';
+import { escapteHTML } from '../../dom/preventXSS.js';
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -12,34 +12,49 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	var chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function () {};
+	chatSocket.onopen = function (e) {};
 
-	// When receiving message from server
-	chatSocket.onmessage = function(e) {
-		const data = JSON.parse(e.data);
-
-		if( data.blacklist == true) {
-			errormsg("Could not send message", 'livechat-conversation-errormsg');
-			return;
+	chatSocket.onclose = function(e) {
+		if (e.code === 3000) {
+			errormsg("Unauthorized access. Please log in.", "homepage-errormsg");
+		} else if (e.code === 4000) {
+			errormsg("Bad request or service unavailable", "homepage-errormsg");
+		} else if (e.code === 4004) {
+			errormsg("Conversation does not exist", "homepage-errormsg");
 		}
+	};
 
-		const userLookup = response.users.reduce((acc, user) => {
-			acc[user.id] = {
-				nickname: user.nickname,
-				avatar: user.avatar
-			};
-			return acc;
-		}, {});
+	chatSocket.onerror = function(e) {};
 
-		let id;
-		if (response.users[0].id === data.author)
-			id = response.users[0].id;
-		else
-			id = response.users[1].id;
+	chatSocket.onmessage = function(e) {
+		try {
+			const data = JSON.parse(e.data);
 
-		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
-		chatArea.innerHTML += messageElement;
-		chatArea.scrollTop = chatArea.scrollHeight;
+			if( data.blacklist == true) {
+				errormsg("Could not send message", 'livechat-conversation-errormsg');
+				return;
+			}
+
+			const userLookup = response.users.reduce((acc, user) => {
+				acc[user.id] = {
+					nickname: user.nickname,
+					avatar: user.avatar
+				};
+				return acc;
+			}, {});
+
+			let id;
+			if (response.users[0].id === data.author)
+				id = response.users[0].id;
+			else
+				id = response.users[1].id;
+
+			const messageElement = createMsgElement(id, userLookup, data.time, data.message);
+			chatArea.innerHTML += messageElement;
+			chatArea.scrollTop = chatArea.scrollHeight;
+		} catch (error) {
+			errormsg("Could not send message", "livechat-conversation-errormsg");
+		}
 	};
 
 	chatSocket.onclose = function(e) {};
@@ -78,7 +93,7 @@ function sendMessage(message) {
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
-			'message': encodeHTML(message)
+			'message': escapteHTML(message)
 		}));
 	}
 }

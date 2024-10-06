@@ -1,13 +1,11 @@
 import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
 import { setCurrentContactID } from './notifications.js';
-import { encodeHTML } from '../../dom/preventXSS.js';
+import { escapteHTML } from '../../dom/preventXSS.js';
 
 export function newMsg (avatar, time, text, id) {
     console.log("avatar: ", avatar);
-    // const msg_Text = encodeHTML(text);
-    const msg_Text = text;
-    // console.log("msg_Text: ", msg_Text);
+    const msg_Text = escapteHTML(text);
 
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
