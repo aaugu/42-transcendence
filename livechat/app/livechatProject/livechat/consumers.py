@@ -4,52 +4,57 @@ from channels.db import database_sync_to_async
 from livechat.models import Message, Conversation, Blacklist, User
 from datetime import datetime
 from asgiref.sync import sync_to_async
+from urllib.parse import parse_qs
 
 class ChatConsumer(AsyncWebsocketConsumer):
 	async def connect(self):
 		self.conversation_id = self.scope['url_route']['kwargs']['conversation_id']
+
 		try:
-			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+			query_string = self.scope["query_string"].decode("utf-8")
+			query_params = parse_qs(query_string)
+			self.user_id = int(query_params.get("user_id", [None])[0])
+			user = await sync_to_async(User.objects.get)(user_id=self.user_id)
+		except User.DoesNotExist:
+			await self.close(3000, "Unauthorized")
+			return
+		
+		try:
+			conversation = await self.get_conversation(self.conversation_id)
 		except Conversation.DoesNotExist:
 			await self.close(4000, "Conversation does not exists")
 			return
+		if conversation.user_1 == self.user_id or conversation.user_2 == self.user_id:
+			await self.accept()
+		else:
+			await self.close(3000, "Unauthorized")
 
-		self.room_group_name = f'chat_{self.conversation_id}'
-
-		await self.channel_layer.group_add(
-			self.room_group_name,
-			self.channel_name
-		)
-		await self.accept()
 
 	async def disconnect(self, close_code):
-		await self.channel_layer.group_discard(
-			self.room_group_name,
-			self.channel_name
-		)
+		pass
 
 	async def receive(self, text_data):
 		try:
 			text_data_json = json.loads(text_data)
 			message_content = text_data_json['message']
 			author_id = text_data_json['author']
+			print(f"Received message from user {self.user_id}: {text_data_json['message']}")
 		except:
-			await self.close(4000, "Empty")
+			await self.send(text_data=json.dumps({ 'error': 'Empty'}))
 			return
 
 		current_date = datetime.now().strftime("%Y-%m-%d")
 		current_time = datetime.now().strftime("%H:%M")
 
 		try:
-			conversation = await sync_to_async(Conversation.objects.get)(id=self.conversation_id)
+			conversation = await self.get_conversation(self.conversation_id)
 		except Conversation.DoesNotExist:
-			await self.close(4000, "Conversation does not exists")
+			await self.send(text_data=json.dumps({ 'error': "Conversation does not exists", 'code': 4004}))
 			return
 		
-		# user_id = self.scope['headers'].get('user_id', None)
-		# if user_id != author_id:
-		# 	await self.close(3000, "Unauthorized")
-		# 	return
+		if self.user_id != author_id:
+			await self.send(text_data=json.dumps({ 'error': "Unauthorized", 'code': 3000}))
+			return
 
 		if (conversation.user_1 == author_id):
 			target_id = conversation.user_2
@@ -60,12 +65,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			target = await self.get_user(target_id)
 			author = await self.get_user(author_id)
 		except User.DoesNotExist:
+			await self.send(text_data=json.dumps({ 'error': "User does not exists", 'code': 4004}))
 			return
 
-		try:
-			blacklist = await self.get_blacklist(target, author)
-		except Blacklist.DoesNotExist:
+		blacklist = await self.get_blacklist(target, author)
 
+		if not blacklist:
 			await sync_to_async(Message.objects.create)(
 				conversation=conversation,
 				author=author_id,
@@ -74,39 +79,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 				time=current_time
 			)
 
-			await self.channel_layer.group_send(
-				self.room_group_name,
+			await self.send(text_data=json.dumps(
 				{
 					'type': 'chat_message',
 					'message': message_content,
 					'author': author_id,
 					'date': current_date,
-					'time': current_time
-				}
+					'time': current_time,
+					'blacklist': False
+				})
 			)
-			return
-	
-		await self.send(text_data=json.dumps({
-			'blacklist': True,
-		}))
+			print(f"Sent message from user {self.user_id}: {message_content}")
+		else:
+			await self.send(text_data=json.dumps({
+				'blacklist': True,
+			}))
 
-	async def chat_message(self, event):
-		message = event['message']
-		author = event['author']
-		date = event['date']
-		time = event['time']
-
-		await self.send(text_data=json.dumps({
-			'author': author,
-			'message': message,
-			'date': date,
-			'time': time
-		}))
 
 	@database_sync_to_async
 	def get_blacklist(self, initiator, target):
-		return Blacklist.objects.get(initiator=initiator, target=target)
+		try:
+			data = Blacklist.objects.get(initiator=initiator, target=target)
+		except:
+			data = None
+		return data
 	
 	@database_sync_to_async
 	def get_user(self, id):
 		return User.objects.get(user_id=id)
+
+	@database_sync_to_async
+	def get_conversation(self, conversation_id):
+		return Conversation.objects.get(id=conversation_id)

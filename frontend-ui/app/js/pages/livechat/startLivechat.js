@@ -1,7 +1,6 @@
 import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
-import { getCookie } from "../user/cookie.js";
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -11,14 +10,28 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	const chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function (e) { console.log("Hello", e);};
+	chatSocket.onopen = function (e) {};
+	
+	chatSocket.onclose = function(e) { 
+		if (e.code === 3000) {
+			errormsg("Unauthorized access. Please log in.", "homepage-errormsg");
+		} else if (e.code === 4000) {
+			errormsg("Bad request or service unavailable", "homepage-errormsg");
+		} else if (e.code === 4004) {
+			errormsg("Conversation does not exist", "homepage-errormsg");
+		}
+	};
 
+	chatSocket.onerror = function(e) {};
+	
 	chatSocket.onmessage = function(e) {
+<<<<<<< HEAD
 		// const data = JSON.parse(e.data);
 		// console.log(data.message);
+=======
+>>>>>>> origin/master
 		try {
 			const data = JSON.parse(e.data);
-			console.log(data);
 	
 			if( data.blacklist == true) {
 				errormsg("Could not send message", 'livechat-conversation-errormsg');
@@ -47,26 +60,26 @@ export async function startLivechat (conv_id, response) {
 		}
 	};
 
-	chatSocket.onclose = function(e) {console.log("Bye bye", e);};
-
-	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();
-		if (!response) {
-			close(chatSocket);
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		else if ( chatSocket && chatSocket.readyState === 1) {
-			if (contact_blacklisted == true) {
-				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
-			} else {
-				sendMessage(messageInput.value);
+	if (messageSubmitBtn) {
+		messageSubmitBtn.addEventListener('click', function (event) {
+			event.preventDefault();
+			if (!response) {
+				close(chatSocket);
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 			}
-		}
-		else {
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		messageInput.value = '';
-	});
+			else if ( chatSocket && chatSocket.readyState === 1) {
+				if (contact_blacklisted == true) {
+					errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
+				} else {
+					sendMessage(escapeHTML(messageInput.value));
+				}
+			}
+			else {
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
+			}
+			messageInput.value = '';
+		});
+	}
 }
 
 function sendMessage(message) {
