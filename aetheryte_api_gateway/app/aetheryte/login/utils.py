@@ -6,6 +6,9 @@ from django.http import HttpRequest
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from colorama import Fore, Style
+import logging
+
+logger = logging.getLogger(__name__)
 
 def generate_verification_code():
     return str(random.randint(100000, 999999))
@@ -15,12 +18,9 @@ def dprint(msg):
     colored_msg = Fore.YELLOW + full_msg + Style.RESET_ALL
     print(colored_msg)
 
+
 def check_authentication(request):
     access_token = request.COOKIES.get('csrf_token')
-    print("blaasdahkfdjlkgsdas")
-    print("access token" + access_token)
-    print("dsjf")
-    print(type(access_token))
     if access_token:
         request.META['HTTP_AUTHORIZATION'] = 'Bearer ' + access_token
     else:
@@ -47,16 +47,16 @@ def get_user_from_jwt(request):
 def check_user_jwt_vs_user_body(request: HttpRequest, user_id_name: str):
     json_request = json.loads(request.body.decode('utf-8'))
     user_id_body = json_request.get(user_id_name)
-    print(user_id_body)
     user_id_jwt = get_user_from_jwt(request)
-    print(user_id_jwt)
+    print(f"User ID Body: {user_id_body}, user ID JWT: {user_id_jwt}")
     if user_id_body == user_id_jwt:
         return True
     else:
         return False
-    
+
 def check_user_jwt_vs_user_url(request: HttpRequest, user_id: int):
     user_id_jwt = get_user_from_jwt(request)
+    # print(f"User ID URL: {user_id}, user ID JWT: {user_id_jwt}")
     if user_id == user_id_jwt:
         return True
     else:

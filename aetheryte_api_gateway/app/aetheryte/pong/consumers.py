@@ -11,13 +11,10 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         try:
           # print(self.scope['headers'])
-          print(f"In connect method from API Pong Consumer")
-          
 
           game_id = self.scope['url_route']['kwargs']['game_id']
           
           query_string = self.scope["query_string"].decode("utf-8")
-          print(f"Query string: {query_string}")
 
           url = f"ws://172.20.3.2:9000/ws/pong/{game_id}?{query_string}"
           self.pong_ws = await websockets.connect(url)
@@ -31,7 +28,6 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         try:
             await self.pong_ws.close()
-
         except:
             pass
 
