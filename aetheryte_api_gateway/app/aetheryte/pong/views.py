@@ -6,7 +6,6 @@ import logging
 from login.models import CustomUser
 from login.serializers import *
 from login.utils import check_authentication, check_user_jwt_vs_user_url, get_user_from_jwt
-from django.http import QueryDict
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
 

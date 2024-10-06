@@ -27,21 +27,7 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 		print(f"User {self.user_id} joined room group {self.room_group_name}")
 
 		try:
-<<<<<<< HEAD
-			print(self.scope['headers'])
-			print("-------------")
-			headers = dict(self.scope['headers'])
-			print(headers)
-			token = headers[b'cookie'].decode().split('=')[1]
-			print(type(token))
-			print("-------------")
-			print(token)
-
-			conversation_id = self.scope['url_route']['kwargs']['conversation_id']
-			url = f"ws://172.20.5.2:8000/ws/chat/{conversation_id}"
-=======
 			url = f"ws://172.20.5.2:8000/ws/chat/{self.conversation_id}?user_id={self.user_id}"
->>>>>>> origin/master
 			self.livechat_ws = await websockets.connect(url)
 			await self.accept()
 		except:

@@ -25,11 +25,6 @@ export async function startLivechat (conv_id, response) {
 	chatSocket.onerror = function(e) {};
 	
 	chatSocket.onmessage = function(e) {
-<<<<<<< HEAD
-		// const data = JSON.parse(e.data);
-		// console.log(data.message);
-=======
->>>>>>> origin/master
 		try {
 			const data = JSON.parse(e.data);
 	

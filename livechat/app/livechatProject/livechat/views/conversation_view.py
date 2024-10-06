@@ -47,11 +47,7 @@ class ConversationView(APIView):
 
 		if not user_exists(target_id):
 			if not create_user(target_id):
-<<<<<<< HEAD
-				return HTTP_422_UNPROCESSABLE_ENTITY
-=======
 				return status.HTTP_422_UNPROCESSABLE_ENTITY
->>>>>>> origin/master
 
 		conversation = Conversation(
 			user_1 = user_id,

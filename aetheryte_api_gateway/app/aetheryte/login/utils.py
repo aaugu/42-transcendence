@@ -38,17 +38,18 @@ def get_user_from_jwt(request):
     access_token = request.COOKIES.get('csrf_token')
     secret_key = os.environ.get('AETHERYTE_DJANGO_JWT_PASS')
     if access_token:
+        print(f"Access token found: {access_token}")
         dc = jwt.decode(access_token, secret_key, algorithms=['HS256'])
-        
+        print(f"User ID: {dc['user_id']}") 
         return dc['user_id']
     else:
+        print("No access token found")
         return -1
 
 def check_user_jwt_vs_user_body(request: HttpRequest, user_id_name: str):
     json_request = json.loads(request.body.decode('utf-8'))
     user_id_body = json_request.get(user_id_name)
     user_id_jwt = get_user_from_jwt(request)
-    print(f"User ID Body: {user_id_body}, user ID JWT: {user_id_jwt}")
     if user_id_body == user_id_jwt:
         return True
     else:
