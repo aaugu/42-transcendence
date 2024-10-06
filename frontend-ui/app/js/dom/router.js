@@ -27,6 +27,8 @@ import { startGameTournamentremote, t_remote_socket } from "../pages/game/gamepl
 import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGameTwoPlayers.js"
 import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
+import { loginSubmitOnEnter } from "../pages/login/loginEvent.js"
+import { signupSubmitOnEnter } from "../pages/signup/signupEvent.js"
 
 let urlRoute;
 let currentClickListener = null;
@@ -115,11 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		"/login" : {
 			content: loginPage,
 			clickListener: loginEvent,
+			keydown: loginSubmitOnEnter,
 			description: "login page"
 		},
         "/signup" : {
 			content: signupPage,
 			clickListener: signupEvent,
+			keydown: signupSubmitOnEnter,
 			description: "signup page"
 		},
         "/local-twoplayer" : {

@@ -1,6 +1,6 @@
-export function encodeHTML(str) {
+export function encodeHTML(unsafeText) {
     const div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
+    div.textContent = unsafeText;
     return div.innerHTML;
 }
 
