@@ -10,57 +10,71 @@ export async function startLivechat (conv_id, response) {
 	const messageSubmitBtn = document.getElementById("chat-send");
 	const chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function () {};
-
-	// When receiving message from server
-	chatSocket.onmessage = function(e) {
-		const data = JSON.parse(e.data);
-
-		if( data.blacklist == true) {
-			errormsg("Could not send message", 'livechat-conversation-errormsg');
-			return;
+	chatSocket.onopen = function (e) {};
+	
+	chatSocket.onclose = function(e) { 
+		if (e.code === 3000) {
+			errormsg("Unauthorized access. Please log in.", "homepage-errormsg");
+		} else if (e.code === 4000) {
+			errormsg("Bad request or service unavailable", "homepage-errormsg");
+		} else if (e.code === 4004) {
+			errormsg("Conversation does not exist", "homepage-errormsg");
 		}
-
-		const userLookup = response.users.reduce((acc, user) => {
-			acc[user.id] = {
-				nickname: user.nickname,
-				avatar: user.avatar
-			};
-			return acc;
-		}, {});
-
-		let id;
-		if (response.users[0].id === data.author)
-			id = response.users[0].id;
-		else
-			id = response.users[1].id;
-
-		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
-		chatArea.appendChild(messageElement);
-		chatArea.scrollTop = chatArea.scrollHeight;
 	};
 
-	chatSocket.onclose = function(e) {};
-
-	// Message listeners
-	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();
-		if (!response) {
-			close(chatSocket);
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		else if ( chatSocket && chatSocket.readyState === 1) {
-			if (contact_blacklisted == true) {
-				errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
-			} else {
-				sendMessage(messageInput.value);
+	chatSocket.onerror = function(e) {};
+	
+	chatSocket.onmessage = function(e) {
+		try {
+			const data = JSON.parse(e.data);
+	
+			if( data.blacklist == true) {
+				errormsg("Could not send message", 'livechat-conversation-errormsg');
+				return;
 			}
+	
+			const userLookup = response.users.reduce((acc, user) => {
+				acc[user.id] = {
+					nickname: user.nickname,
+					avatar: user.avatar
+				};
+				return acc;
+			}, {});
+	
+			let id;
+			if (response.users[0].id === data.author)
+				id = response.users[0].id;
+			else
+				id = response.users[1].id;
+	
+			const messageElement = createMsgElement(id, userLookup, data.time, data.message);
+			chatArea.appendChild(messageElement);
+			chatArea.scrollTop = chatArea.scrollHeight;	
+		} catch (error) {
+			errormsg("Could not send message", "livechat-conversation-errormsg");
 		}
-		else {
-			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
-		}
-		messageInput.value = '';
-	});
+	};
+
+	if (messageSubmitBtn) {
+		messageSubmitBtn.addEventListener('click', function (event) {
+			event.preventDefault();
+			if (!response) {
+				close(chatSocket);
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
+			}
+			else if ( chatSocket && chatSocket.readyState === 1) {
+				if (contact_blacklisted == true) {
+					errormsg("You blacklisted that user", 'livechat-conversation-errormsg');
+				} else {
+					sendMessage(escapeHTML(messageInput.value));
+				}
+			}
+			else {
+				errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
+			}
+			messageInput.value = '';
+		});
+	}
 }
 
 function sendMessage(message) {
@@ -88,15 +102,16 @@ function createMsgElement(id, userLookup, time, message) {
 	const newMessage = newChatMsg(avatar, time, message, id);
 	messageElement.innerHTML = newMessage;
 
-	return messageElement
+	return messageElement;
 }
 
 function newChatMsg (avatar, time, msgText, id) {
+	const safeMsgText = escapeHTML(msgText);
     if (id === userID) {
         return `<div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            ${safeMsgText}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -112,7 +127,7 @@ function newChatMsg (avatar, time, msgText, id) {
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            ${safeMsgText}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -121,4 +136,10 @@ function newChatMsg (avatar, time, msgText, id) {
         </div>`;
     }
 
+}
+
+export function escapeHTML(unsafeText) {
+    const div = document.createElement('div');
+    div.textContent = unsafeText;
+    return div.innerHTML;
 }

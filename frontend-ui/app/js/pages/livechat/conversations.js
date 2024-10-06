@@ -21,12 +21,15 @@ async function allConversations() {
 		},
 		credentials: 'include'
 	});
-	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
-		throw new Error(`${response.status}`);
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
+        throw new Error(`${response.status}`);
+
+    const responseData = await response.json();
+    if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -67,7 +70,7 @@ export async function get_all_conv() {
 	}
 	catch (e) {
 		all_conversations = [];
-		if (e.message === "403") {
+		if (e.message === "403" || e.message === "401") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
         }

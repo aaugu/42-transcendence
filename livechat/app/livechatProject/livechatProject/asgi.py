@@ -16,12 +16,11 @@ from livechat.routing import websocket_urlpatterns
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'livechatProject.settings')
 
-# ASGI application configuration
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),  # Pour gérer les requêtes HTTP classiques
+    "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            websocket_urlpatterns  # Importation des routes WebSocket depuis routing.py
+            websocket_urlpatterns
         )
     ),
 })
