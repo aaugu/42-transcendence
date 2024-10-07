@@ -9,22 +9,6 @@ from .game.constants import PARAMS
 from .services import GameAlreadyFinishedException
 import logging
 
-
-logger = logging.getLogger(__name__)
-
-# def join_game(request, joiner_id, game_id):
-#     # print(f'Received request to join game with: {joiner_id} and joiner_id: {game_id}')
-
-#     if not joiner_id or not  game_id:
-#       return JsonResponse({"error": "Missing required parameters"}, status=400)
-
-#     GameService.join_game(joiner_id=joiner_id, game_id=game_id)
-
-#     curr_game = GameService.get_game(game_id=game_id).to_dict()
-
-#     return JsonResponse(curr_game)
-
-
 def create_game(request, creator_id, mode, joiner_id):
     # print(f'Received request to create game with creator_id: {creator_id} and mode: {mode}')
 
@@ -97,12 +81,3 @@ def get_user_games(request, user_id):
         'Entries in the db'
 
     return JsonResponse(datas, safe=False)
-
-# def get_game(request, game_id):
-#     # print(f'Received request to get game with id: {game_id}')
-
-#     game = GameService.get_game(game_id=game_id)
-#     if not game:
-#         return JsonResponse({"error": "Game not found"}, status=404)
-
-#     return JsonResponse(game.to_dict())

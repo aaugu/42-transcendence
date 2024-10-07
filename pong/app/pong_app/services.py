@@ -11,12 +11,8 @@ class GameAlreadyFinishedException(Exception):
 
 class GameService:
     """
-    Create a game with the specified creator ID and game mode.
-    Parameters:
-    - creator_id (str): The ID of the game creator.
-    - mode (GameMode): The game mode.
-    Returns:
-    - str: The ID of the created game.
+      - Service class for game operations
+      - Create, end, get games
     """
 
     @staticmethod
@@ -36,15 +32,8 @@ class GameService:
 
         game_instance.game_state.paddles[0].player_id = creator_id
 
-        print(
-            f"Created game {game_id} with user {creator_id} Left Paddle ID = {game_instance.game_state.paddles[0].player_id}"
-        )
-
         from .consumers.consumers import PongConsumer
-
         PongConsumer.games[game_id] = game_instance
-
-        print(f" Service create game: ${game_instance.game_id}, {game_instance.mode}")
 
         return game_instance
 
@@ -106,7 +95,6 @@ class GameService:
 
     @staticmethod
     def end_game(request):
-        print(f"Received request to end game")
         game_id = request.POST.get("game_id")
         game = Games.objects.get(game_id=game_id)
         if game.status == "FINISHED":
@@ -120,13 +108,11 @@ class GameService:
           if loser_id == 'null':
             loser_id = None
 
-        # game = Games.objects.get(game_id=game_id)
         game.status = "FINISHED"
         game.winner_id = winner_id
         game.loser_id = loser_id
         game.save()
 
-        # Return a dictionary that can be converted to JSON
         return {
             "game_id": game.game_id,
             "status": game.status,

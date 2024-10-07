@@ -45,32 +45,22 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
 @csrf_exempt
 def end_game(request):
     if not check_authentication(request):
-        print("Authentication check failed")
         return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    print("Authentication check passed")
 
     # Decode the JWT token and get the user ID
     user_id = get_user_from_jwt(request)
-    print(f"User ID from JWT: {user_id}")
 
     # Extract winner_id and loser_id from the request
     winner_id = int(request.POST.get('winner_id'))
     loser_id = int(request.POST.get('loser_id'))
-    print(f"Winner ID: {winner_id}, Loser ID: {loser_id}")
 
-    # Check if user_id matches winner_id or loser_id
-    if user_id == winner_id or user_id == loser_id:
-        print("User ID matches winner_id or loser_id")
-    else:
-        print("User ID does not match winner_id or loser_id")
+    if not (user_id == winner_id or user_id == loser_id):
         return JsonResponse({'detail': 'Unauthorized'}, status=403)
 
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
     if response.text:  # Check if the response is not empty
-        print("Received response from PONG_SERVICE")
         return JsonResponse(response.json(), status=response.status_code)
     else:
-        print("Empty response from PONG_SERVICE")
         return JsonResponse({"error": "Empty response"}, status=400)
 
 def get_user_games(request, user_id):
@@ -103,9 +93,3 @@ def get_user_games(request, user_id):
                 except CustomUser.DoesNotExist:
                     game["loser_id"] = "Unknown user"
     return JsonResponse(games, safe=False, status=response.status_code)
-
-# def get_game(request, game_id):
-#     if not check_authentication(request):
-#         return JsonResponse({"detail": "Unauthorized"}, status=401)
-#     response = requests.get(f"{PONG_SERVICE_URL}/get-game/{game_id}/")
-#     return JsonResponse(response.json(), status=response.status_code)
