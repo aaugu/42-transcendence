@@ -6,7 +6,6 @@ import asyncio
 from livechat.utils import get_jwt_user_id
 
 def get_game_data(game_id, token):
-
   PONG_SERVICE_URL = "http://172.20.3.2:9000"
   headers = {'Authorization': f'Bearer {token}'}
   response = requests.get(f"{PONG_SERVICE_URL}/get-game-data/{game_id}/", headers=headers)
