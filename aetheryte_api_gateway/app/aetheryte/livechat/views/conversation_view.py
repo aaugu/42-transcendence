@@ -30,10 +30,10 @@ class ConversationView(APIView):
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
 		response = requests.get(url = request_url)
-		response_json = response.json()
-		users = self.get_users_from_conversations(response_json['conversations'])
 
 		if response.status_code == status.HTTP_200_OK:
+			response_json = response.json()
+			users = self.get_users_from_conversations(response_json['conversations'])
 			return Response({ "conversations": response_json['conversations'], "users": users }, status=status.HTTP_200_OK)
 		else:
 			try:
