@@ -51,7 +51,10 @@ export async function blockUser(target_id) {
 		credentials: 'include'
 	});
     if (!response.ok) {
-		throw new Error(`${response.status}`);
+		const responseData = await response.json();
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
 }
 
@@ -69,7 +72,10 @@ export async function unblockUser(target_id) {
 		credentials: 'include'
 	});
 	if (!response.ok) {
-        throw new Error(`${response.status}`);	
+		const responseData = await response.json();
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
 }
 
