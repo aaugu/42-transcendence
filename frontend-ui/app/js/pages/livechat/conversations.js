@@ -21,16 +21,20 @@ async function allConversations() {
 		},
 		credentials: 'include'
 	});
-	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403)
         throw new Error(`${response.status}`);
-
-    const responseData = await response.json();
+	var responseData;
+	try {
+    	responseData = await response.json();
+	} catch (e) {
+		throw new Error('500');
+	}
     if (!response.ok) {
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${responseData.status}`);
 	}
-	if (responseData !== null) {
+	if (responseData) {
 		return responseData;
 	}
 }
