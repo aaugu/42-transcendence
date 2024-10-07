@@ -42,7 +42,7 @@ export async function livechatPage() {
                         </div>
                         <span class="hidden mt-1 text-danger" id="livechat-conversation-errormsg" style="font-size: 10px;"></span>
                     </div>
-                    <button id="chat-send" type="button" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
+                    <button id="chat-send" type="submit" class="btn btn-light btn-sm btn-rounded me-2 hidden">Send</button>
                 </div>
              </div>
         </div>

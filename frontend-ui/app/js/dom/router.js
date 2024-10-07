@@ -19,8 +19,6 @@ import { chatSocket} from "../pages/livechat/startLivechat.js"
 import { livechatPage } from "../pages/livechat/livechatPage.js"
 import { livechatEvent } from "../pages/livechat/livechatEvent.js"
 import { updateTournLists } from "../pages/tournament/updateTournLists.js"
-import { joinGamePage } from "../pages/game/remote/joinGamePage.js"
-import { joinGameEvent } from "../pages/game/remote/joinGameEvent.js"
 import { newgamePage } from "../pages/game/newgamePage.js"
 import { newlocalgameEvent } from "../pages/game/newgameEvent.js"
 import { notifications, clearNotificationsRefresh } from "../pages/livechat/notifications.js"
@@ -29,6 +27,8 @@ import { startGameTournamentremote, t_remote_socket } from "../pages/game/gamepl
 import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGameTwoPlayers.js"
 import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
+import { loginSubmitOnEnter } from "../pages/login/loginEvent.js"
+import { signupSubmitOnEnter } from "../pages/signup/signupEvent.js"
 
 let urlRoute;
 let currentClickListener = null;
@@ -117,11 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		"/login" : {
 			content: loginPage,
 			clickListener: loginEvent,
+			keydown: loginSubmitOnEnter,
 			description: "login page"
 		},
         "/signup" : {
 			content: signupPage,
 			clickListener: signupEvent,
+			keydown: signupSubmitOnEnter,
 			description: "signup page"
 		},
         "/local-twoplayer" : {
@@ -178,11 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			clickListener: livechatEvent,
 			startFunction: notifications,
 			description: "stats page"
-		},
-		"/join-game": {
-			content: joinGamePage,
-			clickListener: joinGameEvent,
-			description: "join an existing game",
 		},
     }
 

@@ -11,7 +11,7 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 	if (mode === "LOCAL_TWO_PLAYERS")
 		  link = "!";
 	else
-		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary" href='#'>Join the game</button>`
+		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary">Join the game</button>`
 
 	const response = await fetch('https://' + window.location.host + '/api/livechat/notification/', {
 		method: 'POST',
@@ -58,7 +58,7 @@ export async function inviteGameButton(ctc_id) {
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGameRemote(userID, ctc_id, mode);
 		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id);
+		await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/remote-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}
