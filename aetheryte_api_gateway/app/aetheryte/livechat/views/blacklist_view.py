@@ -62,7 +62,11 @@ class BlacklistView(APIView):
 			"blacklisted_id": target_id
 		}
 		response = requests.post( url, json = body)
-		return Response(status=response.status_code)
+		try:
+			response_json = response.json()
+			return Response(response_json, status=response.status_code)
+		except:
+			return Response(status=response.status_code)
 
 	# DELETE: unblacklist a user
 	def delete(self, request, user_id, target):
