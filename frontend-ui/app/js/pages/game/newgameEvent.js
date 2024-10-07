@@ -108,9 +108,8 @@ export async function newtournamentremoteEvent(tourn_id) {
 			const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
 			const newGameId = response.game_id;
 
-			const new_url = `/tournament-remote/${newGameId}`;
-			tournament.notif_link = `<button id="t-remote-match-link" data-gameurl="${new_url}" data-tournid="${tourn_id}"
-										class="btn btn-primary" href='#'>Join the match</button>`;
+			// const new_url = `/tournament-remote/${newGameId}`;
+			tournament.game_id = `${newGameId}`;
 
 			tournament.startNextMatch();
 			hideModal('single-t-modal');
