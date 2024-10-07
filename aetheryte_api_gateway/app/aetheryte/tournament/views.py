@@ -48,6 +48,7 @@ class StartMatchView(APIView):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/start/"
         json_request = json.loads(request.body.decode('utf-8'))
+        json_request['user_jwt'] = utils.get_user_from_jwt(request)
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
@@ -64,6 +65,7 @@ class EndMatchView(APIView):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/end/"
         json_request = json.loads(request.body.decode('utf-8'))
+        json_request['user_jwt'] = utils.get_user_from_jwt(request)
         response = requests.post(url = request_url, json = json_request)
         if response.json() is not None:
             response_json = response.json()
