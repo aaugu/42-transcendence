@@ -6,7 +6,7 @@ import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
 import { error500 } from '../errorpage/error500.js';
-import { escapteHTML } from '../../dom/preventXSS.js';
+import { escapeHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
@@ -39,7 +39,7 @@ async function newConv(conv_nickname) {
 
 export async function newConvButton() {
 	var conv_nickname = document.getElementById('chat-search-input').value;
-	conv_nickname = escapteHTML(conv_nickname);
+	conv_nickname = escapeHTML(conv_nickname);
 	try {
 		const response = await newConv(conv_nickname);
 		const conv_id = response.conversation_id;

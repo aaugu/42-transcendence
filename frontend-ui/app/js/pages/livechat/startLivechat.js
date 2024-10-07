@@ -2,7 +2,7 @@ import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
 import { newMsg } from "./messages.js";
-import { escapteHTML } from '../../dom/preventXSS.js';
+import { escapeHTML } from '../../dom/preventXSS.js';
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -93,7 +93,7 @@ function sendMessage(message) {
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
-			'message': escapteHTML(message)
+			'message': escapeHTML(message)
 		}));
 	}
 }

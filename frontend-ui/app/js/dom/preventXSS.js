@@ -1,4 +1,4 @@
-export function escapteHTML(unsafeText) {
+export function escapeHTML(unsafeText) {
     const div = document.createElement('div');
     div.textContent = unsafeText;
     return div.innerHTML;
