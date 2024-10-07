@@ -1,9 +1,16 @@
 import websockets
+import requests
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 import asyncio
 from livechat.utils import get_jwt_user_id
-from .views import get_game
+
+def get_game_data(game_id, token):
+
+  PONG_SERVICE_URL = "http://172.20.3.2:9000"
+  headers = {'Authorization': f'Bearer {token}'}
+  response = requests.get(f"{PONG_SERVICE_URL}/get-game-data/{game_id}/", headers=headers)
+  return response.json()
 
 class ApiPongConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -14,12 +21,14 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
           self.user_id = get_jwt_user_id(token)
           game_id = self.scope['url_route']['kwargs']['game_id']
           print(f"Game ID: {game_id}")
-          # res = get_game(game_id)
+          
+          res = get_game_data(game_id, token)
+          creator_id = res.get('creator_id')
+          joiner_id = res.get('joiner_id')
 
-          # print(f"Res from get_game: {res}")
-          # print(f"User ID: {self.user_id}")
+          print(f"Creator ID: {creator_id} - Joiner ID: {joiner_id} - User ID: {self.user_id}")
 
-          if not self.user_id:
+          if self.user_id != creator_id and self.user_id != joiner_id:
               print("User has no access to this game")
               await self.close(3000, "Not authorized")
               return

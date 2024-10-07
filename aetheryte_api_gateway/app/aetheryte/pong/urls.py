@@ -7,5 +7,4 @@ urlpatterns = [
     path("create-game-remote/<player_one_id>/<player_two_id>/<mode>/", views.create_game_remote, name='create_game_remote'),
     path("end-game/", views.end_game, name='end_game'),
     path("get-user-games/<user_id>/", views.get_user_games, name='get_user_games'),
-    path("get-game/<game_id>/", views.get_game, name='get_game'),
 ]

@@ -24,8 +24,6 @@ def create_game(request, creator_id, mode, joiner_id):
   else:
     joiner_nickname = CustomUser.objects.get(id=joiner_id).nickname
 
-  print(f"Creator: {creator_nickname} & Joiner: {joiner_nickname}")
-
   try:
     response = requests.post(
         f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/",
@@ -126,11 +124,11 @@ def get_user_games(request, user_id):
                     game["loser_id"] = "Unknown user"
     return JsonResponse(games, safe=False, status=response.status_code)
 
-def get_game(request, game_id):
-    print("GET GAME")
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    print("CHECK AUTH")
-    response = requests.get(f"{PONG_SERVICE_URL}/get_game/{game_id}/")
+# def get_game(request, game_id):
+#     print("GET GAME")
+#     if not check_authentication(request):
+#       return JsonResponse({'detail': 'Unauthorized'}, status=401)
+#     print("CHECK AUTH")
+#     response = requests.get(f"{PONG_SERVICE_URL}/get-game-data/{game_id}/")
 
-    return JsonResponse(response.json(), status=response.status_code)
+#     return JsonResponse(response.json(), status=response.status_code)

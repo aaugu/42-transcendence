@@ -9,8 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 
-import logging
-
 @csrf_exempt
 def create_game(request, creator_id, mode, joiner_id):
     print("Received request to create game yeah!")
@@ -95,7 +93,7 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
         player1 = None
         player2 = None
 
-    button = f'<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${player_one_id}" data-receiverid="${player_two_id}" class="btn btn-primary">Join the game</button>'
+    button = f'<button id="chat-invite-game-link" data-gameid="{game_id}" data-senderid="{player_one_id}" data-receiverid="{player_two_id}" class="btn btn-primary">Join the game</button>'
     
     json_request = {
         'user_1': {
@@ -133,3 +131,7 @@ def get_user_games(request, user_id):
         'Entries in the db'
 
     return JsonResponse(datas, safe=False)
+
+def get_game_data(request, game_id):
+    game = GameService.get_game(game_id)
+    return JsonResponse(game.to_dict())
