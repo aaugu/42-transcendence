@@ -10,11 +10,19 @@ import requests, json
 from login.models import CustomUser
 from login.serializers import *
 from usermanager.utils import check_authentication
+from login.utils import get_user_from_jwt
 
 # Messages : get all messages from a conversation
 class MessageView(APIView):
 	def get(self, request, user_id, conversation_id):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversation/" + str(conversation_id) + "/messages/"
@@ -36,4 +44,8 @@ class MessageView(APIView):
 							},
 							status=status.HTTP_200_OK)
 		else:
-			return Response(status=response.status_code)
+			try:
+				response_json = response.json()
+				return Response(response_json, status=response.status_code)
+			except:
+				return Response(status=response.status_code)

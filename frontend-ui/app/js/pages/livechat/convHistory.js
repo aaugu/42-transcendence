@@ -4,6 +4,7 @@ import { set_contact_blacklisted } from "./blacklist.js";
 import { startLivechat } from "./startLivechat.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { error500 } from "../errorpage/error500.js";
+import { updateProfile } from "../user/updateProfile.js";
 
 export async function getConvHistory(conv_id) {
     if (conv_id === null || conv_id === undefined || userID === null )
@@ -18,12 +19,15 @@ export async function getConvHistory(conv_id) {
         credentials: 'include'
     });
 
-	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('Conversation could not be found');
-		throw new Error(`${response.status}`);
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
+        throw new Error(`${response.status}`);
+
+    const responseData = await response.json();
+    if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
-	const responseData = await response.json();
 	if (responseData !== null) {
 		return responseData;
 	}
@@ -46,16 +50,15 @@ export async function convHistory(e) {
             startLivechat(conv_id, response);
     }
     catch (e) {
-        if (e.message === "403") {
-            updateProfile(false, null);
-            errormsg('You were redirected to the landing page', 'homepage-errormsg');
-        }
-        else if (e.message === "500" || e.message === "502") {
-            conversationArea = document.getElementById('conversation');
+        if (e.message === "500" || e.message === "502") {
+            const conversationArea = document.getElementById('conversation');
             if (conversationArea)
                 conversationArea.innerHTML = error500();
+        } else if (e.message === "403" || e.message === "401") {
+            updateProfile(false, null);
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
         } else {
-            errormsg(e.message, 'livechat-errormsg');
+            errormsg(e.message, 'homepage-errormsg');
         }
     }
 }
