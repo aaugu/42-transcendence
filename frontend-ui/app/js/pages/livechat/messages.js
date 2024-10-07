@@ -1,14 +1,18 @@
 import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
 import { setCurrentContactID } from './notifications.js';
+import { escapteHTML } from '../../dom/preventXSS.js';
 
-function newMsg (avatar, time, msgText, id) {
+export function newMsg (avatar, time, text, id) {
+    console.log("avatar: ", avatar);
+    const msg_Text = escapteHTML(text);
+
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
         <div class="card">
         <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            <p class="mb-0 small w-100" style="font-size: 10px;">
+            ${msg_Text}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -25,8 +29,8 @@ function newMsg (avatar, time, msgText, id) {
         class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="20">
         <div class="card">
         <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
+            <p class="mb-0 small w-100" style="font-size: 10px;">
+            ${msg_Text}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">

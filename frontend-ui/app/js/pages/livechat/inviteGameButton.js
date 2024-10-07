@@ -5,6 +5,7 @@ import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
 import { isBlacklisted } from './blacklist.js';
+import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
 async function sendGameInvite(game_id, ctc_id, mode) {
 	let link;
@@ -26,10 +27,14 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 		}),
 		credentials: 'include'
 	});
-	if (!response.ok) {
-		if (response.status === 404)
-			throw new Error('User does not exist');
-		throw new Error(`${response.status}`);
+	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
+        throw new Error(`${response.status}`);
+
+    const responseData = await response.json();
+    if (!response.ok) {
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
 	}
 }
 
@@ -63,7 +68,7 @@ export async function inviteGameButton(ctc_id) {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}
-		else if (e.message === "403") {
+		else if (e.message === "403" || e.message === "401") {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return '';
@@ -104,7 +109,7 @@ export async function inviteGameButtonLocal(ctc_id) {
 			errormsg("Service temporarily unavailable", "livechat-conversation-errormsg")
 			return ;
 		}
-		else if (e.message === "403") {
+		else if (e.message === "403" || e.message === "401") {
 			updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			return '';

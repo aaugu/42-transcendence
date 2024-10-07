@@ -6,6 +6,7 @@ import { userID, updateProfile } from "../user/updateProfile.js";
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { error500 } from "../errorpage/error500.js"
 import { errormsg } from "../../dom/errormsg.js";
+import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
 
 let notificationsRefreshInterval;
 let current_ctc_id;
@@ -22,7 +23,10 @@ export async function notifications() {
                 }
             })};
         if (!self_already_added) {
-            document.getElementById('chat-search-input').value = localStorage.getItem('nickname');
+            const nickname = localStorage.getItem('nickname');
+            if (containsForbiddenCharacters(nickname))
+                throw new Error("Could not load notifications");
+             document.getElementById('chat-search-input').value = nickname;
             await newConvButton();
         }
         updateConvList();
@@ -30,6 +34,9 @@ export async function notifications() {
     } catch (e) {
         if (e.message === "500" || e.message === "502") {
 			document.getElementById('main-content').innerHTML = error500();
+        } else if (e.message === "403" || e.message === "401") {
+            updateProfile(false, null);
+            errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		} else {
             errormsg(e.message, "homepage-errormsg");
         }
@@ -47,6 +54,9 @@ export async function startNotificationsRefresh() {
             } catch (e) {
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "homepage-errormsg");
+                } else if (e.message === "403" || e.message === "401") {
+                    updateProfile(false, null);
+                    errormsg('You were redirected to the landing page', 'homepage-errormsg');
 				} else {
                     errormsg(e.message, "homepage-errormsg");
                 }

@@ -1,6 +1,8 @@
 import { userID } from "../user/updateProfile.js";
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from "./blacklist.js";
+import { newMsg } from "./messages.js";
+import { escapteHTML } from '../../dom/preventXSS.js';
 export var chatSocket
 
 export async function startLivechat (conv_id, response) {
@@ -8,43 +10,56 @@ export async function startLivechat (conv_id, response) {
 
 	const messageInput = document.getElementById("chat-textarea");
 	const messageSubmitBtn = document.getElementById("chat-send");
-	const chatArea = document.getElementById("chat-msgs");
+	var chatArea = document.getElementById("chat-msgs");
 
-	chatSocket.onopen = function () {};
+	chatSocket.onopen = function (e) {};
 
-	// When receiving message from server
-	chatSocket.onmessage = function(e) {
-		const data = JSON.parse(e.data);
-
-		if( data.blacklist == true) {
-			errormsg("Could not send message", 'livechat-conversation-errormsg');
-			return;
+	chatSocket.onclose = function(e) {
+		if (e.code === 3000) {
+			errormsg("Unauthorized access. Please log in.", "homepage-errormsg");
+		} else if (e.code === 4000) {
+			errormsg("Bad request or service unavailable", "homepage-errormsg");
+		} else if (e.code === 4004) {
+			errormsg("Conversation does not exist", "homepage-errormsg");
 		}
+	};
 
-		const userLookup = response.users.reduce((acc, user) => {
-			acc[user.id] = {
-				nickname: user.nickname,
-				avatar: user.avatar
-			};
-			return acc;
-		}, {});
+	chatSocket.onerror = function(e) {};
 
-		let id;
-		if (response.users[0].id === data.author)
-			id = response.users[0].id;
-		else
-			id = response.users[1].id;
+	chatSocket.onmessage = function(e) {
+		try {
+			const data = JSON.parse(e.data);
 
-		const messageElement = createMsgElement(id, userLookup, data.time, data.message);
-		chatArea.appendChild(messageElement);
-		chatArea.scrollTop = chatArea.scrollHeight;
+			if( data.blacklist == true) {
+				errormsg("Could not send message", 'livechat-conversation-errormsg');
+				return;
+			}
+
+			const userLookup = response.users.reduce((acc, user) => {
+				acc[user.id] = {
+					nickname: user.nickname,
+					avatar: user.avatar
+				};
+				return acc;
+			}, {});
+
+			let id;
+			if (response.users[0].id === data.author)
+				id = response.users[0].id;
+			else
+				id = response.users[1].id;
+
+			const messageElement = createMsgElement(id, userLookup, data.time, data.message);
+			chatArea.innerHTML += messageElement;
+			chatArea.scrollTop = chatArea.scrollHeight;
+		} catch (error) {
+			errormsg("Could not send message", "livechat-conversation-errormsg");
+		}
 	};
 
 	chatSocket.onclose = function(e) {};
 
-	// Message listeners
-	messageSubmitBtn.addEventListener('click', function (event) {
-		event.preventDefault();
+	const onSend = () => {
 		if (!response) {
 			close(chatSocket);
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
@@ -60,6 +75,17 @@ export async function startLivechat (conv_id, response) {
 			errormsg("Service Temporarily Unavailable", "livechat-conversation-errormsg");
 		}
 		messageInput.value = '';
+	}
+
+	// Message listeners
+	messageSubmitBtn.addEventListener('click', onSend);
+	messageInput.addEventListener('keydown', function(event) {
+		if (event.key === 'Enter' && event.shiftKey)
+			return;
+		else if (event.key === 'Enter') {
+			event.preventDefault();
+			onSend();
+		}
 	});
 }
 
@@ -67,58 +93,20 @@ function sendMessage(message) {
 	if (message.trim()) {
 		chatSocket.send(JSON.stringify({
 			'author': userID,
-			'message': message
+			'message': escapteHTML(message)
 		}));
 	}
 }
 
 function createMsgElement(id, userLookup, time, message) {
-	const messageElement = document.createElement("li");
-	messageElement.classList.add("d-flex");
-	messageElement.classList.add("mb-4");
-
 	let avatar;
 	if (id == userID) {
 		avatar = localStorage.getItem('avatar');
-		messageElement.classList.add("justify-content-end");
 	} else {
 		avatar = userLookup[id].avatar;
 	}
 
-	const newMessage = newChatMsg(avatar, time, message, id);
-	messageElement.innerHTML = newMessage;
+	const newMessage = newMsg(avatar, time, message, id);
 
-	return messageElement
-}
-
-function newChatMsg (avatar, time, msgText, id) {
-    if (id === userID) {
-        return `<div class="card">
-        <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
-            </p>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-            <p class="small mb-0" style="font-size: 7px;">${time}</p>
-        </div>
-        </div>
-        <img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="30">`;
-    }
-    else {
-        return `<img src=${avatar} alt="avatar"
-        class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="30">
-        <div class="card">
-        <div class="card-body">
-            <p class="mb-0 small" style="font-size: 10px;">
-            ${msgText}
-            </p>
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-            <p class="small mb-0" style="font-size: 7px;">${time}</p>
-        </div>
-        </div>`;
-    }
-
+	return newMessage
 }
