@@ -38,6 +38,9 @@ class PongConsumer(AsyncWebsocketConsumer):
             print(f"Game {self.game_id} is already finished. Rejecting new connection.")
             await self.close()
 
+        print(f"Game finished ? {PongConsumer.games[self.game_id].game_state.finished}")
+
+
 
         if user_id == game.game_state.paddles[0].player_id:
             self.player_id = game.game_state.paddles[0].player_id
@@ -85,9 +88,9 @@ class PongConsumer(AsyncWebsocketConsumer):
               # If it doesn't, create a new list with the new player
               PongConsumer.players_in_game[self.game_id] = [self.player_id]
 
-          print(f"Players in game: {PongConsumer.players_in_game}")
-          print(f"User count for game {self.game_id}: {PongConsumer.user_per_room[self.game_id]}")
-          print(f"Consumer players in game: {PongConsumer.players_in_game}")
+          # print(f"Players in game: {PongConsumer.players_in_game}")
+          # print(f"User count for game {self.game_id}: {PongConsumer.user_per_room[self.game_id]}")
+          # print(f"Consumer players in game: {PongConsumer.players_in_game}")
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
@@ -122,7 +125,7 @@ class PongConsumer(AsyncWebsocketConsumer):
             ):
                 PongConsumer.players_in_game[self.game_id].remove(self.player_id)
 
-        print(f"Remaining players in game: {PongConsumer.players_in_game}")
+        # print(f"Remaining players in game: {PongConsumer.players_in_game}")
 
         # Leave the room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
@@ -234,6 +237,7 @@ class PongConsumer(AsyncWebsocketConsumer):
         # Retrieve the remaining player IDs from the game state
         remaining_player = PongConsumer.players_in_game.get(game_id, [])
         print(f"Remaining players in player disconnet: {remaining_player}")
+
 
         # Remove the disconnected player if they are still in the list (just for sanity check)
         if player_id in remaining_player:

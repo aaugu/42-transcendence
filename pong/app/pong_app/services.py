@@ -91,6 +91,10 @@ class GameService:
     def end_game(request):
         game_id = request.POST.get("game_id")
         game = Games.objects.get(game_id=game_id)
+
+        from .consumers.consumers import PongConsumer
+        PongConsumer.games[game_id].game_state.finished = True
+        
         if game.status == "FINISHED":
           raise GameAlreadyFinishedException("Game is already finished")
         winner_id = request.POST.get("winner_id")
