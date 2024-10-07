@@ -45,7 +45,6 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
         try:
             await self.pong_ws.send(text_data)
         except Exception as e:
-            logger.error(f'Send Error: {e}')
             await self.close(3000, "Service unavailable or you're unauthorized to proceed")
 
     async def pong_handler(self):
@@ -56,5 +55,4 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
         except websockets.exceptions.ConnectionClosed:
             pass
         except Exception as e:
-            logger.error(f'Error in pong_handler method: {e}')
             await self.close(3000, "Service unavailable or you're unauthorized to proceed")

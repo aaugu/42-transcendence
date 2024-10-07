@@ -1,4 +1,5 @@
 import requests
+import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -28,7 +29,7 @@ def create_game(request, creator_id, mode, joiner_id):
   try:
     response = requests.post(
         f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/",
-        data={
+        json={
           'creator_nickname': creator_nickname,
           'joiner_nickname': joiner_nickname
         }
@@ -36,7 +37,7 @@ def create_game(request, creator_id, mode, joiner_id):
   except requests.exceptions.RequestException as e:
     return JsonResponse({'detail': 'Failed to create game due to service error.'}, status=503)
 
-  print("RESPONSE")
+  print("RESPONSE", response)
 
   return JsonResponse(response.json(), status=response.status_code)
 
@@ -64,7 +65,7 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
 
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-remote/{player_one_id}/{player_two_id}/{mode}/",
-    data={
+    json={
       'creator_nickname': creator_nickname,
       'joiner_nickname': joiner_nickname
     }
@@ -92,6 +93,7 @@ def end_game(request):
         return JsonResponse(response.json(), status=response.status_code)
     else:
         return JsonResponse({"error": "Empty response"}, status=400)
+
 
 def get_user_games(request, user_id):
     if not check_authentication(request):
