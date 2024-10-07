@@ -26,15 +26,17 @@ async function sendGameInvite(game_id, ctc_id, mode) {
 		}),
 		credentials: 'include'
 	});
-	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
-        throw new Error(`${response.status}`);
 
-    const responseData = await response.json();
-    if (!response.ok) {
-		if (responseData.errors)
-			throw new Error(`${responseData.errors}`);
-		throw new Error(`${responseData.status}`);
-	}
+	try {
+        if (!response.ok) {
+            const responseData = await response.json();
+            if (responseData.errors)
+                throw new Error(`${responseData.errors}`);
+            throw new Error(`${responseData.status}`);
+        }
+    } catch (e) {
+        throw new Error(`${response.status}`);
+    }
 }
 
 export async function inviteGameButton(ctc_id) {
@@ -54,7 +56,6 @@ export async function inviteGameButton(ctc_id) {
 			localStorage.setItem('right', userInfo.nickname);
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
-
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGameRemote(userID, ctc_id, mode);
 		const game_id = game.game_id;
