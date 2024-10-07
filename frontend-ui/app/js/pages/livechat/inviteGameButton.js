@@ -58,7 +58,7 @@ export async function inviteGameButton(ctc_id) {
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGameRemote(userID, ctc_id, mode);
 		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id);
+		// await sendGameInvite(game_id, ctc_id);
 		const new_url = `/remote-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}
@@ -99,7 +99,7 @@ export async function inviteGameButtonLocal(ctc_id) {
 		const mode = getGameMode("local-twoplayer");
 		const game = await createGame(mode, ctc_id);
 		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id, mode);
+		// await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/local-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}

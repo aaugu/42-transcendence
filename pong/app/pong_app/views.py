@@ -6,8 +6,11 @@ from .models import Games
 from .game.constants import PARAMS
 from .services import GameAlreadyFinishedException
 import requests
+import json
 
 def create_game(request, creator_id, mode, joiner_id):
+    print(f"Received request to create game!")
+
     notif_url = "http://172.20.5.2:8000/livechat/notification/"
     # Vérification des paramètres
     if not creator_id or not joiner_id or not mode:
@@ -21,8 +24,9 @@ def create_game(request, creator_id, mode, joiner_id):
     game = GameService.create_game(creator_id, mode, joiner_id)
 
     # Parse the nicknames in the body of the request
-    player1 = request.POST.get('creator_nickname')
-    player2 = request.POST.get('joiner_nickname')
+    body = json.loads(request.body)
+    player1 = body.get('creator_nickname')
+    player2 = body.get('joiner_nickname')
 
     if joiner_id != 0:
         json_request = {

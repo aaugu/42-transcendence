@@ -10,6 +10,7 @@ export async function createGame(mode, id = 0) {
 
   const response = await fetch(url,
   {
+    method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -34,6 +35,7 @@ export async function createTournamentGame(player1_id, player2_id, mode) {
 
 	const response = await fetch(url,
 	{
+  method: 'POST',
 	headers: {
 		'Accept': 'application/json',
 		'Content-Type': 'application/json',
@@ -55,6 +57,7 @@ export async function createGameRemote(player1_id, player2_id, mode) {
 
 	const response = await fetch(url,
 	{
+    method: 'POST',
 		headers: {
 		'Accept': 'application/json',
 		'Content-Type': 'application/json',

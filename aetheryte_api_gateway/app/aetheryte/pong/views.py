@@ -14,18 +14,29 @@ def create_game(request, creator_id, mode, joiner_id):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not check_user_jwt_vs_user_url(request, int(creator_id)):
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
-  
+
   # Add in the body of request the nickname of creator and joiner
   creator_nickname = CustomUser.objects.get(id=creator_id).nickname
-  joiner_nickname = CustomUser.objects.get(id=joiner_id).nickname
   
-  response = requests.post(
-    f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/",
-    data={
-      'creator_nickname': creator_nickname,
-      'joiner_nickname': joiner_nickname
-    }
-  )
+  if int(joiner_id) == 0:
+    joiner_nickname = ""
+  else:
+    joiner_nickname = CustomUser.objects.get(id=joiner_id).nickname
+
+  print(f"Creator: {creator_nickname} & Joiner: {joiner_nickname}")
+
+  try:
+    response = requests.post(
+        f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/",
+        data={
+          'creator_nickname': creator_nickname,
+          'joiner_nickname': joiner_nickname
+        }
+      )
+  except requests.exceptions.RequestException as e:
+    return JsonResponse({'detail': 'Failed to create game due to service error.'}, status=503)
+
+  print("RESPONSE")
 
   return JsonResponse(response.json(), status=response.status_code)
 
@@ -38,6 +49,7 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
+
   return JsonResponse(response.json(), status=response.status_code)
 
 @csrf_exempt
@@ -57,6 +69,7 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
       'joiner_nickname': joiner_nickname
     }
   )
+
   return JsonResponse(response.json(), status=response.status_code)
 
 @csrf_exempt
@@ -117,4 +130,5 @@ def get_game(request, game_id):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)
     print("CHECK AUTH")
     response = requests.get(f"{PONG_SERVICE_URL}/get_game/{game_id}/")
+
     return JsonResponse(response.json(), status=response.status_code)

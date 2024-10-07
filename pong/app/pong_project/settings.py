@@ -45,13 +45,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
-STATIC_URL = "/static/"
-
-STATICFILES_DIRS = [BASE_DIR / "pong_app" / "static"]
-
 ASGI_APPLICATION = "pong_project.asgi.application"
 
-CORS_ALLOW_ALL_ORIGINS = True  # For testing; restrict in production
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
