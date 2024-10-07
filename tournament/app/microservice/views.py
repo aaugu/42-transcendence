@@ -226,7 +226,7 @@ class StartMatchView(View):
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
         try:
-            Tournament.objects.get(id=tournament_id)
+            tournament = Tournament.objects.get(id=tournament_id)
         except ObjectDoesNotExist:
             return JsonResponse({ 'errors': [f'Tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
@@ -235,7 +235,13 @@ class StartMatchView(View):
         player1 = body.get('player_1')
         player2 = body.get('player_2')
         link = body.get('link')
-
+        if link is not None:
+            if not link.replace('-', '').isalnum():
+                return JsonResponse({'errors': [f'BAD URL']}, status=404)
+            url = f'/tournament-remote/{link}'
+            button = f'<button id=\"t-remote-match-link\" data-gameurl={url} data-tournid={tournament.id} class=\"btn btn-primary\" >Join the match</button>'
+        else:
+            button = None
         try:
             player1 = Player.objects.get(tournament_id=tournament_id, user_id=player1)
             player2 = Player.objects.get(tournament_id=tournament_id, user_id=player2)
@@ -269,14 +275,15 @@ class StartMatchView(View):
 
 
         if player1 is not None or player2 is not None:
-            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, link)
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, button)
         if response.status_code != 201:
             return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
         return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
-    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, link):
+    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, button):
         request_url = "http://172.20.5.2:8000/livechat/notification/"
+
         if tournament.type == Tournament.LOCAL:
             json_request = {
                 'user_1': {
@@ -292,11 +299,11 @@ class StartMatchView(View):
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{link}`'
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{button}`'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{link}`'
+                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{button}`'
                 },
             }
         return requests.post(url = request_url, json = json_request)

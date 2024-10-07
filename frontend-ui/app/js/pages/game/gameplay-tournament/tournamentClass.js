@@ -6,7 +6,7 @@ class TournamentUtils {
         this.current_match = null;
         this.game_status = game_status;
 		this.all_matches = null;
-		this.notif_link = null;
+		this.game_id = null;
     }
 
 	_nextMatch() {
@@ -86,7 +86,7 @@ class TournamentUtils {
 			body: JSON.stringify({
 				"player_1": this.current_match.player_1.user_id,
 				"player_2": this.current_match.player_2.user_id,
-				"link": this.notif_link
+				"link": this.game_id
 			}),
 			credentials: 'include'
 		});
