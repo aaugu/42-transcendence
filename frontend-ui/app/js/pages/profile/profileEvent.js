@@ -27,7 +27,6 @@ export async function profileEvent(e) {
 			try {
 				var friend_nickname = document.getElementById('friend-input').value;
 				friend_nickname = escapeHTML(friend_nickname);
-				console.log(friend_nickname);
 				document.getElementById('friend-input').value = '';
 				await addFriend(friend_nickname);
 				document.getElementById('friend-input').value = '';

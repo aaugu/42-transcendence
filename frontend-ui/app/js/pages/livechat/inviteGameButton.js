@@ -6,37 +6,6 @@ import { contact_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
 import { isBlacklisted } from './blacklist.js';
 
-async function sendGameInvite(game_id, ctc_id, mode) {
-	let link;
-	if (mode === "LOCAL_TWO_PLAYERS")
-		  link = "!";
-	else
-		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary">Join the game</button>`
-
-	const response = await fetch('https://' + window.location.host + '/api/livechat/notification/', {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			"user_id": userID,
-			"target_id": ctc_id,
-			"link": link
-		}),
-		credentials: 'include'
-	});
-	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
-        throw new Error(`${response.status}`);
-
-    const responseData = await response.json();
-    if (!response.ok) {
-		if (responseData.errors)
-			throw new Error(`${responseData.errors}`);
-		throw new Error(`${responseData.status}`);
-	}
-}
-
 export async function inviteGameButton(ctc_id) {
 	if (contact_blacklisted) {
 		errormsg("You blacklisted this contact, you cannot play pong", "livechat-conversation-errormsg");
@@ -54,11 +23,9 @@ export async function inviteGameButton(ctc_id) {
 			localStorage.setItem('right', userInfo.nickname);
 			localStorage.setItem('left', localStorage.getItem('nickname'));
 		}
-
 		const mode = getGameMode("remote-twoplayer");
 		const game = await createGameRemote(userID, ctc_id, mode);
 		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/remote-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}
@@ -99,7 +66,6 @@ export async function inviteGameButtonLocal(ctc_id) {
 		const mode = getGameMode("local-twoplayer");
 		const game = await createGame(mode, ctc_id);
 		const game_id = game.game_id;
-		await sendGameInvite(game_id, ctc_id, mode);
 		const new_url = `/local-twoplayer/${game_id}`;
 		urlRoute(new_url);
 	}
