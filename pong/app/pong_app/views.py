@@ -5,8 +5,10 @@ from .services import GameService
 from .models import Games
 from .game.constants import PARAMS
 from .services import GameAlreadyFinishedException
+import requests
 
 def create_game(request, creator_id, mode, joiner_id):
+    notif_url = "http://172.20.5.2:8000/livechat/notification/"
     # Vérification des paramètres
     if not creator_id or not joiner_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
@@ -18,13 +20,32 @@ def create_game(request, creator_id, mode, joiner_id):
 
     game = GameService.create_game(creator_id, mode, joiner_id)
 
+    # Parse the nicknames in the body of the request
+    player1 = request.POST.get('creator_nickname')
+    player2 = request.POST.get('joiner_nickname')
+
+    if joiner_id != 0:
+        json_request = {
+            'user_1': {
+                'user_id': creator_id,
+                'message': f'You have invited `{player2}` to play a local game.'
+            },
+            'user_2': {
+                'user_id': joiner_id,
+                'message': f'{player1} invites you to play a local game on their computer, go join them.'
+            },
+        }
+        response = requests.post(notif_url, json=json_request)
+        if response.status_code != 200:
+            return JsonResponse({"error": "Failed to send notification"}, status=500)
+
     return JsonResponse(game.to_dict())
+
 
 def create_game_tournament(request, player_one_id, player_two_id, mode):
     # Vérification des paramètres
     if not player_one_id or not player_two_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
-
     try:
         mode = GameMode[mode.upper()]
     except KeyError:
@@ -35,6 +56,7 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
     return JsonResponse(game.to_dict())
 
 def create_game_remote(request, player_one_id, player_two_id, mode):
+    notif_url = "http://172.20.5.2:8000/livechat/notification/"
     # Vérification des paramètres
     if not player_one_id or not player_two_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
@@ -45,11 +67,31 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
         return JsonResponse({"error": "Invalid game mode"}, status=400)
 
     game = GameService.create_game_remote(player_one_id, player_two_id, mode)
+    game_id = game.game_id
+
+    # Parse the nicknames in the body of the request
+    player1 = request.POST.get('creator_nickname')
+    player2 = request.POST.get('joiner_nickname')
+    button = f'<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${player_one_id}" data-receiverid="${player_two_id}" class="btn btn-primary">Join the game</button>'
+    
+    json_request = {
+        'user_1': {
+            'user_id': player_one_id,
+            'message': f'Your match against `{player2}` is ready, click here to join. `{button}`'
+        },
+        'user_2': {
+            'user_id': player_two_id,
+            'message': f'Your match against `{player1}` is ready, click here to join. `{button}`'
+        },
+    }
+
+    response = requests.post(notif_url, json=json_request)
+    if response.status_code != 200:
+        return JsonResponse({"error": "Failed to send notification"}, status=500)
 
     return JsonResponse(game.to_dict())
 
 def end_game(request):
-
     try:
         data = GameService.end_game(request)
         return JsonResponse({"message": "Game ended", "data": data})

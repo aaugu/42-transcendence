@@ -2,9 +2,6 @@ import uuid
 from .game.game import Game, GameMode, GameState
 from .models import Games
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-import time
-from django.http import JsonResponse
 
 class GameAlreadyFinishedException(Exception):
     pass
@@ -55,8 +52,8 @@ class GameService:
       game_instance.game_state.paddles[1].player_id = player_two_id
 
       from .consumers.consumers import PongConsumer
-
       PongConsumer.games[game_id] = game_instance
+
       return game_instance
 
     @staticmethod
@@ -84,13 +81,10 @@ class GameService:
         game_instance = Game(mode=mode, game_id=game_id)
         game_instance.game_state.paddles[0].player_id = player_one_id
         game_instance.game_state.paddles[1].player_id = player_two_id
+
         from .consumers.consumers import PongConsumer
-
-        print(
-            f" Service create game tournament: ${game_instance.game_id}, {game_instance.mode}"
-        )
-
         PongConsumer.games[game_id] = game_instance
+
         return game_instance
 
     @staticmethod

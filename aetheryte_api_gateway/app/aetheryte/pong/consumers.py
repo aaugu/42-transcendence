@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 import asyncio
 from livechat.utils import get_jwt_user_id
+from .views import get_game
 
 class ApiPongConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -11,13 +12,17 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
           headers = dict(self.scope['headers'])
           token = headers[b'cookie'].decode().split('=')[1]
           self.user_id = get_jwt_user_id(token)
-          print(f"User ID: {self.user_id}")
+          game_id = self.scope['url_route']['kwargs']['game_id']
+          print(f"Game ID: {game_id}")
+          # res = get_game(game_id)
+
+          # print(f"Res from get_game: {res}")
+          # print(f"User ID: {self.user_id}")
 
           if not self.user_id:
-              print("User ID not found")
+              print("User has no access to this game")
               await self.close(3000, "Not authorized")
               return
-          game_id = self.scope['url_route']['kwargs']['game_id']
           
           query_string = self.scope["query_string"].decode("utf-8")
 
