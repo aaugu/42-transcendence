@@ -123,12 +123,3 @@ def get_user_games(request, user_id):
                 except CustomUser.DoesNotExist:
                     game["loser_id"] = "Unknown user"
     return JsonResponse(games, safe=False, status=response.status_code)
-
-# def get_game(request, game_id):
-#     print("GET GAME")
-#     if not check_authentication(request):
-#       return JsonResponse({'detail': 'Unauthorized'}, status=401)
-#     print("CHECK AUTH")
-#     response = requests.get(f"{PONG_SERVICE_URL}/get-game-data/{game_id}/")
-
-#     return JsonResponse(response.json(), status=response.status_code)
