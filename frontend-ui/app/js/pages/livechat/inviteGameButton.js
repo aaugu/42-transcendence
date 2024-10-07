@@ -5,14 +5,13 @@ import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
 import { isBlacklisted } from './blacklist.js';
-import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
 async function sendGameInvite(game_id, ctc_id, mode) {
 	let link;
 	if (mode === "LOCAL_TWO_PLAYERS")
 		  link = "!";
 	else
-		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary" href='#'>Join the game</button>`
+		  link = `<button id="chat-invite-game-link" data-gameid="${game_id}" data-senderid="${userID}" data-receiverid="${ctc_id}" class="btn btn-primary">Join the game</button>`
 
 	const response = await fetch('https://' + window.location.host + '/api/livechat/notification/', {
 		method: 'POST',

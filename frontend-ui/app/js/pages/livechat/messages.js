@@ -4,15 +4,14 @@ import { setCurrentContactID } from './notifications.js';
 import { escapteHTML } from '../../dom/preventXSS.js';
 
 export function newMsg (avatar, time, text, id) {
-    console.log("avatar: ", avatar);
-    const msg_Text = escapteHTML(text);
+    // const msg_Text = escapteHTML(text);
 
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small w-100" style="font-size: 10px;">
-            ${msg_Text}
+            ${text}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
@@ -30,7 +29,7 @@ export function newMsg (avatar, time, text, id) {
         <div class="card">
         <div class="card-body">
             <p class="mb-0 small w-100" style="font-size: 10px;">
-            ${msg_Text}
+            ${text}
             </p>
         </div>
         <div class="card-footer d-flex justify-content-end">
