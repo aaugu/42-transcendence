@@ -1,15 +1,12 @@
 import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import logging
 
 from login.models import CustomUser
 from login.serializers import *
 from login.utils import check_authentication, check_user_jwt_vs_user_url, get_user_from_jwt
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
-
-logger = logging.getLogger(__name__)
 
 def create_game(request, creator_id, mode, joiner_id):
   if not check_authentication(request):

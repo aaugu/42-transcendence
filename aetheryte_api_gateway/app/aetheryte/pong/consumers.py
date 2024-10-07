@@ -1,12 +1,8 @@
-import json
 import websockets
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
-import logging
 import asyncio
 from livechat.utils import get_jwt_user_id
-
-logger = logging.getLogger(__name__)
 
 class ApiPongConsumer(AsyncWebsocketConsumer):
     async def connect(self):
