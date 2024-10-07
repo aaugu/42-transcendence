@@ -81,16 +81,16 @@ services:
         ports:
             - "443:443"
 
-    # Elasticsearch / Kibana
-    elasticsearch:
-        extends:
-            file: elk/docker/docker-compose.yml
-            service: elasticsearch
-    init-elasticsearch:
-        extends:
-            file: elk/docker/docker-compose.yml
-            service: init-elasticsearch
-    kibana:
-        extends:
-            file: elk/docker/docker-compose.yml
-            service: kibana
+    # # Elasticsearch / Kibana
+    # elasticsearch:
+    #     extends:
+    #         file: elk/docker/docker-compose.yml
+    #         service: elasticsearch
+    # init-elasticsearch:
+    #     extends:
+    #         file: elk/docker/docker-compose.yml
+    #         service: init-elasticsearch
+    # kibana:
+    #     extends:
+    #         file: elk/docker/docker-compose.yml
+    #         service: kibana
