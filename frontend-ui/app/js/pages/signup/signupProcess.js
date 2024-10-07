@@ -6,6 +6,7 @@ import { readAvatarFile } from "../user/avatar.js";
 import { loginProcess } from "../login/loginProcess.js";
 import { setUserID } from "../user/updateProfile.js";
 import { logout } from "../user/logout.js";
+import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
 
 
 export async function signupProcess() {
@@ -30,6 +31,13 @@ export async function signupProcess() {
 		document.cookie = `csrftoken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		document.cookie = `sessionid=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 		setUserID();
+    }
+
+    if (containsForbiddenCharacters(username) || containsForbiddenCharacters(nickname)
+        || containsForbiddenCharacters(email)) {
+        errormsg("Forbidden characters present in user input", "homepage-errormsg");
+        document.getElementById('signup-submit').disabled = false;
+        return ;
     }
 
     if (!signupFieldsValidity(username, nickname, email, password, repeatPassword)) {

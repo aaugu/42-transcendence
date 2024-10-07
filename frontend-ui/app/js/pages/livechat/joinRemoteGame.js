@@ -3,25 +3,6 @@ import { urlRoute } from "../../dom/router.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { getUserInfo } from "../user/getUserInfo.js";
 
-export async function joinGame(gameId) {
-	if (userID === null)
-		throw new Error("403");
-	const joinGameEndpoint = "https://" + window.location.host + "/api/pong/join-game";
-	const response = await fetch(`${joinGameEndpoint}/${gameId}/${userID}`, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		credentials: "include"
-	});
-
-	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
-		throw new Error(`${response.status}`);
-	}
-}
-
 export async function joinRemoteGame(gameId, senderId, receiverId) {
 	try {
 			if (senderId != userID) {

@@ -5,12 +5,19 @@ import { updateProfile } from "../user/updateProfile.js";
 import { setUserID } from "../user/updateProfile.js";
 import { defaultAvatar } from "../user/avatar.js";
 import { logout } from "../user/logout.js";
+import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
+import { passwordValidity } from "../user/password.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     if (!password || !username) {
         errormsg("Username or password field cannot be blank", "homepage-errormsg");
+        return ;
+    }
+
+    if (containsForbiddenCharacters(username) || !passwordValidity(password)) {
+        errormsg("Forbidden characters present in user input", "homepage-errormsg");
         return ;
     }
 
