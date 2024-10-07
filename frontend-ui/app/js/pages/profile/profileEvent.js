@@ -4,6 +4,7 @@ import { twoFactorAuthProfileButton } from "../login/twoFactorAuth.js";
 import { editUserInfoModal } from "../user/editUserInfo.js";
 import { addFriend, deleteFriend, updateFriendList } from "./friends.js";
 import { errormsg } from "../../dom/errormsg.js";
+import { escapeHTML } from "../../dom/preventXSS.js";
 
 export async function profileEvent(e) {
 	if (e.target.classList.contains('edit-btn') || e.target.parentElement.classList.contains('edit-btn')) {
@@ -24,7 +25,8 @@ export async function profileEvent(e) {
 			break;
 		case "add-friend-btn":
 			try {
-				const friend_nickname = document.getElementById('friend-input').value;
+				var friend_nickname = document.getElementById('friend-input').value;
+				friend_nickname = escapeHTML(friend_nickname);
 				document.getElementById('friend-input').value = '';
 				await addFriend(friend_nickname);
 				document.getElementById('friend-input').value = '';

@@ -34,6 +34,15 @@ export async function startGameTournamentremote() {
 			throw new Error("This tournament is not in progress");
 		else if (t_details.status === 'Finished')
 			throw new Error("This tournament is already finished");
+
+		t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
+
+		const canvas = displayGame();
+		handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);
+		handleButtons(t_remote_socket);
+
+		document.addEventListener("keydown", keyDownEventTournamentRemote);
+		document.addEventListener("keyup", keyUpEventTournamentRemote);
 	} catch (e) {
 		if (e.message === "500" || e.message === "502") {
 			urlRoute('/profile')
@@ -43,15 +52,6 @@ export async function startGameTournamentremote() {
 			errormsg(e.message, "homepage-errormsg");
 		}
 	}
-
-	t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
-
-	const canvas = displayGame();
-	handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);
-	handleButtons(t_remote_socket);
-
-	document.addEventListener("keydown", keyDownEventTournamentRemote);
-	document.addEventListener("keyup", keyUpEventTournamentRemote);
 }
 
 export function keyDownEventTournamentRemote(event) {

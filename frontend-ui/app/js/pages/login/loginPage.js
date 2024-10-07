@@ -1,6 +1,10 @@
+import { loginSubmitOnEnter } from "./loginEvent.js";
+
 export function loginPage() {
 	document.getElementById('nav-profile-elements').classList.add('hidden');
 	document.getElementById('logo').href = "/";
+
+	document.addEventListener('keydown', loginSubmitOnEnter);
     return `
     <div class="content-box">
         <h1 class="text-bold display-5 m-2">Log in here</h1>

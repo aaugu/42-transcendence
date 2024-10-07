@@ -4,6 +4,7 @@ import { displayGame } from './displayGame.js';
 import { handleWebsocketGame } from './handleWebsocket.js';
 import { userID } from '../../user/updateProfile.js';
 import { error404Page } from '../../errorpage/error404Page.js';
+import { containsForbiddenCharacters } from '../../../dom/preventXSS.js';
 
 export var g_socket;
 let gameState = { current: null };
@@ -20,6 +21,11 @@ export async function startGameTwoPlayers() {
 
 	const right_player = localStorage.getItem('right');
 	const left_player = localStorage.getItem('left');
+
+	if (containsForbiddenCharacters(right_player) || containsForbiddenCharacters(left_player)) {
+		document.getElementById("main-content").innerHTML = error404Page();
+		return ;
+	}
 
 	if (mode == 'local-twoplayer')
 		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
