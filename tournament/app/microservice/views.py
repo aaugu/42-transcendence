@@ -288,22 +288,22 @@ class StartMatchView(View):
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                    'message': f'Tournament {tournament.name}  : your match against {player2.nickname} is ready'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                    'message': f'Tournament {tournament.name}  : your match against {player1.nickname} is ready'
                 },
             }
         elif tournament.type == Tournament.REMOTE:
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{button}`'
+                    'message': f'Tournament {tournament.name}  : your match against {player2.nickname} is ready. click here {button}'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{button}`'
+                    'message': f'Tournament {tournament.name}  : your match against {player1.nickname} is ready. click here {button}'
                 },
             }
         return requests.post(url = request_url, json = json_request)
