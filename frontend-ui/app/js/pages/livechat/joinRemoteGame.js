@@ -15,11 +15,17 @@ export async function joinGame(gameId) {
 		credentials: "include"
 	});
 
+	const responseData = null;
 	if (!response.ok) {
-		if (response.errors)
-			throw new Error(`${response.errors}`);
-		throw new Error(`${response.status}`);
-	}
+        try {
+            responseData = await response.json();
+        } catch (e) {
+            throw new Error(`${response.status}`);
+        }
+        if (responseData.errors)
+            throw new Error(`${responseData.errors}`);
+        throw new Error(`${responseData.status}`);
+    }
 }
 
 export async function joinRemoteGame(gameId, senderId, receiverId) {

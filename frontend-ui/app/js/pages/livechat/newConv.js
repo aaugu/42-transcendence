@@ -22,17 +22,21 @@ async function newConv(conv_nickname) {
 		}),
 		credentials: 'include'
 	});
-	try {
-        if (!response.ok) {
-            const responseData = await response.json();
-            if (responseData.errors)
-                throw new Error(`${responseData.errors}`);
-            throw new Error(`${responseData.status}`);
-        } else {
-            const responseData = await response.json();
-            if (responseData !== null) {
-                return responseData;
-            }
+	const responseData = null;
+    if (!response.ok) {
+        try {
+            responseData = await response.json();
+        } catch (e) {
+            throw new Error(`${response.status}`);
+        }
+        if (responseData.errors)
+            throw new Error(`${responseData.errors}`);
+        throw new Error(`${responseData.status}`);
+    }
+    try {
+        responseData = await response.json();
+        if (responseData !== null) {
+            return responseData;
         }
     } catch (e) {
         throw new Error(`${response.status}`);
@@ -60,6 +64,7 @@ export async function newConvButton() {
 		document.getElementById('chat-search-input').value = '';
 
 	} catch (e) {
+		console.log(e.message);
 		if (e.message === "500" || e.message === "502") {
 			errormsg("Service temporarily unavailable", 'homepage-errormsg');;
 		} else if (e.message === '403' || e.message === "401") {

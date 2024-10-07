@@ -50,21 +50,25 @@ export async function blockUser(target_id) {
 		}),
 		credentials: 'include'
 	});
-	try {
-		if (!response.ok) {
-			const responseData = await response.json();
-			if (responseData.errors)
-				throw new Error(`${responseData.errors}`);
-			throw new Error(`${responseData.status}`);
-		} else {
-			const responseData = await response.json();
-			if (responseData !== null) {
-				return responseData.is_blacklisted;
-			}
-		}
-	} catch (e) {
-		throw new Error(`${response.status}`);
-	}
+	const responseData = null;
+	if (!response.ok) {
+        try {
+            responseData = await response.json();
+        } catch (e) {
+            throw new Error(`${response.status}`);
+        }
+        if (responseData.errors)
+            throw new Error(`${responseData.errors}`);
+        throw new Error(`${responseData.status}`);
+    }
+    try {
+        responseData = await response.json();
+        if (responseData !== null) {
+            return responseData.is_blacklisted;
+        }
+    } catch (e) {
+        throw new Error(`${response.status}`);
+    }
 }
 
 export async function unblockUser(target_id) {
@@ -80,16 +84,17 @@ export async function unblockUser(target_id) {
 		},
 		credentials: 'include'
 	});
-	try {
-		if (!response.ok) {
-			const responseData = await response.json();
-			if (responseData.errors)
-				throw new Error(`${responseData.errors}`);
-			throw new Error(`${responseData.status}`);
-		}
-	} catch (e) {
-		throw new Error(`${response.status}`);
-	}
+	const responseData = null;
+	if (!response.ok) {
+        try {
+            const responseData = await response.json();
+        } catch (e) {
+            throw new Error(`${response.status}`);
+        }
+        if (responseData.errors)
+            throw new Error(`${responseData.errors}`);
+        throw new Error(`${responseData.status}`);
+    }
 }
 
 export async function isBlacklisted(target_id) {
@@ -105,19 +110,24 @@ export async function isBlacklisted(target_id) {
 		},
 		credentials: 'include'
 	});
+	const responseData = null;
+	if (!response.ok) {
+		try {
+			responseData = await response.json();
+		} catch (e) {
+			throw new Error(`${response.status}`);
+		}
+		if (responseData.errors)
+			throw new Error(`${responseData.errors}`);
+		throw new Error(`${responseData.status}`);
+	}
 	try {
-		if (!response.ok) {
-			const responseData = await response.json();
-			if (responseData.errors)
-				throw new Error(`${responseData.errors}`);
-			throw new Error(`${responseData.status}`);
-		} else {
-			const responseData = await response.json();
-			if (responseData !== null) {
-				return responseData.is_blacklisted;
-			}
+		responseData = await response.json();
+		if (responseData !== null) {
+			return responseData.is_blacklisted;
 		}
 	} catch (e) {
 		throw new Error(`${response.status}`);
 	}
+
 }
