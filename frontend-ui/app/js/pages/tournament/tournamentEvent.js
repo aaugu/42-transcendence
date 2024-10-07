@@ -3,7 +3,7 @@ import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
 import { urlRoute } from "../../dom/router.js";
 import { hideModal } from "../../dom/modal.js";
-import { newtournamentgameEvent, newtournamentremoteEvent } from "../game/newgameEvent.js";
+import { newtournamentlocalEvent, newtournamentremoteEvent } from "../game/newgameEvent.js";
 import { deleteTournament } from "./deleteTournament.js";
 import { updateTournLists } from "./updateTournLists.js";
 import { errormsg } from "../../dom/errormsg.js";
@@ -31,7 +31,7 @@ export async function tournamentEvent(e) {
 				newtournamentremoteEvent(tourn_id_start);
 			}
 			else if (t_mode === "Local")
-				newtournamentgameEvent(tourn_id_start);
+				newtournamentlocalEvent(tourn_id_start);
 			break;
 		case "t-delete":
 			const tourn_id_delete = document.getElementById('t-delete').dataset.tournid;

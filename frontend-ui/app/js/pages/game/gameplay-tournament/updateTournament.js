@@ -39,7 +39,6 @@ export async function startNewMatchCycle_remote(tournament) {
 	const player2_id = tournament.current_match.player_2.user_id;
 	const response = await createTournamentGame(player1_id, player2_id, "TOURNAMENT_REMOTE");
 	const newGameId = response.game_id;
-	// const new_url = `/tournament-remote/${newGameId}`;
 
 	tournament.game_id = `${newGameId}`;
 	tournament.startMatch();
