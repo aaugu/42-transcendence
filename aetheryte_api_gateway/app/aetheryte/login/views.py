@@ -77,18 +77,24 @@ class Verify2FACodeView(APIView):
 class logout_user(APIView):
     
     def post(self, request, user_id):
-        try:
-            user_id = int(user_id)
-        except ValueError:
-            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+        if check_authentication(request):
+            if check_user_jwt_vs_user_url(request, user_id):
+                try:
+                    user_id = int(user_id)
+                except ValueError:
+                    return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if user_id > 0:
-            user = get_object_or_404(CustomUser, id=user_id)
-            user.online = False
-            try:
-                user.save()
-                return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_404_NOT_FOUND)
+                if user_id > 0:
+                    user = get_object_or_404(CustomUser, id=user_id)
+                    user.online = False
+                    try:
+                        user.save()
+                        return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
+                    except Exception as e:
+                        return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
