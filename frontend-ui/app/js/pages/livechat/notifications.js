@@ -26,7 +26,11 @@ export async function notifications() {
             const nickname = localStorage.getItem('nickname');
             if (containsForbiddenCharacters(nickname))
                 throw new Error("Could not load notifications");
-             document.getElementById('chat-search-input').value = nickname;
+            const chatSearch = document.getElementById('chat-search-input');
+            if (chatSearch)
+                chatSearch.value = nickname;
+            else
+                throw new Error("500");
             await newConvButton();
         }
         updateConvList();
@@ -52,6 +56,7 @@ export async function startNotificationsRefresh() {
                 displayChatInterface(notif.dataset.ctcid, "Notifications");
 		        displayMessages(response, true);
             } catch (e) {
+                clearNotificationsRefresh();
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "homepage-errormsg");
                 } else if (e.message === "403" || e.message === "401") {

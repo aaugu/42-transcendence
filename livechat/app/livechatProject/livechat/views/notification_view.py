@@ -17,7 +17,7 @@ class NotificationView(APIView):
 		body = json.loads(body_unicode)
 		if 	not body['user_1']['user_id'] or not body['user_1']['message'] or \
 			not body['user_2']['user_id'] or not body['user_2']['message']:
-			return Response(status=status.HTTP_400_BAD_REQUEST)
+			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 
 		status_code = self.create_notification(body['user_1']['user_id'], body['user_1']['message'])
 		if status_code != status.HTTP_201_CREATED:
