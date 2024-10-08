@@ -50,7 +50,6 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
 
-
   return JsonResponse(response.json(), status=response.status_code)
 
 @csrf_exempt
