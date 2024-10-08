@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import re
+from django.core.exceptions import ValidationError
 
 from .models import CustomUser
 
@@ -29,8 +31,39 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         return token
+    
+class CustomPatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['nickname', 'email', 'is_2fa_enabled', 'avatar', 'online']
+    
+    def validate_nickname(self, value):
+        if not re.match(r'^[\w.@+-]+$', value):
+            raise serializers.ValidationError("Enter a valid nickname. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        return value
+    
+    def validate_email(self, value):
+        if not re.match(r'^[\w.@+-]+$', value):
+            raise serializers.ValidationError("Enter a valid email. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        return value
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'nickname', 'email', 'is_2fa_enabled', 'avatar', 'online']
+
+    def validate_username(self, value):
+        if not re.match(r'^[\w.@+-]+$', value):
+            raise serializers.ValidationError("Enter a valid username. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        return value
+    
+    def validate_nickname(self, value):
+        if not re.match(r'^[\w.@+-]+$', value):
+            raise serializers.ValidationError("Enter a valid nickname. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        return value
+    
+    def validate_email(self, value):
+        if not re.match(r'^[\w.@+-]+$', value):
+            raise serializers.ValidationError("Enter a valid email. This value may contain only letters, numbers, and @/./+/-/_ characters.")
+        return value
+    

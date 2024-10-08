@@ -3,6 +3,7 @@
 .vscode/
 trash/
 **/__pycache__/
+**/migrations/
 *.pyc
 **/init.sql
 **/volumes/ 
