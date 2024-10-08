@@ -21,7 +21,7 @@ export async function startGameTournamentlocal() {
 
 	try {
 		if (!tourn_id || !gameId)
-			throw new Error("Tournament not found");
+			throw new Error("Tournament was interrupted due to an error");
 
 		t_details = await getTournamentDetails(tourn_id);
 		if (t_details.status === 'In Progress') {

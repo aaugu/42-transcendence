@@ -116,6 +116,7 @@ export async function newtournamentremoteEvent(tourn_id) {
 			if (e.message === "500" || e.message === "502") {
 				errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
 			} else if (e.message === "403") {
+				hideModal('single-t-modal');
 				updateProfile(false, null);
 				errormsg('You were redirected to the landing page', 'homepage-errormsg');
 			}

@@ -75,10 +75,6 @@ export async function livechatEvent(e) {
 			const receiver_id = target.dataset.receiverid;
 			joinRemoteGame(game_id, sender_id, receiver_id);
 			break;
-		case "ctc-nickname":
-			const nickname = target.textContent;
-			urlRoute(`/profile/${nickname}`);
-			break;
 		case "t-remote-match-link":
 			const gameurl = target.dataset.gameurl;
 			const tourn_id = target.dataset.tournid;
