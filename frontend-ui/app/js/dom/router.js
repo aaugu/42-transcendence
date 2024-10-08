@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         const {target} = e;
-        if (!target.matches('nav a, #login, #signup'))
+        if (!target.matches('nav a, #login, #signup, #ctc-nickname'))
             return ;
         e.preventDefault();
         urlRoute(e);
@@ -186,8 +186,8 @@ document.addEventListener('DOMContentLoaded', () => {
     urlRoute = (url) => {
         if (typeof url !== 'string')
         {
-            const event = url;
-            event.preventDefault();
+			const event = url;
+			event.preventDefault();
             url = event.target.href;
         }
         window.history.pushState({}, '', url);
