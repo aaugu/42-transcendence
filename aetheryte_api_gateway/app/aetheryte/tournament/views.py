@@ -13,9 +13,7 @@ from login import utils
 class GenerateMatchesView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
         response = requests.get(url = request_url)
@@ -27,9 +25,7 @@ class GenerateMatchesView(APIView):
 
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/matches/generate/"
         response = requests.post(url = request_url)
@@ -42,9 +38,7 @@ class GenerateMatchesView(APIView):
 class StartMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/start/"
         json_request = json.loads(request.body.decode('utf-8'))
@@ -59,9 +53,7 @@ class StartMatchView(APIView):
 class EndMatchView(APIView):
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/match/end/"
         json_request = json.loads(request.body.decode('utf-8'))
@@ -76,9 +68,7 @@ class EndMatchView(APIView):
 class TournamentView(APIView):
     @staticmethod
     def get(request: HttpRequest) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/"
         response = requests.get(url = request_url)
@@ -90,11 +80,10 @@ class TournamentView(APIView):
     
     @staticmethod
     def post(request: HttpRequest) -> Response:
-        try:
-            utils.check_authentication(request) == True
-            utils.check_user_jwt_vs_user_body(request, 'user_id') == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
+        if not utils.check_user_jwt_vs_user_body(request, 'user_id'):
+            return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.post(url = request_url, json = json_request)
@@ -107,9 +96,7 @@ class TournamentView(APIView):
 class TournamentPlayersView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
         response = requests.get(url = request_url)
@@ -121,11 +108,10 @@ class TournamentPlayersView(APIView):
         
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-            utils.check_user_jwt_vs_user_body(request, 'user_id') == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
+        if not utils.check_user_jwt_vs_user_body(request, 'user_id'):
+            return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/players/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.post(url = request_url, json = json_request)
@@ -138,11 +124,10 @@ class TournamentPlayersView(APIView):
 class StartTournamentView(APIView):
     @staticmethod
     def patch(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-            utils.check_user_jwt_vs_user_body(request, 'user_id') == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
+        if not utils.check_user_jwt_vs_user_body(request, 'user_id'):
+            return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/start/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.patch(url = request_url, json = json_request)
@@ -155,9 +140,7 @@ class StartTournamentView(APIView):
 class ManageTournamentView(APIView):
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         response = requests.get(url = request_url)
@@ -169,11 +152,10 @@ class ManageTournamentView(APIView):
         
     @staticmethod
     def delete(request: HttpRequest, tournament_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-            utils.check_user_jwt_vs_user_body(request, 'user_id') == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
+        if not utils.check_user_jwt_vs_user_body(request, 'user_id'):
+            return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(tournament_id) + "/"
         json_request = json.loads(request.body.decode('utf-8'))
         response = requests.delete(url = request_url, json = json_request)
@@ -186,11 +168,10 @@ class ManageTournamentView(APIView):
 class MyTournamentAsAdminView(APIView):
     @staticmethod
     def get(request: HttpRequest, user_id: int) -> Response:
-        try:
-            utils.check_authentication(request) == True
-            utils.check_user_jwt_vs_user_url(request, user_id) == True
-        except Exception:
+        if not utils.check_authentication(request):
             return Response('errors: access denied', status=401)
+        if not utils.check_user_jwt_vs_user_url(request, user_id):
+            return Response('errors: access denied', status=403)
         request_url = "http://172.20.2.2:10000/tournament/" + str(user_id) + "/mytournament/admin/"
         response = requests.get(url = request_url)
         if response.json() is not None:
