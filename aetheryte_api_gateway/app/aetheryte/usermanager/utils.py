@@ -20,12 +20,3 @@ def check_authentication(request):
         return True
     else:
         return False
-
-#example user creation
-{
-	"username":"afavre",
-	"nickname":"arnaud",
-	"email":"arnaud.favree@gmail.com",
-	"password":"q",
-    "avatar":"default avatar"
-}
