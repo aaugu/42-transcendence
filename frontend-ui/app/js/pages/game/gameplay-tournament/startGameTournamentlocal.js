@@ -33,7 +33,7 @@ export async function startGameTournamentlocal() {
 		else if (t_details.status === 'Finished')
 			throw new Error("This tournament is already finished");
 
-		t_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
+		t_socket = new WebSocket('wss://' + window.location.host + `/ws/pong/${gameId}`);
 
 		const canvas = displayGame();
 		handleWebsocketTournament(t_socket, tournament, canvas, gameState);
