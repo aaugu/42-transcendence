@@ -23,7 +23,7 @@ export async function livechatPage() {
                     <div class="h6 text-center">Select a contact to start a conversation or invite someone to a local (<i class="bi bi-joystick
                     text-black"></i>) or a remote (<i class="bi bi-controller text-black"></i>) Pong Game</div>
                 </div>
-                <a id="ctc-nickname" class="hidden" href=""></a>
+                <a id="ctc-nickname" class="hidden" href="#"></a>
                 <ul id="chat-msgs"class="row list-unstyled custom-scrollbar flex-grow-1 text-white
                         w-100 mb-2"></ul>
                 <div class="d-flex align-items-center">

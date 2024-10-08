@@ -101,8 +101,8 @@ export function displayChatInterface (ctc_id, ctc_nickname) {
     play_button_local.setAttribute('data-ctcid', ctc_id);
     if (ctc_nickname !== "Notifications") {
         nickname.classList.remove('hidden');
-        nickname.setAttribute('data-otherctcid', ctc_id);
         nickname.innerText = ctc_nickname;
+        nickname.href = `/profile/${ctc_nickname}`;
     }
 
     if (parseInt(ctc_id) === userID) {
