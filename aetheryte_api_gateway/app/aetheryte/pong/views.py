@@ -96,8 +96,8 @@ def end_game(request):
 def get_user_games(request, user_id):
     if not check_authentication(request):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    if not check_user_jwt_vs_user_url(request, int(user_id)):
-        return JsonResponse({'detail': 'Unauthorized'}, status=403)
+    # if not check_user_jwt_vs_user_url(request, int(user_id)):
+    #     return JsonResponse({'detail': 'Unauthorized'}, status=403)
     response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
     games = response.json()
 
