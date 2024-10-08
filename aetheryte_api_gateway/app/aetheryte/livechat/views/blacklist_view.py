@@ -54,6 +54,8 @@ class BlacklistView(APIView):
 			if not body['target_id']:
 				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 			target_id = body['target_id']
+			if target_id == user_id:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 		except:
 			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 
