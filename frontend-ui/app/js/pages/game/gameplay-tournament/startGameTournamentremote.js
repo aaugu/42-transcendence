@@ -35,7 +35,7 @@ export async function startGameTournamentremote() {
 		else if (t_details.status === 'Finished')
 			throw new Error("This tournament is already finished");
 
-		t_remote_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
+		t_remote_socket = new WebSocket('wss://' + window.location.host + `/ws/pong/${gameId}?user_id=${userID}`);
 
 		const canvas = displayGame();
 		handleWebsocketTournament_remote(t_remote_socket, tournament, canvas, gameState);
