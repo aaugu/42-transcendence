@@ -1,52 +1,91 @@
 import requests
+import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 
 from login.models import CustomUser
 from login.serializers import *
-from usermanager.utils import check_authentication
+from login.utils import check_authentication, check_user_jwt_vs_user_url, get_user_from_jwt
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
 
-
+@csrf_exempt
 def create_game(request, creator_id, mode, joiner_id):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    response = requests.get(
-        f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/"
-    )
-    return JsonResponse(response.json(), status=response.status_code)
+  if not check_authentication(request):
+    return JsonResponse({'detail': 'Unauthorized'}, status=401)
+  if not check_user_jwt_vs_user_url(request, int(creator_id)):
+    return JsonResponse({'detail': 'Unauthorized'}, status=403)
 
+  # Add in the body of request the nickname of creator and joiner
+  creator_nickname = CustomUser.objects.get(id=creator_id).nickname
+  
+  if int(joiner_id) == 0:
+    joiner_nickname = ""
+  else:
+    joiner_nickname = CustomUser.objects.get(id=joiner_id).nickname
 
+  try:
+    response = requests.post(
+        f"{PONG_SERVICE_URL}/create-game/{creator_id}/{mode}/{joiner_id}/",
+        json={
+          'creator_nickname': creator_nickname,
+          'joiner_nickname': joiner_nickname
+        }
+      )
+  except requests.exceptions.RequestException as e:
+    return JsonResponse({'detail': 'Failed to create game due to service error.'}, status=503)
+
+  print("RESPONSE", response)
+
+  return JsonResponse(response.json(), status=response.status_code)
+
+@csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    response = requests.get(
-        f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
-    )
-    return JsonResponse(response.json(), status=response.status_code)
+  if not check_authentication(request):
+    return JsonResponse({'detail': 'Unauthorized'}, status=401)
+  if not check_user_jwt_vs_user_url(request, int(player_one_id)):
+    return JsonResponse({'detail': 'Unauthorized'}, status=403)
+  response = requests.post(
+    f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
+  )
 
+  return JsonResponse(response.json(), status=response.status_code)
+
+@csrf_exempt
 def create_game_remote(request, player_one_id, player_two_id, mode):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    response = requests.get(
-        f"{PONG_SERVICE_URL}/create-game-remote/{player_one_id}/{player_two_id}/{mode}/"
-    )
-    return JsonResponse(response.json(), status=response.status_code)
+  if not check_authentication(request):
+    return JsonResponse({'detail': 'Unauthorized'}, status=401)
+  if not check_user_jwt_vs_user_url(request, int(player_one_id)):
+    return JsonResponse({'detail': 'Unauthorized'}, status=403)
 
+  creator_nickname = CustomUser.objects.get(id=player_one_id).nickname
+  joiner_nickname = CustomUser.objects.get(id=player_two_id).nickname
 
-def join_game(request, joiner_id, game_id):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    response = requests.get(f"{PONG_SERVICE_URL}/join-game/{joiner_id}/{game_id}/")
-    return JsonResponse(response.json(), status=response.status_code)
+  response = requests.post(
+    f"{PONG_SERVICE_URL}/create-game-remote/{player_one_id}/{player_two_id}/{mode}/",
+    json={
+      'creator_nickname': creator_nickname,
+      'joiner_nickname': joiner_nickname
+    }
+  )
 
+  return JsonResponse(response.json(), status=response.status_code)
 
 @csrf_exempt
 def end_game(request):
     if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
+        return JsonResponse({'detail': 'Unauthorized'}, status=401)
+
+    # Decode the JWT token and get the user ID
+    user_id = get_user_from_jwt(request)
+
+    # Extract winner_id and loser_id from the request
+    winner_id = int(request.POST.get('winner_id'))
+    loser_id = int(request.POST.get('loser_id'))
+
+    if not (user_id == winner_id or user_id == loser_id):
+        return JsonResponse({'detail': 'Unauthorized'}, status=403)
+
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
     if response.text:  # Check if the response is not empty
         return JsonResponse(response.json(), status=response.status_code)
@@ -57,8 +96,11 @@ def end_game(request):
 def get_user_games(request, user_id):
     if not check_authentication(request):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not check_user_jwt_vs_user_url(request, int(user_id)):
+        return JsonResponse({'detail': 'Unauthorized'}, status=403)
     response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
     games = response.json()
+
     for game in games:
         if game["winner_id"] is not None:
             if game["winner_id"] == 0:
@@ -81,20 +123,3 @@ def get_user_games(request, user_id):
                 except CustomUser.DoesNotExist:
                     game["loser_id"] = "Unknown user"
     return JsonResponse(games, safe=False, status=response.status_code)
-
-
-def get_game(request, game_id):
-    if not check_authentication(request):
-        return JsonResponse({"detail": "Unauthorized"}, status=401)
-    response = requests.get(f"{PONG_SERVICE_URL}/get-game/{game_id}/")
-    return JsonResponse(response.json(), status=response.status_code)
-
-def get_pong_constants(request):
-    if not check_authentication(request):
-      return JsonResponse({'detail': 'Unauthorized'}, status=401)
-    try:
-        response = requests.get(f"{PONG_SERVICE_URL}/get_pong_constants/")
-        return JsonResponse(response.json(), status=response.status_code)
-    except json.JSONDecodeError:
-        print(f"Failed to parse JSON: {response.content}")
-        return JsonResponse({'detail': 'Failed to parse JSON'}, status=500)

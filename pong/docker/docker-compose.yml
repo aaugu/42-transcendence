@@ -1,27 +1,3 @@
-# services:
-#     pong-python:
-#         build:
-#             context: python
-#             dockerfile: Dockerfile
-#         volumes:
-#             - pong_postgres_volume:/var/lib/postgresql/data/
-#             - ../app/:/app/
-#         networks:
-#             transcendence:
-#                 ipv4_address: 172.20.3.2
-#         environment:
-#             POSTGRES_DB: ${LIVECHAT_POSTGRES_NAME}
-#             POSTGRES_USER: ${ROOT_USER}
-#             POSTGRES_PASSWORD: ${ROOT_PASSWORD}
-
-#         # healthcheck:
-#         #     test: curl --fail https://172.20.3.2:8000/ || exit 1
-#         #     interval: 10s
-#         #     timeout: 5s
-#         #     retries: 5
-#         restart: on-failure
-
-
 services:
     pong-postgres:
         build:
@@ -60,9 +36,4 @@ services:
             PONG_POSTGRES_IP: ${PONG_POSTGRES_IP}
             PONG_POSTGRES_PORT: ${PONG_POSTGRES_PORT}
             PONG_DJANGO_SECRET_KEY: ${PONG_DJANGO_SECRET_KEY}
-        # healthcheck:
-        #     test: curl --fail https://172.20.5.2:8000/ || exit 1
-        #     interval: 10s
-        #     timeout: 5s
-        #     retries: 10
         restart: on-failure
