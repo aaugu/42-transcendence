@@ -58,6 +58,7 @@ def create_game(request, creator_id, mode, joiner_id):
 @csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
     # Vérification des paramètres
+    print(f"Received request to create tournament game with {player_one_id} and {player_two_id}")
     if not player_one_id or not player_two_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
     try:

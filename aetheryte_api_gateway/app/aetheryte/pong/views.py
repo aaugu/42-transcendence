@@ -44,10 +44,12 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not check_user_jwt_vs_user_url(request, int(player_one_id)):
+    print("Unauthorized user in check_user_jwt_vs_user_url")
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
+
 
   return JsonResponse(response.json(), status=response.status_code)
 
@@ -56,6 +58,7 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not check_user_jwt_vs_user_url(request, int(player_one_id)):
+    print("Unauthorized user in check_user_jwt_vs_user_url")
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
 
   creator_nickname = CustomUser.objects.get(id=player_one_id).nickname
