@@ -73,5 +73,3 @@ def check_user_jwt_vs_user_url(request: HttpRequest, user_id: int):
         return True
     else:
         return False
-
-
