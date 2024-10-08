@@ -69,12 +69,9 @@ def check_user_jwt_vs_user_body(request: HttpRequest, user_id_name: str):
 
 def check_user_jwt_vs_user_url(request: HttpRequest, user_id: int):
     user_id_jwt = get_user_from_jwt(request)
-    print(f"User ID from JWT: {user_id_jwt} and User ID from URL: {user_id}, request path: {request.path}")
     if user_id == user_id_jwt:
-        print(f"In check user jwt vs user url, returning True")
         return True
     else:
-        print(f"In check user jwt vs user url, returning False")
         return False
 
 
