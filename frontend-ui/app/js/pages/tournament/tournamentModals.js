@@ -55,7 +55,7 @@ export async function openSingleTournamentModal(e) {
 		}
 		else if (has_joined === true) {
 			if (is_admin === true && ((has_started === false && t_details.type == "Remote") || t_details.type == "Local")) {
-				t_modalText.innerHTML = `<span>You are the admin. You can go play this ${t_details.type == "Remote" ? "REMOTE" : "LOCAL"} tournament or delete it.</span>
+				t_modalText.innerHTML = `<span>You are the admin.</span>
 										</br>
 										</br>
 										<span>Tournament n°${t_details.id}</span>
