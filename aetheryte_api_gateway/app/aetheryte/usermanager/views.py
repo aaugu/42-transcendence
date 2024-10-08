@@ -29,15 +29,12 @@ class general_user(APIView):
 class detailed_user(APIView):
     def get(self, request, pk):
         if check_authentication(request):
-            if check_user_jwt_vs_user_url(request, pk):
-                try:
-                    user = CustomUser.objects.get(pk=pk)
-                except CustomUser.DoesNotExist:
-                    return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
-                serializer = CustomUserSerializer(user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
+            try:
+                user = CustomUser.objects.get(pk=pk)
+            except CustomUser.DoesNotExist:
+                return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
+            serializer = CustomUserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         
