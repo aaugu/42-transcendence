@@ -35,12 +35,12 @@ def create_game(request, creator_id, mode, joiner_id):
 
     print("In views microservice", player1, player2)
 
-    if joiner_id != 0:
+    if int(joiner_id) != 0:
         print("Sending notification to joiner")
         json_request = {
             'user_1': {
                 'user_id': creator_id,
-                'message': f'You have invited `{player2}` to play a local game.'
+                'message': f'You have invited {player2} to play a local game.'
             },
             'user_2': {
                 'user_id': joiner_id,
@@ -99,11 +99,11 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     json_request = {
         'user_1': {
             'user_id': player_one_id,
-            'message': f'Your match against `{player2}` is ready, click here to join. {button}'
+            'message': f'Your match against {player2} is ready, click here to join. {button}'
         },
         'user_2': {
             'user_id': player_two_id,
-            'message': f'Your match against `{player1}` is ready, click here to join. {button}'
+            'message': f'Your match against {player1} is ready, click here to join. {button}'
         },
     }
 

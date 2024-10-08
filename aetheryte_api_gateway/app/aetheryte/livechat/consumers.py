@@ -24,7 +24,7 @@ class ApiChatConsumer(AsyncWebsocketConsumer):
 			self.room_group_name,
 			self.channel_name
 		)
-		print(f"User {self.user_id} joined room group {self.room_group_name}")
+		# print(f"User {self.user_id} joined room group {self.room_group_name}")
 
 		try:
 			url = f"ws://172.20.5.2:8000/ws/chat/{self.conversation_id}?user_id={self.user_id}"
