@@ -72,11 +72,11 @@ class MatchUtils:
 
         return match_status_msg[status]
     
-    # def check_jwt_user_in_player(match: Match, user_jwt: int): 
-    #     if user_jwt == match.player_1 or user_jwt == match.player_2 or user_jwt == match.tournament.admin_id:
-    #         return True
-    #     else:
-    #         return False
+    def check_jwt_user_in_player(match: Match, user_jwt: int): 
+        if user_jwt == match.player_1.user_id or user_jwt == match.player_2.user_id or user_jwt == match.tournament.admin_id:
+            return True
+        else:
+            return False
 
 class TournamentUtils:
     @staticmethod
@@ -99,7 +99,7 @@ class TournamentUtils:
         return status_string[status]
 
 @method_decorator(csrf_exempt, name='dispatch')
-class GenerateMatchesView(View):
+class GenerateMatchesView(View): 
     @staticmethod
     def get(request: HttpRequest, tournament_id: int) -> JsonResponse:
         try:
@@ -114,11 +114,6 @@ class GenerateMatchesView(View):
 
     @staticmethod
     def post(request: HttpRequest, tournament_id: int) -> JsonResponse:
-        # try:
-        #     body = json.loads(request.body.decode('utf-8'))
-        # except Exception:
-        #     return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
-        # user_id = body.get('user_id')
         try:
             tournament = Tournament.objects.get(id=tournament_id)
             players = list(tournament.players.all())
@@ -126,16 +121,14 @@ class GenerateMatchesView(View):
             return JsonResponse({'errors': [f'tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
-        # if tournament.admin_id != user_id:
-        #     return JsonResponse({
-        #         'errors': [f'you cannot generate `{tournament.name}` because you are not the owner of the tournament']
-        #     }, status=403)
         try:
             players = GenerateMatchesView.sort_players(players)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         if len(players) < settings.MIN_PLAYERS:
             return JsonResponse({'errors': [error.NOT_ENOUGH_PLAYERS]}, status=422)
+        if tournament.status != Tournament.CREATED:
+            return JsonResponse({'errors': ['The tournament has already started']}, status=409)
 
         matches = GenerateMatchesView.generate_matches(players, tournament)
 
@@ -233,7 +226,7 @@ class StartMatchView(View):
             return JsonResponse(data={'errors': [error.BAD_JSON_FORMAT]}, status=400)
 
         try:
-            Tournament.objects.get(id=tournament_id)
+            tournament = Tournament.objects.get(id=tournament_id)
         except ObjectDoesNotExist:
             return JsonResponse({ 'errors': [f'Tournament with id `{tournament_id}` does not exist']}, status=404)
         except Exception as e:
@@ -242,12 +235,25 @@ class StartMatchView(View):
         player1 = body.get('player_1')
         player2 = body.get('player_2')
         link = body.get('link')
-
+        if link is not None:
+            if not link.replace('-', '').isalnum():
+                return JsonResponse({'errors': [f'BAD URL']}, status=404)
+            url = f'/tournament-remote/{link}'
+            button = f'<button id=\"t-remote-match-link\" data-gameurl={url} data-tournid={tournament.id} class=\"btn btn-primary\" >Join the match</button>'
+        else:
+            button = None
         try:
             player1 = Player.objects.get(tournament_id=tournament_id, user_id=player1)
             player2 = Player.objects.get(tournament_id=tournament_id, user_id=player2)
         except ObjectDoesNotExist:
             return JsonResponse({'errors': [error.MATCH_PLAYER_NOT_EXIST]}, status=404)
+        except Exception as e:
+            return JsonResponse({'errors': [str(e)]}, status=404)
+        try:
+            user_jwt = body.get('user_jwt')
+            user_jwt = Player.objects.get(tournament_id=tournament_id, user_id=user_jwt)
+        except ObjectDoesNotExist:
+            return JsonResponse({'errors: access denied'}, status=401)
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         try:
@@ -269,34 +275,35 @@ class StartMatchView(View):
 
 
         if player1 is not None or player2 is not None:
-            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, link)
+            response = StartMatchView.send_match_start_notif(match.tournament, player1, player2, button)
         if response.status_code != 201:
             return JsonResponse(MatchUtils.match_notif_to_json(match, False), status=200)
         return JsonResponse(MatchUtils.match_notif_to_json(match, True), status=200)
 
     @staticmethod
-    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, link):
+    def send_match_start_notif(tournament: Tournament, player1: Player, player2: Player, button):
         request_url = "http://172.20.5.2:8000/livechat/notification/"
+
         if tournament.type == Tournament.LOCAL:
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready'
+                    'message': f'Tournament {tournament.name}  : your match against {player2.nickname} is ready'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready'
+                    'message': f'Tournament {tournament.name}  : your match against {player1.nickname} is ready'
                 },
             }
         elif tournament.type == Tournament.REMOTE:
             json_request = {
                 'user_1': {
                     'user_id': player1.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player2.nickname}` is ready. click here `{link}`'
+                    'message': f'Tournament {tournament.name}  : your match against {player2.nickname} is ready. click here {button}'
                 },
                 'user_2': {
                     'user_id': player2.user_id,
-                    'message': f'Tournament `{tournament.name}`  : your match against `{player1.nickname}` is ready. click here `{link}`'
+                    'message': f'Tournament {tournament.name}  : your match against {player1.nickname} is ready. click here {button}'
                 },
             }
         return requests.post(url = request_url, json = json_request)
@@ -326,7 +333,7 @@ class EndMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         winner = body.get('winner')
-        # user_jwt = body.get('user_jwt')
+        user_jwt = body.get('user_jwt')
         try:
             winner = Player.objects.get(tournament=tournament, user_id=winner)
         except ObjectDoesNotExist:
@@ -340,8 +347,8 @@ class EndMatchView(View):
         except Exception as e:
             return JsonResponse({'errors': [str(e)]}, status=404)
         
-        # if MatchUtils.check_jwt_user_in_player(match, user_jwt) == False:
-        #     return JsonResponse('errors: access denied', status=401)
+        if MatchUtils.check_jwt_user_in_player(match, user_jwt) == False:
+            return JsonResponse({'errors: access denied'}, status=401)
 
         nb_matches = match.tournament.matches.count()
         try:

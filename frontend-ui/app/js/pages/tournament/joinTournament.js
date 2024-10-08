@@ -1,6 +1,7 @@
 import { userID } from '../user/updateProfile.js';
 import { errormsg } from '../../dom/errormsg.js';
 import { hideModal } from '../../dom/modal.js';
+import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
 async function joinTournament(nickname, tournament_id) {
 	const response = await fetch('https://' + window.location.host + '/api/tournament/' + tournament_id + '/players/', {
@@ -33,6 +34,8 @@ export async function joinTournamentButton() {
 	const tournament_name = document.getElementById("single-t-modal-title").innerText;
 	const tourn_id = document.getElementById('t-join').dataset.tournid;
 	try {
+		if (containsForbiddenCharacters(nickname))
+			throw new Error("Could not join tournament");
 		await joinTournament(nickname, tourn_id);
 		setTimeout(() => {
 			hideModal('single-t-modal');

@@ -39,7 +39,7 @@ export async function convHistory(e) {
         const secondTargetElement = e.target.closest('.list-group-item').querySelector('[data-ctcid]');
         const conv_id = targetElement ? targetElement.dataset.convid : null;
 		const ctc_id = secondTargetElement ? secondTargetElement.dataset.ctcid : null;
-		const ctc_nickname = secondTargetElement.innerText;
+		const ctc_nickname = secondTargetElement ? secondTargetElement.innerText : 'guest';
 
 		const response = await getConvHistory(conv_id);
 		set_contact_blacklisted(response.contact_blacklisted);

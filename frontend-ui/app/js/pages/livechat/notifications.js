@@ -6,6 +6,7 @@ import { userID, updateProfile } from "../user/updateProfile.js";
 import { displayChatInterface, displayMessages } from "./messages.js";
 import { error500 } from "../errorpage/error500.js"
 import { errormsg } from "../../dom/errormsg.js";
+import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
 
 let notificationsRefreshInterval;
 let current_ctc_id;
@@ -22,7 +23,14 @@ export async function notifications() {
                 }
             })};
         if (!self_already_added) {
-            document.getElementById('chat-search-input').value = localStorage.getItem('nickname');
+            const nickname = localStorage.getItem('nickname');
+            if (containsForbiddenCharacters(nickname))
+                throw new Error("Could not load notifications");
+            const chatSearch = document.getElementById('chat-search-input');
+            if (chatSearch)
+                chatSearch.value = nickname;
+            else
+                throw new Error("500");
             await newConvButton();
         }
         updateConvList();
@@ -48,6 +56,7 @@ export async function startNotificationsRefresh() {
                 displayChatInterface(notif.dataset.ctcid, "Notifications");
 		        displayMessages(response, true);
             } catch (e) {
+                clearNotificationsRefresh();
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "homepage-errormsg");
                 } else if (e.message === "403" || e.message === "401") {

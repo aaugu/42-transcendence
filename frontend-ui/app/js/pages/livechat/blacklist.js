@@ -50,11 +50,8 @@ export async function blockUser(target_id) {
 		}),
 		credentials: 'include'
 	});
-	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
-        throw new Error(`${response.status}`);
-
-    const responseData = await response.json();
     if (!response.ok) {
+		const responseData = await response.json();
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${responseData.status}`);
@@ -74,11 +71,8 @@ export async function unblockUser(target_id) {
 		},
 		credentials: 'include'
 	});
-	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
-        throw new Error(`${response.status}`);
-
-    const responseData = await response.json();
-    if (!response.ok) {
+	if (!response.ok) {
+		const responseData = await response.json();
 		if (responseData.errors)
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${responseData.status}`);
