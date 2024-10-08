@@ -4,6 +4,7 @@ import json
 import os
 from django.http import HttpRequest
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from jwt import ExpiredSignatureError, InvalidTokenError
 
 from colorama import Fore, Style
 
@@ -40,6 +41,23 @@ def get_user_from_jwt(request):
     else:
         return -1
 
+def get_jwt_user_id(token):
+    try:
+        decoded_token = jwt.decode(token, os.environ.get('AETHERYTE_DJANGO_JWT_PASS'), algorithms=["HS256"])
+
+        user_id = decoded_token.get('user_id')
+
+        if user_id:
+            return user_id
+        else:
+            return None
+
+    except ExpiredSignatureError:
+        return None
+
+    except InvalidTokenError:
+        return None
+
 def check_user_jwt_vs_user_body(request: HttpRequest, user_id_name: str):
     json_request = json.loads(request.body.decode('utf-8'))
     user_id_body = json_request.get(user_id_name)
@@ -55,17 +73,3 @@ def check_user_jwt_vs_user_url(request: HttpRequest, user_id: int):
         return True
     else:
         return False
-
-
-# example json user micro
-{
-    "nickname": "arnaud",
-    "username": "afavre",
-    "email": "afavre@ffxiv.ch",
-    "password": "q",
-    "avatar": "default avatar"
-}
-
-{
-    "verification_code": ""
-}

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 from .models import UserVerification, CustomUser
-from .utils import generate_verification_code, get_user_from_jwt
+from .utils import *
 from .serializers import *
 
 
@@ -36,6 +36,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 return Response({"detail": "Verification code sent to email"}, status=status.HTTP_200_OK)
             else:
                 tokens = response.data
+
                 access_token = tokens.get('access')
 
                 response.set_cookie(
@@ -73,35 +74,27 @@ class Verify2FACodeView(APIView):
                 return Response({"detail": "Invalid verification code"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "No session id found"}, status=status.HTTP_400_BAD_REQUEST)
 
-class UpdateUser(APIView):
-    def get_object(self, user_id):
-        return get_object_or_404(CustomUser, id=user_id)
-
-    def patch(self, request):
-        user_id = get_user_from_jwt(request)
-        user = self.get_object(user_id)
-        serializer = CustomUserSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 class logout_user(APIView):
     
     def post(self, request, user_id):
-        try:
-            user_id = int(user_id)
-        except ValueError:
-            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+        if check_authentication(request):
+            if check_user_jwt_vs_user_url(request, user_id):
+                try:
+                    user_id = int(user_id)
+                except ValueError:
+                    return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if user_id > 0:
-            user = get_object_or_404(CustomUser, id=user_id)
-            user.online = False
-            try:
-                user.save()
-                return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
-            except Exception as e:
-                return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                if user_id > 0:
+                    user = get_object_or_404(CustomUser, id=user_id)
+                    user.online = False
+                    try:
+                        user.save()
+                        return Response({"detail": "User successfully logged out"}, status=status.HTTP_200_OK)
+                    except Exception as e:
+                        return Response({"detail": f"An error occurred: {str(e)}"}, status=status.HTTP_404_NOT_FOUND)
+                else:
+                    return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({"detail": "Invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
-
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
