@@ -1,11 +1,8 @@
 import { userID } from '../user/updateProfile.js';
 import { colorBlockButton } from './blacklist.js';
 import { setCurrentContactID } from './notifications.js';
-import { escapeHTML } from '../../dom/preventXSS.js';
 
 export function newMsg (avatar, time, text, id) {
-    // const msg_Text = escapeHTML(text);
-
     if (id === userID) {
         return `<li data-msgid="${id}" class="d-flex mb-4 justify-content-end">
         <div class="card">

@@ -5,7 +5,6 @@ import { userID } from '../user/updateProfile.js';
 import { updateTournLists } from './updateTournLists.js';
 import { containsForbiddenCharacters } from '../../dom/preventXSS.js';
 
-//type can  be local or remote
 async function createTournament(new_tournament) {
 	const response = await fetch('https://' + window.location.host + '/api/tournament/', {
 		method: 'POST',

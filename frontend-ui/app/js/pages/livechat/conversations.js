@@ -30,7 +30,7 @@ async function allConversations() {
 			throw new Error(`${responseData.errors}`);
 		throw new Error(`${responseData.status}`);
 	}
-	if (responseData !== null) {
+	if (responseData) {
 		return responseData;
 	}
 }

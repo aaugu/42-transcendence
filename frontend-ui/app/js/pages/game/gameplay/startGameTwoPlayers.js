@@ -28,9 +28,9 @@ export async function startGameTwoPlayers() {
 	}
 
 	if (mode == 'local-twoplayer')
-		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}`);
+		g_socket = new WebSocket('wss://' + window.location.host + `/ws/pong/${gameId}`);
 	else
-		g_socket = new WebSocket('wss://' + window.location.host + `/wsn/pong/${gameId}?user_id=${userID}`);
+		g_socket = new WebSocket('wss://' + window.location.host + `/ws/pong/${gameId}?user_id=${userID}`);
 	if (!g_socket && g_socket.readyState !== WebSocket.OPEN) {
 		document.getElementById("main-content").innerHTML = error500();
 		return ;
