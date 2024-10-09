@@ -19,7 +19,6 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
           token = headers[b'cookie'].decode().split('=')[1]
           self.user_id = get_jwt_user_id(token)
           game_id = self.scope['url_route']['kwargs']['game_id']
-          print(f"Websocket path {self.scope['path']}")
           
           res = get_game_data(game_id, token)
 
