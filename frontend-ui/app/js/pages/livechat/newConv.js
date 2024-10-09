@@ -9,7 +9,7 @@ import { escapeHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('403');
+		throw new Error('401');
 	}
 	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',
