@@ -5,12 +5,11 @@ import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
-import { error500 } from '../errorpage/error500.js';
 import { escapeHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('403');
+		throw new Error('401');
 	}
 	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',

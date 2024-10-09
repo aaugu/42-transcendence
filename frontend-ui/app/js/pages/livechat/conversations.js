@@ -10,7 +10,7 @@ export function reset_all_conv() {
 
 async function allConversations() {
 	if (userID === null) {
-		throw new Error('403');
+		throw new Error('401');
 	}
 
 	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/conversations/', {

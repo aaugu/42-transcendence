@@ -52,7 +52,7 @@ export async function getTournamentDetails(tournament_id) {
 
 export async function getMyTournaments() {
 	if (userID === null) {
-		throw new Error('403');
+		throw new Error('401');
 	}
 
 	const response = await fetch('https://' + window.location.host + '/api/tournament/' + userID + '/mytournament/admin/', {
@@ -69,7 +69,7 @@ export async function getMyTournaments() {
 
 	const responseData = await response.json();
 	if (!response.ok) {
-		if (response.status === 403)
+		if (response.status === 403 || response.status === 401)
 			throw new Error(`${response.status}`);
 		else if (responseData.errors)
 			throw new Error(`${responseData.errors}`);

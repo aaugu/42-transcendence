@@ -1,7 +1,6 @@
 import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
 import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
-import { urlRoute } from "../../dom/router.js";
 import { hideModal } from "../../dom/modal.js";
 import { newtournamentgameEvent, newtournamentremoteEvent } from "../game/newgameEvent.js";
 import { deleteTournament } from "./deleteTournament.js";
@@ -43,7 +42,7 @@ export async function tournamentEvent(e) {
 				if (e.message === "500" || e.message === "502") {
 					errormsg("Service temporarily unavailable", "single-t-modal-errormsg");
 				}
-				else if (e.message === "403") {
+				else if (e.message === "401" || e.message === "403") {
 					errormsg("Could not delete tournament : you don't have the rights or it has already started", "single-t-modal-errormsg");
 				}
 				else {
