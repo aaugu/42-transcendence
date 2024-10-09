@@ -5,7 +5,6 @@ import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
-import { error500 } from '../errorpage/error500.js';
 import { escapeHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {

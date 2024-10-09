@@ -5,9 +5,9 @@ import { errormsg } from "../../dom/errormsg.js";
 import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
 import { joinRemoteGame } from "./joinRemoteGame.js";
-import { userID } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
 import { inviteGameButtonLocal } from "./inviteGameButton.js";
+import { updateProfile } from "../user/updateProfile.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {

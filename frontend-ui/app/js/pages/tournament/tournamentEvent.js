@@ -1,7 +1,6 @@
 import { openCreateTournamentModal, openSingleTournamentModal } from "./tournamentModals.js";
 import { createTournamentButton } from "./createTournament.js";
 import { joinTournamentButton } from "./joinTournament.js";
-import { urlRoute } from "../../dom/router.js";
 import { hideModal } from "../../dom/modal.js";
 import { newtournamentgameEvent, newtournamentremoteEvent } from "../game/newgameEvent.js";
 import { deleteTournament } from "./deleteTournament.js";

@@ -1,5 +1,4 @@
 import { errormsg } from '../../dom/errormsg.js';
-import { urlRoute } from '../../dom/router.js';
 import { hideModal } from '../../dom/modal.js';
 import { userID } from '../user/updateProfile.js';
 import { updateTournLists } from './updateTournLists.js';
