@@ -171,5 +171,5 @@ class getUserByNickname(APIView):
             serializer = CustomUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         
