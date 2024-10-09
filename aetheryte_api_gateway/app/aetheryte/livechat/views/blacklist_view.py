@@ -48,12 +48,17 @@ class BlacklistView(APIView):
 		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-		body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		if not body['target_id']:
+		try:
+			body_unicode = request.body.decode('utf-8')
+			body = json.loads(body_unicode)
+			if not body['target_id']:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
+			target_id = body['target_id']
+			if target_id == user_id:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
+		except:
 			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		target_id = body['target_id']
+
 		if not user_valid(user_id) or not user_valid(target_id):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -70,7 +75,14 @@ class BlacklistView(APIView):
 
 	# DELETE: unblacklist a user
 	def delete(self, request, user_id, target):
-		if not check_authentication(request):
+		try:
+			if not check_authentication(request):
+				return Response(status=status.HTTP_401_UNAUTHORIZED)
+			
+			jwt_user_id = get_user_from_jwt(request)
+			if jwt_user_id != user_id:
+				return Response(status=status.HTTP_403_FORBIDDEN)
+		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 		if not user_valid(user_id) or not user_valid(target):
