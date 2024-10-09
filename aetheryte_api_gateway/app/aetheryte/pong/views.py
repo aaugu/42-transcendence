@@ -19,11 +19,12 @@ def create_game(request, creator_id, mode, joiner_id):
   if not user_valid(creator_id) or (int(joiner_id) != 0 and not user_valid(joiner_id)):
     return JsonResponse({'detail': 'User not found'}, status=404)
   if creator_id == joiner_id:
-    return JsonResponse({'detail': 'Cannot play against yourself'}, status=400)
+    return JsonResponse({'detail': 'Cannot play against yourself'}, status=404)
 
   # Add in the body of request the nickname of creator and joiner
   creator_nickname = CustomUser.objects.get(id=creator_id).nickname
   
+
   if int(joiner_id) == 0:
     joiner_nickname = ""
   else:
@@ -50,6 +51,8 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not user_valid(player_one_id) or not user_valid(player_two_id):
     print("Check 2")
     return JsonResponse({'detail': 'User not found'}, status=404)
+  if player_one_id == player_two_id:
+    return JsonResponse({'detail': 'Cannot play against yourself'}, status=404)
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
@@ -92,7 +95,11 @@ def end_game(request):
     winner_id = int(request.POST.get('winner_id'))
     loser_id = int(request.POST.get('loser_id'))
 
-    if not (user_id == winner_id or user_id == loser_id):
+    game_id = request.POST.get('game_id')
+    response = requests.get(f"{PONG_SERVICE_URL}/get-game-data/{game_id}/")
+    mode = response.json().get('mode')
+
+    if mode != 'TOURNAMENT' and not (user_id == winner_id or user_id == loser_id):
         return JsonResponse({'detail': 'Unauthorized'}, status=403)
 
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)

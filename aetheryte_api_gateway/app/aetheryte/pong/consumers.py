@@ -19,15 +19,15 @@ class ApiPongConsumer(AsyncWebsocketConsumer):
           token = headers[b'cookie'].decode().split('=')[1]
           self.user_id = get_jwt_user_id(token)
           game_id = self.scope['url_route']['kwargs']['game_id']
+          print(f"Websocket path {self.scope['path']}")
           print(f"Game ID: {game_id}")
           
           res = get_game_data(game_id, token)
+
           creator_id = res.get('creator_id')
           joiner_id = res.get('joiner_id')
 
-          print(f"Creator ID: {creator_id} - Joiner ID: {joiner_id} - User ID: {self.user_id}")
-
-          if self.user_id != creator_id and self.user_id != joiner_id:
+          if self.user_id != creator_id and self.user_id != joiner_id and res.get('mode') != 'TOURNAMENT':
               print("User has no access to this game")
               await self.close(3000, "Not authorized")
               return
