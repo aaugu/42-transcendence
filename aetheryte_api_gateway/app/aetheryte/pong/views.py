@@ -18,6 +18,8 @@ def create_game(request, creator_id, mode, joiner_id):
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
   if not user_valid(creator_id) or (int(joiner_id) != 0 and not user_valid(joiner_id)):
     return JsonResponse({'detail': 'User not found'}, status=404)
+  if creator_id == joiner_id:
+    return JsonResponse({'detail': 'Cannot play against yourself'}, status=400)
 
   # Add in the body of request the nickname of creator and joiner
   creator_nickname = CustomUser.objects.get(id=creator_id).nickname
@@ -43,12 +45,15 @@ def create_game(request, creator_id, mode, joiner_id):
 @csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
+    print("Check 1")
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not user_valid(player_one_id) or not user_valid(player_two_id):
+    print("Check 2")
     return JsonResponse({'detail': 'User not found'}, status=404)
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
+  print("Check 3")
 
   return JsonResponse(response.json(), status=201)
 
