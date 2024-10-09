@@ -16,7 +16,11 @@ export async function loginEvent(e) {
 }
 
 export function loginSubmitOnEnter(e) {
-	if (e.key === 'Enter') {
+	var twoFAmodal = document.getElementById('login-2fa-modal');
+	if (e.key === 'Enter' && !twoFAmodal.classList.contains('show')) {
 		loginProcess();
+	}
+	else if (e.key === 'Enter' && twoFAmodal.classList.contains('show')) {
+		twoFactorAuthLoginButton();
 	}
 }
