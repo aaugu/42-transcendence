@@ -11,8 +11,6 @@ import json
 
 @csrf_exempt
 def create_game(request, creator_id, mode, joiner_id):
-    print("Received request to create game yeah!")
-
     notif_url = "http://172.20.5.2:8000/livechat/notification/"
     # Vérification des paramètres
     if not creator_id or not joiner_id or not mode:
@@ -33,10 +31,7 @@ def create_game(request, creator_id, mode, joiner_id):
         player1 = None
         player2 = None
 
-    print("In views microservice", player1, player2)
-
     if int(joiner_id) != 0:
-        print("Sending notification to joiner")
         json_request = {
             'user_1': {
                 'user_id': creator_id,
@@ -49,7 +44,7 @@ def create_game(request, creator_id, mode, joiner_id):
         }
         response = requests.post(notif_url, json=json_request)
         if response.status_code != 201:
-            return JsonResponse({"error": "Failed to send notification"}, status=500)
+            return JsonResponse({"error": "Failed to send notification"}, status=response.status_code)
         else:
             print("Notification sent successfully")
 
@@ -58,7 +53,6 @@ def create_game(request, creator_id, mode, joiner_id):
 @csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
     # Vérification des paramètres
-    print(f"Received request to create tournament game with {player_one_id} and {player_two_id}")
     if not player_one_id or not player_two_id or not mode:
         return JsonResponse({"error": "Missing required parameters"}, status=400)
     try:
@@ -99,17 +93,17 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     json_request = {
         'user_1': {
             'user_id': player_one_id,
-            'message': f'Your match against {player2} is ready, click here to join. {button}'
+            'message': f'You have invited {player2} to play a remote game, click here to join. {button}'
         },
         'user_2': {
             'user_id': player_two_id,
-            'message': f'Your match against {player1} is ready, click here to join. {button}'
+            'message': f'{player1} invites you to play a remote game, click here to join. {button}'
         },
     }
 
     response = requests.post(notif_url, json=json_request)
     if response.status_code != 201:
-        return JsonResponse({"error": "Failed to send notification"}, status=500)
+        return JsonResponse({"error": "Failed to send notification"}, status=response.status_code)
 
     return JsonResponse(game.to_dict())
 
