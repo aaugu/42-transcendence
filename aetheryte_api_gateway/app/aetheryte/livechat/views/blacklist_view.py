@@ -24,16 +24,19 @@ class BlacklistView(APIView):
 		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+		if target == user_id:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
+
 		if not user_valid(user_id) or not user_valid(target):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 		
 		url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/blacklist/" + str(target)
 		response = requests.get(url)
-		response_json = response.json()
 
-		if response.status_code == status.HTTP_200_OK:
-			return Response({ "is_blacklisted": response_json['is_blacklisted'] }, status=status.HTTP_200_OK)
-		else:
+		try:
+			response_json = response.json()
+			return Response(response_json, status=response.status_code)
+		except:
 			return Response(status=response.status_code)
 
 	# POST: add target user to blacklist
@@ -84,6 +87,9 @@ class BlacklistView(APIView):
 				return Response(status=status.HTTP_403_FORBIDDEN)
 		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+		if target == user_id:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
 
 		if not user_valid(user_id) or not user_valid(target):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
