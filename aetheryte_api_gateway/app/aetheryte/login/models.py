@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
 
     #User informations
-    nickname = models.CharField(unique=True, max_length=30)
+    nickname = models.CharField(unique=True, max_length=30, blank=False)
     avatar = models.CharField(blank=True)
     friends_list = ArrayField( models.IntegerField(), blank=True, default=list )
     online = models.BooleanField(default=False)
