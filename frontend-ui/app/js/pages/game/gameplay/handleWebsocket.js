@@ -237,7 +237,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					"Tournament could not be properly continued due to a server error",
 					"homepage-errormsg"
 				);
-			} else if (error.message === "403") {
+			} else if (error.message === "401") {
 				urlRoute("/");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
 			} else if (error.message === "409") {
