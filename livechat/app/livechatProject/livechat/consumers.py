@@ -24,7 +24,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		except Conversation.DoesNotExist:
 			await self.close(4000, "Conversation does not exists")
 			return
-		if conversation.user_1 == self.user_id or conversation.user_2 == self.user_id:
+		if (conversation.user_1 == self.user_id or conversation.user_2 == self.user_id) and (conversation.user_1 != conversation.user_2):
 			await self.accept()
 		else:
 			await self.close(3000, "Unauthorized")
