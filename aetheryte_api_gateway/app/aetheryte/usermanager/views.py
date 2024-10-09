@@ -11,20 +11,23 @@ from .serializer import *
 
 class general_user(APIView):
     def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            new_user = CustomUser(
-                username=serializer.validated_data['username'],
-                nickname=serializer.validated_data['nickname'],
-                email=serializer.validated_data['email'],
-                avatar=serializer.validated_data['avatar'],
-                is_2fa_enabled=False
-            )
-            new_user.set_password(request.data['password'])
-            new_user.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+        try:
+            serializer = CustomUserSerializer(data=request.data)
+            if serializer.is_valid():
+                new_user = CustomUser(
+                    username=serializer.validated_data['username'],
+                    nickname=serializer.validated_data['nickname'],
+                    email=serializer.validated_data['email'],
+                    avatar=serializer.validated_data['avatar'],
+                    is_2fa_enabled=False
+                )
+                new_user.set_password(request.data['password'])
+                new_user.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+        except:
+            return Response({ "errors": "Bad request" }, status=status.HTTP_400_BAD_REQUEST)
         
 class detailed_user(APIView):
     def get(self, request, pk):
