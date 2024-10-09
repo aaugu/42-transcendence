@@ -54,7 +54,6 @@ def create_game_tournament(request, player_one_id, player_two_id, mode):
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
-  print("Check 3")
 
   return JsonResponse(response.json(), status=201)
 
