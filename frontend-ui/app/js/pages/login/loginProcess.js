@@ -7,6 +7,7 @@ import { defaultAvatar } from "../user/avatar.js";
 import { logout } from "../user/logout.js";
 import { containsForbiddenCharacters } from "../../dom/preventXSS.js";
 import { passwordValidity } from "../user/password.js";
+import { hideModal } from "../../dom/modal.js";
 
 export async function loginProcess() {
     const username = document.getElementById('username').value;
@@ -16,8 +17,12 @@ export async function loginProcess() {
         return ;
     }
 
-    if (containsForbiddenCharacters(username) || !passwordValidity(password)) {
+    if (containsForbiddenCharacters(username)) {
         errormsg("Forbidden characters present in user input", "homepage-errormsg");
+        return ;
+    }
+    if (!passwordValidity(password)) {
+        errormsg("Invalid password", "homepage-errormsg");
         return ;
     }
 
@@ -55,7 +60,7 @@ export async function loginProcess() {
         })
         .then(async response => {
             if (!response.ok) {
-                if ( response.status === 502)
+                if ( response.status === 502 || response.status === 500)
                     throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
@@ -93,12 +98,18 @@ export async function loginProcess() {
             }
         })
         .catch(e => {
-            if (e.message === "502") {
+            const loginBtn = document.getElementById('login-submit')
+            if (loginBtn)
+                loginBtn.disabled = false;
+            var twoFAmodal = document.getElementById('login-2fa-modal');
+            if (twoFAmodal.classList.contains('show'))
+                hideModal('login-2fa-modal');
+            if (e.message === "502" || e.message === "500") {
                 errormsg("Service temporarily unavailable", "login-errormsg");
             } else {
                 errormsg(e.message, "homepage-errormsg");
             }
-            document.getElementById('login-submit').disabled = false;
+
         });
     }
 

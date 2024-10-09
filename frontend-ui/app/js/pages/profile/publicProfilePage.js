@@ -14,8 +14,6 @@ export async function publicProfilePage() {
 	if (nickname === null || nickname === "")
 		return error404Page();
 
-    if ( user_id === null )
-        throw new Error('401');
     document.getElementById('nav-profile-elements').classList.remove('hidden');
     document.getElementById('logo').href = "/profile";
 
@@ -25,6 +23,9 @@ export async function publicProfilePage() {
         var avatar = userinfo.avatar;
 		var user_id = userinfo.id;
 
+        if (user_id === null ) {
+            throw new Error("401");
+        }
         var friends_html = await updateFriendList(user_id);
 		matches_html = await matchHistoryList(nickname, user_id);
 
