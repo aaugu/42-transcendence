@@ -24,7 +24,7 @@ class general_user(APIView):
             new_user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+            return Response({"error": "user already exsist"}, status=status.HTTP_409_CONFLICT)
         
 class detailed_user(APIView):
     def get(self, request, pk):
