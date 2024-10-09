@@ -46,10 +46,8 @@ def create_game(request, creator_id, mode, joiner_id):
 @csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
-    print("Check 1")
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not user_valid(player_one_id) or not user_valid(player_two_id):
-    print("Check 2")
     return JsonResponse({'detail': 'User not found'}, status=404)
   if player_one_id == player_two_id:
     return JsonResponse({'detail': 'Cannot play against yourself'}, status=404)
@@ -69,6 +67,8 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
   if not user_valid(player_one_id) or not user_valid(player_two_id):
     return JsonResponse({'detail': 'User not found'}, status=404)
+  if player_one_id == player_two_id:
+    return JsonResponse({'detail': 'Cannot play against yourself'}, status=404)
 
   creator_nickname = CustomUser.objects.get(id=player_one_id).nickname
   joiner_nickname = CustomUser.objects.get(id=player_two_id).nickname
