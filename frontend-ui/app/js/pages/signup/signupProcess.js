@@ -77,7 +77,7 @@ export async function signupProcess() {
         })
         .then(async response => {
             if (!response.ok) {
-                if ( response.status === 502)
+                if ( response.status === 502 || response.status === 500)
                     throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
@@ -104,7 +104,7 @@ export async function signupProcess() {
             }
         })
         .catch(e => {
-            if (e.message === "502") {
+            if (e.message === "502" || e.message === "500") {
                 errormsg("Service temporarily unavailable", "signup-errormsg");
             } else {
                 errormsg(e.message, "homepage-errormsg");

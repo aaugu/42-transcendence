@@ -60,7 +60,7 @@ export async function loginProcess() {
         })
         .then(async response => {
             if (!response.ok) {
-                if ( response.status === 502)
+                if ( response.status === 502 || response.status === 500)
                     throw new Error(`${response.status}`);
                 const error = await response.json();
                 if (error.username) {
@@ -104,7 +104,7 @@ export async function loginProcess() {
             var twoFAmodal = document.getElementById('login-2fa-modal');
             if (twoFAmodal.classList.contains('show'))
                 hideModal('login-2fa-modal');
-            if (e.message === "502") {
+            if (e.message === "502" || e.message === "500") {
                 errormsg("Service temporarily unavailable", "login-errormsg");
             } else {
                 errormsg(e.message, "homepage-errormsg");
