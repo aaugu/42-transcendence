@@ -4,7 +4,7 @@ import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';
 import { getUserInfo } from "../user/getUserInfo.js";
-import { isBlacklisted } from './blacklist.js';$
+import { isBlacklisted } from './blacklist.js';
 
 export async function inviteGameButton(ctc_id) {
 	if (contact_blacklisted) {
