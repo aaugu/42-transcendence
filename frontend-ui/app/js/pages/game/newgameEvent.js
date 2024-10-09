@@ -9,6 +9,8 @@ import { updateProfile } from '../user/updateProfile.js';
 
 export async function newlocalgameEvent() {
 	try {
+		localStorage.removeItem('right');
+		localStorage.removeItem('left');
 		const newGameId = await getGameID();
 		const new_url = `/local-twoplayer/${newGameId}`;
 		urlRoute(new_url);
