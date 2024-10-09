@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from login.models import CustomUser
 from login.serializers import *
 from login.utils import check_authentication, check_user_jwt_vs_user_url, get_user_from_jwt
+from livechat.views.utils import user_valid
 
 PONG_SERVICE_URL = "http://172.20.3.2:9000"
 
@@ -15,6 +16,8 @@ def create_game(request, creator_id, mode, joiner_id):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not check_user_jwt_vs_user_url(request, int(creator_id)):
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
+  if not user_valid(creator_id) or (int(joiner_id) != 0 and not user_valid(joiner_id)):
+    return JsonResponse({'detail': 'User not found'}, status=404)
 
   # Add in the body of request the nickname of creator and joiner
   creator_nickname = CustomUser.objects.get(id=creator_id).nickname
@@ -35,17 +38,19 @@ def create_game(request, creator_id, mode, joiner_id):
   except requests.exceptions.RequestException as e:
     return JsonResponse({'detail': 'Failed to create game due to service error.'}, status=503)
 
-  return JsonResponse(response.json(), status=response.status_code)
+  return JsonResponse(response.json(), status=201)
 
 @csrf_exempt
 def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
+  if not user_valid(player_one_id) or not user_valid(player_two_id):
+    return JsonResponse({'detail': 'User not found'}, status=404)
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
 
-  return JsonResponse(response.json(), status=response.status_code)
+  return JsonResponse(response.json(), status=201)
 
 
 @csrf_exempt
@@ -54,6 +59,8 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
   if not check_user_jwt_vs_user_url(request, int(player_one_id)):
     return JsonResponse({'detail': 'Unauthorized'}, status=403)
+  if not user_valid(player_one_id) or not user_valid(player_two_id):
+    return JsonResponse({'detail': 'User not found'}, status=404)
 
   creator_nickname = CustomUser.objects.get(id=player_one_id).nickname
   joiner_nickname = CustomUser.objects.get(id=player_two_id).nickname
@@ -66,7 +73,7 @@ def create_game_remote(request, player_one_id, player_two_id, mode):
     }
   )
 
-  return JsonResponse(response.json(), status=response.status_code)
+  return JsonResponse(response.json(), status=201)
 
 @csrf_exempt
 def end_game(request):
@@ -85,7 +92,7 @@ def end_game(request):
 
     response = requests.post(f"{PONG_SERVICE_URL}/end-game/", data=request.POST)
     if response.text:  # Check if the response is not empty
-        return JsonResponse(response.json(), status=response.status_code)
+        return JsonResponse(response.json(), status=201)
     else:
         return JsonResponse({"error": "Empty response"}, status=400)
 
@@ -93,6 +100,8 @@ def end_game(request):
 def get_user_games(request, user_id):
     if not check_authentication(request):
       return JsonResponse({'detail': 'Unauthorized'}, status=401)
+    if not user_valid(user_id):
+        return JsonResponse({'detail': 'User not found'}, status=404)
     # if not check_user_jwt_vs_user_url(request, int(user_id)):
     #     return JsonResponse({'detail': 'Unauthorized'}, status=403)
     response = requests.get(f"{PONG_SERVICE_URL}/get_user_games/{user_id}/")
