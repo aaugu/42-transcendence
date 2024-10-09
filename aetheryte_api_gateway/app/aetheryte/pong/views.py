@@ -43,13 +43,12 @@ def create_game(request, creator_id, mode, joiner_id):
 def create_game_tournament(request, player_one_id, player_two_id, mode):
   if not check_authentication(request):
     return JsonResponse({'detail': 'Unauthorized'}, status=401)
-  if not check_user_jwt_vs_user_url(request, int(player_one_id)):
-    return JsonResponse({'detail': 'Unauthorized'}, status=403)
   response = requests.post(
     f"{PONG_SERVICE_URL}/create-game-tournament/{player_one_id}/{player_two_id}/{mode}/"
   )
 
   return JsonResponse(response.json(), status=response.status_code)
+
 
 @csrf_exempt
 def create_game_remote(request, player_one_id, player_two_id, mode):
