@@ -54,12 +54,15 @@ class ConversationView(APIView):
 		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-		body_unicode = request.body.decode('utf-8')
-		body = json.loads(body_unicode)
-		if not body['nickname']:
+		try:
+			body_unicode = request.body.decode('utf-8')
+			body = json.loads(body_unicode)
+			if not body['nickname']:
+				return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
+			nickname = body['nickname']
+		except:
 			return Response({'errors': "Bad request"}, status=status.HTTP_400_BAD_REQUEST)
-		
-		nickname = body['nickname']
+
 		if not user_exists(nickname):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
