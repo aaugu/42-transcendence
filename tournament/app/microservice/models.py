@@ -15,7 +15,7 @@ class Tournament(models.Model):
 
     name = models.CharField(max_length=settings.MAX_TOURNAMENT_NAME_LENGTH)
     admin_id = models.IntegerField(default=0)
-    max_players = models.IntegerField(default=16, blank=True)
+    max_players = models.IntegerField(default=settings.MAX_PLAYERS)
     status = models.IntegerField(default=CREATED)
     type = models.IntegerField(default=LOCAL)
 
