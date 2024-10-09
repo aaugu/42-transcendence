@@ -35,8 +35,6 @@ def create_game(request, creator_id, mode, joiner_id):
   except requests.exceptions.RequestException as e:
     return JsonResponse({'detail': 'Failed to create game due to service error.'}, status=503)
 
-  print("RESPONSE", response)
-
   return JsonResponse(response.json(), status=response.status_code)
 
 @csrf_exempt
