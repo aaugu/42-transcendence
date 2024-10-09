@@ -21,11 +21,11 @@ class NotificationView(APIView):
 
 		status_code = self.create_notification(body['user_1']['user_id'], body['user_1']['message'])
 		if status_code != status.HTTP_201_CREATED:
-			return Response({'errors': "Coud not create notification"}, status=status_code)
+			return Response({'errors': "Could not create notification"}, status=status_code)
 
 		status_code = self.create_notification(body['user_2']['user_id'], body['user_2']['message'])
 		if status_code != status.HTTP_201_CREATED:
-			return Response({'errors': "Coud not create notification"}, status=status_code)
+			return Response({'errors': "Could not create notification"}, status=status_code)
 
 		return Response(status=status.HTTP_201_CREATED)
 
@@ -35,11 +35,11 @@ class NotificationView(APIView):
 			status_code = self.create_self_conversation(user_id)
 			if status_code != status.HTTP_201_CREATED:
 				return status_code
-		
+
 		conv = Conversation.objects.filter(user_1=user_id, user_2=user_id).first()
 		if not conv:
 			return status.HTTP_422_UNPROCESSABLE_ENTITY
-		
+
 		actual_timezone = pytz.timezone(self.timezone)
 		now = datetime.now()
 		timestamp = actual_timezone.localize(now)
