@@ -42,11 +42,12 @@ export async function profilePage() {
             clearFriendListRefresh();
             return error500();
         }
-        else if (e.message === "403") {
+        else if (e.message === "401" || e.message === "403") {
             updateProfile(false, null);
             errormsg('You were redirected to the landing page', 'homepage-errormsg');
             return '';
-        } else {
+        }
+        else {
             errormsg(e.message, 'homepage-errormsg');
         }
     }

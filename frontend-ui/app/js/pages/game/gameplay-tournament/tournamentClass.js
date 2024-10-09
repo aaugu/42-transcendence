@@ -26,6 +26,8 @@ class TournamentUtils {
     }
 
 	async _startTournament() {
+		if (userID === null || userID === undefined)
+			throw new Error("401");
 		const url = 'https://' + window.location.host + '/api/tournament/' + this.tourn_id + '/start/';
 		const response = await fetch(url, {
 			method: 'PATCH',

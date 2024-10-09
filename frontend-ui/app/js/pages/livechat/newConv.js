@@ -5,12 +5,11 @@ import { errormsg } from '../../dom/errormsg.js'
 import { displayChatInterface, displayMessages } from './messages.js';
 import { getConvHistory } from './convHistory.js';
 import { startLivechat } from './startLivechat.js';
-import { error500 } from '../errorpage/error500.js';
 import { escapeHTML } from '../../dom/preventXSS.js';
 
 async function newConv(conv_nickname) {
     if (conv_nickname === null || conv_nickname === undefined || userID === null ) {
-		throw new Error('403');
+		throw new Error('401');
 	}
 	const response = await fetch('https://' + window.location.host + '/api/livechat/' + userID + '/conversations/', {
 		method: 'POST',
@@ -38,9 +37,11 @@ async function newConv(conv_nickname) {
 }
 
 export async function newConvButton() {
-	var conv_nickname = document.getElementById('chat-search-input').value;
-	conv_nickname = escapeHTML(conv_nickname);
 	try {
+		var conv_nickname = document.getElementById('chat-search-input').value;
+		if (conv_nickname == '' || conv_nickname == null || conv_nickname == undefined)
+			throw new Error('Please enter a nickname');
+		conv_nickname = escapeHTML(conv_nickname);
 		const response = await newConv(conv_nickname);
 		const conv_id = response.conversation_id;
 
@@ -65,7 +66,7 @@ export async function newConvButton() {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
 		} else {
-			errormsg(e.message, 'homepage-errormsg');
+			errormsg(e.message, 'livechat-errormsg');
 		}
 	}
 }

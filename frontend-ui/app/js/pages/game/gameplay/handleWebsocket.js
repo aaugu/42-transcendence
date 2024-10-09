@@ -11,12 +11,16 @@ export function handleWebsocketGame(socket, canvas, gameState) {
 
 	socket.onclose = function (event) {
 		if (event.wasClean === false) {
+			localStorage.removeItem('right');
+			localStorage.removeItem('left');
 			urlRoute("/profile");
 			errormsg("Connection lost or could not be established", "homepage-errormsg");
 		}
 	};
 
 	socket.onerror = function (error) {
+		localStorage.removeItem('right');
+		localStorage.removeItem('left');
 		urlRoute("/profile");
 		errormsg(
 			"Connection to game could not be established",
@@ -223,6 +227,8 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 				if (tournament.game_status === "In Progress" && tournament.current_match) {
 					await startNewMatchCycle_remote(tournament);
 				}
+				localStorage.removeItem('right');
+				localStorage.removeItem('left');
 				urlRoute("/profile");
 				errormsg("Your opponent disconnected, you won this match", "homepage-errormsg");
 			}
@@ -237,7 +243,7 @@ export function handleWebsocketTournament_remote(socket, tournament, canvas, gam
 					"Tournament could not be properly continued due to a server error",
 					"homepage-errormsg"
 				);
-			} else if (error.message === "403") {
+			} else if (error.message === "401") {
 				urlRoute("/");
 				errormsg("You were redirected to the landing page", "homepage-errormsg");
 			} else if (error.message === "409") {

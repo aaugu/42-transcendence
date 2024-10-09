@@ -1,4 +1,4 @@
-import { userID } from "../user/updateProfile.js";
+import { userID, updateProfile } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
 import { errormsg } from "../../dom/errormsg.js";
 import { getUserInfo } from "../user/getUserInfo.js";

@@ -4,7 +4,7 @@ const gatewayEndpoint = "https://" + window.location.host + "/api/pong";
 
 export async function createGame(mode, id = 0) {
   if (userID === null)
-    throw new Error('403');
+    throw new Error('401');
 
     const url = `${gatewayEndpoint}/create-game/${userID}/${mode}/${id}/`;
 
@@ -29,7 +29,7 @@ export async function createGame(mode, id = 0) {
 
 export async function createTournamentGame(player1_id, player2_id, mode) {
 	if (player1_id === null)
-		throw new Error('403');
+		throw new Error('401');
 
 	const url = `${gatewayEndpoint}/create-game-tournament/${player1_id}/${player2_id}/${mode}/`;
 
