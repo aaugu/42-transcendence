@@ -16,9 +16,3 @@ export async function signupEvent(e) {
 			break;
 	}
 }
-
-export function signupSubmitOnEnter(e) {
-	if (e.key === 'Enter') {
-		signupProcess();
-	}
-}

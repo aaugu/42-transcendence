@@ -92,6 +92,10 @@ export async function signupProcess() {
 					document.getElementById('signup-submit').disabled = false;
 					throw new Error(error.nickname);
                 }
+                else if (error.errors) {
+					document.getElementById('signup-submit').disabled = false;
+					throw new Error(error.errors);
+                }
 				throw new Error(`${response.status}`);
             }
 			document.getElementById('signup-submit').disabled = false;
