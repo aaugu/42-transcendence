@@ -9,7 +9,7 @@ export async function editUserInfo(infoType, newInfo) {
 	if (userID === null)
 		throw new Error ("Could not identify user");
 
-	if (containsForbiddenCharacters(newInfo))
+	if (infoType != "avatar" && containsForbiddenCharacters(newInfo))
 		throw new Error ("Forbidden characters present in user input");
 
 	const url = 'https://' + window.location.host + '/api/user/';

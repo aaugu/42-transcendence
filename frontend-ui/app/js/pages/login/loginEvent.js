@@ -14,9 +14,3 @@ export async function loginEvent(e) {
 	}
 
 }
-
-export function loginSubmitOnEnter(e) {
-	if (e.key === 'Enter') {
-		loginProcess();
-	}
-}

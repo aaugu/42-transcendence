@@ -27,8 +27,6 @@ import { startGameTournamentremote, t_remote_socket } from "../pages/game/gamepl
 import { keyUpEventTwoPlayer, keyDownEventTwoPlayer } from "../pages/game/gameplay/startGameTwoPlayers.js"
 import { keyUpEventTournamentLocal, keyDownEventTournamentLocal } from "../pages/game/gameplay-tournament/startGameTournamentlocal.js"
 import { keyDownEventTournamentRemote, keyUpEventTournamentRemote } from "../pages/game/gameplay-tournament/startGameTournamentremote.js"
-import { loginSubmitOnEnter } from "../pages/login/loginEvent.js"
-import { signupSubmitOnEnter } from "../pages/signup/signupEvent.js"
 
 let urlRoute;
 let currentClickListener = null;
@@ -99,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('click', (e) => {
         const {target} = e;
-        if (!target.matches('nav a, #login, #signup'))
+        if (!target.matches('nav a, #login, #signup, #ctc-nickname'))
             return ;
         e.preventDefault();
         urlRoute(e);
@@ -117,13 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		"/login" : {
 			content: loginPage,
 			clickListener: loginEvent,
-			keydown: loginSubmitOnEnter,
 			description: "login page"
 		},
         "/signup" : {
 			content: signupPage,
 			clickListener: signupEvent,
-			keydown: signupSubmitOnEnter,
 			description: "signup page"
 		},
         "/local-twoplayer" : {
@@ -186,8 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
     urlRoute = (url) => {
         if (typeof url !== 'string')
         {
-            const event = url;
-            event.preventDefault();
+			const event = url;
+			event.preventDefault();
             url = event.target.href;
         }
         window.history.pushState({}, '', url);

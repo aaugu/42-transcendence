@@ -1,5 +1,5 @@
 import { getGameID, getGameMode, createGame, createGameRemote } from '../game/gameplay/createnewGame.js';
-import { userID } from '../user/updateProfile.js';
+import { userID, updateProfile } from '../user/updateProfile.js';
 import { urlRoute } from '../../dom/router.js'
 import { errormsg } from '../../dom/errormsg.js';
 import { contact_blacklisted } from './blacklist.js';

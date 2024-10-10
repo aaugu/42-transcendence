@@ -11,33 +11,33 @@ from .serializer import *
 
 class general_user(APIView):
     def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            new_user = CustomUser(
-                username=serializer.validated_data['username'],
-                nickname=serializer.validated_data['nickname'],
-                email=serializer.validated_data['email'],
-                avatar=serializer.validated_data['avatar'],
-                is_2fa_enabled=False
-            )
-            new_user.set_password(request.data['password'])
-            new_user.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+        try:
+            serializer = CustomUserSerializer(data=request.data)
+            if serializer.is_valid():
+                new_user = CustomUser(
+                    username=serializer.validated_data['username'],
+                    nickname=serializer.validated_data['nickname'],
+                    email=serializer.validated_data['email'],
+                    avatar=serializer.validated_data['avatar'],
+                    is_2fa_enabled=False
+                )
+                new_user.set_password(request.data['password'])
+                new_user.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_409_CONFLICT)
+        except:
+            return Response({ "errors": "Bad request" }, status=status.HTTP_400_BAD_REQUEST)
         
 class detailed_user(APIView):
     def get(self, request, pk):
         if check_authentication(request):
-            if check_user_jwt_vs_user_url(request, pk):
                 try:
                     user = CustomUser.objects.get(pk=pk)
                 except CustomUser.DoesNotExist:
                     return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
                 serializer = CustomUserSerializer(user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
         
@@ -63,14 +63,11 @@ class detailed_user(APIView):
 class friends_list_user(APIView):
     def get(self, request, pk):
         if check_authentication(request):
-            if check_user_jwt_vs_user_url(request, pk):
                 try:
                     user = CustomUser.objects.get(pk=pk)
                 except CustomUser.DoesNotExist:
                     return Response({"status": "ERROR", "details": "No user with this ID"}, status=status.HTTP_404_NOT_FOUND)
                 return Response({"friends": user.friends_list}, status=status.HTTP_200_OK)
-            else:
-                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         
@@ -136,7 +133,6 @@ class friends_list_user_delete(APIView):
 class get_friends_status(APIView):
     def get(self, request, pk):
         if check_authentication(request):
-            if check_user_jwt_vs_user_url(request, pk):
                 try:
                     user = CustomUser.objects.get(pk=pk)
                 except CustomUser.DoesNotExist:
@@ -147,8 +143,6 @@ class get_friends_status(APIView):
                 online_statuses = CustomUser.objects.filter(id__in=ufl).values('id', 'nickname', 'online')
 
                 return Response({"status": "OK", "online_statuses": online_statuses}, status=status.HTTP_200_OK)
-            else:
-                return Response({"ERROR": "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"status": "ERROR", "details": "Authentication failed"}, status=status.HTTP_403_FORBIDDEN)
 
@@ -180,5 +174,5 @@ class getUserByNickname(APIView):
             serializer = CustomUserSerializer(user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            return Response({"ERROR: ", "Unauthorized access"}, status=status.HTTP_401_UNAUTHORIZED)
         

@@ -3,6 +3,8 @@ import { error500 } from "../errorpage/error500.js";
 import { getNicknameUserInfo } from "../user/getUserInfo.js"
 import { updateFriendList } from "./friends.js"
 import { matchHistoryList, matchWinsLosses } from "./matchHistory.js";
+import { updateProfile } from "../user/updateProfile.js"
+import { errormsg } from "../../dom/errormsg.js"
 
 export async function publicProfilePage() {
 	var nickname = window.location.href.split("/")[4];
@@ -12,8 +14,6 @@ export async function publicProfilePage() {
 	if (nickname === null || nickname === "")
 		return error404Page();
 
-    if ( user_id === null )
-        throw new Error('403');
     document.getElementById('nav-profile-elements').classList.remove('hidden');
     document.getElementById('logo').href = "/profile";
 
@@ -23,6 +23,9 @@ export async function publicProfilePage() {
         var avatar = userinfo.avatar;
 		var user_id = userinfo.id;
 
+        if (user_id === null ) {
+            throw new Error("401");
+        }
         var friends_html = await updateFriendList(user_id);
 		matches_html = await matchHistoryList(nickname, user_id);
 
@@ -35,10 +38,11 @@ export async function publicProfilePage() {
             return error404Page();
         else if (e.message === "502")
             return error500();
-        else if (e.message === "403") {
+        else if (e.message === "401" || e.message === "403") {
             updateProfile(false, null);
 			errormsg('You were redirected to the landing page', 'homepage-errormsg');
-        } else {
+        }
+        else {
             errormsg(e.message, 'homepage-errormsg');
         }
     }

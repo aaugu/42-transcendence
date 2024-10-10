@@ -5,9 +5,9 @@ import { errormsg } from "../../dom/errormsg.js";
 import { chatSocket } from "./startLivechat.js";
 import { inviteGameButton } from "./inviteGameButton.js";
 import { joinRemoteGame } from "./joinRemoteGame.js";
-import { userID } from "../user/updateProfile.js";
 import { urlRoute } from "../../dom/router.js";
 import { inviteGameButtonLocal } from "./inviteGameButton.js";
+import { updateProfile } from "../user/updateProfile.js";
 
 export async function livechatEvent(e) {
 	if (e.target.classList.contains('list-group-item') || e.target.parentElement.classList.contains('list-group-item')) {
@@ -74,10 +74,6 @@ export async function livechatEvent(e) {
 			const sender_id = target.dataset.senderid;
 			const receiver_id = target.dataset.receiverid;
 			joinRemoteGame(game_id, sender_id, receiver_id);
-			break;
-		case "ctc-nickname":
-			const nickname = target.textContent;
-			urlRoute(`/profile/${nickname}`);
 			break;
 		case "t-remote-match-link":
 			const gameurl = target.dataset.gameurl;

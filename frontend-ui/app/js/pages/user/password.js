@@ -45,6 +45,8 @@ export async function editPassword(newPassword, repeatNewPassword, oldPassword) 
 	if (!response.ok) {
 		if (responseData.old_password)
 			throw new Error(responseData.old_password[0]);
+		if (responseData.non_field_errors)
+			throw new Error(responseData.non_field_errors[0]);
 		throw new Error("Could not edit user password");
 	}
 }
