@@ -14,7 +14,7 @@ export async function logout() {
 		credentials: 'include'
 	});
 
-	if (!response.ok && response.status === 502)
+	if (!response.ok && (response.status === 502 || response.status === 500))
 		throw new Error(`${response.status}`);
 
 	const responseData = await response.json();

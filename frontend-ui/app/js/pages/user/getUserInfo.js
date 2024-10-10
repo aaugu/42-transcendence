@@ -16,7 +16,7 @@ export async function getUserInfo(id = null) {
     });
 
     if (!response.ok) {
-        if (response.status === 502) {
+        if (response.status === 502 || response.status === 500) {
             throw new Error(`${response.status}`)
         }
         const error = await response.json();

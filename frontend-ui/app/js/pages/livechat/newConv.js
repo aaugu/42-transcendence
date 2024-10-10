@@ -54,7 +54,8 @@ export async function newConvButton() {
 		else {
 			displayChatInterface(users[0].id, conv_nickname);
 		}
-		startLivechat(conv_id, history);
+		if (conv_id && history.user.length == 2)
+			startLivechat(conv_id, history);
 		displayMessages(history, false);
 		document.getElementById('chat-search-input').value = '';
 
