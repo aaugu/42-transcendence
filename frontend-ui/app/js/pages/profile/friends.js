@@ -49,7 +49,7 @@ export async function addFriend(friend_nickname) {
 		credentials: 'include'
 	});
 
-	if (!response.ok && response.status === 502)
+	if (!response.ok && (response.status === 502 || response.status === 500))
 		throw new Error(`${response.status}`);
 
 	const responseData = await response.json();
@@ -75,7 +75,7 @@ export async function deleteFriend(friend_id) {
 		credentials: 'include'
 	});
 
-	if (!response.ok && response.status === 502)
+	if (!response.ok && (response.status === 502 || response.status === 500))
 		throw new Error(`${response.status}`);
 
 	const responseData = await response.json();

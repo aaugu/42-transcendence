@@ -26,7 +26,7 @@ export async function editUserInfo(infoType, newInfo) {
 		credentials: 'include',
 	});
 
-	if (!response.ok && response.status === 502) {
+	if (!response.ok && (response.status === 502 || response.status === 500)) {
 		throw new Error(`${response.status}`);
 	}
 	if (!response.ok) {
