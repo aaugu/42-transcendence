@@ -20,7 +20,11 @@ class ConversationView(APIView):
 			if not create_user(user_id):
 				return Response({'errors': "Could not create conversation"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-		conversations = Conversation.objects.filter(Q(user_1=user_id) | Q(user_2=user_id))
+		try:
+			user = User.objects.get(user_id=user_id)
+		except:
+			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
+		conversations = Conversation.objects.filter(Q(user_1=user) | Q(user_2=user))
 		serializer = ConversationSerializer(conversations, many=True)
 
 		return Response({ "conversations": serializer.data }, status=status.HTTP_200_OK)
@@ -42,27 +46,33 @@ class ConversationView(APIView):
 
 	# Create conversation
 	def create_conversation(self, user_id, target_id):
-		if self.conversation_exists(user_id, target_id):
-			return status.HTTP_409_CONFLICT
-
 		if not user_exists(target_id):
 			if not create_user(target_id):
 				return status.HTTP_422_UNPROCESSABLE_ENTITY
 
+		try:
+			user = User.objects.get(user_id=user_id)
+			target = User.objects.get(target=user_id)
+		except:
+			return status.HTTP_404_NOT_FOUND
+
+		if self.conversation_exists(user, target):
+			return status.HTTP_409_CONFLICT
+
 		conversation = Conversation(
-			user_1 = user_id,
-			user_2 = target_id,
+			user_1 = user,
+			user_2 = target,
 		)
 		conversation.save()
-		check_conversation = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
+		check_conversation = Conversation.objects.filter(Q(user_1=user) & Q(user_2=target))
 		if not check_conversation:
 			return status.HTTP_422_UNPROCESSABLE_ENTITY
 		return status.HTTP_201_CREATED
 
 	# Check if conversation exists
-	def conversation_exists(self, user_id, target_id):
-		conversation_1 = Conversation.objects.filter(Q(user_1=user_id) & Q(user_2=target_id))
-		conversation_2 = Conversation.objects.filter(Q(user_1=target_id) & Q(user_2=user_id))
+	def conversation_exists(self, user, target):
+		conversation_1 = Conversation.objects.filter(Q(user_1=user) & Q(user_2=target))
+		conversation_2 = Conversation.objects.filter(Q(user_1=target) & Q(user_2=user))
 		if conversation_1 or conversation_2:
 			return True
 		return False

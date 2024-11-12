@@ -22,6 +22,7 @@ async function newConv(conv_nickname) {
 		}),
 		credentials: 'include'
 	});
+	console.log(response.status);
 	if (response.status === 500 || response.status === 502 || response.status === 401 || response.status === 403 )
         throw new Error(`${response.status}`);
 

@@ -25,22 +25,23 @@ class ConversationView(APIView):
 		except:
 			return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
 		if not user_valid(user_id):
 			return Response({'errors': "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 		request_url = "http://172.20.5.2:8000/livechat/" + str(user_id) + "/conversations/"
 		response = requests.get(url = request_url)
 
-		if response.status_code == status.HTTP_200_OK:
-			response_json = response.json()
-			users = self.get_users_from_conversations(response_json['conversations'])
-			return Response({ "conversations": response_json['conversations'], "users": users }, status=status.HTTP_200_OK)
-		else:
-			try:
-				response_json = response.json()
-				return Response(response_json, status=response.status_code)
-			except:
-				return Response(status=response.status_code)
+		# if response.status_code == status.HTTP_200_OK:
+		# 	response_json = response.json()
+		# 	users = self.get_users_from_conversations(response_json['conversations'])
+		# 	return Response({ "conversations": response_json['conversations'], "users": users }, status=status.HTTP_200_OK)
+		# else:
+		# 	try:
+		# 		response_json = response.json()
+		# 		return Response(response_json, status=response.status_code)
+		# 	except:
+		# 		return Response(status=response.status_code)
 	
 	# POST: create conversation with two users
 	def post(self, request, user_id):

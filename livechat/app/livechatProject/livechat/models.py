@@ -9,8 +9,8 @@ class User(models.Model):
         return str(self.user_id)
 
 class Conversation(models.Model):
-    user_1 = models.PositiveIntegerField(blank=False)
-    user_2 = models.PositiveIntegerField(blank=False)
+    user_1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_1', blank=False)
+    user_2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_2', blank=False)
 
     def __str__(self):
         return str(self.id)
